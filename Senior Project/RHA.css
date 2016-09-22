@@ -16,16 +16,64 @@
     margin-left: 5%;
 }
 
+.sidebar {
+	position: relative;
+	color: #ffffff;
+	border-radius: 3px;
+	border: 3px solid #000000;
+	background-color: #800000;
+	margin-top: 5px;
+	text-align: center; 
+	width: 28%;
+	float: right;
+}
+
+.upcomingEvents {
+	border-top-width: 1px;
+	border-top-color: black;
+	border-top-style: solid;
+	max-height: 400px;
+	text-align: left;
+	overflow-y: scroll;
+}
+
+
+.event {
+	border: 2px solid black;
+	border-radius: 10px;
+	background-color: #404040;
+	position: relative;
+	width: 95%;
+	margin-left: 2%;
+	margin-top: 2.5%;
+}
+
+.event :hover {
+	background-color: #a0a0a0;
+	border-radius: 10px;
+}
+
+.event p {
+	font-size: 12pt;
+	color: white;
+}
+
+.event h2 {
+	text-align: center;
+	font-size: 16pt;
+	color: white;
+}
+
 /*.navBar::before{
     content: url('images/RHA.jpg');
 }*/
 
 img {
-	max-width: 300px;
+	max-width: 305px;
 }
 
 .tileArea {
-	
+	max-width: 72%;
 }
 
 .newsArea {
@@ -64,24 +112,6 @@ h6 {
 	background-color: #dddddd;
 }
 
-.sidebar {
-	color: #ffffff;
-	border-radius: 3px;
-	border: 3px solid #000000;
-	background-color: #800000;
-	margin-top: 5px;
-	width: 28%;
-	float: right;
-}
-
-.upcomingEvents {
-	border-top-width: 1px;
-	border-top-color: black;
-	border-top-style: solid;
-	max-height: 400px;
-	overflow-y: scroll;
-}
-
 div a {
     text-decoration: none;
     color:black;
@@ -94,6 +124,11 @@ ul {
   display: inline;
   margin: 0;
   padding: 0;
+}
+
+.navBarWrapper ul li {
+    display: inline-block;
+	background-color: white;
 }
 
 ul li {
@@ -114,14 +149,15 @@ ul li ul {
   display: none;
 }
 
-ul li ul li {
+.navBarWrapper ul li ul li {
   border: 2px solid black;
   display: block;
 }
 
+/* I don't know what this does, I couldn't find a bug when I removed it.
 ul li ul li a {
     display:block !important;
-}
+}*/
 
 ul li ul li:hover {
     background: #666;
