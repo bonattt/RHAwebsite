@@ -21,6 +21,7 @@
 }*/
 
 img {
+	max-width: 300px;
 }
 
 .tileArea {
@@ -66,10 +67,8 @@ h6 {
 .sidebar {
 	color: #ffffff;
 	border-radius: 3px;
-	border-color: #000000;
-	border-style: solid;
+	border: 3px solid #000000;
 	background-color: #800000;
-	border-width: 3px;
 	margin-top: 5px;
 	width: 28%;
 	float: right;
@@ -79,7 +78,7 @@ h6 {
 	border-top-width: 1px;
 	border-top-color: black;
 	border-top-style: solid;
-	
+	max-height: 400px;
 	overflow-y: scroll;
 }
 
@@ -101,11 +100,11 @@ ul li {
     display: inline-block;
 }
 
-ul li:hover {
+/*ul li:hover {
     background: #555;
 }
 
-ul li:hover ul {
+*/ul li:hover ul {
     display: block;
 }
 
