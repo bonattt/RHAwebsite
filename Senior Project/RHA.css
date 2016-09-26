@@ -79,10 +79,6 @@
 	color: white;
 }
 
-.navBar {
-    background-color: #800000;
-}
-
 img {
 	max-width: 305px;
 }
@@ -109,11 +105,16 @@ h6 {
 	color: #80000;
 }
 
+body {
+	margin: 0;
+}
+
 .navBar{
     text-align: center;
 	border-bottom-color: black;
 	border-bottom-width: 2px;
 	border-bottom-style: solid;
+    background-color: #800000;
 }
 
 .navBarWrapper{
