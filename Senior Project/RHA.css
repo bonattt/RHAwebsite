@@ -16,6 +16,21 @@
     margin-left: 5%;
 }
 
+.loginArea {
+	float: right;
+	margin-right: 5%;
+}
+
+.loginArea form {
+	font-size: 12pt;
+	color: white;
+}
+
+.loginArea form input {
+	max-width: 60px;
+	font-size: 8pt.;
+}
+
 .sidebar {
 	position: relative;
 	color: #ffffff;
@@ -64,9 +79,9 @@
 	color: white;
 }
 
-/*.navBar::before{
-    content: url('images/RHA.jpg');
-}*/
+.navBar {
+    background-color: #800000;
+}
 
 img {
 	max-width: 305px;
@@ -147,6 +162,15 @@ ul li ul {
   position: absolute;
   width: 200px;
   display: none;
+}
+
+.navBarWrapper ul li {
+	background-color: #800000;
+	color: white;
+}
+
+.navBarWrapper ul li a {
+	color: white;
 }
 
 .navBarWrapper ul li ul li {
