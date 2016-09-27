@@ -1,3 +1,5 @@
+/* Home page */
+
 .topLinks{
     font-size: 2.25em;
     background-color: white;
@@ -79,10 +81,6 @@
 	color: white;
 }
 
-img {
-	max-width: 305px;
-}
-
 .tileArea {
 	max-width: 72%;
 }
@@ -155,13 +153,7 @@ ul {
 
 ul li {
     display: inline-block;
-}
-
-/*ul li:hover {
-    background: #555;
-}
-
-*/ul li:hover ul {
+}ul li:hover ul {
     display: block;
 }
 
@@ -184,11 +176,6 @@ ul li ul {
   border: 2px solid black;
   display: block;
 }
-
-/* I don't know what this does, I couldn't find a bug when I removed it.
-ul li ul li a {
-    display:block !important;
-}*/
 
 ul li ul li:hover {
     background: #666;

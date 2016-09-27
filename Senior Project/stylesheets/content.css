@@ -6,3 +6,18 @@ body {
 .navBar{
 	margin: -10pt;
 }
+
+h1{
+	color: #696969;
+	text-align: center;
+	font-size: 72px;
+	margin-top: 20pt;
+}
+
+/* Subway Cam */
+
+#subwayCam {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
