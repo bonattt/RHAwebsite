@@ -125,13 +125,9 @@ body {
 	border-bottom-width: 2px;
 	border-bottom-style: solid;
     background-color: #800000;
-}
-
-.navBarWrapper{
     padding-top: 50px;
 	padding-bottom: 25px;
 }
-
 .footer {
 	float: center;
 	text-align: center;
@@ -152,7 +148,7 @@ ul {
   padding: 0;
 }
 
-.navBarWrapper ul li {
+.navBar ul li {
     display: inline-block;
 	background-color: white;
 }
@@ -175,16 +171,16 @@ ul li ul {
   display: none;
 }
 
-.navBarWrapper ul li {
+.navBar ul li {
 	background-color: #800000;
 	color: white;
 }
 
-.navBarWrapper ul li a {
+.navBar ul li a {
 	color: white;
 }
 
-.navBarWrapper ul li ul li {
+.navBar ul li ul li {
   border: 2px solid black;
   display: block;
 }

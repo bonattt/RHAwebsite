@@ -1,4 +1,8 @@
 
-.content {
+body {
 	margin: 10pt;
+}
+
+.navBar{
+	margin: -10pt;
 }
