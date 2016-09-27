@@ -95,6 +95,16 @@ img {
 
 }
 
+.ribbon-wrapper {
+	background-color: #a0a0a0
+	opacity: 0.5;
+}
+
+.ribbon-text {
+	color: black;
+	opacity: 1;
+}
+	
 h5 {
 	font-style: underline;
 	font-size: 20px;
