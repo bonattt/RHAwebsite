@@ -1,0 +1,83 @@
+
+.dropdown{
+    margin-left: 5%;
+}
+
+.loginArea {
+	float: right;
+	margin-right: 5%;
+}
+
+.loginArea form {
+	font-size: 12pt;
+	color: white;
+}
+
+.loginArea form input {
+	max-width: 60px;
+	font-size: 8pt.;
+}
+
+.navBar {
+	margin: -10px;
+    text-align: center;
+	border-bottom-color: black;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+    background-color: #800000;
+    padding-top: 50px;
+	padding-bottom: 25px;
+}
+
+#rha-image {
+	padding-right: 50px;
+	vertical-align: middle;
+}
+
+.navBar ul li {
+    display: inline-block;
+	background-color: white;
+}
+
+.navBar ul li {
+	background-color: #800000;
+	color: white;
+}
+
+.navBar ul li a {
+	color: white;
+}
+
+.navBar ul li ul li {
+  border: 2px solid black;
+  display: block;
+}
+
+.navBar ul {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.navBar  ul li {
+    display: inline-block;
+} .navBar  ul li:hover ul {
+    display: block;
+}
+
+.navBar ul li ul {
+  position: absolute;
+  width: 200px;
+  display: none;
+}
+
+.navBar ul li ul li:hover {
+    background: #666;
+}
+
+.navBar div a {
+    text-decoration: none;
+    font-size: 20px;
+    padding: 15px;
+    display:inline-block;
+}
