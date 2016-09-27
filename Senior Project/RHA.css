@@ -126,6 +126,10 @@ body {
     padding-top: 50px;
 	padding-bottom: 25px;
 }
+.image-tile {
+	max-width: 309px;
+}
+
 .footer {
 	float: center;
 	text-align: center;
