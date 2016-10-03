@@ -35,29 +35,43 @@ h3{
 	font-size: 28px;
 }
 
-.committeesLeft {
+.committees {
 	margin-left: 25px;
-}
-
-.committeesRight{
-	float: right;
 	margin-right: 25px;
-}
-
-
-
-#pawsOnThePatio {
-	width: 20%;
-	margin-left: auto;
-	margin-right: auto;
-	display: block;
-}
-#onCampus, #pawsOnThePatio {
-	display: inline-block;
-}
-
-.committeesLeft, .committeesRight{
 	width: 75%;
 	vertical-align: top;
 	font-size: 20px;
+}
+
+#onCampus, #onCampusPhoto {
+	display: inline-block;
+}
+
+#offCampus, #offCampusPhoto {
+	display: inline-block;
+}
+
+#service, #servicePhoto {
+	display: inline-block;
+}
+
+#publicity, #publicityPhoto {
+	display: inline-block;
+}
+
+#onCampusPhoto, #offCampusPhoto, #servicePhoto, #publicityPhoto {
+	width: 20%;
+}
+
+#onCampusWrapper, #serviceWrapper{
+	background-color: #DCDCDC;
+	padding: 15px;
+	margin-left: -10pt;
+	margin-right: -10pt;
+}
+
+#offCampusWrapper, #publicityWrapper {
+	padding: 15px;
+	margin-left: -10pt;
+	margin-right: -10pt;
 }
