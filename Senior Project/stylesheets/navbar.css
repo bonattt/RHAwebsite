@@ -36,22 +36,23 @@
 
 .navBar ul li {
     display: inline-block;
-	background-color: white;
-}
-
-.navBar ul li {
 	background-color: #800000;
 	color: white;
+	font-size: 16pt;
 }
 
 .navBar ul li a {
 	color: white;
+	text-decoration: none;
 }
 
 .navBar ul li ul li {
   border: 2px solid black;
   display: block;
+  padding-top: 5pt;
+  padding-bottom: 5pt;
 }
+
 
 .navBar ul {
   display: inline;
