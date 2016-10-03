@@ -57,7 +57,7 @@
 .navBar ul {
   display: inline;
   margin: 0;
-  padding: 0;
+  padding: 2px;
 }
 
 .navBar  ul li {
