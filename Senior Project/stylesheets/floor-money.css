@@ -1,9 +1,9 @@
 
 #floor-money {
-	margin-left: 7%;
-	margin-top: 2%;
+	border-collapse: collapse;
+	margin-top: 25px;
 }
 
-#sidebar {
-	margin-right: 3%;
+td {
+	padding: 5px;
 }
