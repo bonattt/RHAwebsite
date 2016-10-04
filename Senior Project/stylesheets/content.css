@@ -139,9 +139,20 @@ h3{
     display: inline-block;
     text-align: center;
     height: 300px;
+	margin-bottom: 100px;
 }
 
 .signUpImage {
 	width: 75%;
 	height: 75%;
+}
+
+.moreInfoLink, .signUpLink {
+	width: 35%;
+	display: inline-block;
+	font-size: 24px;
+}
+
+.signUpText {
+	font-size: 36px;
 }
