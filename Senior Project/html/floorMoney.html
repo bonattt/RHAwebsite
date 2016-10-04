@@ -4,7 +4,12 @@
 <head>
     <link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
     <link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/floor-money.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/upcoming-events.css">
+	
 	<link rel="icon" href="../images/RHA.jpg">
+	
+	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
 	
     <title>
         RHA | floor money
@@ -87,157 +92,198 @@
     </div>
 
     <h1>Floor Money</h1>
-    <table border="1" align="center" bordercolor="#c0c0c0">
-        <tbody>
-            <tr>
-                <td align="middle" width="200"><b>Floor</b></td>
-                <td align="middle" width="60"><b>Balance</b></td>
-                <td align="middle" width="200"><b>Floor</b></td>
-                <td align="middle" width="60"><b>Balance</b></td>
-            </tr>
-            <tr>
-                <td> Apt East 1 </td>
-                <td align="right">
-                    $93.79&nbsp;
-                </td>
-                <td> Apt West 1 </td>
-                <td align="right">
-                    $933.01&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td> Apt East 2 </td>
-                <td align="right">
-                    $87.91&nbsp;
-                </td>
-                <td> Apt West 2 </td>
-                <td align="right">
-                    $501.11&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td> Apt East 3 </td>
-                <td align="right">
-                    $109.14&nbsp;
-                </td>
-                <td> Apt West 3 </td>
-                <td align="right">
-                    $21.56&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td bgcolor="#eeeeee" colspan="4">&nbsp;</td>
-            </tr>
-            <tr>
-                <td> BSB 0/1 </td>
-                <td align="right">
-                    $261.28&nbsp;
-                </td>
-                <td> Speed 1 </td>
-                <td align="right">
-                    $762.78&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td> BSB 2 </td>
-                <td align="right">
-                    $283.17&nbsp;
-                </td>
-                <td> Speed 2 </td>
-                <td align="right">
-                    $685.98&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td> BSB 3 </td>
-                <td align="right">
-                    $840.00&nbsp;
-                </td>
-                <td> Speed 3 </td>
-                <td align="right">
-                    $496.11&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td bgcolor="#eeeeee" colspan="4">&nbsp;</td>
-            </tr>
-            <tr>
-                <td> Deming 0 </td>
-                <td align="right">
-                    $613.00&nbsp;
-                </td>
-                <td> Lakeside 1 </td>
-                <td align="right">
-                    $0.00&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td> Deming 1 </td>
-                <td align="right">
-                    $332.00&nbsp;
-                </td>
-                <td> Lakeside 2 </td>
-                <td align="right">
-                    $700.00&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td> Deming 2 </td>
-                <td align="right">
-                    $514.44&nbsp;
-                </td>
-                <td> Lakeside 3 </td>
-                <td align="right">
-                    $32.06&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td> Deming 3 </td>
-                <td align="right">
-                    $498.04&nbsp;
-                </td>
-                <td> Lakeside 4 </td>
-                <td align="right">
-                    $32.61&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td bgcolor="#eeeeee" colspan="4">&nbsp;</td>
-            </tr>
-            <tr>
-                <td> Mees </td>
-                <td align="right">
-                    $1161.21&nbsp;
-                </td>
-                <td> Percopo 0/1 </td>
-                <td align="right">
-                    $1126.54&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td> Blumberg </td>
-                <td align="right">
-                    $847.73&nbsp;
-                </td>
-                <td> Percopo 2 </td>
-                <td align="right">
-                    $376.03&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td> Scharpenberg </td>
-                <td align="right">
-                    $194.65&nbsp;
-                </td>
-                <td> Percopo 3 </td>
-                <td align="right">
-                    $146.97&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td bgcolor="#eeeeee" colspan="4">&nbsp;</td>
-            </tr>
-        </tbody>
-    </table>
+	<p> 
+		What is floor money? Floor money is money you can earn for your floor
+		or hall to fund events, like a floor trip to go laser tagging, or
+		something else fun! How can you earn floor money? By participating in
+		events like hallimpics. Below is a list of all upcoming events which
+		could earn you floor money.
+	</p>
+	<p> 
+		You can also earn floor money by having at least 2 people from your
+		floor attend RHA meetings each week (month?)
+	</p>
+	<span>
+		<table border="1" align="left" bordercolor="#c0c0c0" id="floor-money">
+			<tbody>
+				<tr>
+					<td align="middle" width="200"><b>Floor</b></td>
+					<td align="middle" width="60"><b>Balance</b></td>
+					<td align="middle" width="200"><b>Floor</b></td>
+					<td align="middle" width="60"><b>Balance</b></td>
+				</tr>
+				<tr>
+					<td> Apt East 1 </td>
+					<td align="right">
+						$93.79&nbsp;
+					</td>
+					<td> Apt West 1 </td>
+					<td align="right">
+						$933.01&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td> Apt East 2 </td>
+					<td align="right">
+						$87.91&nbsp;
+					</td>
+					<td> Apt West 2 </td>
+					<td align="right">
+						$501.11&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td> Apt East 3 </td>
+					<td align="right">
+						$109.14&nbsp;
+					</td>
+					<td> Apt West 3 </td>
+					<td align="right">
+						$21.56&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td bgcolor="#eeeeee" colspan="4">&nbsp;</td>
+				</tr>
+				<tr>
+					<td> BSB 0/1 </td>
+					<td align="right">
+						$261.28&nbsp;
+					</td>
+					<td> Speed 1 </td>
+					<td align="right">
+						$762.78&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td> BSB 2 </td>
+					<td align="right">
+						$283.17&nbsp;
+					</td>
+					<td> Speed 2 </td>
+					<td align="right">
+						$685.98&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td> BSB 3 </td>
+					<td align="right">
+						$840.00&nbsp;
+					</td>
+					<td> Speed 3 </td>
+					<td align="right">
+						$496.11&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td bgcolor="#eeeeee" colspan="4">&nbsp;</td>
+				</tr>
+				<tr>
+					<td> Deming 0 </td>
+					<td align="right">
+						$613.00&nbsp;
+					</td>
+					<td> Lakeside 1 </td>
+					<td align="right">
+						$0.00&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td> Deming 1 </td>
+					<td align="right">
+						$332.00&nbsp;
+					</td>
+					<td> Lakeside 2 </td>
+					<td align="right">
+						$700.00&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td> Deming 2 </td>
+					<td align="right">
+						$514.44&nbsp;
+					</td>
+					<td> Lakeside 3 </td>
+					<td align="right">
+						$32.06&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td> Deming 3 </td>
+					<td align="right">
+						$498.04&nbsp;
+					</td>
+					<td> Lakeside 4 </td>
+					<td align="right">
+						$32.61&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td bgcolor="#eeeeee" colspan="4">&nbsp;</td>
+				</tr>
+				<tr>
+					<td> Mees </td>
+					<td align="right">
+						$1161.21&nbsp;
+					</td>
+					<td> Percopo 0/1 </td>
+					<td align="right">
+						$1126.54&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td> Blumberg </td>
+					<td align="right">
+						$847.73&nbsp;
+					</td>
+					<td> Percopo 2 </td>
+					<td align="right">
+						$376.03&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td> Scharpenberg </td>
+					<td align="right">
+						$194.65&nbsp;
+					</td>
+					<td> Percopo 3 </td>
+					<td align="right">
+						$146.97&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td bgcolor="#eeeeee" colspan="4">&nbsp;</td>
+				</tr>
+			</tbody>
+		</table>
+		
+			
+		<div id="sidebar">
+			<h3> Floor Money Events </h3>
+			<div id="upcomingEvents">
+				<div class="event">
+					<a href="https://upload.wikimedia.org/wikipedia/commons/8/8e/Rubber_duckies_So_many_ducks.jpg">
+						<h2 class="eventText"> Rubber Duck Invasion!!! </h2>
+						<p class="eventText"> ruber ducks are coming to your school to take over the world and control your mind!! </p>
+					</a>
+				</div>
+				
+				<div class="event">
+					<a href="https://upload.wikimedia.org/wikipedia/commons/8/8e/Rubber_duckies_So_many_ducks.jpg">
+						<h2 class="eventText"> Rubber Duck Invasion!!! </h2>
+						<p class="eventText"> ruber ducks are coming to your school to take over the world and control your mind!! </p>
+					</a>
+				</div>
+				
+				<div class="event">
+					<a href="https://upload.wikimedia.org/wikipedia/commons/8/8e/Rubber_duckies_So_many_ducks.jpg">
+						<h2 class="eventText"> Rubber Duck Invasion!!! </h2>
+						<p class="eventText"> ruber ducks are coming to your school to take over the world and control your mind!! </p>
+					</a>
+				</div>
+			</div>
+		</div>
+		
+	</span>
 </body>
 </html>
