@@ -9,13 +9,13 @@
 <table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
 <tr><td><b>Test Suite</b></td></tr>
 <tr><td><a href="verify-RHAhome.html">verify-RHAhome</a></td></tr>
-<tr><td><a href="verify-navi-RHAhome-toSubway-Cam.html">verify-navi-RHAhome-toSubway-Cam</a></td></tr>
 <tr><td><a href="verify-navi-RHAhome.html">verify-navi-RHAhome</a></td></tr>
 <tr><td><a href="verify-navi-signups.html">verify-navi-signups</a></td></tr>
 <tr><td><a href="verify-navi-submit-proposal.html">verify-navi-submit-proposal</a></td></tr>
 <tr><td><a href="verify-navi-hall-money.html">verify-navi-floor-money</a></td></tr>
 <tr><td><a href="verify-navi-officers.html">verify-navi-officers</a></td></tr>
 <tr><td><a href="verify-navi-committees.html">verify-navi-committees</a></td></tr>
+<tr><td><a href="verify-navi-RHAhome-toSubway-Cam.html">verify-navi-Subway-Cam</a></td></tr>
 </tbody></table>
 </body>
 </html>

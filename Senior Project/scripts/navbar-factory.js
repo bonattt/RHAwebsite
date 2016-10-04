@@ -63,5 +63,5 @@ window.onload = function() {
 		'            <input type="password" id="password-input"> </input>'+
 		'            <input name="Submit"  style="left-margin: 1px;" type="submit" value="login" onClick="JavaScript:handleClick()"/>'+
 		'        </form>'+
-		'    </div>';
+		'    </div>'; // */
 	}
