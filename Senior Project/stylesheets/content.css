@@ -147,10 +147,10 @@ h3{
 	height: 75%;
 }
 
-.moreInfoLink, .signUpLink {
-	width: 35%;
+.moreInfoLink, .signUpLink, .viewListLink {
+	width: 25%;
 	display: inline-block;
-	font-size: 24px;
+	font-size: 20px;
 }
 
 .signUpText {
