@@ -1,8 +1,9 @@
 from django.conf.urls import include, url
 from django.contrib import admin
+from . import views
 
 urlpatterns = [
-	url(r'^home/', '<h1> home age !!!! </h1>'),
+	url(r'^home/', views.homePage),
 	url(r'^admin/', admin.site.urls),
 	url(r'^about/', include('about.urls')),
 	url(r'^events/', include('events.urls')),
