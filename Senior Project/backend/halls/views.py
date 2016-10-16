@@ -2,9 +2,10 @@ from django.http import HttpResponse
 
 
 def aboutHalls(request):
-	return HttpResponse('<h1> TODO redirect to webpage! </h1>');
+	file = open('html/redirect_aboutHalls.html');
+	return HttpResponse(file.read());
 	
 
 def floorMoney(request):
-	file = open('../../html/floorMoney.html');
+	file = open('html/floorMoney.html');
 	return HttpResponse(file.read());
