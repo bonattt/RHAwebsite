@@ -1,20 +1,25 @@
 from django.http import HttpResponse
 
 def officers(request):
-	return HttpResponse('<h1> TODO return actual HTML here!! </h1>');
+	file = open('../../html/officers.html');
+	return HttpResponse(file.read());
 
 	
 def constitution(request):
-	return HttpResponse('<h1> TODO return actual HTML here!! </h1>');
+	file = open('../../html/');
+	return HttpResponse(file);
 	
 	
 def procDoc(request):
-	return HttpResponse('<h1> TODO return actual HTML here!! </h1>');
+	file = open('../../html/ ');
+	return HttpResponse(file);
 	
 	
 def committees(request):
-	return HttpResponse('<h1> TODO return actual HTML here!! </h1>');
+	file = open('../../html/committees');
+	return HttpResponse(file.read());
 	
 	
 def contact(request):
-	return HttpResponse('<h1> TODO return actual HTML here!! </h1>');
+	file = open('../../html/');
+	return HttpResponse('<h1> TODO: make the email open email something? </h1>');

@@ -2,4 +2,5 @@ from django.http import HttpResponse
 
 
 def subwayCam(request):
-	return HttpResponse('<h1> TODO return actual HTML here!! </h1>');
+	file = open('../../html/subwayCam.html');
+	return HttpResponse(file.read());

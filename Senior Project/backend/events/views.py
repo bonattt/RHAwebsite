@@ -2,13 +2,16 @@ from django.http import HttpResponse
 
 
 def signUps(request):
-	return HttpResponse('<h1> TODO return actual HTML here!! </h1>');
+	file = open('../../html/sign-ups.html');
+	return HttpResponse(file.read());
 	
 	
 def proposals(request):
-	return HttpResponse('<h1> TODO return actual HTML here!! </h1>');
+	file = open('../../html/proposals.html');
+	return HttpResponse(file.read());
 	
 	
 def pastEvents(request):
-	return HttpResponse('<h1> TODO return actual HTML here!! </h1>');
+	file = open('../../html/pastEvents.html');
+	return HttpResponse(file.read());
 	
