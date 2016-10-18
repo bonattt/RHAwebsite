@@ -9,6 +9,7 @@ window.onload = function() {
 		'            <a href="#"> <u> Events </u> </a>'+
 		'            <ul>'+
 		'                <li><a href="sign-ups.html">Sign-Ups</a></li>'+
+		'                <li><a href="pastEvents.html">Past Events</a></li>'+
 		'                <li><a href="proposals.html">Submit a Proposal</a></li>'+
 		'            </ul>'+
 		'        </li>'+
