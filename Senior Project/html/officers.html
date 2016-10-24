@@ -2,13 +2,11 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
-	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
 	<link rel="icon" href="../images/RHA.jpg">
+	<script src="jquery.1.12.4.min.js"></script>
     <title>
         RHA | Officers
     </title>
-	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
 </head>
 
 <body>
@@ -17,9 +15,9 @@
 
 
 	<div class="content">
-		<h1>Officers</h1>
+		<h1 class="edit">Officers</h1>
 		<div class="officer" id="president">
-			<h3>Allison Hunley - President</h3>
+			<h3 class = "edit">Allison Hunley - President</h3>
 			<img src="http://www.rose-hulman.edu/rha/im/exec_president.jpg" alt="Allison Hunley" height="294" width="195">
 			<p>Email: <a href="mailto:hunleyam@rose-hulman.edu">hunleyam@rose-hulman.edu</a></p>
 			<p>Box #: 1079 </p>
@@ -107,6 +105,18 @@
 			<p>Room: West 202</p> 
 		</div>
 	</div>
-</body>
 
+		<div id="myModal" class="modal">
+		<div class="modal-content">
+			<span class="close">x</span>
+			<p id="officerTitle"></p>
+			<p id="name">Name: </p>
+			<p id="email">Email: </p> 
+		</div>
+	</div>
+</body>
 </html>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
+	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
+	<script type="text/javascript" src="../scripts/adminPermissions.js"> </script>
