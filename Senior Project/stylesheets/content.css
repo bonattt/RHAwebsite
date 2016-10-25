@@ -237,7 +237,7 @@ h3{
 	text-align: center;
 }
 
-.close {
+.close, .closeList, .closeEdit {
     color: black;
     float: right;
     font-size: 28px;
