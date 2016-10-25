@@ -71,17 +71,17 @@ function moreInformationFunction(triggeringElement) {
         var nameInput = document.createElement("textarea");
         nameInput.setAttribute("rows", "1");
         nameInput.setAttribute("cols", "20");
-        nameInput.setAttribute("placeholder", title[0]);
+        nameInput.innerHTML = title[0];
 
         var priceInput = document.createElement("textarea");
         priceInput.setAttribute("rows", "1");
         priceInput.setAttribute("cols", "20");
-        priceInput.setAttribute("placeholder", title[1].split("<")[0]);
+        priceInput.innerHTML = title[1].split("<")[0];
 
         var descriptionInput = document.createElement("textarea");
         descriptionInput.setAttribute("rows", "4");
         descriptionInput.setAttribute("cols", "30");
-        descriptionInput.setAttribute("placeholder", editImage.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML);
+        descriptionInput.innerHTML = editImage.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML;
 
 
         var nameNode = document.getElementById("nameInput");

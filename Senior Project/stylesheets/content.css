@@ -261,13 +261,21 @@ h3{
 	text-align: center;
 }
 
+.modalButton {
+	margin-left: 35%;
+	margin-right: 35%;
+	margin-top: 10%;
+}
+
 .modalLeft {
 	float: left;
+	width: 46%;
 }
 
 .modalRight {
 	padding: 10px;
 	float: right;
+	width: 46%;
 }
 
 .modal-content p {

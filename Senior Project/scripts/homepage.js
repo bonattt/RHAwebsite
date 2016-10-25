@@ -24,12 +24,12 @@
         var newStuffInput = document.createElement("textarea");
         newStuffInput.setAttribute("rows", "1");
         newStuffInput.setAttribute("cols", "20");
-        newStuffInput.setAttribute("placeholder", editImage.srcElement.parentElement.innerHTML.split("<")[0]);
+        newStuffInput.innerHTML = editImage.srcElement.parentElement.innerHTML.split("<")[0];
 
         var descInput = document.createElement("textarea");
         descInput.setAttribute("rows", "4");
         descInput.setAttribute("cols", "20");
-        descInput.setAttribute("placeholder", editImage.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].innerHTML);
+        descInput.innerHTML = editImage.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].innerHTML;
 
         var whatsnewNode = document.getElementById("whatsnewInput");
         var descNode = document.getElementById("descInput");
@@ -54,6 +54,15 @@
 
             }
         }
+
+        var submit = document.getElementById("submit");
+        submit.addEventListener("click", )
+
+        
+        function submitChanges(header, description) {
+            
+        }
     }
+
 
 })();

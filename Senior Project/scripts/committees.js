@@ -26,12 +26,12 @@
         var committeeInput = document.createElement("textarea");
         committeeInput.setAttribute("rows", "1");
         committeeInput.setAttribute("cols", "20");
-        committeeInput.setAttribute("placeholder", parent.querySelectorAll(":nth-child(1)")[0].textContent);
+        committeeInput.innerHTML = parent.querySelectorAll(":nth-child(1)")[0].textContent;
 
         var descInput = document.createElement("textarea");
         descInput.setAttribute("rows", "4");
         descInput.setAttribute("cols", "30");
-        descInput.setAttribute("placeholder", parent.querySelectorAll(":nth-child(2)")[0].textContent);
+        descInput.innerHTML = parent.querySelectorAll(":nth-child(2)")[0].textContent;
 
         var committeeNode = document.getElementById("committeeInput");
         var descNode = document.getElementById("descInput");

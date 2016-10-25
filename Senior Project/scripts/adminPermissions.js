@@ -32,18 +32,18 @@
         var nameInput = document.createElement("textarea");
         nameInput.setAttribute("rows", "1");
         nameInput.setAttribute("cols", "20");
-        nameInput.setAttribute("placeholder", nameAndTitle[0]);
+        nameInput.innerHTML = nameAndTitle[0];
 
 
         var emailInput = document.createElement("textarea");
         emailInput.setAttribute("rows", "1");
         emailInput.setAttribute("cols", "20");
-        emailInput.setAttribute("placeholder", parent.querySelectorAll(":nth-child(3)")[0].textContent.split(" ")[1]);
+        emailInput.innerHTML = parent.querySelectorAll(":nth-child(3)")[0].textContent.split(" ")[1];
 
         var phnNumInput = document.createElement("textarea");
         phnNumInput.setAttribute("rows", "1");
         phnNumInput.setAttribute("cols", "20");
-        phnNumInput.setAttribute("placeholder", parent.querySelectorAll(":nth-child(4)")[0].textContent.split(": ")[1]);
+        phnNumInput.innerHTML = parent.querySelectorAll(":nth-child(4)")[0].textContent.split(": ")[1];
         // console.log()
 
         var CMInput = null;
@@ -52,7 +52,7 @@
             CMInput = document.createElement("textarea");
             CMInput.setAttribute("rows", "1");
             CMInput.setAttribute("cols", "20");
-            CMInput.setAttribute("placeholder", parent.querySelectorAll(":nth-child(6)")[0].textContent.split(": ")[1]);
+            CMInput.innerHTML = parent.querySelectorAll(":nth-child(6)")[0].textContent.split(": ")[1];
         } else {
             //do nothing
         }
