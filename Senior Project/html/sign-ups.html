@@ -20,7 +20,7 @@
 
 		<div class="tileArea">
 			<div class="eventTile">
-				<p class="signUpText">King's Island - $25</p>
+				<p class="signUpText edit">King's Island - $25</p>
 				<img class="signUpImage" src="../images/kingsIsland.jpg"></img>
 				<a >
 					<p onclick="moreInformationFunction(this)" class="moreInfoLink" id="moreInfoLinkKings">Show Details</p>
@@ -33,7 +33,7 @@
 					close on 9/28/2016.</div>
 			</div>
 			<div class="eventTile">
-				<p class="signUpText">Children's Museum - $10</p>
+				<p class="signUpText edit">Children's Museum - $10</p>
 				<img class="signUpImage" src="../images/childrensMuseum.jpg"></img>
 				<a>
 					<p onclick="moreInformationFunction(this)" class="moreInfoLink" id="moreInfoLinkIndy">Show Details</p>
@@ -46,7 +46,7 @@
 					will close on 10/20/2016.</div>
 			</div>
 			<div class="eventTile">
-				<p class="signUpText">Pumpkin Works - FREE</p>
+				<p class="signUpText edit">Pumpkin Works - FREE</p>
 				<img class="signUpImage" src="../images/pumpkinWorks.jpg"></img>
 				<a>
 					<p onclick="moreInformationFunction(this)" class="moreInfoLink" id="moreInfoLinkPumpkin">Show Details</p>
@@ -59,7 +59,7 @@
 			</div>
 			<div class="eventTile">
 
-				<p class="signUpText">Skyzone Trampoline Park - $15</p>
+				<p class="signUpText edit">Skyzone Trampoline Park - $15</p>
 				<img class="signUpImage" src="../images/skyZone.jpg"></img>
 				<a>
 					<p onclick="moreInformationFunction(this)" class="moreInfoLink" id="moreInfoLinkSkyzone">Show Details</p>
@@ -74,14 +74,32 @@
 	</div>
 	</div>
 
-	<div id="myModal" class="modal">
+	<div id="listModal" class="modal">
 		<div class="modal-content">
-			<span class="close">x</span>
+			<span class="closeList">x</span>
 			<p>The attendees for this event are:</p>
 			<p>Morgan Cook</p>
 			<p>Thomas Bonatti</p>
 		</div>
 	</div>
+
+	<div id="editModal" class="modal">
+		<div class="modal-content">
+			<span class="closeEdit">x</span>
+			<div class="modalLeft">
+				
+				<p id="name"></p>
+				<p id="price"></p>
+				<p id="description"></p>
+			</div>
+			<div class="modalRight">
+				<p id="nameInput"></p>
+				<p id="priceInput"></p>
+				<p id="descriptionInput"></p>
+			</div>
+		</div>
+	</div>
+
 </body>
 <script language="Javascript" src="../scripts/navbar-factory.js"> </script>
 <script language="Javascript" src="../scripts/signUps.js"></script>
