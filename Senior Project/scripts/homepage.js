@@ -6,7 +6,6 @@
         for (var i = 0; i < adminValues.length; i++) {
             var editImage = document.createElement("img");
             editImage.setAttribute("src", "../images/edit.png");
-            editImage.style.cssText = "float: right;";
             adminValues[i].appendChild(editImage);
             editImage.addEventListener("click", function (e) {
                 showModal(e);
@@ -19,42 +18,39 @@
     	var modal = document.getElementById('myModal');
         var span = document.getElementsByClassName("close")[0];
 
-        var parent = editImage.srcElement.parentElement.parentElement;
-        var committee = "Committee: ";
-        var description = description = "Description: ";
+        var newStuff = "Header: ";
+        var newStuffDesc = "Description: ";
 
-        var committeeInput = document.createElement("textarea");
-        committeeInput.setAttribute("rows", "1");
-        committeeInput.setAttribute("cols", "20");
-        committeeInput.setAttribute("placeholder", parent.querySelectorAll(":nth-child(1)")[0].textContent);
+        var newStuffInput = document.createElement("textarea");
+        newStuffInput.setAttribute("rows", "1");
+        newStuffInput.setAttribute("cols", "20");
+        newStuffInput.setAttribute("placeholder", editImage.srcElement.parentElement.innerHTML.split("<")[0]);
 
         var descInput = document.createElement("textarea");
         descInput.setAttribute("rows", "4");
-        descInput.setAttribute("cols", "30");
-        descInput.setAttribute("placeholder", parent.querySelectorAll(":nth-child(2)")[0].textContent);
+        descInput.setAttribute("cols", "20");
+        descInput.setAttribute("placeholder", editImage.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].innerHTML);
 
-        var committeeNode = document.getElementById("committeeInput");
+        var whatsnewNode = document.getElementById("whatsnewInput");
         var descNode = document.getElementById("descInput");
 
-
-       	document.getElementById("committeeName").innerHTML = committee;
-       	committeeNode.appendChild(committeeInput);
-       	document.getElementById("description").innerHTML = description;
-       	descNode.appendChild(descInput);
-
+        document.getElementById("whatsnew").innerHTML = newStuff;
+        whatsnewNode.appendChild(newStuffInput);
+        document.getElementById("description").innerHTML = newStuffDesc;
+        descNode.appendChild(descInput);
 
         modal.style.display = "block";
         span.onclick = function () {
             modal.style.display = "none";
-            committeeNode.removeChild(committeeNode.firstChild);
+            whatsnewNode.removeChild(whatsnewNode.firstChild);
             descNode.removeChild(descNode.firstChild);
 
         }
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
-            	committeeNode.removeChild(committeeNode.firstChild);
-            	descNode.removeChild(descNode.firstChild);
+                whatsnewNode.removeChild(whatsnewNode.firstChild);
+                descNode.removeChild(descNode.firstChild);
 
             }
         }

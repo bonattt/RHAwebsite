@@ -12,6 +12,7 @@
 	<script type="text/javascript" src="../scripts/login-script.js">  </script>
 	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
 
+
 </head>
 
 <body>
@@ -20,7 +21,7 @@
 	<img class="scrollingImage" src="../images/homePagePicture.jpg">
 
 	<div class="newsArea">
-		<h1> What's new? </h1>
+		<h1 class="edit"> What's new? </h1>
 		<p>
 			Residence Hall Association is an organization for students living on campus in a residence hall. If you live in a residence
 			hall, then you are already a member. All you have to do is come to a meeting and have fun sharing ideas! R.H.A has several
@@ -91,8 +92,22 @@
 		<p> &copy; 2017 Rose-Hulman Institute of Technology, Residence Hall Association </p>
 	</div>
 
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+			<span class="close">x</span>
+			<div class="modalLeft">
+				<p id="whatsnew"></p>
+				<p id="description"></p>
+			</div>
+			<div class="modalRight">
+				<p id="whatsnewInput"></p>
+				<p id="descInput"></p>
+			</div>
+		</div>
+	</div>
 
 
 </body>
 
 </html>
+<script type="text/javascript" src="../scripts/homepage.js"> </script>

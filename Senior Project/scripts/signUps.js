@@ -64,23 +64,54 @@ function moreInformationFunction(triggeringElement) {
         var span = document.getElementsByClassName("closeEdit")[0];
 
         var title = editImage.srcElement.parentElement.innerHTML.split(" - ");
-        var name = title[0];
-        var price = title[1].split("<")[0];
-        var description = editImage.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML;
+        var name = "Event name: ";
+        var price = "Price: " ;
+        var description = "Description: ";
 
-        // console.log(editImage.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML);
+        var nameInput = document.createElement("textarea");
+        nameInput.setAttribute("rows", "1");
+        nameInput.setAttribute("cols", "20");
+        nameInput.setAttribute("placeholder", title[0]);
 
-        document.getElementById("name").innerHTML = "Event name: " + name; 
-        document.getElementById("price").innerHTML = "Price: " + price;
-        document.getElementById("description").innerHTML = "Description: ";      
+        var priceInput = document.createElement("textarea");
+        priceInput.setAttribute("rows", "1");
+        priceInput.setAttribute("cols", "20");
+        priceInput.setAttribute("placeholder", title[1].split("<")[0]);
+
+        var descriptionInput = document.createElement("textarea");
+        descriptionInput.setAttribute("rows", "4");
+        descriptionInput.setAttribute("cols", "30");
+        descriptionInput.setAttribute("placeholder", editImage.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML);
+
+
+        var nameNode = document.getElementById("nameInput");
+        var priceNode = document.getElementById("priceInput");
+        var descriptionNode = document.getElementById("descriptionInput");
+
+
+        document.getElementById("name").innerHTML = name;
+        nameNode.appendChild(nameInput); 
+        document.getElementById("price").innerHTML = price;
+        priceNode.appendChild(priceInput); 
+        document.getElementById("description").innerHTML = description;  
+        descriptionNode.appendChild(descriptionInput); 
+
 
         modal.style.display = "block";
         span.onclick = function () {
             modal.style.display = "none";
+            nameNode.removeChild(nameNode.firstChild);
+            priceNode.removeChild(priceNode.firstChild);
+            descriptionNode.removeChild(descriptionNode.firstChild);
+
         }
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
+                nameNode.removeChild(nameNode.firstChild);
+                priceNode.removeChild(priceNode.firstChild);
+                descriptionNode.removeChild(descriptionNode.firstChild);
+
             }
         }
     }
