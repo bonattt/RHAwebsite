@@ -8,9 +8,9 @@ window.onload = function() {
 		'        <li>'+
 		'            <a href="#"> <u> Events </u> </a>'+
 		'            <ul>'+
-		'                <li><a href="sign-ups.html">Sign-Ups</a></li>'+
-		'                <li><a href="pastEvents.html">Past Events</a></li>'+
-		'                <li><a href="proposals.html">Submit a Proposal</a></li>'+
+		'                <a href="sign-ups.html"><li>Sign-Ups</li></a>'+
+		'                <a href="pastEvents.html"><li>Past Events</li></a>'+
+		'                <a href="proposals.html"><li>Submit a Proposal</li></a>'+
 		'            </ul>'+
 		'        </li>'+
 		'    </ul>'+
@@ -19,7 +19,7 @@ window.onload = function() {
 		'        <li>'+
 		'            <a href="#"> Services </a>'+
 		'            <ul>'+
-		'                <li><a href="subwayCam.html">Subway Cam</a></li>'+
+		'                <a href="subwayCam.html"><li>Subway Cam</li></a>'+
 		'            </ul>'+
 		'        </li>'+
 		'    </ul>'+
@@ -28,8 +28,8 @@ window.onload = function() {
 		'        <li>'+
 		'            <a href="#"> <u> Forms </u> </a>'+
 		'            <ul>'+
-		'                <li><a href="http://www.rose-hulman.edu/rha/downloads/RHA_Reimbursement_Form.xlsm">Reimbursement Form</a></li>'+
-		'                <li><a href="http://www.rose-hulman.edu/rha/downloads/RHA_Payment_Form.xls">Payment Form</a></li>'+
+		'                <a href="http://www.rose-hulman.edu/rha/downloads/RHA_Reimbursement_Form.xlsm"><li>Reimbursement Form</li></a>'+
+		'                <a href="http://www.rose-hulman.edu/rha/downloads/RHA_Payment_Form.xls"><li>Payment Form</li></a>'+
 		'            </ul>'+
 		'        </li>'+
 		'    </ul>'+
@@ -38,8 +38,8 @@ window.onload = function() {
 		'        <li>'+
 		'            <a href="#"> Halls </a>'+
 		'            <ul>'+
-		'                <li><a href="http://www.rose-hulman.edu/offices-and-services/student-life/campus-life/housing-and-residence-life.aspx">About Our Residence Halls</a></li>'+
-		'                <li><a href="floorMoney.html">Floor Money</a></li>'+
+		'                <a href="http://www.rose-hulman.edu/offices-and-services/student-life/campus-life/housing-and-residence-life.aspx"><li>About Our Residence Halls</li></a>'+
+		'                <a href="floorMoney.html"><li>Floor Money</li></a>'+
 		'            </ul>'+
 		'        </li>'+
 		'    </ul>'+
@@ -48,11 +48,11 @@ window.onload = function() {
 		'        <li>'+
 		'            <a href="#"> <u> About Us </u> </a>'+
 		'            <ul>'+
-		'                <li> <a href="officers.html">Officers</a> </li>'+
-		'                <li> <a href="http://www.rose-hulman.edu/rha/constitution.pdf">Constitution</a> </li>'+
-		'                <li> <a href="http://www.rose-hulman.edu/rha/procedural.pdf">Procedural Document</a> </li>'+
-		'                <li> <a href="committees.html">Committees</a> </li>'+
-		'                <li> <a href="mailto:hunleyam@rose-hulman.edu">Contact Us</a> </li>'+
+		'                <a href="officers.html"><li>Officers</li></a>'+
+		'                <a href="http://www.rose-hulman.edu/rha/constitution.pdf"><li>Constitution</li></a>'+
+		'                <a href="http://www.rose-hulman.edu/rha/procedural.pdf"><li>Procedural Document</li></a>'+
+		'                <a href="committees.html"><li>Committees</li></a>'+
+		'                <a href="mailto:rhitrha@gmail.com"><li>Contact Us</li></a>'+
 		'            </ul>'+
 		'            </li>'+
 		'        </ul>'+
