@@ -38,7 +38,11 @@ CREATE TABLE Proposals (
         paid boolean,
         event_date DATE,
         event_signup_open DATE,
-        event_signup_close DATE
+        event_signup_close DATE,
+        cost_to_attendee MONEY,
+        image_path varchar(50),
+        description varchar(400),
+        attendees jsonb
 );
 
 -- Most entries below this point are temporary. Once the database has been begun regular use, these inserts will become obselete
