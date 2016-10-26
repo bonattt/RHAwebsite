@@ -3,14 +3,14 @@
 
 <head>
 	<link rel="icon" href="../images/RHA.jpg">
-    <title>
-        RHA | Officers
-    </title>
+	<title>
+		RHA | Officers
+	</title>
 </head>
 
 <body>
-	
-	<div id="navBar">  </div>
+
+	<div id="navBar"> </div>
 
 
 	<div class="content">
@@ -46,7 +46,7 @@
 			<img src="http://www.rose-hulman.edu/rha/im/exec_vicepresident.jpg" alt="Bartosz  Miskowiec" height="294" width="195">
 			<p>Email: <a href="mailto:miskowbs@rose-hulman.edu">miskowbs@rose-hulman.edu</a></p>
 			<p>Phone Number: 773-616-1802</p>
-			<p>Room: Lakeside 208</p>        
+			<p>Room: Lakeside 208</p>
 			<p>Box #: 1203 </p>
 		</div>
 
@@ -55,7 +55,7 @@
 			<img src="http://www.rose-hulman.edu/rha/im/exec_oncampus.jpg" alt="Daniel Lauriola" height="294" width="195">
 			<p>Email: <a href="mailto:lauriodk@rose-hulman.edu">lauriodk@rose-hulman.edu</a></p>
 			<p>Phone Number: 260-413-4080</p>
-			<p>Room: East 306</p>  
+			<p>Room: East 306</p>
 			<p>Box #: 1140</p>
 		</div>
 
@@ -64,7 +64,7 @@
 			<img src="http://www.rose-hulman.edu/rha/im/exec_offcampus.jpg" alt="Carly Tuska" height="294" width="195">
 			<p>Email: <a href="mailto:tuskaca@rose-hulman.edu">tuskaca@rose-hulman.edu</a></p>
 			<p>Phone Number: 812-249-3129</p>
-			<p>Room: Percopo 123</p>  
+			<p>Room: Percopo 123</p>
 			<p>Box #: 603</p>
 		</div>
 
@@ -73,7 +73,7 @@
 			<img src="http://www.rose-hulman.edu/rha/im/exec_service.jpg" alt="Michael Doyel" height="294" width="195">
 			<p>Email: <a href="mailto:doyelmk@rose-hulman.edu">doyelmk@rose-hulman.edu</a></p>
 			<p>Phone Number: 316-201-2309</p>
-			<p>Room: BSB 218</p>  
+			<p>Room: BSB 218</p>
 			<p>Box #: 2309</p>
 		</div>
 
@@ -82,7 +82,7 @@
 			<img src="http://www.rose-hulman.edu/rha/im/exec_ncc.jpeg" alt="Ammanda Krauss" height="294" width="195">
 			<p>Email: <a href="mailto:kraussar@rose-hulman.edu">kraussar@rose-hulman.edu</a></p>
 			<p>Phone Number: 716-341-0777</p>
-			<p>Room: East 206</p>  
+			<p>Room: East 206</p>
 			<p>Box #: 1126</p>
 		</div>
 
@@ -91,16 +91,16 @@
 			<img src="http://www.rose-hulman.edu/rha/im/exec_publicity.jpg" alt="Sydney Black" height="294" width="195">
 			<p>Email: <a href="mailto:blacksj@rose-hulman.edu">blacksj@rose-hulman.edu</a></p>
 			<p>Phone Number: 716-341-0777</p>
-			<p>Room: East 206</p> 
+			<p>Room: East 206</p>
 			<p>Box #: 1126</p>
 		</div>
-		
+
 		<div class="officer" id="webmaster">
 			<h3 class="edit">Ben Kimmel - Web Master</h3>
 			<img src="http://www.rose-hulman.edu/rha/im/exec_webmaster.JPG" alt="Ben Kimmel" height="294" width="210">
 			<p>Email: <a href="mailto:kimmelbs@rose-hulman.edu">kimmelbs@rose-hulman.edu</a></p>
 			<p>Phone Number: 484-844-5269</p>
-			<p>Room: West 202</p> 
+			<p>Room: West 202</p>
 			<p>Box #: 1107</p>
 		</div>
 	</div>
@@ -108,26 +108,35 @@
 	<div id="myModal" class="modal">
 		<div class="modal-content">
 			<span class="close">x</span>
-			<div class="modalLeft">
-				<p id="officerTitle"></p>
-				<p id="name"></p>
-				<p id="email"></p> 
-				<p id="phnNum"></p>
-				<p id="CM"></p>
-			</div>
-			<div class="modalRight">
-				<br>
-				<p id="nameInput"></p>
-				<p id="emailInput"></p>
-				<p id="phnNumInput"></p>
-				<p id="CMInput"></p>
-			</div>
+			<table class="modalTable">
+				<tr>
+					<td id="title" class="title"></td>
+					<td id="titleInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="name" class="title"></td>
+					<td id="nameInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="email" class="title"></td>
+					<td id="emailInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="phnNum" class="title"></td>
+					<td id="phnNumInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="CM" class="title"></td>
+					<td id="CMInput" class="textArea"></td>
+				</tr>
+			</table>
 		</div>
 	</div>
 
 </body>
+
 </html>
-    <link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
-	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
-	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
-	<script type="text/javascript" src="../scripts/adminPermissions.js"> </script>
+<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
+<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
+<script type="text/javascript" src="../scripts/adminPermissions.js"> </script>

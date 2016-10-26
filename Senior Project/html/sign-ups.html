@@ -14,6 +14,7 @@
 
 	<div id="navBar"></div>
 	<h1>Sign-ups</h1>
+	<button onclick="addEvent()"" id="addEvent">Add Event</button>
 
 	<div class="pageBody">
 		<div id="snackbar">You have successfully signed up for the event.</div>
@@ -22,15 +23,14 @@
 			<div class="eventTile">
 				<p class="signUpText edit">King's Island - $25</p>
 				<img class="signUpImage" src="../images/kingsIsland.jpg"></img>
-				<a >
+				<a>
 					<p onclick="moreInformationFunction(this)" class="moreInfoLink" id="moreInfoLinkKings">Show Details</p>
 				</a>
 				<a onclick="signUp()">
 					<p class="signUpLink">Sign Up</p>
 				</a>
 				<a id="myBtn" class="viewListLink">View List</a>
-				<div class="moreInformation" id="kingsIslandInfo">About: King's Island is a fast-paced amusement park full of exhilerating roller coasters. Sign-ups for this event will
-					close on 9/28/2016.</div>
+				<div class="moreInformation" id="kingsIslandInfo">King's Island is a fast-paced amusement park full of exhilerating roller coasters. Sign-ups for this event will close on 9/28/2016.</div>
 			</div>
 			<div class="eventTile">
 				<p class="signUpText edit">Children's Museum - $10</p>
@@ -42,8 +42,7 @@
 					<p class="signUpLink">Sign Up</p>
 				</a>
 				<a id="myBtn" class="viewListLink">View List</a>
-				<div class="moreInformation" id="childrensMuseumInfo">About: The Indianapolis Childrens' Museum is a fun, interactive museum for people of all ages. Sign-ups for this event
-					will close on 10/20/2016.</div>
+				<div class="moreInformation" id="childrensMuseumInfo">The Indianapolis Childrens' Museum is a fun, interactive museum for people of all ages. Sign-ups for this event will close on 10/20/2016.</div>
 			</div>
 			<div class="eventTile">
 				<p class="signUpText edit">Pumpkin Works - FREE</p>
@@ -86,17 +85,28 @@
 	<div id="editModal" class="modal">
 		<div class="modal-content">
 			<span class="closeEdit">x</span>
-			<div class="modalLeft">
-				
-				<p id="name"></p>
-				<p id="price"></p>
-				<p id="description"></p>
-			</div>
-			<div class="modalRight">
-				<p id="nameInput"></p>
-				<p id="priceInput"></p>
-				<p id="descriptionInput"></p>
-			</div>
+			<table class="modalTable">
+				<tr>
+					<td id="name" class="title"></td>
+					<td id="nameInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="price" class="title"></td>
+					<td id="priceInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="image" class="title"></td>
+					<td id="imageInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="description" class="title"></td>
+					<td id="descriptionInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="signUpCloseDate" class="title"></td>
+					<td id="signUpCloseDateInput" class="textArea"></td>
+				</tr>
+			</table>
 		</div>
 	</div>
 
