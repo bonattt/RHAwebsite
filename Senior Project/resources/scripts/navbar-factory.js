@@ -1,16 +1,16 @@
 
 window.onload = function() {
 	document.getElementById('navBar').innerHTML = 
-		'    <a href="RHAhome.html" >'+
-		'        <img src="../images/RHA.jpg" id="rha-image"></img>'+
+		'    <a href="RHAhome" >'+
+		'        <img src="./images/RHA.jpg" id="rha-image"></img>'+
 		'    </a>'+
 		'        <ul>'+
 		'        <li>'+
 		'            <a href="#"> <u> Events </u> </a>'+
 		'            <ul>'+
-		'                <a href="sign-ups.html"><li>Sign-Ups</li></a>'+
-		'                <a href="pastEvents.html"><li>Past Events</li></a>'+
-		'                <a href="proposals.html"><li>Submit a Proposal</li></a>'+
+		'                <a href="sign-ups"><li>Sign-Ups</li></a>'+
+		'                <a href="pastEvents"><li>Past Events</li></a>'+
+		'                <a href="proposals"><li>Submit a Proposal</li></a>'+
 		'            </ul>'+
 		'        </li>'+
 		'    </ul>'+
@@ -19,7 +19,7 @@ window.onload = function() {
 		'        <li>'+
 		'            <a href="#"> Services </a>'+
 		'            <ul>'+
-		'                <a href="subwayCam.html"><li>Subway Cam</li></a>'+
+		'                <a href="subwayCam"><li>Subway Cam</li></a>'+
 		'            </ul>'+
 		'        </li>'+
 		'    </ul>'+
@@ -39,7 +39,7 @@ window.onload = function() {
 		'            <a href="#"> Halls </a>'+
 		'            <ul>'+
 		'                <a href="http://www.rose-hulman.edu/offices-and-services/student-life/campus-life/housing-and-residence-life.aspx"><li>About Our Residence Halls</li></a>'+
-		'                <a href="floorMoney.html"><li>Floor Money</li></a>'+
+		'                <a href="floorMoney"><li>Floor Money</li></a>'+
 		'            </ul>'+
 		'        </li>'+
 		'    </ul>'+
@@ -48,10 +48,10 @@ window.onload = function() {
 		'        <li>'+
 		'            <a href="#"> <u> About Us </u> </a>'+
 		'            <ul>'+
-		'                <a href="officers.html"><li>Officers</li></a>'+
+		'                <a href="officers"><li>Officers</li></a>'+
 		'                <a href="http://www.rose-hulman.edu/rha/constitution.pdf"><li>Constitution</li></a>'+
 		'                <a href="http://www.rose-hulman.edu/rha/procedural.pdf"><li>Procedural Document</li></a>'+
-		'                <a href="committees.html"><li>Committees</li></a>'+
+		'                <a href="committees"><li>Committees</li></a>'+
 		'                <a href="mailto:rhitrha@gmail.com"><li>Contact Us</li></a>'+
 		'            </ul>'+
 		'            </li>'+
