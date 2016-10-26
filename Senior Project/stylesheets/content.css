@@ -256,8 +256,8 @@ h3{
     margin: 15% auto;
     padding: 20px;
     border: 1px solid white;
-    width: 35%;
-    height: 25%;
+    width: 25%;
+    height: 35%;
 	text-align: center;
 }
 
@@ -267,15 +267,16 @@ h3{
 	margin-top: 10%;
 }
 
-.modalLeft {
-	float: left;
-	width: 46%;
+.modalTable {
+	width: 100%;
 }
 
-.modalRight {
-	padding: 10px;
-	float: right;
-	width: 46%;
+.title {
+	text-align: left;
+}
+
+.textArea {
+	float: left;
 }
 
 .modal-content p {
@@ -299,4 +300,12 @@ h3{
 
 .moreInformation {
 	display: none;
+}
+
+#addEvent{
+	text-align: center;
+	font-size: 200%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }

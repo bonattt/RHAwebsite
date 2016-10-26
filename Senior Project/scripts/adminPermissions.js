@@ -23,58 +23,67 @@
         nameAndTitle = nameAndTitle.split(" - ");
         // var name = "Name: " + nameAndTitle[0];
         var name = "Name: "; 
-        var title = "Title: " + nameAndTitle[1].split("<")[0];
+        var title = "Title: ";
         var email = "Email: ";
         var phoneNumber = "Phone number: ";
         var room = "Room number: " + parent.querySelectorAll(":nth-child(5)")[0].textContent.split(": ")[1];
         var cm = null;
 
+        var titleInput = document.createElement("textarea");
+        titleInput.setAttribute("rows", "1");
+        titleInput.setAttribute("cols", "30");
+        titleInput.innerHTML = nameAndTitle[1].split("<")[0];
+
         var nameInput = document.createElement("textarea");
         nameInput.setAttribute("rows", "1");
-        nameInput.setAttribute("cols", "20");
+        nameInput.setAttribute("cols", "30");
         nameInput.innerHTML = nameAndTitle[0];
+
+        //This is how to get the image
+        //console.log(parent.firstChild.nextElementSibling.querySelectorAll(":nth-child(1)")[0].currentSrc);
 
 
         var emailInput = document.createElement("textarea");
         emailInput.setAttribute("rows", "1");
-        emailInput.setAttribute("cols", "20");
-        emailInput.innerHTML = parent.querySelectorAll(":nth-child(3)")[0].textContent.split(" ")[1];
+        emailInput.setAttribute("cols", "30");
+        emailInput.innerHTML = parent.querySelectorAll(":nth-child(3)")[0].textContent.split(": ")[1];
+        console.log(parent.querySelectorAll(":nth-child(3)")[0].textContent);
 
         var phnNumInput = document.createElement("textarea");
         phnNumInput.setAttribute("rows", "1");
-        phnNumInput.setAttribute("cols", "20");
+        phnNumInput.setAttribute("cols", "30");
         phnNumInput.innerHTML = parent.querySelectorAll(":nth-child(4)")[0].textContent.split(": ")[1];
-        // console.log()
 
         var CMInput = null;
         if (parent.querySelectorAll(":nth-child(6)")[0]) { 
             cm = "CM: ";
             CMInput = document.createElement("textarea");
             CMInput.setAttribute("rows", "1");
-            CMInput.setAttribute("cols", "20");
+            CMInput.setAttribute("cols", "30");
             CMInput.innerHTML = parent.querySelectorAll(":nth-child(6)")[0].textContent.split(": ")[1];
-        } else {
-            //do nothing
         }
-        // console.log(editImage.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(4)")[0].textContent);
 
 
         var nameNode = document.getElementById("nameInput");
         var emailNode = document.getElementById("emailInput");
         var phnNode = document.getElementById("phnNumInput");
         var CMNode = document.getElementById("CMInput");
+        var titleNode = document.getElementById("titleInput");
 
 
-        document.getElementById("officerTitle").innerHTML = title;
-        document.getElementById("name").innerHTML = name;
+        titleNode.appendChild(titleInput);
+        document.getElementById("title").innerHTML = title;
         nameNode.appendChild(nameInput);
-        document.getElementById("email").innerHTML = email;
+        document.getElementById("name").innerHTML = name;
         emailNode.appendChild(emailInput);
-        document.getElementById("phnNum").innerHTML = phoneNumber;
+        document.getElementById("email").innerHTML = email;
         phnNode.appendChild(phnNumInput);
-        document.getElementById("CM").innerHTML = cm;
+        document.getElementById("phnNum").innerHTML = phoneNumber;
         if(CMInput) {
             CMNode.appendChild(CMInput);
+        }
+        if(document.getElementById("CM")) {
+            document.getElementById("CM").innerHTML = cm;
         }
 
 
@@ -84,6 +93,7 @@
             nameNode.removeChild(nameNode.firstChild);
             emailNode.removeChild(emailNode.firstChild);
             phnNode.removeChild(phnNode.firstChild);
+            titleNode.removeChild(titleNode.firstChild);
             if(CMNode.firstChild) {
                 CMNode.removeChild(CMNode.firstChild);
             }
@@ -95,6 +105,7 @@
                 nameNode.removeChild(nameNode.firstChild);
                 emailNode.removeChild(emailNode.firstChild);
                 phnNode.removeChild(phnNode.firstChild);
+                titleNode.removeChild(titleNode.firstChild);
                 if(CMNode.firstChild) {
                     CMNode.removeChild(CMNode.firstChild);
                 }
