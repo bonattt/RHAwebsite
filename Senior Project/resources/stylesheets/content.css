@@ -161,6 +161,15 @@ h3{
 
 #templateDownload {
 	color: #708090;
+
+}
+
+#addProposal{
+	text-align: center;
+	font-size: 200%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 /* Sign ups */
