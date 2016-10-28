@@ -1,0 +1,5 @@
+
+
+test:
+  override:
+    - node 'Senior Project/nodetests/sampleTest.js'
