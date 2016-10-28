@@ -1,0 +1,5 @@
+
+
+test:
+  override:
+    - node nodetests/sampleTest.js
