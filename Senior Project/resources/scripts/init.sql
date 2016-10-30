@@ -7,6 +7,7 @@ CREATE TABLE Users (
         lastname varchar(20),
         hall varchar(20),
         admin boolean,
+        -- memberType varchar(30), -- replace admin with this
         active boolean,
         trip_eligible boolean,
         meet_attend jsonb
@@ -43,6 +44,13 @@ CREATE TABLE Proposals (
         image_path varchar(50),
         description varchar(400),
         attendees jsonb
+);
+
+CREATE TABLE FontPageNews (
+        newsID SERIAL PRIMARY KEY,
+        title varchar(20),
+        description varchar(500),
+        datePosted DATE
 );
 
 -- Most entries below this point are temporary. Once the database has been begun regular use, these inserts will become obselete
