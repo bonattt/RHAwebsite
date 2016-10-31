@@ -79,3 +79,55 @@
     }
 
 })();
+
+        function showModal() {
+        var modal = document.getElementById('myModal');
+        var span = document.getElementsByClassName("close")[0];
+
+        var committee = "Committee: ";
+        var description = "Description: ";
+        var image = "Image: ";
+
+        var committeeInput = document.createElement("textarea");
+        committeeInput.setAttribute("rows", "1");
+        committeeInput.setAttribute("cols", "30");
+
+        var descInput = document.createElement("textarea");
+        descInput.setAttribute("rows", "4");
+        descInput.setAttribute("cols", "30");
+
+        var imageInput = document.createElement("textarea");
+        imageInput.setAttribute("rows", "1");
+        imageInput.setAttribute("cols", "30");
+
+        var committeeNode = document.getElementById("committeeInput");
+        var descNode = document.getElementById("descInput");
+        var imageNode = document.getElementById("imageInput");
+
+
+       	document.getElementById("committeeName").innerHTML = committee;
+       	committeeNode.appendChild(committeeInput);
+       	document.getElementById("description").innerHTML = description;
+       	descNode.appendChild(descInput);
+       	document.getElementById("image").innerHTML = image;
+       	imageNode.appendChild(imageInput);
+
+
+        modal.style.display = "block";
+        span.onclick = function () {
+            modal.style.display = "none";
+            committeeNode.removeChild(committeeNode.firstChild);
+            descNode.removeChild(descNode.firstChild);
+            imageNode.removeChild(imageNode.firstChild);
+
+        }
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                committeeNode.removeChild(committeeNode.firstChild);
+                descNode.removeChild(descNode.firstChild);
+                imageNode.removeChild(imageNode.firstChild);
+
+            }
+        }
+    }
