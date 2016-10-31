@@ -12,6 +12,11 @@ function addProposal() {
     var eventDate = "Event date: ";
     var signUpCloseDate = "Sign-up close date: ";
     var proposer = "Proposer: ";
+    var weekProposed = "Week Proposed: ";
+    var quarter = "Quarter: ";
+    var moneyRequested = "Money Requested: ";
+    var approved = "Approved: ";
+    var moneyAllocated = "Money Allocated: ";
 
     var nameInput = document.createElement("textarea");
     nameInput.setAttribute("rows", "1");
@@ -45,6 +50,26 @@ function addProposal() {
     proposerInput.setAttribute("rows", "1");
     proposerInput.setAttribute("cols", "30");
 
+        var weekProposedInput = document.createElement("textarea");
+    weekProposedInput.setAttribute("rows", "1");
+    weekProposedInput.setAttribute("cols", "30");
+
+        var quarterInput = document.createElement("textarea");
+    quarterInput.setAttribute("rows", "1");
+    quarterInput.setAttribute("cols", "30");
+
+        var moneyRequestedInput = document.createElement("textarea");
+    moneyRequestedInput.setAttribute("rows", "1");
+    moneyRequestedInput.setAttribute("cols", "30");
+
+        var approvedInput = document.createElement("textarea");
+    approvedInput.setAttribute("rows", "1");
+    approvedInput.setAttribute("cols", "30");
+
+        var moneyAllocatedInput = document.createElement("textarea");
+    moneyAllocatedInput.setAttribute("rows", "1");
+    moneyAllocatedInput.setAttribute("cols", "30");
+
     var nameNode = document.getElementById("nameInput");
     var costToAttendeeNode = document.getElementById("costToAttendeeInput");
     var imageNode = document.getElementById("imageInput");
@@ -53,6 +78,11 @@ function addProposal() {
     var eventDateNode = document.getElementById("eventDateInput");
     var signUpCloseDateNode = document.getElementById("signUpCloseDateInput");
     var proposerNode = document.getElementById("proposerInput");
+    var weekProposedNode = document.getElementById("weekProposedInput");
+    var quarterNode = document.getElementById("quarterInput");
+    var moneyRequestedNode = document.getElementById("moneyRequestedInput");
+    var approvedNode = document.getElementById("approvedInput");
+    var moneyAllocatedNode = document.getElementById("moneyAllocatedInput");
 
 
     document.getElementById("name").innerHTML = name;
@@ -71,6 +101,16 @@ function addProposal() {
     signUpCloseDateNode.appendChild(signUpCloseDateInput);
     document.getElementById("proposer").innerHTML = proposer;
     proposerNode.appendChild(proposerInput);
+    document.getElementById("weekProposed").innerHTML = weekProposed;
+    weekProposedNode.appendChild(weekProposedInput);
+    document.getElementById("quarter").innerHTML = quarter;
+    quarterNode.appendChild(quarterInput);
+    document.getElementById("moneyRequested").innerHTML = moneyRequested;
+    moneyRequestedNode.appendChild(moneyRequestedInput);
+    document.getElementById("approved").innerHTML = approved;
+    approvedNode.appendChild(approvedInput);
+    document.getElementById("moneyAllocated").innerHTML = moneyAllocated;
+    moneyAllocatedNode.appendChild(moneyAllocatedInput);
 
 
     modal.style.display = "block";
@@ -84,6 +124,11 @@ function addProposal() {
         eventDateNode.removeChild(eventDateNode.firstChild);
         signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
         proposerNode.removeChild(proposerNode.firstChild);
+        weekProposedNode.removeChild(weekProposedNode.firstChild);
+        quarterNode.removeChild(quarterNode.firstChild);
+        moneyRequestedNode.removeChild(moneyRequestedNode.firstChild);
+        approvedNode.removeChild(approvedNode.firstChild);
+        moneyAllocatedNode.removeChild(moneyAllocatedNode.firstChild);
 
     }
     window.onclick = function (event) {
@@ -97,6 +142,11 @@ function addProposal() {
             eventDateNode.removeChild(eventDateNode.firstChild);
             signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
             proposerNode.removeChild(proposerNode.firstChild);
+            weekProposedNode.removeChild(weekProposedNode.firstChild);
+            quarterNode.removeChild(quarterNode.firstChild);
+            moneyRequestedNode.removeChild(moneyRequestedNode.firstChild);
+            approvedNode.removeChild(approvedNode.firstChild);
+            moneyAllocatedNode.removeChild(moneyAllocatedNode.firstChild);
         }
     }
 }

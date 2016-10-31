@@ -148,10 +148,9 @@ h3{
 
 #submit {
 	text-align: center;
-	font-size: 500%;
+	font-size: 300%;
 	display: block;
 	color: 	#708090;
-	margin-bottom: 50px;
 }
 
 #proposalTemplate{
@@ -275,9 +274,10 @@ h3{
 }
 
 .modalButton {
-	margin-left: 35%;
-	margin-right: 35%;
-	margin-top: 10%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 5%;
+	margin-bottom: 5%;
 }
 
 .modalTable {
@@ -315,7 +315,7 @@ h3{
 	display: none;
 }
 
-#addEvent{
+#addOfficer{
 	text-align: center;
 	font-size: 200%;
 	display: block;
