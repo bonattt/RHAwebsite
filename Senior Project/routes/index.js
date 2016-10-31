@@ -242,6 +242,66 @@ router.put('/api/v1/committee/:id', (req, res, next) => {
   });
 });
 
+/* GET all funds */
+router.get('/api/v1/funds', (req, res, next) => {
+  const results = [];
+
+  pg.connect(connectionString, (err, client, done) => {
+    if(err) {
+      done();
+      console;
+      console.log(err);
+      return res.status(500).json({success: false, data: "You did something so bad you broke the server =("});
+    }
+
+    const query = client.query('SELECT * FROM funds ORDER BY funds_id ASC;');
+    
+    query.on('row', (row) => {
+      results.push(row);
+    });
+
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+  });
+});
+
+/* PUT modify a fund */
+router.put('/api/v1/fund/:id', (req, res, next) => {
+  const results = [];
+
+  const id = req.params.id;
+
+  pg.connect(connectionString, (err, client, done) => {
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: "You broke it so hard it stopped =("});
+    }
+
+    var firstQuery = createUpdateQuery(id, 'funds_id', req.body, 'funds'); 
+
+    var colValues = [];
+    Object.keys(req.body).filter(function (key) {
+      colValues.push(req.body[key]);
+    });
+
+    client.query(firstQuery, colValues);
+
+    const query = client.query('SELECT * FROM funds WHERE funds_id = $1', [id]);
+
+    query.on('row', (row) => {
+      results.push(row);
+    });
+
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+  });
+});
+
 /* POST a new proposal */
 router.post('/api/v1/proposal', (req, res, next) => {
   const results= [];
