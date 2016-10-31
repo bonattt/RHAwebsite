@@ -18,7 +18,14 @@
     }
 
     function getFrontPageNews() {
-        
+
+    }
+
+    function inputHandler(property, value) {
+        console.log(value);
+        whatsnew[property] = value;
+        $('#title').text(whatsnew.title);
+        $('#shownDescription').text(whatsnew.shownDescription);
     }
 
     function showModal(editImage) {
@@ -33,12 +40,15 @@
         var newStuffInput = document.createElement("textarea");
         newStuffInput.setAttribute("rows", "1");
         newStuffInput.setAttribute("cols", "20");
+        newStuffInput.setAttribute("name", "");
         newStuffInput.innerHTML = div.querySelectorAll(":nth-child(2)")[0].innerHTML;
+        // whatsnew["title"] = newStuffInput.innerHTML;
 
         var descInput = document.createElement("textarea");
         descInput.setAttribute("rows", "4");
         descInput.setAttribute("cols", "20");
         descInput.innerHTML = div.querySelectorAll(":nth-child(3)")[0].innerHTML;
+        // whatsnew["shownDescription"] = descInput.innerHTML;
 
         var whatsnewNode = document.getElementById("whatsnewInput");
         var descNode = document.getElementById("descInput");
