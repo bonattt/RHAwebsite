@@ -66,7 +66,7 @@ router.put('/api/v1/event/:id', (req, res, next) => {
       return res.status(500).json({success: false, data: "You broke it so hard it stopped =("});
     }
 
-    var firstQuery = createUpdateQuery(id, 'proposal_id', req.body);
+    var firstQuery = createUpdateQuery(id, 'proposal_id', req.body, 'proposals');
 
     var colValues = [];
     Object.keys(req.body).filter(function (key) {
@@ -77,6 +77,31 @@ router.put('/api/v1/event/:id', (req, res, next) => {
 
     const query = client.query('SELECT * FROM proposals WHERE proposal_id = $1', [id]);
 
+    query.on('row', (row) => {
+      results.push(row);
+    });
+
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+  });
+});
+
+/* GET all officers */
+router.get('/api/v1/officers', (req, res, next) => {
+  const results = [];
+
+  pg.connect(connectionString, (err, client, done) => {
+    if(err) {
+      done();
+      console;
+      console.log(err);
+      return res.status(500).json({success: false, data: "You did something so bad you broke the server =("});
+    }
+
+    const query = client.query('SELECT user_id, username, firstname, lastname, hall, image, memberType FROM Users WHERE memberType IS NOT NULL ORDER BY lastname ASC;');
+    
     query.on('row', (row) => {
       results.push(row);
     });
@@ -123,8 +148,8 @@ router.post('/api/v1/proposal', (req, res, next) => {
 });
 
 /* Create an UpdateQuery */
-function createUpdateQuery (filterVal, filter, cols) {
-  var query = ['UPDATE proposals SET'];
+function createUpdateQuery (filterVal, filter, cols, table) {
+  var query = ['UPDATE ' + table + ' SET'];
 
   var set = [];
   Object.keys(cols).forEach(function (key, i) {

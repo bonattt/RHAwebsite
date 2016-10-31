@@ -232,7 +232,7 @@ INSERT INTO users VALUES (DEFAULT, 'santanb', 'Brennan', 'Santaniello', 'Blum', 
 INSERT INTO users VALUES (DEFAULT, 'busches', 'Scott', 'Busche', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'braaksa', 'Ashley', 'Braaksma', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'lir', 'Ronghan', 'Li', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO users VALUES (DEFAULT, 'blacks', 'Sydney', 'Black', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO users VALUES (DEFAULT, 'blacks', 'Sydney', 'Black', 'Blum', null, null, false, 'Publicity Chair', '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'wangj', 'Jiawen', 'Wang', 'Blum', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'rudiche', 'Erin', 'Rudich', 'Blum', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'storkl', 'Lauren', 'Stork', 'Blum', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
@@ -245,8 +245,8 @@ INSERT INTO users VALUES (DEFAULT, 'mccuais', 'Samantha', 'McCuaig', 'Blum', nul
 
 -- Percopo 1
 INSERT INTO users VALUES (DEFAULT, 'adamst', 'Ty', 'Adams', 'Percopo 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO users VALUES (DEFAULT, 'tuskac', 'Carley', 'Tuska', 'Percopo 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO users VALUES (DEFAULT, 'doyelb', 'Bichael', 'Doyel', 'Percopo 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO users VALUES (DEFAULT, 'tuskac', 'Carley', 'Tuska', 'Percopo 1', null, 'Off-Campus Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO users VALUES (DEFAULT, 'doyelb', 'Michael', 'Doyel', 'Percopo 1', null, 'Service Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'burkeb', 'Brian', 'Burke', 'Percopo 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'turskim', 'Michael', 'Turski', 'Percopo 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'jursc', 'Connor', 'Jurs', 'Percopo 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
@@ -255,7 +255,7 @@ INSERT INTO users VALUES (DEFAULT, 'marzari', 'Isabella', 'Marzari', 'Percopo 1'
 -- Percopo 2
 INSERT INTO users VALUES (DEFAULT, 'majumda', 'Ari-Jit', 'Majumdar', 'Percopo 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'crewsm', 'Madeline', 'Crews', 'Percopo 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO users VALUES (DEFAULT, 'hunleya', 'Allison', 'Hunley', 'Percopo 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO users VALUES (DEFAULT, 'hunleya', 'Allison', 'Hunley', 'Percopo 2', null, 'President', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'sheffei', 'Ian', 'Sheffert', 'Percopo 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 
 -- Percopo 3
@@ -274,7 +274,7 @@ INSERT INTO users VALUES (DEFAULT, 'brauna', 'Anna', 'Braun', 'Apartments E 2', 
 INSERT INTO users VALUES (DEFAULT, 'hainesc', 'Charisse', 'Haines', 'Apartments E 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 
 -- Apartments E 3
-INSERT INTO users VALUES (DEFAULT, 'lauriod', 'Daniel', 'Lauriola', 'Apartments E 3', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
+INSERT INTO users VALUES (DEFAULT, 'lauriod', 'Daniel', 'Lauriola', 'Apartments E 3', null, 'On-campus Chair', false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'xuz', 'Zihang', 'Xu', 'Apartments E 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'pratta', 'Avery', 'Pratt', 'Apartments E 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'dudaj', 'Jason', 'Duda', 'Apartments E 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
@@ -290,10 +290,10 @@ INSERT INTO users VALUES (DEFAULT, 'declerm', 'Matthew', 'DeClerck', 'Apartments
 -- Apartments W 2
 INSERT INTO users VALUES (DEFAULT, 'usherj', 'James', 'Usher', 'Apartments W 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'rodibab', 'Brooks', 'Rodibaugh', 'Apartments W 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO users VALUES (DEFAULT, 'miskowb', 'Bartosz', 'Miskowiec', 'Apartments W 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO users VALUES (DEFAULT, 'miskowb', 'Bartosz', 'Miskowiec', 'Apartments W 2', null, 'Vice President', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 
 -- Apartments W 3
-INSERT INTO users VALUES (DEFAULT, 'kraussa', 'Amanda', 'Krauss', 'Apartments W 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO users VALUES (DEFAULT, 'kraussa', 'Amanda', 'Krauss', 'Apartments W 3', null, 'NCC Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'lauert', 'Tressa', 'Lauer', 'Apartments W 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 
 -- Lakeside 1
@@ -306,7 +306,7 @@ INSERT INTO users VALUES (DEFAULT, 'stallas', 'Silven', 'Stallard', 'Lakeside 1'
 INSERT INTO users VALUES (DEFAULT, 'yatesa', 'Austin', 'Yates', 'Lakeside 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'wised', 'Douglas', 'Wise', 'Lakeside 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO users VALUES (DEFAULT, 'mattoxn', 'Nicole', 'Mattox', 'Lakeside 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO users VALUES (DEFAULT, 'kimmelb', 'Benjamin', 'Kimmel', 'Lakeside 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO users VALUES (DEFAULT, 'kimmelb', 'Benjamin', 'Kimmel', 'Lakeside 2', null, 'Webmaster', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 
 -- Lakeside 3
 INSERT INTO users VALUES (DEFAULT, 'sahabuj', 'Jane', 'Sahabu', 'Lakeside 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
