@@ -174,6 +174,40 @@ router.get('/api/v1/committees', (req, res, next) => {
   });
 });
 
+/* POST a new committee */
+router.post('/api/v1/committee', (req, res, next) => {
+  const results= [];
+
+  const data = {committeeName: req.body.name, image: req.body.image, description: req.body.description};
+
+  if(data.committeeName==null || data.description == null ) {
+    return res.status(400).json({success: false, data: "This is not properly formed committee."});
+  }
+
+  pg.connect(connectionString, (err, client, done) => {
+
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }
+
+    client.query('INSERT INTO committee(committeeName, image, description) VALUES ($1, $2, $3);',
+      [data.committeeName, data.image, data.description]);
+    
+    const query = client.query('SELECT * FROM committee WHERE committeeName = $1', [data.committeeName]);
+
+    query.on('row', (row) => {
+      results.push(row);
+    });
+
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+  });
+});
+
 /* POST a new proposal */
 router.post('/api/v1/proposal', (req, res, next) => {
   const results= [];
@@ -195,7 +229,7 @@ router.post('/api/v1/proposal', (req, res, next) => {
     client.query('INSERT INTO proposals(proposal_name, cost_to_attendee, event_date, event_signup_open, event_signup_close, image_path, description, proposer_id, week_proposed, quarter_proposed, money_requested, approved) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);',
       [data.name, data.cost_to_attendee, data.event_date, data.event_signup_open, data.event_signup_close, data.image_path, data.description, data.proposer_id, data.week_proposed, data.quarter_proposed, data.money_requested, data.approved]);
 		
-    const query = client.query('SELECT * FROM proposals ORDER BY proposal_id ASC');
+    const query = client.query('SELECT * FROM proposals WHERE proposal_name = $1', [data.name]);
 
     query.on('row', (row) => {
       results.push(row);
