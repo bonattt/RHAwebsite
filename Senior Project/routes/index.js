@@ -117,7 +117,7 @@ router.get('/api/v1/officers', (req, res, next) => {
 router.put('/api/v1/member/:id', (req, res, next) => {
   const results = [];
 
-  const username = req.params.username;
+  const id = req.params.id;
 
   pg.connect(connectionString, (err, client, done) => {
     if(err) {
@@ -127,7 +127,6 @@ router.put('/api/v1/member/:id', (req, res, next) => {
     }
 
     var firstQuery = createUpdateQuery(id, 'user_id', req.body, 'members'); 
-    console.log(firstQuery);
 
     var colValues = [];
     Object.keys(req.body).filter(function (key) {
@@ -196,6 +195,41 @@ router.post('/api/v1/committee', (req, res, next) => {
       [data.committeeName, data.image, data.description]);
     
     const query = client.query('SELECT * FROM committee WHERE committeeName = $1', [data.committeeName]);
+
+    query.on('row', (row) => {
+      results.push(row);
+    });
+
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+  });
+});
+
+/* PUT modify a committee */
+router.put('/api/v1/committee/:id', (req, res, next) => {
+  const results = [];
+
+  const id = req.params.id;
+
+  pg.connect(connectionString, (err, client, done) => {
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: "You broke it so hard it stopped =("});
+    }
+
+    var firstQuery = createUpdateQuery(id, 'committeeid', req.body, 'committee'); 
+
+    var colValues = [];
+    Object.keys(req.body).filter(function (key) {
+      colValues.push(req.body[key]);
+    });
+
+    client.query(firstQuery, colValues);
+
+    const query = client.query('SELECT * FROM committee WHERE committeeid = $1', [id]);
 
     query.on('row', (row) => {
       results.push(row);
