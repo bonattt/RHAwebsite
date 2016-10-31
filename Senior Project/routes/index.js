@@ -100,8 +100,44 @@ router.get('/api/v1/officers', (req, res, next) => {
       return res.status(500).json({success: false, data: "You did something so bad you broke the server =("});
     }
 
-    const query = client.query('SELECT user_id, username, firstname, lastname, hall, image, memberType FROM Users WHERE memberType IS NOT NULL ORDER BY lastname ASC;');
+    const query = client.query('SELECT user_id, username, firstname, lastname, hall, image, memberType FROM members WHERE memberType IS NOT NULL ORDER BY lastname ASC;');
     
+    query.on('row', (row) => {
+      results.push(row);
+    });
+
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+  });
+});
+
+/* PUT modify a member */
+router.put('/api/v1/member/:id', (req, res, next) => {
+  const results = [];
+
+  const username = req.params.username;
+
+  pg.connect(connectionString, (err, client, done) => {
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: "You broke it so hard it stopped =("});
+    }
+
+    var firstQuery = createUpdateQuery(id, 'user_id', req.body, 'members'); 
+    console.log(firstQuery);
+
+    var colValues = [];
+    Object.keys(req.body).filter(function (key) {
+      colValues.push(req.body[key]);
+    });
+
+    client.query(firstQuery, colValues);
+
+    const query = client.query('SELECT * FROM members WHERE user_id = $1', [id];
+
     query.on('row', (row) => {
       results.push(row);
     });
