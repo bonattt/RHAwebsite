@@ -42,7 +42,7 @@ CREATE TABLE Proposals (
         event_signup_open DATE,
         event_signup_close DATE,
         cost_to_attendee MONEY,
-        -- image_path varchar(100), make updates in inserts before uncommenting here
+        image_path varchar(100), 
         description varchar(400),
         attendees jsonb
 );
