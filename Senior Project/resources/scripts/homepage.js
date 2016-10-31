@@ -1,6 +1,7 @@
 (function() {
 	var isAdmin = true;
     var hasListener = false;
+    var whatsnew = {};
 
 	if (isAdmin) {
         var adminValues = document.getElementsByClassName("edit");
@@ -16,6 +17,9 @@
         }
     }
 
+    function getFrontPageNews() {
+        
+    }
 
     function showModal(editImage) {
     	var modal = document.getElementById('myModal');
