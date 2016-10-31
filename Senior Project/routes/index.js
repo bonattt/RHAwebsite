@@ -33,6 +33,10 @@ router.post('/api/v1/proposal', (req, res, next) => {
 
   const data = {name: req.body.name, cost_to_attendee: req.body.cost_to_attendee, event_date: req.body.event_date, event_signup_open: req.body.event_signup_open, event_signup_close: req.body.event_signup_close, image_path: req.body.image_path, description: req.body.description, proposer_id: req.body.proposer_id, week_proposed: req.body.week_proposed, quarter_proposed: req.body.quarter_proposed, money_requested: req.body.money_requested, approved: req.body.approved};
 
+  if(data.name==null || data.cost_to_attendee==null || data.event_date== null || data.description==null || data.proposer_id==null || data.week_proposed == null || data.quarter_proposed==null || data.money_requested==null ) {
+    return res.status(400).json({success: false, data: "This is not properly formed proposal. Please follow proposal submission guidelines."});
+  }
+
   pg.connect(connectionString, (err, client, done) => {
 
     if(err) {
