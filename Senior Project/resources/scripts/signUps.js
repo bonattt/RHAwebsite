@@ -1,3 +1,33 @@
+(function() {
+    var proposal = [{
+	name: "FormTestProp0",
+	cost_to_attendee: 10.50,
+	event_date: "2016-11-10",
+	event_signup_open: "2016-11-01",
+	event_signup_close: "2016-11-04",
+	image_path: "abc123",
+	description: "newFakeEvent",
+	proposer_id: 44,
+	week_proposed: 5,
+	quarter_proposed: 1,
+	money_requested: 750,
+	approved: true
+}];
+
+    for(var i=0; i<proposal.length; i++){
+        var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal.name + " - $" + proposal.cost_to_attendee + "</p>";
+        html += "<img class='signUpImage' src =" + proposal.image_path + "></img>";
+        html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
+        html += "<a onclick='signUp()'><p class='signUpLink'> Sign Up </p></a>";
+        html += "<a id='myBtn' class='viewListLink'> View List </a>";
+        html += "<div class='moreInformation'>" + proposal.eventDescription + " Sign-ups for this event will close on " + proposal.signUpCloseDate + ".</div>";
+        html += "</div>";
+
+        var tileArea = document.getElementsByClassName("tileArea")[0];
+        tileArea.innerHTML += html;  
+    }
+})();
+
 function signUp() {
     var signUpSnackbar = document.getElementById("snackbar");
     signUpSnackbar.className = "show";
