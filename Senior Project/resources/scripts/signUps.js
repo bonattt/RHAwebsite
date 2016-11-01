@@ -32,6 +32,8 @@ function moreInformationFunction(triggeringElement) {
     }
 
     var isAdmin = true;
+    apiURL = "rha-website-1.csse.rose-hulman.edu:3000/";
+    newEvent = {};
 
     if (isAdmin) {
         var adminValues = document.getElementsByClassName("edit");
@@ -43,6 +45,26 @@ function moreInformationFunction(triggeringElement) {
                 showEditModal(e);
             }, false);
         }
+    }
+
+
+    function getEvents() {
+        $.ajax({
+            url: apiURL + 'api/v1/events',
+            type: 'GET',
+            data: newEvent,
+            dataType: 'JSON',
+            success: function(data) {
+                if(data) {
+                    console.log("Here's some data! " + data);
+                } else {
+                    console.log("Could not GET data! :(");
+                }
+            },
+            error: function(req, status, err) {
+                console.log(err, status, req);
+            }
+        });
     }
 
     function showListModal() {
@@ -136,5 +158,11 @@ function moreInformationFunction(triggeringElement) {
             }
         }
     }
+
+   $(document).ready(function() {
+        console.log("HELLO");
+        getEvents();
+    });
+
 
 })();
