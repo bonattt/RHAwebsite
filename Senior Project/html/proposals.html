@@ -15,6 +15,7 @@
 	<div id="navBar"> </div>
 	<div id="proposalsPage">
 	<h1>Proposals</h1>
+	<button onclick="addProposal()" id="addProposal">Add Proposal To Database</button>
 	<div id="directions">
 	<h3>Directions:</h3>
 	<ul>
@@ -35,6 +36,68 @@
 	<a href="mailto:rhitrha@gmail.com" id="submit">Submit a Proposal</a>
 	<p id="proposalTemplate">Need ideas on how to format your proposal? <a href="http://www.rose-hulman.edu/rha/downloads/template.pptx" id="templateDownload">Download a Proposal Slide Template</a></p>
 	</div>
+
+		<div id="editModal" class="modal">
+		<div class="modal-content">
+			<span class="closeEdit">x</span>
+			<table class="modalTable">
+				<tr>
+					<td id="name" class="title"></td>
+					<td id="nameInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="costToAttendee" class="title"></td>
+					<td id="costToAttendeeInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="image" class="title"></td>
+					<td id="imageInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="description" class="title"></td>
+					<td id="descriptionInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="signUpOpenDate" class="title"></td>
+					<td id="signUpOpenDateInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="eventDate" class="title"></td>
+					<td id="eventDateInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="signUpCloseDate" class="title"></td>
+					<td id="signUpCloseDateInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="proposer" class="title"></td>
+					<td id="proposerInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="weekProposed" class="title"></td>
+					<td id="weekProposedInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="quarter" class="title"></td>
+					<td id="quarterInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="moneyRequested" class="title"></td>
+					<td id="moneyRequestedInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="approved" class="title"></td>
+					<td id="approvedInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="moneyAllocated" class="title"></td>
+					<td id="moneyAllocatedInput" class="textArea"></td>
+				</tr>
+			</table>
+			<button id="submit" class="modalButton">Submit</button>
+		</div>
+	</div>
 </body>
+<script language="Javascript" src="../scripts/proposals.js"></script>
 
 </html>

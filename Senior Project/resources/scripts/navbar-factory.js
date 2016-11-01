@@ -1,7 +1,7 @@
 
 window.onload = function() {
 	document.getElementById('navBar').innerHTML = 
-		'    <a href="RHAhome" >'+
+		'    <a href="/" >'+
 		'        <img src="./images/RHA.jpg" id="rha-image"></img>'+
 		'    </a>'+
 		'        <ul>'+

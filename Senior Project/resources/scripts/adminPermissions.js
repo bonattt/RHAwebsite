@@ -1,6 +1,7 @@
 (function () {
     var isAdmin = true;
 
+
     if (isAdmin) {
         var adminValues = document.getElementsByClassName("edit");
         for (var i = 0; i < adminValues.length; i++) {
@@ -12,6 +13,7 @@
             }, false);
         }
     }
+
 
     function showModal(editImage) {
         var modal = document.getElementById('myModal');
@@ -116,6 +118,85 @@
 
 
 
-
-
 })();
+
+function showModal(){
+        var modal = document.getElementById('myModal');
+        var span = document.getElementsByClassName("close")[0];
+        var name = "Name: "; 
+        var title = "Title: ";
+        var email = "Email: ";
+        var phoneNumber = "Phone number: ";
+        var room = "Room number: ";
+        var cm = "CM: ";
+
+        var titleInput = document.createElement("textarea");
+        titleInput.setAttribute("rows", "1");
+        titleInput.setAttribute("cols", "30");
+
+        var nameInput = document.createElement("textarea");
+        nameInput.setAttribute("rows", "1");
+        nameInput.setAttribute("cols", "30");
+
+
+        var emailInput = document.createElement("textarea");
+        emailInput.setAttribute("rows", "1");
+        emailInput.setAttribute("cols", "30");
+
+        var phnNumInput = document.createElement("textarea");
+        phnNumInput.setAttribute("rows", "1");
+        phnNumInput.setAttribute("cols", "30");
+
+        var CMInput = document.createElement("textarea");
+            CMInput.setAttribute("rows", "1");
+            CMInput.setAttribute("cols", "30");
+
+
+        var nameNode = document.getElementById("nameInput");
+        var emailNode = document.getElementById("emailInput");
+        var phnNode = document.getElementById("phnNumInput");
+        var CMNode = document.getElementById("CMInput");
+        var titleNode = document.getElementById("titleInput");
+
+
+        titleNode.appendChild(titleInput);
+        document.getElementById("title").innerHTML = title;
+        nameNode.appendChild(nameInput);
+        document.getElementById("name").innerHTML = name;
+        emailNode.appendChild(emailInput);
+        document.getElementById("email").innerHTML = email;
+        phnNode.appendChild(phnNumInput);
+        document.getElementById("phnNum").innerHTML = phoneNumber;
+        if(CMInput) {
+            CMNode.appendChild(CMInput);
+        }
+        if(document.getElementById("CM")) {
+            document.getElementById("CM").innerHTML = cm;
+        }
+
+
+        modal.style.display = "block";
+        span.onclick = function () {
+            modal.style.display = "none";
+            nameNode.removeChild(nameNode.firstChild);
+            emailNode.removeChild(emailNode.firstChild);
+            phnNode.removeChild(phnNode.firstChild);
+            titleNode.removeChild(titleNode.firstChild);
+            if(CMNode.firstChild) {
+                CMNode.removeChild(CMNode.firstChild);
+            }
+
+        }
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                nameNode.removeChild(nameNode.firstChild);
+                emailNode.removeChild(emailNode.firstChild);
+                phnNode.removeChild(phnNode.firstChild);
+                titleNode.removeChild(titleNode.firstChild);
+                if(CMNode.firstChild) {
+                    CMNode.removeChild(CMNode.firstChild);
+                }
+            }
+        }
+}
