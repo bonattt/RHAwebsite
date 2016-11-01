@@ -58,9 +58,10 @@
 .tile{
 	display: inline-block;
 	width: 30%;
-	margin-left: 1.5%;
-	margin-right: 1.5%;
+	margin-left: 1px;
+	margin-right: 1px;
 	text-align: center;
+	vertical-align: top;
 }
 
 .image-tile{
