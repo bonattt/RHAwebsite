@@ -257,13 +257,13 @@ h3{
 	width: 33%;
     display: inline-block;
     text-align: center;
-    height: 300px;
-	margin-bottom: 100px;
+	margin-bottom: .5%;
+	vertical-align: top;
 }
 
 .signUpImage {
 	width: 75%;
-	height: 75%;
+	height: 250px;
 }
 
 .moreInfoLink, .signUpLink, .viewListLink {
