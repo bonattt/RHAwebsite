@@ -30,6 +30,7 @@ h1{
 }
 
 .footer {
+	margin: -1.5%;
 	float: center;
 	text-align: center;
 	background-color: #696969;
@@ -53,25 +54,39 @@ h1{
 .event {
 	border: 2px solid black;
 	border-radius: 30px;
+	min-height: 120px;
 	background-color: #DCDCDC;
 	position: relative;
 	width: 95%;
-	height: 125px;
 	margin: 2%;
 }
 
 .eventImage{
+	margin-top: 10px;
 	height: 100px;
 	width: 35%;
 	margin-left: 2%;
+	vertical-align: top;
+	border-radius: 20px;
 }
 
 .eventText {
 	width: 60%;
+	height: 100%;
 	text-decoration: none;
 	text-align: center;
+	color: black;
+}
+
+.eventText h2 {
 	font-size: 16pt;
-	color: white;
+	vertical-align: top;
+	max-height: 80%;
+}
+.eventText p {
+	font-size: 11pt;
+	vertical-align: bottom;
+	max-height: 20%;
 }
 
 .eventImage, .eventText {
