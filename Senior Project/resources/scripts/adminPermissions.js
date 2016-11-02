@@ -65,22 +65,79 @@
     boxNumber: "2863"
 }];
 
-    for(var i=0; i<officer.length; i++){
-        if(officer[i].memberType != ""){
-        var html = "<div class='officer'>";
-        html += "<h3 class='edit'>" + officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].memberType + "</h3>";
-        html += "<img src='../images/officers/" + removeSpaces(officer[i].memberType.toLowerCase()) + ".jpg' alt='" + officer[i].memberType +  "'height='294' width='195'>";
-        html += "<p>Email: <a href='mailto:'" + officer[i].email +">" + officer[i].email + "</a></p>";
-        html += "<p> Phone Number: " + officer[i].phoneNumber + "</p>";
-        html += "<p> Room: " + officer[i].roomNumber + "</p>";
-        html += "<p>Box #: " + officer[i].boxNumber + "</p>";
 
-        var officers = document.getElementById("officers");
-        console.log(officers.innerHTML);
-        officers.innerHTML += html;
+    var xhr = getEvents();
+    xhr.send();
+    setTimeout(function() {actuallyDoShit(xhr.responseText)}, 300);
 
+    function actuallyDoShit(officer) {
+        officer = JSON.parse(officer);
+
+        for(var i=0; i<officer.length; i++) {
+            if(officer[i].memberType != "") {
+                var html = "<div class='officer'>";
+                html += "<h3 class='edit'>" + officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].membertype + "</h3>";
+                html += "<img src='../images/officers/" + removeSpaces(officer[i].membertype.toLowerCase()) + ".jpg' alt='" + officer[i].membertype +  "'height='294' width='195'>";
+                html += "<p>Email: <a href='mailto:'" + officer[i].email +">" + officer[i].email + "</a></p>";
+                html += "<p> Phone Number: " + officer[i].phoneNumber + "</p>";
+                html += "<p> Room: " + officer[i].roomNumber + "</p>";
+                html += "<p>Box #: " + officer[i].boxNumber + "</p>";
+
+                var officers = document.getElementById("officers");
+                officers.innerHTML += html;
+
+            }
         }
     }
+
+    function getEvents() {
+        var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
+        console.log(url);
+        function createCORSRequest(method, url) {
+            var xhr = new XMLHttpRequest();
+            if ("withCredentials" in xhr) {
+
+            // Check if the XMLHttpRequest object has a "withCredentials" property.
+            // "withCredentials" only exists on XMLHTTPRequest2 objects.
+                xhr.open(method, url, true);
+
+            } else if (typeof XDomainRequest != "undefined") {
+
+            // Otherwise, check if XDomainRequest.
+            // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+                xhr = new XDomainRequest();
+                xhr.open(method, url);
+
+            } else {
+
+            // Otherwise, CORS is not supported by the browser.
+                xhr = null;
+
+            }
+            return xhr;
+        }
+
+        var xhr = createCORSRequest('GET', url);
+        // console.log(xhr);
+        if (!xhr) {
+          throw new Error('CORS not supported');
+        }
+
+        xhr.onload = function () {
+            var responseText = xhr.responseText;
+            console.log("Response text: " + responseText);
+            // return responseText;
+        }
+
+        xhr.onerror = function() {
+            console.log("There was an error");
+        }
+        // xhr.send();
+        // console.log(xhr);
+        return xhr;
+
+    }
+
 })();
 
 function removeSpaces(thingToRemoveSpacesFrom){
