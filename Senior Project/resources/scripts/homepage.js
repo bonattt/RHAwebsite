@@ -63,7 +63,7 @@
         html += "<div class='eventText'><h2>" + proposal[0].name + "</h2>";
         html += "<p>" + proposal[0].event_date + "</p></div></a></div>";
 
-        var sidebar = document.getElementById("sidebarTitle");
+        var sidebar = document.getElementById("sidebarEvents");
         console.log(sidebar.innerHTML);
         console.log(sidebar.innerHTML += html);
         sidebar.innterHTML += html; 
