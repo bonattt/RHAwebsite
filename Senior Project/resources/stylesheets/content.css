@@ -43,16 +43,21 @@ h1{
 }
 
 
-#sidebar {
+#upcomingEvents { /* #sidebar { */
     border-radius: 15px;
     border: 1px solid #000000;
     text-align: center;
     width: 28%;
     float: right;
+	background-color: #EEEEEE;
+}
+
+#sidebar {
+	border-top: 1px solid #000000;
 	overflow-y: auto;
 	overflow-x: hidden;
-	max-height: 450px;
-	background-color: #EEEEEE;
+	max-height: 350px;
+
 }
 
 .event {
