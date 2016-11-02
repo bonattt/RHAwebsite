@@ -1,18 +1,78 @@
-(function() {
+// (function() {
+//     var proposal = [{
+// 	name: "King's Island",
+// 	cost_to_attendee: 10.50,
+// 	event_date: "2016-11-10",
+// 	event_signup_open: "2016-11-01",
+// 	event_signup_close: "2016-11-04",
+// 	image_path: "../images/kingsIsland.jpg",
+// 	description: "newFakeEvent",
+// 	proposer_id: 44,
+// 	week_proposed: 5,
+// 	quarter_proposed: 1,
+// 	money_requested: 750,
+// 	approved: true
+// }];
+
+//     for(var i=0; i<proposal.length; i++){
+//         var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].name + " - $" + proposal[i].cost_to_attendee + "</p>";
+//         html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
+//         html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
+//         html += "<a onclick='signUp()'><p class='signUpLink'> Sign Up </p></a>";
+//         html += "<a id='myBtn' class='viewListLink'> View List </a>";
+//         html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
+//         html += "</div>";
+
+//         var tileArea = document.getElementsByClassName("eventTileArea")[0];
+//         tileArea.innerHTML += html;  
+//     }
+// })();
+
+function displayPastEvents() {
     var proposal = [{
-	name: "King's Island",
-	cost_to_attendee: 10.50,
-	event_date: "2016-11-10",
-	event_signup_open: "2016-11-01",
-	event_signup_close: "2016-11-04",
-	image_path: "../images/kingsIsland.jpg",
-	description: "newFakeEvent",
-	proposer_id: 44,
-	week_proposed: 5,
-	quarter_proposed: 1,
-	money_requested: 750,
-	approved: true
-}];
+        name: "King's Island",
+        cost_to_attendee: 10.50,
+        event_date: "2016-11-10",
+        event_signup_open: "2016-11-01",
+        event_signup_close: "2016-11-04",
+        image_path: "../images/kingsIsland.jpg",
+        description: "newFakeEvent",
+        proposer_id: 44,
+        week_proposed: 5,
+        quarter_proposed: 1,
+        money_requested: 750,
+        approved: true
+    }];
+
+    for(var i=0; i<proposal.length; i++){
+        var html = "<div class='eventTile'><p class='signUpText'>" + proposal[i].name + " - $" + proposal[i].cost_to_attendee + "</p>";
+        html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
+        html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
+        html += "<a id='myBtn' class='viewListLink'> View List </a>";
+        html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
+        html += "</div>";
+
+        var tileArea = document.getElementsByClassName("eventTileArea")[0];
+        tileArea.innerHTML += html;  
+    }
+
+}
+
+function displaySignUps() {
+        var proposal = [{
+            name: "King's Island",
+            cost_to_attendee: 10.50,
+            event_date: "2016-11-10",
+            event_signup_open: "2016-11-01",
+            event_signup_close: "2016-11-04",
+            image_path: "../images/kingsIsland.jpg",
+            description: "newFakeEvent",
+            proposer_id: 44,
+            week_proposed: 5,
+            quarter_proposed: 1,
+            money_requested: 750,
+            approved: true
+        }];
 
     for(var i=0; i<proposal.length; i++){
         var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].name + " - $" + proposal[i].cost_to_attendee + "</p>";
@@ -20,13 +80,14 @@
         html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
         html += "<a onclick='signUp()'><p class='signUpLink'> Sign Up </p></a>";
         html += "<a id='myBtn' class='viewListLink'> View List </a>";
-        html += "<div class='moreInformation'>" + proposal[i].eventDescription + " Sign-ups for this event will close on " + proposal[i].signUpCloseDate + ".</div>";
+        html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
         html += "</div>";
 
         var tileArea = document.getElementsByClassName("eventTileArea")[0];
         tileArea.innerHTML += html;  
     }
-})();
+
+}
 
 function signUp() {
     var signUpSnackbar = document.getElementById("snackbar");
@@ -35,22 +96,20 @@ function signUp() {
 }
 
 function moreInformationFunction(triggeringElement) {
-    var linkClicked = triggeringElement.id;
-    var events = document.getElementsByClassName("moreInformation");
-    var moreInfoLinks = document.getElementsByClassName("moreInfoLink");
-    for (var i = 0; i < events.length; i++) {
-        //NOTE: I'm not a fan about the use of IDs here... maybe consider re-working it later. -Sean
-        var moreInfo = document.getElementById(events[i].id);
-        var moreInfoLink = document.getElementById(moreInfoLinks[i].id);
-        if (moreInfoLink.id == linkClicked && moreInfoLink.textContent == "Show Details") {
-            moreInfo.style.display = "block";
-            moreInfoLink.textContent = "Hide Details";
-        }
-        else {
-            moreInfo.style.display = "none";
-            moreInfoLink.textContent = "Show Details";
-        }
+    var parentDiv = triggeringElement.parentElement.parentElement;
+    var linkClicked = parentDiv.getElementsByClassName("moreInfoLink")[0];
+    var descriptionToShow = parentDiv.getElementsByClassName("moreInformation")[0];
+    console.log(linkClicked);
+    console.log(descriptionToShow);
+
+    if (linkClicked.innerHTML == "Show Details") {
+        descriptionToShow.style.display = "block";
+        linkClicked.innerHTML = "Hide Details";
+    } else {
+        descriptionToShow.style.display = "none";
+        linkClicked.innerHTML = "Show Details";        
     }
+
 }
 
 (function () {
@@ -205,7 +264,14 @@ function moreInformationFunction(triggeringElement) {
 
    $(document).ready(function() {
         console.log("HELLO");
-        getEvents();
+        if (window.location.pathname.indexOf("pastEvents") > -1) {
+            displayPastEvents();
+            // call Past events method
+        } else {
+            // call sign-ups method
+            displaySignUps();
+        }
+        // getEvents();
     });
 
 
