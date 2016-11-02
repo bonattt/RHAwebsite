@@ -50,6 +50,9 @@ h1{
     text-align: center;
     width: 28%;
     float: right;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 450px;
 }
 
 .event {
