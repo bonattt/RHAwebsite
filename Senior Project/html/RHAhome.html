@@ -2,6 +2,12 @@
 <html lang="en">
 
 <head>
+	<!-- custom scroll bar -->
+	<link rel="stylesheet" href="../malihu-custom-scrollbar-plugin-master/jquery.mCustomScrollbar.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">  </script>
+	<script src="../malihu-custom-scrollbar-plugin-master/jquery.mCustomScrollbar.concat.min.js">  </script>
+	<script src="../scripts/custom-scroll.js">  </script>
+	
 	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
 	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
 	<link rel="icon" href="../images/RHA.jpg">
@@ -10,7 +16,6 @@
 	</title>
 	<script type="text/javascript" src="../scripts/login-script.js">  </script>
 	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
-
 
 </head>
 
@@ -26,10 +31,11 @@
 			responsibilities and plans events for on campus residents.</p>
 	</div>
 	</img>
-	<div id="sidebar">
+
+	<div id="sidebar" class="mCustomScrollbar" data-mcs-theme="dark">
 		<h3 id="sidebarTitle"> Upcoming Events </h3>
-		
 	</div>
+	
 	<div class="tileArea">
 		<a class="tile" href="subwayCam">
 			<img class="image-tile" src="../images/subwaycam-screenshot2.png">
