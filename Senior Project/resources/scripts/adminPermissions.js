@@ -1,6 +1,7 @@
 (function () {
     var isAdmin = true;
 
+
     if (isAdmin) {
         var adminValues = document.getElementsByClassName("edit");
         for (var i = 0; i < adminValues.length; i++) {
@@ -12,6 +13,7 @@
             }, false);
         }
     }
+
 
     function showModal(editImage) {
         var modal = document.getElementById('myModal');
@@ -112,8 +114,6 @@
             }
         }
     }
-
-
 
 
 
