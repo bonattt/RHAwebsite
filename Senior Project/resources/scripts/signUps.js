@@ -76,8 +76,22 @@ function moreInformationFunction(triggeringElement) {
     }
 
     function showListModal() {
+            var eventAttendees = [{
+        name: "Morgan Cook"
+    },
+    {
+        name: "Thomas Bonnatti"
+    }]
         var modal = document.getElementById('listModal');
         var span = document.getElementsByClassName("closeList")[0];
+        var list = document.getElementById("list");
+        var html = "";
+        for(var i=0; i < eventAttendees.length; i++){
+            console.log("The person at " + i + "is: " + eventAttendees[i].name);
+            html += "<br>" + eventAttendees[i].name; 
+        }
+        list.innerHTML = "The attendees for this event are:";
+        list.innerHTML += html;
         modal.style.display = "block";
         span.onclick = function () {
             modal.style.display = "none";
