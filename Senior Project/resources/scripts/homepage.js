@@ -112,7 +112,7 @@
         var newStuffInput = document.createElement("textarea");
         newStuffInput.setAttribute("rows", "1");
         newStuffInput.setAttribute("cols", "20");
-        newStuffInput.setAttribute("name", "");
+        // newStuffInput.setAttribute("name", "");
         newStuffInput.innerHTML = div.querySelectorAll(":nth-child(2)")[0].innerHTML;
         // whatsnew["title"] = newStuffInput.innerHTML;
 
