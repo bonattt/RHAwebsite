@@ -265,12 +265,10 @@ function moreInformationFunction(triggeringElement) {
    $(document).ready(function() {
         console.log("HELLO");
         if (window.location.pathname.indexOf("pastEvents") > -1) {
-            console.log("You're on the past events page!");
             displayPastEvents();
             // call Past events method
         } else {
             // call sign-ups method
-            console.log("Yeah idfk know where you are");
             displaySignUps();
         }
         // getEvents();
