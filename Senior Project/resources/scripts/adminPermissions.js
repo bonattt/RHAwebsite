@@ -1,3 +1,92 @@
+(function() {
+    var officer = [{
+	username: "cookmn",
+	firstname: "Allison",
+	lastname: "Cook",
+	hall: "none",
+	memberType: "President",
+	active: true,
+	trip_eligible: true,
+    email: "cookmn@rose-hulman.edu",
+    phoneNumber: "(812) 230-9401",
+    roomNumber: "Skinner2A",
+    boxNumber: "2863"
+},
+{
+	username: "cookmn",
+	firstname: "Morgan",
+	lastname: "Cook",
+	hall: "none",
+	memberType: "Vice President",
+	active: true,
+	trip_eligible: true,
+    email: "cookmn@rose-hulman.edu",
+    phoneNumber: "(812) 230-9401",
+    roomNumber: "Skinner2A",
+    boxNumber: "2863"
+},
+{
+	username: "cookmn",
+	firstname: "Morgan",
+	lastname: "Cook",
+	hall: "none",
+	memberType: "",
+	active: true,
+	trip_eligible: true,
+    email: "cookmn@rose-hulman.edu",
+    phoneNumber: "(812) 230-9401",
+    roomNumber: "Skinner2A",
+    boxNumber: "2863"
+},
+{
+	username: "cookmn",
+	firstname: "Morgan",
+	lastname: "Cook",
+	hall: "none",
+	memberType: "NCC",
+	active: true,
+	trip_eligible: true,
+    email: "cookmn@rose-hulman.edu",
+    phoneNumber: "(812) 230-9401",
+    roomNumber: "Skinner2A",
+    boxNumber: "2863"
+},
+{
+	username: "cookmn",
+	firstname: "Morgan",
+	lastname: "Cook",
+	hall: "none",
+	memberType: "Service",
+	active: true,
+	trip_eligible: true,
+    email: "cookmn@rose-hulman.edu",
+    phoneNumber: "(812) 230-9401",
+    roomNumber: "Skinner2A",
+    boxNumber: "2863"
+}];
+
+    for(var i=0; i<officer.length; i++){
+        if(officer[i].memberType != ""){
+        var html = "<div class='officer'>";
+        html += "<h3 class='edit'>" + officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].memberType + "</h3>";
+        html += "<img src='../images/officers/" + removeSpaces(officer[i].memberType.toLowerCase()) + ".jpg' alt='" + officer[i].memberType +  "'height='294' width='195'>";
+        html += "<p>Email: <a href='mailto:'" + officer[i].email +">" + officer[i].email + "</a></p>";
+        html += "<p> Phone Number: " + officer[i].phoneNumber + "</p>";
+        html += "<p> Room: " + officer[i].roomNumber + "</p>";
+        html += "<p>Box #: " + officer[i].boxNumber + "</p>";
+
+        var officers = document.getElementById("officers");
+        console.log(officers.innerHTML);
+        officers.innerHTML += html;
+
+        }
+    }
+})();
+
+function removeSpaces(thingToRemoveSpacesFrom){
+    return thingToRemoveSpacesFrom.replace(" ","");
+}
+
 (function () {
     var isAdmin = true;
 
