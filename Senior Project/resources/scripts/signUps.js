@@ -45,10 +45,9 @@ function displayPastEvents() {
     }];
 
     for(var i=0; i<proposal.length; i++){
-        var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].name + " - $" + proposal[i].cost_to_attendee + "</p>";
+        var html = "<div class='eventTile'><p class='signUpText'>" + proposal[i].name + " - $" + proposal[i].cost_to_attendee + "</p>";
         html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
         html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
-        html += "<a onclick='signUp()'><p class='signUpLink'> Sign Up </p></a>";
         html += "<a id='myBtn' class='viewListLink'> View List </a>";
         html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
         html += "</div>";
@@ -97,10 +96,11 @@ function signUp() {
 }
 
 function moreInformationFunction(triggeringElement) {
-
-    var descriptionToShow = triggeringElement.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0];
-    var linkClicked = triggeringElement.parentElement.parentElement.querySelectorAll(":nth-child(3)")[0].firstChild;
+    var parentDiv = triggeringElement.parentElement.parentElement;
+    var linkClicked = parentDiv.getElementsByClassName("moreInfoLink")[0];
+    var descriptionToShow = parentDiv.getElementsByClassName("moreInformation")[0];
     console.log(linkClicked);
+    console.log(descriptionToShow);
 
     if (linkClicked.innerHTML == "Show Details") {
         descriptionToShow.style.display = "block";
