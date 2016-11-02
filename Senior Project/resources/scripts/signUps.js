@@ -117,7 +117,7 @@ function displaySignUps() {
 
         for(var i=0; i<proposal.length; i++){
             var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - " + proposal[i].cost_to_attendee + "</p>";
-            html += "<img class='signUpImage' src =" + '../images/' + proposal[i].image_path + ".png" +"></img>";
+            html += "<img class='signUpImage' src =" + proposal[i].image_path +"></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
             html += "<a onclick='signUp()'><p class='signUpLink'> Sign Up </p></a>";
             html += "<a id='myBtn' class='viewListLink'> View List </a>";
