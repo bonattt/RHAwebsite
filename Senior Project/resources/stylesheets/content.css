@@ -278,8 +278,10 @@ h3{
 }
 
 .signUpImage {
-	width: 90%;
+	width: 70%;
 	height: 250px;
+	display: block;
+	margin: auto auto auto auto;
 }
 
 .moreInfoLink, .signUpLink, .viewListLink {
