@@ -20,9 +20,8 @@
         html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
         html += "<a onclick='signUp()'><p class='signUpLink'> Sign Up </p></a>";
         html += "<a id='myBtn' class='viewListLink'> View List </a>";
-        html += "<div class='moreInformation'>" + proposal[i].eventDescription + " Sign-ups for this event will close on " + proposal[i].signUpCloseDate + ".</div>";
+        html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
         html += "</div>";
-
         var tileArea = document.getElementsByClassName("tileArea")[0];
         tileArea.innerHTML += html;  
     }
@@ -35,22 +34,35 @@ function signUp() {
 }
 
 function moreInformationFunction(triggeringElement) {
-    var linkClicked = triggeringElement.id;
-    var events = document.getElementsByClassName("moreInformation");
-    var moreInfoLinks = document.getElementsByClassName("moreInfoLink");
-    for (var i = 0; i < events.length; i++) {
-        //NOTE: I'm not a fan about the use of IDs here... maybe consider re-working it later. -Sean
-        var moreInfo = document.getElementById(events[i].id);
-        var moreInfoLink = document.getElementById(moreInfoLinks[i].id);
-        if (moreInfoLink.id == linkClicked && moreInfoLink.textContent == "Show Details") {
-            moreInfo.style.display = "block";
-            moreInfoLink.textContent = "Hide Details";
-        }
-        else {
-            moreInfo.style.display = "none";
-            moreInfoLink.textContent = "Show Details";
-        }
+    // var linkClicked = triggeringElement.id;
+
+    var descriptionToShow = triggeringElement.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0];
+    var linkClicked = triggeringElement.parentElement.parentElement.querySelectorAll(":nth-child(3)")[0].firstChild;
+    console.log(linkClicked);
+
+    if (linkClicked.innerHTML == "Show Details") {
+        descriptionToShow.style.display = "block";
+        linkClicked.innerHTML = "Hide Details";
+    } else {
+        descriptionToShow.style.display = "none";
+        linkClicked.innerHTML = "Show Details";        
     }
+
+    // var events = document.getElementsByClassName("moreInformation");
+    // var moreInfoLinks = document.getElementsByClassName("moreInfoLink");
+    // for (var i = 0; i < events.length; i++) {
+    //     //NOTE: I'm not a fan about the use of IDs here... maybe consider re-working it later. -Sean
+    //     var moreInfo = document.getElementById(events[i].id);
+    //     var moreInfoLink = document.getElementById(moreInfoLinks[i].id);
+    //     if (moreInfoLink.id == linkClicked && moreInfoLink.textContent == "Show Details") {
+    //         moreInfo.style.display = "block";
+    //         moreInfoLink.textContent = "Hide Details";
+    //     }
+    //     else {
+    //         moreInfo.style.display = "none";
+    //         moreInfoLink.textContent = "Show Details";
+    //     }
+    // }
 }
 
 (function () {
@@ -191,7 +203,10 @@ function moreInformationFunction(triggeringElement) {
 
    $(document).ready(function() {
         console.log("HELLO");
-        getEvents();
+        if (window.location.pathname.indexOf("pastEvents.html") > -1) {
+            console.log("You're on the past events page!");
+        }
+        // getEvents();
     });
 
 
