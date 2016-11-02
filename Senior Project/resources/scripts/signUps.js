@@ -121,7 +121,7 @@ function moreInformationFunction(triggeringElement) {
     }
 
     var isAdmin = true;
-    apiURL = "rha-website-1.csse.rose-hulman.edu:3000/";
+    apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
     newEvent = {};
 
     if (isAdmin) {
