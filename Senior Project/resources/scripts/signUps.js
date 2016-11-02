@@ -22,7 +22,8 @@
         html += "<a id='myBtn' class='viewListLink'> View List </a>";
         html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
         html += "</div>";
-        var tileArea = document.getElementsByClassName("tileArea")[0];
+
+        var tileArea = document.getElementsByClassName("eventTileArea")[0];
         tileArea.innerHTML += html;  
     }
 })();
@@ -110,8 +111,22 @@ function moreInformationFunction(triggeringElement) {
     }
 
     function showListModal() {
+            var eventAttendees = [{
+        name: "Morgan Cook"
+    },
+    {
+        name: "Thomas Bonnatti"
+    }]
         var modal = document.getElementById('listModal');
         var span = document.getElementsByClassName("closeList")[0];
+        var list = document.getElementById("list");
+        var html = "";
+        for(var i=0; i < eventAttendees.length; i++){
+            console.log("The person at " + i + "is: " + eventAttendees[i].name);
+            html += "<br>" + eventAttendees[i].name; 
+        }
+        list.innerHTML = "The attendees for this event are:";
+        list.innerHTML += html;
         modal.style.display = "block";
         span.onclick = function () {
             modal.style.display = "none";
