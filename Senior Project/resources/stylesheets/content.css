@@ -44,7 +44,7 @@ h1{
 
 
 #sidebar {
-    border-radius: 30px;
+    border-radius: 15px;
     border: 1px solid #000000;
     text-align: center;
     width: 28%;
@@ -52,13 +52,14 @@ h1{
 	overflow-y: auto;
 	overflow-x: hidden;
 	max-height: 450px;
+	background-color: #EEEEEE;
 }
 
 .event {
 	border: 2px solid black;
 	border-radius: 30px;
 	min-height: 120px;
-	background-color: #DCDCDC;
+	background-color: #D0D0D0;
 	position: relative;
 	width: 95%;
 	margin: 2%;
