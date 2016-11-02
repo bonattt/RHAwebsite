@@ -1,4 +1,76 @@
 (function() {
+    var proposal = [{
+	name: "King's Island",
+	cost_to_attendee: 10.50,
+	event_date: "2016-11-10",
+	event_signup_open: "2016-11-01",
+	event_signup_close: "2016-11-04",
+	image_path: "../images/kingsIsland.jpg",
+	description: "newFakeEvent",
+	proposer_id: 44,
+	week_proposed: 5,
+	quarter_proposed: 1,
+	money_requested: 750,
+	approved: true
+},
+{
+	name: "King's Island",
+	cost_to_attendee: 10.50,
+	event_date: "2016-11-10",
+	event_signup_open: "2016-11-01",
+	event_signup_close: "2016-11-04",
+	image_path: "../images/kingsIsland.jpg",
+	description: "newFakeEvent",
+	proposer_id: 44,
+	week_proposed: 5,
+	quarter_proposed: 1,
+	money_requested: 750,
+	approved: true
+},
+{
+	name: "King's Island",
+	cost_to_attendee: 10.50,
+	event_date: "2016-11-10",
+	event_signup_open: "2016-11-01",
+	event_signup_close: "2016-11-04",
+	image_path: "../images/kingsIsland.jpg",
+	description: "newFakeEvent",
+	proposer_id: 44,
+	week_proposed: 5,
+	quarter_proposed: 1,
+	money_requested: 750,
+	approved: true
+},
+{
+	name: "King's Island",
+	cost_to_attendee: 10.50,
+	event_date: "2016-11-10",
+	event_signup_open: "2016-11-01",
+	event_signup_close: "2016-11-04",
+	image_path: "../images/kingsIsland.jpg",
+	description: "newFakeEvent",
+	proposer_id: 44,
+	week_proposed: 5,
+	quarter_proposed: 1,
+	money_requested: 750,
+	approved: true
+}];
+
+    for(var i=0; i<proposal.length; i++){
+        console.log("hey there, cutie ;)")
+        var html = "<div class='event'><a href='sign-ups'>";
+        html += "<img src=" + proposal[0].image_path + " alt='Event' class='eventImage'>";
+        html += "<div class='eventText'><h2>" + proposal[0].name + "</h2>";
+        html += "<p>" + proposal[0].event_date + "</p></div></a></div>";
+
+        var sidebar = document.getElementById("sidebarEvents");
+        console.log(sidebar.innerHTML);
+        console.log(sidebar.innerHTML += html);
+        sidebar.innterHTML += html; 
+    }
+})();
+
+(function() {
 	var isAdmin = true;
     var hasListener = false;
     var whatsnew = {};
