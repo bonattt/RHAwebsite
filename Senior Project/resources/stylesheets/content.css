@@ -32,7 +32,6 @@ h1{
 .footer {
 	padding: 1%;
 	margin: -1.5%;
-	float: center;
 	text-align: center;
 	background-color: #696969;
 }
@@ -44,19 +43,28 @@ h1{
 }
 
 
-#sidebar {
-    border-radius: 30px;
+#upcomingEvents { /* #sidebar { */
+    border-radius: 15px;
     border: 1px solid #000000;
     text-align: center;
     width: 28%;
     float: right;
+	background-color: #EEEEEE;
+}
+
+#sidebar {
+	border-top: 1px solid #000000;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 350px;
+
 }
 
 .event {
 	border: 2px solid black;
 	border-radius: 30px;
 	min-height: 120px;
-	background-color: #DCDCDC;
+	background-color: #D0D0D0;
 	position: relative;
 	width: 95%;
 	margin: 2%;
@@ -166,34 +174,22 @@ h3{
 	font-size: 20px;
 }
 
-#onCampus, #onCampusPhoto {
+.committees, .committeePhoto {
 	display: inline-block;
 }
 
-#offCampus, #offCampusPhoto {
-	display: inline-block;
-}
-
-#service, #servicePhoto {
-	display: inline-block;
-}
-
-#publicity, #publicityPhoto {
-	display: inline-block;
-}
-
-#onCampusPhoto, #offCampusPhoto, #servicePhoto, #publicityPhoto {
+.committeePhoto {
 	width: 20%;
 }
 
-#onCampusWrapper, #serviceWrapper{
+.committeeWrapperRight{
 	background-color: #DCDCDC;
 	padding: 15px;
 	margin-left: -10pt;
 	margin-right: -10pt;
 }
 
-#offCampusWrapper, #publicityWrapper {
+.committeeWrapperLeft {
 	padding: 15px;
 	margin-left: -10pt;
 	margin-right: -10pt;
@@ -261,16 +257,15 @@ h3{
 }
 
 .signUpImage {
-	width: 70%;
+	width: 95%;
 	height: 250px;
 	display: block;
 	margin: auto auto auto auto;
 }
 
 .moreInfoLink, .signUpLink, .viewListLink {
-	width: 25%;
+	width: 30%;
 	display: inline-block;
-	font-size: 20px;
 }
 
 .signUpText {

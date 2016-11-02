@@ -1,33 +1,3 @@
-// (function() {
-//     var proposal = [{
-// 	name: "King's Island",
-// 	cost_to_attendee: 10.50,
-// 	event_date: "2016-11-10",
-// 	event_signup_open: "2016-11-01",
-// 	event_signup_close: "2016-11-04",
-// 	image_path: "../images/kingsIsland.jpg",
-// 	description: "newFakeEvent",
-// 	proposer_id: 44,
-// 	week_proposed: 5,
-// 	quarter_proposed: 1,
-// 	money_requested: 750,
-// 	approved: true
-// }];
-
-//     for(var i=0; i<proposal.length; i++){
-//         var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].name + " - $" + proposal[i].cost_to_attendee + "</p>";
-//         html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
-//         html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
-//         html += "<a onclick='signUp()'><p class='signUpLink'> Sign Up </p></a>";
-//         html += "<a id='myBtn' class='viewListLink'> View List </a>";
-//         html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
-//         html += "</div>";
-
-//         var tileArea = document.getElementsByClassName("eventTileArea")[0];
-//         tileArea.innerHTML += html;  
-//     }
-// })();
-
 function displayPastEvents() {
     var proposal = [{
         name: "King's Island",
@@ -121,7 +91,7 @@ function moreInformationFunction(triggeringElement) {
     }
 
     var isAdmin = true;
-    apiURL = "rha-website-1.csse.rose-hulman.edu:3000/";
+    apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
     newEvent = {};
 
     if (isAdmin) {
@@ -138,22 +108,63 @@ function moreInformationFunction(triggeringElement) {
 
 
     function getEvents() {
-        $.ajax({
-            url: apiURL + 'api/v1/events',
-            type: 'GET',
-            data: newEvent,
-            dataType: 'JSON',
-            success: function(data) {
-                if(data) {
-                    console.log("Here's some data! " + data);
-                } else {
-                    console.log("Could not GET data! :(");
-                }
-            },
-            error: function(req, status, err) {
-                console.log(err, status, req);
+        var url = apiURL + 'api/v1/events';
+        console.log(url);
+        function createCORSRequest(method, url) {
+            var xhr = new XMLHttpRequest();
+            if ("withCredentials" in xhr) {
+
+            // Check if the XMLHttpRequest object has a "withCredentials" property.
+            // "withCredentials" only exists on XMLHTTPRequest2 objects.
+                xhr.open(method, url, true);
+
+            } else if (typeof XDomainRequest != "undefined") {
+
+            // Otherwise, check if XDomainRequest.
+            // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+                xhr = new XDomainRequest();
+                xhr.open(method, url);
+
+            } else {
+
+            // Otherwise, CORS is not supported by the browser.
+                xhr = null;
+
             }
-        });
+            return xhr;
+        }
+
+        var xhr = createCORSRequest('GET', url);
+        console.log(xhr);
+        if (!xhr) {
+          throw new Error('CORS not supported');
+        }
+
+        xhr.onload = function () {
+            var responseText = xhr.responseText;
+            console.log("Response text: " + responseText);
+        }
+
+        xhr.onerror = function() {
+            console.log("There was an error");
+        }
+        xhr.send();
+        // $.ajax({
+        //     url: apiURL + 'api/v1/events',
+        //     type: 'GET',
+        //     data: newEvent,
+        //     dataType: 'JSON',
+        //     success: function(data) {
+        //         if(data) {
+        //             console.log("Here's some data! " + data);
+        //         } else {
+        //             console.log("Could not GET data! :(");
+        //         }
+        //     },
+        //     error: function(req, status, err) {
+        //         console.log(err, status, req);
+        //     }
+        // });
     }
 
     function showListModal() {
@@ -271,7 +282,7 @@ function moreInformationFunction(triggeringElement) {
             // call sign-ups method
             displaySignUps();
         }
-        // getEvents();
+        getEvents();
     });
 
 
