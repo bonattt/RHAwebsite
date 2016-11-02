@@ -24,7 +24,8 @@ CREATE TABLE Expenses (
 CREATE TABLE Funds (
         funds_id SERIAL PRIMARY KEY,
         fund_name varchar(50),
-        funds_amount Money
+        funds_amount Money,
+        display_on_site boolean
 );
 
 CREATE TABLE Proposals (
@@ -336,54 +337,55 @@ INSERT INTO Expenses VALUES (DEFAULT, '{"Receiver": "Sydney Black", "CM": 2229, 
 INSERT INTO Expenses VALUES (DEFAULT, '{"Receiver": "Turner Coaches, Inc.", "Address": "P.O. Box 2852 | Terre Haute, IN 47802-0852", "accountCode": 9610, "Description": "Turner Travel to Mason, OH", "AmountUsed": 3030.00, "DateReceived": "2016-9-26", "DateProcessed": "", "Receipts": [{"Amount": 3030.00, "InvoiceDate": "2016-10-1"}]}');
 
 -- Current Funds Tab
-INSERT INTO Funds VALUES (DEFAULT, 'Rollover', 31778.60);
-INSERT INTO Funds VALUES (DEFAULT, 'Fall Income', 26160.00);
-INSERT INTO Funds VALUES (DEFAULT, 'Winter Income', 24520.00);
-INSERT INTO Funds VALUES (DEFAULT, 'Spring Income', 25000.00);
-INSERT INTO Funds VALUES (DEFAULT, 'Additions', 0.00);
-INSERT INTO Funds VALUES (DEFAULT, 'Total Money', 107458.60);
-INSERT INTO Funds VALUES (DEFAULT, 'Total Floor Money', -19245.00);
-INSERT INTO Funds VALUES (DEFAULT, 'Acquired Participation Floor Money', -1098.47);
-INSERT INTO Funds VALUES (DEFAULT, 'Possible to be gotten Floor Money', -17538.75);
-INSERT INTO Funds VALUES (DEFAULT, 'Missed Floor Money', -607.78);
-INSERT INTO Funds VALUES (DEFAULT, 'Awarded Floor Money', 0.00);
-INSERT INTO Funds VALUES (DEFAULT, 'Total Without Floor Money', 88213.60);
-INSERT INTO Funds VALUES (DEFAULT, 'iMoney Proposals', -48793.00);
-INSERT INTO Funds VALUES (DEFAULT, 'Amount Budgeted', -6325.03);
-INSERT INTO Funds VALUES (DEFAULT, 'Cleared Deductions', 0.00);
-INSERT INTO Funds VALUES (DEFAULT, 'Deductions', -10263.79);
-INSERT INTO Funds VALUES (DEFAULT, 'General Funds', 23439.56);
-INSERT INTO Funds VALUES (DEFAULT, 'Total iMoney', 48793.00);
-INSERT INTO Funds VALUES (DEFAULT, 'Floor Money', 17538.75);
-INSERT INTO Funds VALUES (DEFAULT, 'Total Budget', 89771.31);
+INSERT INTO Funds VALUES (DEFAULT, 'Rollover', 31778.60, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Fall Income', 26160.00, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Winter Income', 24520.00, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Spring Income', 25000.00, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Additions', 0.00, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Total Money', 107458.60, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Total Floor Money', -19245.00, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Acquired Participation Floor Money', -1098.47, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Possible to be gotten Floor Money', -17538.75, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Missed Floor Money', -607.78, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Awarded Floor Money', 0.00, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Total Without Floor Money', 88213.60, false);
+INSERT INTO Funds VALUES (DEFAULT, 'iMoney Proposals', -48793.00, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Amount Budgeted', -6325.03, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Cleared Deductions', 0.00, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Deductions', -10263.79, false);
+INSERT INTO Funds VALUES (DEFAULT, 'General Funds', 23439.56, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Total iMoney', 48793.00, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Floor Money', 17538.75, false);
+INSERT INTO Funds VALUES (DEFAULT, 'Total Budget', 89771.31, false);
+
 
 -- Floor Money tab
-INSERT INTO Funds VALUES (DEFAULT, 'BSB 0-1', 41.34);
-INSERT INTO Funds VALUES (DEFAULT, 'BSB 2', 43.17);
-INSERT INTO Funds VALUES (DEFAULT, 'BSB 3', 41.34);
-INSERT INTO Funds VALUES (DEFAULT, 'Speed 1', 30.31);
-INSERT INTO Funds VALUES (DEFAULT, 'Speed 2', 43.17);
-INSERT INTO Funds VALUES (DEFAULT, 'Speed 3', 43.17);
-INSERT INTO Funds VALUES (DEFAULT, 'Demind 0', 27.56);
-INSERT INTO Funds VALUES (DEFAULT, 'Deming 1', 20.21);
-INSERT INTO Funds VALUES (DEFAULT, 'Deming 2', 38.58);
-INSERT INTO Funds VALUES (DEFAULT, 'Deming Attic', 26.64);
-INSERT INTO Funds VALUES (DEFAULT, 'Blum', 62.46);
-INSERT INTO Funds VALUES (DEFAULT, 'Mees', 68.89);
-INSERT INTO Funds VALUES (DEFAULT, 'Scharp', 64.30);
-INSERT INTO Funds VALUES (DEFAULT, 'Percopo 0-1', 76.24);
-INSERT INTO Funds VALUES (DEFAULT, 'Percopo 2', 60.62);
-INSERT INTO Funds VALUES (DEFAULT, 'Percopo 3', 46.14);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 1', 32.15);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 2', 35.82);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 3', 37.66);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 1', 26.57);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 2', 35.82);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 3', 34.91);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 1', 41.25);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 2', 53.28);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 3', 33.17);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 4', 33.72);
+INSERT INTO Funds VALUES (DEFAULT, 'BSB 0-1', 41.34, true);
+INSERT INTO Funds VALUES (DEFAULT, 'BSB 2', 43.17, true);
+INSERT INTO Funds VALUES (DEFAULT, 'BSB 3', 41.34, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Speed 1', 30.31, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Speed 2', 43.17, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Speed 3', 43.17, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Demind 0', 27.56, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Deming 1', 20.21, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Deming 2', 38.58, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Deming Attic', 26.64, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Blum', 62.46, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Mees', 68.89, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Scharp', 64.30, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Percopo 0-1', 76.24, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Percopo 2', 60.62, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Percopo 3', 46.14, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 1', 32.15, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 2', 35.82, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 3', 37.66, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 1', 26.57, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 2', 35.82, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 3', 34.91, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 1', 41.25, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 2', 53.28, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 3', 33.17, true);
+INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 4', 33.72, true);
 
 -- If both week and qtr proposed are -1, the event was last year
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', -1, -1, 7000.00, true, 7000.00, true, NULL, NULL, NULL);
