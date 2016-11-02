@@ -19,55 +19,6 @@
 		<div id="snackbar">You have successfully signed up for the event.</div>
 
 		<div class="eventTileArea">
-			<div class="eventTile">
-				<p class="signUpText edit">King's Island - $25</p>
-				<img class="signUpImage" src="../images/kingsIsland.jpg"></img>
-				<a>
-					<p onclick="moreInformationFunction(this)" class="moreInfoLink" id="moreInfoLinkKings">Show Details</p>
-				</a>
-				<a onclick="signUp()">
-					<p class="signUpLink">Sign Up</p>
-				</a>
-				<a id="myBtn" class="viewListLink">View List</a>
-				<div class="moreInformation" id="kingsIslandInfo">King's Island is a fast-paced amusement park full of exhilerating roller coasters. Sign-ups for this event will close on 9/28/2016.</div>
-			</div>
-			<div class="eventTile">
-				<p class="signUpText edit">Children's Museum - $10</p>
-				<img class="signUpImage" src="../images/childrensMuseum.jpg"></img>
-				<a>
-					<p onclick="moreInformationFunction(this)" class="moreInfoLink" id="moreInfoLinkIndy">Show Details</p>
-				</a>
-				<a onclick="signUp()">
-					<p class="signUpLink">Sign Up</p>
-				</a>
-				<a id="myBtn" class="viewListLink">View List</a>
-				<div class="moreInformation" id="childrensMuseumInfo">The Indianapolis Childrens' Museum is a fun, interactive museum for people of all ages. Sign-ups for this event will close on 10/20/2016.</div>
-			</div>
-			<div class="eventTile">
-				<p class="signUpText edit">Pumpkin Works - FREE</p>
-				<img class="signUpImage" src="../images/pumpkinWorks.jpg"></img>
-				<a>
-					<p onclick="moreInformationFunction(this)" class="moreInfoLink" id="moreInfoLinkPumpkin">Show Details</p>
-				</a>
-				<a onclick="signUp()">
-					<p class="signUpLink">Sign Up</p>
-				</a>
-				<a id="myBtn" class="viewListLink">View List</a>
-				<div class="moreInformation" id="pumpkinWorksInfo">Pumpkin Works is a farm filled with mazes, cornfields and fun. Sign-ups for this event will close on 10/11/2016.</div>
-			</div>
-			<div class="eventTile">
-
-				<p class="signUpText edit">Skyzone Trampoline Park - $15</p>
-				<img class="signUpImage" src="../images/skyZone.jpg"></img>
-				<a>
-					<p onclick="moreInformationFunction(this)" class="moreInfoLink" id="moreInfoLinkSkyzone">Show Details</p>
-				</a>
-				<a onclick="signUp()">
-					<p class="signUpLink">Sign Up</p>
-				</a>
-				<a id="myBtn" class="viewListLink">View List</a>
-				<div class="moreInformation" id="skyzoneInfo">Skyzone is a trmpoline park full of trampolines where you can fly high. Sign-ups for this event will close on 10/11/2016.</div>
-			</div>
 		</div>
 	</div>
 	</div>
@@ -75,9 +26,7 @@
 	<div id="listModal" class="modal">
 		<div class="modal-content">
 			<span class="closeList">x</span>
-			<p>The attendees for this event are:</p>
-			<p>Morgan Cook</p>
-			<p>Thomas Bonatti</p>
+			<p id="list"></p>
 		</div>
 	</div>
 
@@ -115,7 +64,7 @@
 
 	<script>
 		window.jQuery || document.write('<script src="../scripts/jquery-3.1.1.js"><\/script>');
-	</script> // this is the fallback
+	</script>
 
 </body>
 <script language="Javascript" src="../scripts/navbar-factory.js"> </script>
