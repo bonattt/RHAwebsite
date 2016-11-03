@@ -1,70 +1,4 @@
 (function () {
-    var officer = [{
-        username: "cookmn",
-        firstname: "Allison",
-        lastname: "Cook",
-        hall: "none",
-        memberType: "President",
-        active: true,
-        trip_eligible: true,
-        email: "cookmn@rose-hulman.edu",
-        phoneNumber: "(812) 230-9401",
-        roomNumber: "Skinner2A",
-        boxNumber: "2863"
-    },
-        {
-            username: "cookmn",
-            firstname: "Morgan",
-            lastname: "Cook",
-            hall: "none",
-            memberType: "Vice President",
-            active: true,
-            trip_eligible: true,
-            email: "cookmn@rose-hulman.edu",
-            phoneNumber: "(812) 230-9401",
-            roomNumber: "Skinner2A",
-            boxNumber: "2863"
-        },
-        {
-            username: "cookmn",
-            firstname: "Morgan",
-            lastname: "Cook",
-            hall: "none",
-            memberType: "",
-            active: true,
-            trip_eligible: true,
-            email: "cookmn@rose-hulman.edu",
-            phoneNumber: "(812) 230-9401",
-            roomNumber: "Skinner2A",
-            boxNumber: "2863"
-        },
-        {
-            username: "cookmn",
-            firstname: "Morgan",
-            lastname: "Cook",
-            hall: "none",
-            memberType: "NCC",
-            active: true,
-            trip_eligible: true,
-            email: "cookmn@rose-hulman.edu",
-            phoneNumber: "(812) 230-9401",
-            roomNumber: "Skinner2A",
-            boxNumber: "2863"
-        },
-        {
-            username: "cookmn",
-            firstname: "Morgan",
-            lastname: "Cook",
-            hall: "none",
-            memberType: "Service",
-            active: true,
-            trip_eligible: true,
-            email: "cookmn@rose-hulman.edu",
-            phoneNumber: "(812) 230-9401",
-            roomNumber: "Skinner2A",
-            boxNumber: "2863"
-        }];
-
 
     var xhr = getEvents();
     xhr.send();
@@ -178,7 +112,7 @@ function removeSpaces(thingToRemoveSpacesFrom) {
     }
 })();
 
-function showModal() {
+function showEmptyModal() {
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
     var name = "Name: ";
