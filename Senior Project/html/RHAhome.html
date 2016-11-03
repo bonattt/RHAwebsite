@@ -80,17 +80,19 @@
 		<p> &copy; 2017 Rose-Hulman Institute of Technology, Residence Hall Association </p>
 	</div>
 
-	<div id="myModal" class="modal">
+		<div id="myModal" class="modal">
 		<div class="modal-content">
 			<span class="close">x</span>
-			<div class="modalLeft">
-				<p id="whatsnew"></p>
-				<p id="description"></p>
-			</div>
-			<div class="modalRight">
-				<p id="whatsnewInput"></p>
-				<p id="descInput"></p>
-			</div>
+			<table class="modalTable">
+				<tr>
+					<td id="whatsnew" class="title"></td>
+					<td id="whatsnewInput" class="textArea"></td>
+				</tr>
+				<tr>
+					<td id="description" class="title"></td>
+					<td id="descInput" class="textArea"></td>
+				</tr>
+			</table>
 			<button id="submit" class="modalButton">Submit</button>
 		</div>
 	</div>
