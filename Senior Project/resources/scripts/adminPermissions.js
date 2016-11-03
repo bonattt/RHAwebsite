@@ -112,7 +112,7 @@ function removeSpaces(thingToRemoveSpacesFrom) {
     }
 })();
 
-function showModal() {
+function showEmptyModal() {
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
     var name = "Name: ";
