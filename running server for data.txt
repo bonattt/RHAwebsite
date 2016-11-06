@@ -1,0 +1,5 @@
+login to server
+sudo su 
+su miskowbs
+go to /home/miskowbs/node-postgres-todo/
+npm start

@@ -116,7 +116,15 @@ function displaySignUps() {
         proposal = JSON.parse(proposal);
 
         for(var i=0; i<proposal.length; i++){
-            var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - " + proposal[i].cost_to_attendee + "</p>";
+            var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - ";
+            if(proposal[i].cost_to_attendee == '$0.00') {
+                console.log(proposal[i].proposal_name + " should be free.");
+                html +="FREE</p>";  
+            } else {
+                console.log("This shit better have a cost greater than 0...");
+                console.log(proposal[i].cost_to_attendee);
+                html += proposal[i].cost_to_attendee + "</p>";
+            }
             html += "<img class='signUpImage' src =" + proposal[i].image_path +"></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
             html += "<a onclick='signUp()'><p class='signUpLink'> Sign Up </p></a>";
