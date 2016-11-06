@@ -149,9 +149,7 @@ function displayUpcomingEvents() {
             }
         }
 
-
         var submit = document.getElementById("submit");
-        submit.style.cssText = "height: 10%; width: 25%; font-size: 14px; float: right; color: black; margin-right: 40%;";
         new_submit = submit.cloneNode(true);
         new_submit.addEventListener("click", function () {
             submitChanges(newStuffInput, descInput)
@@ -161,6 +159,7 @@ function displayUpcomingEvents() {
 
 
         function submitChanges(header, description) {
+            console.log("lol");
             div.querySelectorAll(":nth-child(2)")[0].innerHTML = header.value;
             div.querySelectorAll(":nth-child(3)")[0].innerHTML = description.value;
 
@@ -171,9 +170,7 @@ function displayUpcomingEvents() {
     }
 
     $(document).ready(function () {
-        console.log("HELLO");
         displayUpcomingEvents();
-
     });
 
 })();
