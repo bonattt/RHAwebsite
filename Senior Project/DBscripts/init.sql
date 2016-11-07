@@ -14,6 +14,7 @@ CREATE TABLE Members (
         CM int,
         phone_number int,
         room_number varchar(25)
+);
 
 CREATE TABLE Expenses (
         expenses_id SERIAL PRIMARY KEY ,
