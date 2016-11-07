@@ -11,7 +11,10 @@ CREATE TABLE Members (
         memberType varchar(30), -- replace admin with this
         active boolean,
         trip_eligible boolean,
-        meet_attend jsonb
+        meet_attend jsonb,
+        CM int,
+        phone_number int,
+        room_number varchar(25)
         -- meet_attend varchar(1000)
 );
 
@@ -233,7 +236,7 @@ INSERT INTO Members VALUES (DEFAULT, 'santanb', 'Brennan', 'Santaniello', 'Blum'
 INSERT INTO Members VALUES (DEFAULT, 'busches', 'Scott', 'Busche', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'braaksa', 'Ashley', 'Braaksma', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'lir', 'Ronghan', 'Li', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'blacks', 'Sydney', 'Black', 'Blum', null, 'Publicity Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'blacks', 'Sydney', 'Black', 'Blum', null, 'Publicity Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 2057, 1234567890, 406);
 INSERT INTO Members VALUES (DEFAULT, 'wangj', 'Jiawen', 'Wang', 'Blum', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'rudiche', 'Erin', 'Rudich', 'Blum', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'storkl', 'Lauren', 'Stork', 'Blum', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
@@ -246,8 +249,8 @@ INSERT INTO Members VALUES (DEFAULT, 'mccuais', 'Samantha', 'McCuaig', 'Blum', n
 
 -- Percopo 1
 INSERT INTO Members VALUES (DEFAULT, 'adamst', 'Ty', 'Adams', 'Percopo 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'tuskac', 'Carley', 'Tuska', 'Percopo 1', null, 'Off-Campus Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'doyelb', 'Michael', 'Doyel', 'Percopo 1', null, 'Service Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'tuskac', 'Carley', 'Tuska', 'Percopo 1', null, 'Off-Campus Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 1111, 1234567890, 123);
+INSERT INTO Members VALUES (DEFAULT, 'doyelb', 'Michael', 'Doyel', 'Percopo 1', null, 'Service Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 5476, 1234567890, 125);
 INSERT INTO Members VALUES (DEFAULT, 'burkeb', 'Brian', 'Burke', 'Percopo 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'turskim', 'Michael', 'Turski', 'Percopo 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'jursc', 'Connor', 'Jurs', 'Percopo 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
@@ -256,7 +259,7 @@ INSERT INTO Members VALUES (DEFAULT, 'marzari', 'Isabella', 'Marzari', 'Percopo 
 -- Percopo 2
 INSERT INTO Members VALUES (DEFAULT, 'majumda', 'Ari-Jit', 'Majumdar', 'Percopo 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'crewsm', 'Madeline', 'Crews', 'Percopo 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'hunleya', 'Allison', 'Hunley', 'Percopo 2', null, 'President', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'hunleya', 'Allison', 'Hunley', 'Percopo 2', null, 'President', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 2522, 1234567890, 312);
 INSERT INTO Members VALUES (DEFAULT, 'sheffei', 'Ian', 'Sheffert', 'Percopo 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 
 -- Percopo 3
@@ -275,7 +278,7 @@ INSERT INTO Members VALUES (DEFAULT, 'brauna', 'Anna', 'Braun', 'Apartments E 2'
 INSERT INTO Members VALUES (DEFAULT, 'hainesc', 'Charisse', 'Haines', 'Apartments E 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 
 -- Apartments E 3
-INSERT INTO Members VALUES (DEFAULT, 'lauriod', 'Daniel', 'Lauriola', 'Apartments E 3', null, 'On-campus Chair', false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'lauriod', 'Daniel', 'Lauriola', 'Apartments E 3', null, 'On-campus Chair', false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}', 9048, 1234567890, 302);
 INSERT INTO Members VALUES (DEFAULT, 'xuz', 'Zihang', 'Xu', 'Apartments E 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'pratta', 'Avery', 'Pratt', 'Apartments E 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'dudaj', 'Jason', 'Duda', 'Apartments E 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
@@ -291,10 +294,10 @@ INSERT INTO Members VALUES (DEFAULT, 'declerm', 'Matthew', 'DeClerck', 'Apartmen
 -- Apartments W 2
 INSERT INTO Members VALUES (DEFAULT, 'usherj', 'James', 'Usher', 'Apartments W 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'rodibabs', 'Brooks', 'Rodibaugh', 'Apartments W 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'miskowbs', 'Bartosz', 'Miskowiec', 'Apartments W 2', null, 'Vice President', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'miskowbs', 'Bartosz', 'Miskowiec', 'Apartments W 2', null, 'Vice President', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 5196, 1234567890, 207);
 
 -- Apartments W 3
-INSERT INTO Members VALUES (DEFAULT, 'kraussa', 'Amanda', 'Krauss', 'Apartments W 3', null, 'NCC Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'kraussa', 'Amanda', 'Krauss', 'Apartments W 3', null, 'NCC Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 4567, 1234567890, 306);
 INSERT INTO Members VALUES (DEFAULT, 'lauert', 'Tressa', 'Lauer', 'Apartments W 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 
 -- Lakeside 1
@@ -307,7 +310,7 @@ INSERT INTO Members VALUES (DEFAULT, 'stallas', 'Silven', 'Stallard', 'Lakeside 
 INSERT INTO Members VALUES (DEFAULT, 'yatesa', 'Austin', 'Yates', 'Lakeside 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'wised', 'Douglas', 'Wise', 'Lakeside 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'mattoxn', 'Nicole', 'Mattox', 'Lakeside 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'kimmelb', 'Benjamin', 'Kimmel', 'Lakeside 2', null, 'Webmaster', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'kimmelb', 'Benjamin', 'Kimmel', 'Lakeside 2', null, 'Webmaster', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 1234, 1234567890, 213);
 
 -- Lakeside 3
 INSERT INTO Members VALUES (DEFAULT, 'sahabuj', 'Jane', 'Sahabu', 'Lakeside 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
@@ -320,6 +323,10 @@ INSERT INTO Members VALUES (DEFAULT, 'szatkos', 'Scott', 'Szatkowski', 'Lakeside
 
 -- Off-campus
 INSERT INTO Members VALUES (DEFAULT, 'colotlk', 'Karina', 'Colotl', 'Off-campus', null, null, false, false, '{"Q1": [0, 0, 0, 1], "Q2": [], "Q3": []}');
+
+--Advisors
+INSERT INTO Members VALUES (DEFAULT, 'rhodeska', 'Kyle', 'Rhodes', 'Apartments E 1', null, 'Advisor', false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}', 12, 1234567890, 110);
+INSERT INTO Members VALUES (DEFAULT, 'liobiset', 'Eric', 'Liobis', 'Scharp', null, 'Co-Advisor', false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}', 8, 1234567890);
 
 --Use top format. date thing doesn't work apparently
 INSERT INTO Expenses VALUES (DEFAULT, '{"Receiver": "Allison Hunley", "CM": 1079, "accountCode": 9610, "Description": "Exec Retreat", "AmountUsed": 80.77, "DateReceived": "2016-9-13", "DateProcessed": "", "Receipts": [{"Amount": 27.82, "InvoiceDate": "2016-8-13"}, {"Amount": 52.95, "InvoiceDate": "2016-8-13"}]}');
