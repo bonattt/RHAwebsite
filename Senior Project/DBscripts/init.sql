@@ -389,17 +389,53 @@ INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 2', 53.28, true);
 INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 3', 33.17, true);
 INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 4', 33.72, true);
 
--- If both week and qtr proposed are -1, the event was last year
+-- If both week and qtr proposed are -1, the event was last year 
+-- proposal_id SERIAL PRIMARY KEY ,
+--        proposer_id INT references Members (user_id),
+--        expenses_id INT references Expenses (expenses_id),
+--        proposal_name varchar(50),
+--        week_proposed INT,
+--        quarter_proposed INT,
+--        money_requested Money,
+--        approved boolean,
+--        money_allocated Money,
+--        paid boolean,
+--        event_date DATE,
+--        event_signup_open DATE,
+--        event_signup_close DATE,
+--        cost_to_attendee MONEY,
+--        image_path varchar(100), 
+--        description varchar(400),
+--        attendees jsonb
+
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'test', -1, -1, 7000.00, true, 7000.00, true, '2016-12-12', '2016-12-13', '2016-12-30', 30, '../images/abc123.png', 'This is a random description about an event that doesnt exist!');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', -1, -1, 7000.00, true, 7000.00, true, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', -1, -1, 700.00, true, 700.00, false, '2016-10-11', NULL, NULL); -- May break because of date
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', -1, -1, 1200.00, true, 1200.00, true, '2016-8-30', NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Exec Fund', -1, -1, 1500.00, true, 1500.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie Server', -1, -1, 2000.00, true, 2000.00, true, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'RHA Swag', -1, -1, 2500.00, true, 2500.00, false, NULL, NULL, NULL);
+--01 proposal_id
+--02 proposer_id
+--03 expenses_id
+--04 proposal_name
+--05 week_proposed
+--06 quarter_proposed
+--07 money_requested
+--08 approved
+--09 money_allocated
+--10 paid
+--11 event_date
+--12 event_signup_open
+--13 event_signup_close
+--14 cost_to_attendee
+--15 image_path
+--16 description
+--17 attendees
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', -1, -1, 7000.00, true, 7000.00, true, '2016-11-11', '2016-11-01', '2016-11-9');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', -1, -1, 700.00, true, 700.00, false, '2016-10-11', '2016-10-1', '2016-10-9'); -- May break because of date
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', -1, -1, 1200.00, true, 1200.00, true, '2016-8-30', '2016-8-1', '2016-8-28');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Exec Fund', -1, -1, 1500.00, true, 1500.00, false, '2016-11-1', '2016-10-1', '2016-10-30');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie Server', -1, -1, 2000.00, true, 2000.00, true, '2016-11-29', '2016-11-1', '2016-11-27');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'RHA Swag', -1, -1, 2500.00, true, 2500.00, false, '2016-11-21', '2016-11-1', '2016-11-19');
 
 -- Fall = 0, Winter = 1, Spring = 2
+-- week: 1--11, 1 = first week, 11 = finals week
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Cheap Food Day', 1, 1, NULL, false, 200.00, false, '2016-9-5', '2016-9-5', '2016-9-5', 10, '../images/abc123.png');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lambda Chi Watermelon Bash', 1, 1, 100.00, true, 100.00, false, '2016-9-8', '2016-9-8', '2016-9-8', 10, '../images/abc123.png');
 
@@ -443,43 +479,45 @@ INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Salvation Army Tree', 1, 1, NULL, 
 
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Assassins', 3, 1, NULL, true, 100.00, false, '2016-12-12', '2016-12-12', '2016-12-12', 0, '../images/abc123.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'EWB Wallyball Tourney', 4, 1, NULL, false, 80.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Greatest Floor', 4, 1, NULL, false, 2750.00, false, NULL, NULL, NULL);
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'EWB Wallyball Tourney', 4, 1, NULL, false, 80.00, false, '2016-12-15', '2016-12-1', '2016-13-');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Greatest Floor', 4, 1, NULL, false, 2750.00, false, '2016-11-22', '2016-11-2', '2016-11-20');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Mr. Rose', 5, 1, NULL, false, 150.00, false, NULL, NULL, NULL);
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Mr. Rose', 5, 1, NULL, false, 150.00, false, '2016-11-27', '2016-11-1', '2016-11-20');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lunar New Years Celebration', 7, 1, NULL, false, 125.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 7, 1, NULL, false, 800.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Super Smash Bros Tournament', 7, 1, NULL, false, 200.00, false, NULL, NULL, NULL);
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lunar New Years Celebration', 7, 1, NULL, false, 125.00, false, '2016-2-8', '2016-1-20', '2016-2-6');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lunar New Years Celebration', 7, 1, NULL, false, 125.00, false, '2017-1-28', '2016-1-1', '2016-1-26');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 7, 1, NULL, false, 800.00, false, '2016-12-26', '2016-12-5', '2016-12-24');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Super Smash Bros Tournament', 7, 1, NULL, false, 200.00, false, '2016-11-29', '2016-11-1', '2016-1-27');
 
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Random Acts of Kindness', 8, 1, NULL, false, 200.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Nerds that Cook', 8, 1, NULL, false, 150.00, false, NULL, NULL, NULL);
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Random Acts of Kindness', 8, 1, NULL, false, 200.00, false, '2016-10-27', '2016-10-5', '2016-10-25');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Nerds that Cook', 8, 1, NULL, false, 150.00, false, '2016-12-22', '2016-12-1', '2016-12-20');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland', 3, 2, NULL, false, 1000.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Easter Egg Hunt', 3, 2, NULL, false, 300.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SAA Color Smash', 3, 2, NULL, false, 120.00, false, NULL, NULL, NULL);
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland', 3, 2, NULL, false, 1000.00, false, '2016-11-7', '2016-10-20', '2016-11-5');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Easter Egg Hunt', 3, 2, NULL, false, 300.00, false, '2016-11-8', '2016-10-10', '2016-11-6');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SAA Color Smash', 3, 2, NULL, false, 120.00, false, '2016-11-23', '2016-11-1', '2016-11-20');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Dishes for Wishes', 4, 2, NULL, false, 250.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Deming Park Cookout', 4, 2, NULL, false, 1200.00, false, NULL, NULL, NULL);
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Dishes for Wishes', 4, 2, NULL, false, 250.00, false, '2016-10-25', '2016-10-1', '2016-10-23');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Deming Park Cookout', 4, 2, NULL, false, 1200.00, false, '2016-11-2', '2016-10-11', '2016-11-1');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie on the Lawn', 5, 2, NULL, false, 1200.00, false, NULL, NULL, NULL);
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie on the Lawn', 5, 2, NULL, false, 1200.00, false, '2016-11-30', '2016-11-10', '2016-11-28');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Campus Beautification', 6, 2, NULL, false, 500.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SHPE Cinco de Mayo', 6, 2, NULL, false, 200.00, NULL, false, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'House Keepers Appreciation', 6, 2, NULL, false, 500.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Paws on the Patio', 6, 2, NULL, false, 200.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 6, 2, NULL, false, 800.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tri Delta Teeter Totter-a-thon', 6, 2, NULL, false, 300.00, false, NULL, NULL, NULL);
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Campus Beautification', 6, 2, NULL, false, 500.00, false, '2016-10-27', '2016-10-5', '2016-10-25');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SHPE Cinco de Mayo', 6, 2, NULL, false, 200.00, NULL, false, '2016-5-5', '2016-4-15', '2016-5-3');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'House Keepers Appreciation', 6, 2, NULL, false, 500.00, false, '2017-1-15', '2017-1-1', '2017-1-14');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Paws on the Patio', 6, 2, NULL, false, 200.00, false, '2017-2-7', '2017-1-20', '2017-2-6');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 6, 2, NULL, false, 800.00, false, '2017-4-4', '2017-3-20', '2017-4-3');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tri Delta Teeter Totter-a-thon', 6, 2, NULL, false, 300.00, false, '2017-5-20', '2017-5-1', '2017-5-19');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rose Riot', 7, 2, NULL, false, 7500.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'ISA Global Cuisine Night', 7, 2, NULL, false, 100.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Student Involvement Award Dinner', 7, 2, NULL, false, 1000.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', 7, 2, NULL, false, 7000.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', 7, 2, NULL, false, 800.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', 7, 2, NULL, false, 1200.00, false, NULL, NULL, NULL);
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rose Riot', 7, 2, NULL, false, 7500.00, false, '2017-3-7', '2017-2-24', '2017-3-6');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'ISA Global Cuisine Night', 7, 2, NULL, false, 100.00, false, '2017-4-15', '2017-4-1', '2017-4-14');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Student Involvement Award Dinner', 7, 2, NULL, false, 1000.00, false, '2017-6-1', '2017-5-10', '2017-5-30');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', 7, 2, NULL, false, 7000.00, false, '2017-3-27', '2017-3-4', '2017-3-27');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', 7, 2, NULL, false, 800.00, false, '2016-10-1', '2016-9-2', '2016-9-30');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', 7, 2, NULL, false, 1200.00, false, '2017-10-2', '2017-9-2', '2017-10-1');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tropical Sno', 8, 2, NULL, false, 300.00, false, NULL, NULL, NULL);
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland Tickets', 8, 2, NULL, false, 375.00, false, NULL, NULL, NULL);
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tropical Sno', 8, 2, NULL, false, 300.00, false, '2017-12-17', '2017-11-26', '2017-12-17');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland Tickets', 8, 2, NULL, false, 375.00, false, '2017-4-20', '2017-4-1', '2017-4-19');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Hall Improvement Funds', 9, 2, 10000.00, true, 10000.00, false, NULL, NULL, NULL);
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Hall Improvement Funds', 9, 2, 10000.00, true, 10000.00, false, '2017-3-24', '2017-3-1', '2017-3-23');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, "Thomas' 22nd Birthday", 9, 2, 10000.00, true, 10000.00, false, '2017-2-6', '2017-1-1', '2017-2-1');
