@@ -17,7 +17,7 @@ function displayPastEvents() {
 
     var xhr = getEvents();
     xhr.send();
-    setTimeout(function() {actuallyDoShit(xhr.responseText)}, 300);
+    setTimeout(function () { actuallyDoShit(xhr.responseText) }, 300);
     // console.log("This is the xhr object: ");
     // console.log(xhr);
     // console.log("This SHOULD be its responseText: ");
@@ -27,7 +27,7 @@ function displayPastEvents() {
         // console.log(JSON.parse(proposal));
         proposal = JSON.parse(proposal);
 
-        for(var i=0; i<proposal.length; i++){
+        for (var i = 0; i < proposal.length; i++) {
             var html = "<div class='eventTile'><p class='signUpText'>" + proposal[i].proposal_name + " - " + proposal[i].cost_to_attendee + "</p>";
             html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
@@ -36,8 +36,8 @@ function displayPastEvents() {
             html += "</div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
-            tileArea.innerHTML += html;  
-        
+            tileArea.innerHTML += html;
+
         }
 
     }
@@ -49,20 +49,20 @@ function displayPastEvents() {
             var xhr = new XMLHttpRequest();
             if ("withCredentials" in xhr) {
 
-            // Check if the XMLHttpRequest object has a "withCredentials" property.
-            // "withCredentials" only exists on XMLHTTPRequest2 objects.
+                // Check if the XMLHttpRequest object has a "withCredentials" property.
+                // "withCredentials" only exists on XMLHTTPRequest2 objects.
                 xhr.open(method, url, true);
 
             } else if (typeof XDomainRequest != "undefined") {
 
-            // Otherwise, check if XDomainRequest.
-            // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+                // Otherwise, check if XDomainRequest.
+                // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
                 xhr = new XDomainRequest();
                 xhr.open(method, url);
 
             } else {
 
-            // Otherwise, CORS is not supported by the browser.
+                // Otherwise, CORS is not supported by the browser.
                 xhr = null;
 
             }
@@ -72,7 +72,7 @@ function displayPastEvents() {
         var xhr = createCORSRequest('GET', url);
         // console.log(xhr);
         if (!xhr) {
-          throw new Error('CORS not supported');
+            throw new Error('CORS not supported');
         }
 
         xhr.onload = function () {
@@ -81,7 +81,7 @@ function displayPastEvents() {
             // return responseText;
         }
 
-        xhr.onerror = function() {
+        xhr.onerror = function () {
             console.log("There was an error");
         }
         // xhr.send();
@@ -93,31 +93,31 @@ function displayPastEvents() {
 }
 
 function displaySignUps() {
-        // var proposal = [{
-        //     name: "King's Island",
-        //     cost_to_attendee: 10.50,
-        //     event_date: "2016-11-10",
-        //     event_signup_open: "2016-11-01",
-        //     event_signup_close: "2016-11-04",
-        //     image_path: "../images/kingsIsland.jpg",
-        //     description: "newFakeEvent",
-        //     proposer_id: 44,
-        //     week_proposed: 5,
-        //     quarter_proposed: 1,
-        //     money_requested: 750,
-        //     approved: true
-        // }];
+    // var proposal = [{
+    //     name: "King's Island",
+    //     cost_to_attendee: 10.50,
+    //     event_date: "2016-11-10",
+    //     event_signup_open: "2016-11-01",
+    //     event_signup_close: "2016-11-04",
+    //     image_path: "../images/kingsIsland.jpg",
+    //     description: "newFakeEvent",
+    //     proposer_id: 44,
+    //     week_proposed: 5,
+    //     quarter_proposed: 1,
+    //     money_requested: 750,
+    //     approved: true
+    // }];
 
     var xhr = getEvents();
     xhr.send();
-    setTimeout(function() {actuallyDoShit(xhr.responseText)}, 300);
+    setTimeout(function () { actuallyDoShit(xhr.responseText) }, 300);
 
     function actuallyDoShit(proposal) {
         proposal = JSON.parse(proposal);
 
-        for(var i=0; i<proposal.length; i++){
+        for (var i = 0; i < proposal.length; i++) {
             var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - " + proposal[i].cost_to_attendee + "</p>";
-            html += "<img class='signUpImage' src =" + proposal[i].image_path +"></img>";
+            html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
             html += "<a onclick='signUp()'><p class='signUpLink'> Sign Up </p></a>";
             html += "<a id='myBtn' class='viewListLink'> View List </a>";
@@ -125,96 +125,15 @@ function displaySignUps() {
             html += "</div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
-            tileArea.innerHTML += html;  
+            tileArea.innerHTML += html;
+        }
+        var isAdmin = true;
+        if (isAdmin) {
+            displayEditingPens();
         }
     }
 
-    function getEvents() {
-        var url = apiURL + 'api/v1/events';
-        console.log(url);
-        function createCORSRequest(method, url) {
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-
-            // Check if the XMLHttpRequest object has a "withCredentials" property.
-            // "withCredentials" only exists on XMLHTTPRequest2 objects.
-                xhr.open(method, url, true);
-
-            } else if (typeof XDomainRequest != "undefined") {
-
-            // Otherwise, check if XDomainRequest.
-            // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-
-            } else {
-
-            // Otherwise, CORS is not supported by the browser.
-                xhr = null;
-
-            }
-            return xhr;
-        }
-
-        var xhr = createCORSRequest('GET', url);
-        // console.log(xhr);
-        if (!xhr) {
-          throw new Error('CORS not supported');
-        }
-
-        xhr.onload = function () {
-            var responseText = xhr.responseText;
-            console.log("Response text: " + responseText);
-            // return responseText;
-        }
-
-        xhr.onerror = function() {
-            console.log("There was an error");
-        }
-        // xhr.send();
-        // console.log(xhr);
-        return xhr;
-
-    }
-
-}
-
-function signUp() {
-    var signUpSnackbar = document.getElementById("snackbar");
-    signUpSnackbar.className = "show";
-    setTimeout(function () { signUpSnackbar.className = signUpSnackbar.className.replace("show", ""); }, 3000);
-}
-
-function moreInformationFunction(triggeringElement) {
-    var parentDiv = triggeringElement.parentElement.parentElement;
-    var linkClicked = parentDiv.getElementsByClassName("moreInfoLink")[0];
-    var descriptionToShow = parentDiv.getElementsByClassName("moreInformation")[0];
-    console.log(linkClicked);
-    console.log(descriptionToShow);
-
-    if (linkClicked.innerHTML == "Show Details") {
-        descriptionToShow.style.display = "block";
-        linkClicked.innerHTML = "Hide Details";
-    } else {
-        descriptionToShow.style.display = "none";
-        linkClicked.innerHTML = "Show Details";        
-    }
-
-}
-
-(function () {
-
-    var listLinks = document.getElementsByClassName("viewListLink");
-    for (var i = 0; i < listLinks.length; i++) {
-        var listLink = listLinks[i];
-        listLink.addEventListener("click", showListModal, false);
-    }
-
-    var isAdmin = true;
-    apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
-    newEvent = {};
-
-    if (isAdmin) {
+    function displayEditingPens() {
         var adminValues = document.getElementsByClassName("edit");
         for (var i = 0; i < adminValues.length; i++) {
             var editImage = document.createElement("img");
@@ -226,33 +145,55 @@ function moreInformationFunction(triggeringElement) {
         }
     }
 
-    function showListModal() {
-            var eventAttendees = [{
-        name: "Morgan Cook"
-    },
-    {
-        name: "Thomas Bonnatti"
-    }]
-        var modal = document.getElementById('listModal');
-        var span = document.getElementsByClassName("closeList")[0];
-        var list = document.getElementById("list");
-        var html = "";
-        for(var i=0; i < eventAttendees.length; i++){
-            console.log("The person at " + i + "is: " + eventAttendees[i].name);
-            html += "<br>" + eventAttendees[i].name; 
-        }
-        list.innerHTML = "The attendees for this event are:";
-        list.innerHTML += html;
-        modal.style.display = "block";
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+    function getEvents() {
+        var url = apiURL + 'api/v1/events';
+        console.log(url);
+        function createCORSRequest(method, url) {
+            var xhr = new XMLHttpRequest();
+            if ("withCredentials" in xhr) {
+
+                // Check if the XMLHttpRequest object has a "withCredentials" property.
+                // "withCredentials" only exists on XMLHTTPRequest2 objects.
+                xhr.open(method, url, true);
+
+            } else if (typeof XDomainRequest != "undefined") {
+
+                // Otherwise, check if XDomainRequest.
+                // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+                xhr = new XDomainRequest();
+                xhr.open(method, url);
+
+            } else {
+
+                // Otherwise, CORS is not supported by the browser.
+                xhr = null;
+
             }
+            return xhr;
         }
+
+        var xhr = createCORSRequest('GET', url);
+        // console.log(xhr);
+        if (!xhr) {
+            throw new Error('CORS not supported');
+        }
+
+        xhr.onload = function () {
+            var responseText = xhr.responseText;
+            console.log("Response text: " + responseText);
+            // return responseText;
+        }
+
+        xhr.onerror = function () {
+            console.log("There was an error");
+        }
+        // xhr.send();
+        // console.log(xhr);
+        return xhr;
+
     }
+
+}
 
     function showEditModal(editImage) {
         var modal = document.getElementById('editModal');
@@ -325,14 +266,79 @@ function moreInformationFunction(triggeringElement) {
                 modal.style.display = "none";
                 nameNode.removeChild(nameNode.firstChild);
                 priceNode.removeChild(priceNode.firstChild);
-            imageNode.removeChild(imageNode.firstChild);
+                imageNode.removeChild(imageNode.firstChild);
                 descriptionNode.removeChild(descriptionNode.firstChild);
                 signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
             }
         }
     }
 
-   $(document).ready(function() {
+function signUp() {
+    var signUpSnackbar = document.getElementById("snackbar");
+    signUpSnackbar.className = "show";
+    setTimeout(function () { signUpSnackbar.className = signUpSnackbar.className.replace("show", ""); }, 3000);
+}
+
+function moreInformationFunction(triggeringElement) {
+    var parentDiv = triggeringElement.parentElement.parentElement;
+    var linkClicked = parentDiv.getElementsByClassName("moreInfoLink")[0];
+    var descriptionToShow = parentDiv.getElementsByClassName("moreInformation")[0];
+    console.log(linkClicked);
+    console.log(descriptionToShow);
+
+    if (linkClicked.innerHTML == "Show Details") {
+        descriptionToShow.style.display = "block";
+        linkClicked.innerHTML = "Hide Details";
+    } else {
+        descriptionToShow.style.display = "none";
+        linkClicked.innerHTML = "Show Details";
+    }
+
+}
+
+(function () {
+
+    var listLinks = document.getElementsByClassName("viewListLink");
+    for (var i = 0; i < listLinks.length; i++) {
+        var listLink = listLinks[i];
+        listLink.addEventListener("click", showListModal, false);
+    }
+
+    var isAdmin = true;
+    apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
+    newEvent = {};
+
+
+
+    function showListModal() {
+        var eventAttendees = [{
+            name: "Morgan Cook"
+        },
+            {
+                name: "Thomas Bonnatti"
+            }]
+        var modal = document.getElementById('listModal');
+        var span = document.getElementsByClassName("closeList")[0];
+        var list = document.getElementById("list");
+        var html = "";
+        for (var i = 0; i < eventAttendees.length; i++) {
+            console.log("The person at " + i + "is: " + eventAttendees[i].name);
+            html += "<br>" + eventAttendees[i].name;
+        }
+        list.innerHTML = "The attendees for this event are:";
+        list.innerHTML += html;
+        modal.style.display = "block";
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+
+    $(document).ready(function () {
         console.log("HELLO");
         if (window.location.pathname.indexOf("pastEvents") > -1) {
             displayPastEvents();
