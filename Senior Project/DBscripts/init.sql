@@ -411,7 +411,7 @@ INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 4', 33.72, true);
 --        description varchar(400),
 --        attendees jsonb
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'test', -1, -1, 7000.00, true, 7000.00, true, '2016-12-12', '2016-12-13', '2016-12-30', 30, '../images/abc123.png', 'This is a random description about an event that doesnt exist!');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'test', -1, -1, 7000.00, true, 7000.00, true, '2016-12-12', '2016-12-13', '2016-12-30', 30, '../images/events/rose-seal.png', 'This is a random description about an event that doesnt exist!');
 
 --01 proposal_id
 --02 proposer_id
@@ -430,100 +430,99 @@ INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'test', -1, -1, 7000.00, true, 7000
 --15 image_path
 --16 description
 --17 attendees
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', -1, -1, 7000.00, true, 7000.00, true, '2016-11-11', '2016-11-01', '2016-11-9');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', -1, -1, 700.00, true, 700.00, false, '2016-10-11', '2016-10-1', '2016-10-9'); -- May break because of date
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', -1, -1, 1200.00, true, 1200.00, true, '2016-8-30', '2016-8-1', '2016-8-28');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Exec Fund', -1, -1, 1500.00, true, 1500.00, false, '2016-11-1', '2016-10-1', '2016-10-30');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie Server', -1, -1, 2000.00, true, 2000.00, true, '2016-11-29', '2016-11-1', '2016-11-27');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'RHA Swag', -1, -1, 2500.00, true, 2500.00, false, '2016-11-21', '2016-11-1', '2016-11-19');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', -1, -1, 7000.00, true, 7000.00, true, '2016-11-11', '2016-11-01', '2016-11-9', 0,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', -1, -1, 700.00, true, 700.00, false, '2016-10-11', '2016-10-1', '2016-10-9', 0,"../images/events/blood-drive.jpg"); -- May break because of date
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', -1, -1, 1200.00, true, 1200.00, true, '2016-8-30', '2016-8-1', '2016-8-28', 0,"../images/events/speedlawn.jpg");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Exec Fund', -1, -1, 1500.00, true, 1500.00, false, '2016-11-1', '2016-10-1', '2016-10-30', 0,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie Server', -1, -1, 2000.00, true, 2000.00, true, '2016-11-29', '2016-11-1', '2016-11-27', 0,"../images/events/movie.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'RHA Swag', -1, -1, 2500.00, true, 2500.00, false, '2016-11-21', '2016-11-1', '2016-11-19', 0,"../images/events/fear-engineer-shirt.jpg");
 
 -- Fall = 0, Winter = 1, Spring = 2
 -- week: 1--11, 1 = first week, 11 = finals week
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Cheap Food Day', 1, 1, 1.00, true, 200.00, false, '2016-9-5', '2016-9-5', '2016-9-5', 10, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lambda Chi Watermelon Bash', 1, 1, 100.00, true, 100.00, false, '2016-9-8', '2016-9-8', '2016-9-8', 10, '../images/abc123.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Cheap Food Day', 1, 1, 1.00, true, 200.00, false, '2016-9-5', '2016-9-5', '2016-9-5', 10, '../images/events/food.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lambda Chi Watermelon Bash', 1, 1, 100.00, true, 100.00, false, '2016-9-8', '2016-9-8', '2016-9-8', 10, '../images/events/rose-seal.png');
 
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Chi Omega Run for Wishes', 2, 0, 100.00, false, 150.00, true, '2016-9-11', '2016-9-11', '2016-9-11', 5, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Conferences', 2, 0, 50.00, false, 5000.00, false, '2016-9-12', '2016-9-12', '2016-9-12', 0, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Beach Volleyball and Cookout', 2, 0, 400.00, true, 400.00, true, '2016-9-13', '2016-9-13', '2016-9-13', 5, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Grillin and Chillin', 2, 0, 500.00, true, 500.00, false, '2016-9-14', '2016-9-14', '2016-9-14', 8, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Pop Rocks', 2, 0, 100.00, true, 100.00, true, '2016-9-15', '2016-9-15', '2016-9-15', 5, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Bonfire Guarding', 2, 0, 800.00, true, 800.00, false, '2016-9-16', '2016-9-16', '2016-9-16', 0, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Percopo Hall Ed', 2, 0, 300.00, true, 300.00, true, '2016-9-17', '2016-9-17', '2016-9-17', 0, '../images/abc123.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Chi Omega Run for Wishes', 2, 0, 100.00, false, 150.00, true, '2016-9-11', '2016-9-11', '2016-9-11', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Conferences', 2, 0, 50.00, false, 5000.00, false, '2016-9-12', '2016-9-12', '2016-9-12', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Beach Volleyball and Cookout', 2, 0, 400.00, true, 400.00, true, '2016-9-13', '2016-9-13', '2016-9-13', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Grillin and Chillin', 2, 0, 500.00, true, 500.00, false, '2016-9-14', '2016-9-14', '2016-9-14', 8, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Pop Rocks', 2, 0, 100.00, true, 100.00, true, '2016-9-15', '2016-9-15', '2016-9-15', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Bonfire Guarding', 2, 0, 800.00, true, 800.00, false, '2016-9-16', '2016-9-16', '2016-9-16', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Percopo Hall Ed', 2, 0, 300.00, true, 300.00, true, '2016-9-17', '2016-9-17', '2016-9-17', 0, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Cooking Competition', 3, 0, 12.34, true, 400.00, false, '2016-9-20', '2016-9-20', '2016-9-20', 5, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Kings Island', 3, 0, 6000.00, true, 6000.00, false, '2016-9-23', '2016-9-23', '2016-9-23', 15, '../images/abc123.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Cooking Competition', 3, 0, 12.34, true, 400.00, false, '2016-9-20', '2016-9-20', '2016-9-20', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Kings Island', 3, 0, 6000.00, true, 6000.00, false, '2016-9-23', '2016-9-23', '2016-9-23', 15, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Haunted House', 4, 0, 250.00, true, 375.00, false, '2016-9-26', '2016-9-26', '2016-9-26', 10, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Haunted Trail', 4, 0, 150.00, false, 1000.00, true, '2016-9-30', '2016-9-30', '2016-9-30', 0, '../images/abc123.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Haunted House', 4, 0, 250.00, true, 375.00, false, '2016-9-26', '2016-9-26', '2016-9-26', 10, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Haunted Trail', 4, 0, 150.00, false, 1000.00, true, '2016-9-30', '2016-9-30', '2016-9-30', 0, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'BSB 3 Cookout', 6, 0, 100.00, true, 1000.00, false, '2016-10-10', '2016-10-10', '2016-10-10', 0, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tri-Hop', 6, 0, 150.00, false, 248.00, true, '2016-10-14', '2016-10-14', '2016-10-14', 7, '../images/abc123.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'BSB 3 Cookout', 6, 0, 100.00, true, 1000.00, false, '2016-10-10', '2016-10-10', '2016-10-10', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tri-Hop', 6, 0, 150.00, false, 248.00, true, '2016-10-14', '2016-10-14', '2016-10-14', 7, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Random Acts of Kindness', 7, 0, 0.00, true, 275.00, false, '2016-10-16', '2016-10-16', '2016-10-16', 0, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'BSB 3 Trick-or-Treat', 7, 0, 25.00, true, 200.00, true, '2016-10-17', '2016-10-17', '2016-10-17', 0, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'GUAM Cookie Cart', 7, 0, 20.00, false, 300.00, false, '2016-10-18', '2016-10-18', '2016-10-18', 5, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Reverse Trick-or-Treating', 7, 0, 23.00, false, 20.00, true, '2016-10-19', '2016-10-19', '2016-10-19', 3, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Paws on the Patio', 7, 0, 50.00, false, 200.00, false, '2016-10-20', '2016-10-20', '2016-10-20', 0, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Trunk R Treat', 7, 0, 50.00, true, 50.00, true, '2016-10-21', '2016-10-21', '2016-10-21', 0, '../images/abc123.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Random Acts of Kindness', 7, 0, 0.00, true, 275.00, false, '2016-10-16', '2016-10-16', '2016-10-16', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'BSB 3 Trick-or-Treat', 7, 0, 25.00, true, 200.00, true, '2016-10-17', '2016-10-17', '2016-10-17', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'GUAM Cookie Cart', 7, 0, 20.00, false, 300.00, false, '2016-10-18', '2016-10-18', '2016-10-18', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Reverse Trick-or-Treating', 7, 0, 23.00, false, 20.00, true, '2016-10-19', '2016-10-19', '2016-10-19', 3, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Paws on the Patio', 7, 0, 50.00, false, 200.00, false, '2016-10-20', '2016-10-20', '2016-10-20', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Trunk R Treat', 7, 0, 50.00, true, 50.00, true, '2016-10-21', '2016-10-21', '2016-10-21', 0, 'R');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'No Shave Novemeber', 8, 0, 0.00, true, 200.00, false, '2016-10-24', '2016-10-24', '2016-10-24', 5, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lazer Tag-Pokemon Tourney', 8, 0, 100.00, false, 150.00, true, '2016-10-28', '2016-10-28', '2016-10-28', 10, '../images/abc123.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'No Shave Novemeber', 8, 0, 0.00, true, 200.00, false, '2016-10-24', '2016-10-24', '2016-10-24', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lazer Tag-Pokemon Tourney', 8, 0, 100.00, false, 150.00, true, '2016-10-28', '2016-10-28', '2016-10-28', 10, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lazer Tag Off-campus', 9, 0, 2500.00, true, 500.00, false, '2016-10-31', '2016-10-31', '2016-10-31', 12, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 9, 0, 0.00, true, 800.00, true, '2016-11-1', '2016-11-1', '2016-11-1', 5, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'ISA Diwali', 9, 0, 150.00, false, 125.00, false, '2016-11-3', '2016-11-3', '2016-11-3', 8, '../images/abc123.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lazer Tag Off-campus', 9, 0, 2500.00, true, 500.00, false, '2016-10-31', '2016-10-31', '2016-10-31', 12, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 9, 0, 0.00, true, 800.00, true, '2016-11-1', '2016-11-1', '2016-11-1', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'ISA Diwali', 9, 0, 150.00, false, 125.00, false, '2016-11-3', '2016-11-3', '2016-11-3', 8, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Ski Trip', 1, 1, 3000.00, true, 3375.00, true, '2016-11-28', '2016-11-28', '2016-11-28', 15, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Room Christmas Decoration Contest', 1, 1, 100.00, true, 225.00, false, '2016-11-30', '2016-11-30','2016-11-30', 0, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Floor Christmas Decoration Contest', 1, 1, 100.00, true, 450.00, true, '2016-12-2', '2016-12-2', '2016-12-2', 0, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Mug Decoration', 1, 1, 75.00, true, 300.00, false, '2016-12-2', '2016-12-2', '2016-12-2', 0, '../images/abc123.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Salvation Army Tree', 1, 1, 100.00, true, 150.00, true, '2016-12-3', '2016-12-3', '2016-12-3', 5, '../images/abc123.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Ski Trip', 1, 1, 3000.00, true, 3375.00, true, '2016-11-28', '2016-11-28', '2016-11-28', 15, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Room Christmas Decoration Contest', 1, 1, 100.00, true, 225.00, false, '2016-11-30', '2016-11-30','2016-11-30', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Floor Christmas Decoration Contest', 1, 1, 100.00, true, 450.00, true, '2016-12-2', '2016-12-2', '2016-12-2', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Mug Decoration', 1, 1, 75.00, true, 300.00, false, '2016-12-2', '2016-12-2', '2016-12-2', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Salvation Army Tree', 1, 1, 100.00, true, 150.00, true, '2016-12-3', '2016-12-3', '2016-12-3', 5, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Assassins', 3, 1, 0.00, true, 100.00, false, '2016-12-12', '2016-12-12', '2016-12-12', 0, '../images/abc123.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Assassins', 3, 1, 0.00, true, 100.00, false, '2016-12-12', '2016-12-12', '2016-12-12', 0, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'EWB Wallyball Tourney', 4, 1, 75.50, false, 80.00, true, '2016-12-15', '2016-12-1', '2016-13-');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Greatest Floor', 4, 1, 125.00, true, 2750.00, false, '2016-11-22', '2016-11-2', '2016-11-20');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'EWB Wallyball Tourney', 4, 1, 75.50, false, 80.00, true, '2016-12-15', '2016-12-1', '2016-13-', 0,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Greatest Floor', 4, 1, 125.00, true, 2750.00, false, '2016-11-22', '2016-11-2', '2016-11-20', 0,"IMAGE PATH!!!");
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Mr. Rose', 5, 1, 100.00, false, 150.00, true, '2016-11-27', '2016-11-1', '2016-11-20');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Mr. Rose', 5, 1, 100.00, false, 150.00, true, '2016-11-27', '2016-11-1', '2016-11-20', 0,"../images/events/rose-seal.png");
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lunar New Years Celebration', 7, 1, 75.31, true, 125.00, false, '2016-2-8', '2016-1-20', '2016-2-6');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lunar New Years Celebration', 7, 1, 75.32, true, 125.00, true, '2017-1-28', '2016-1-1', '2016-1-26');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 7, 1, 0.00, true, 800.00, false, '2016-12-26', '2016-12-5', '2016-12-24');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Super Smash Bros Tournament', 7, 1, 25.00, false, 200.00, true, '2016-11-29', '2016-11-1', '2016-1-27');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lunar New Years Celebration', 7, 1, 75.31, true, 125.00, false, '2016-2-8', '2016-1-20', '2016-2-6', 5,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 7, 1, 0.00, true, 800.00, false, '2016-12-26', '2016-12-5', '2016-12-24', 0,"../images/events/blood-drive.jpg");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Super Smash Bros Tournament', 7, 1, 25.00, false, 200.00, true, '2016-11-29', '2016-11-1', '2016-1-27', 5,"../images/events/rose-seal.png!!!");
 
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Random Acts of Kindness', 8, 1, 0.00, false, 200.00, false, '2016-10-27', '2016-10-5', '2016-10-25');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Nerds that Cook', 8, 1, 100.00, false, 150.00, true, '2016-12-22', '2016-12-1', '2016-12-20');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Random Acts of Kindness', 8, 1, 0.00, false, 200.00, false, '2016-10-27', '2016-10-5', '2016-10-25', 0,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Nerds that Cook', 8, 1, 100.00, false, 150.00, true, '2016-12-22', '2016-12-1', '2016-12-20', 5,"../images/events/rose-seal.png");
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland', 3, 2, 151.23, true, 1000.00, false, '2016-11-7', '2016-10-20', '2016-11-5');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Easter Egg Hunt', 3, 2, 67.54, false, 300.00, true, '2016-11-8', '2016-10-10', '2016-11-6');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SAA Color Smash', 3, 2, 32.10, false, 120.00, false, '2016-11-23', '2016-11-1', '2016-11-20');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland', 3, 2, 151.23, true, 1000.00, false, '2016-11-7', '2016-10-20', '2016-11-5', 5 ,"../images/events/rockout-for-ryland.jpg");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Easter Egg Hunt', 3, 2, 67.54, false, 300.00, true, '2016-11-8', '2016-10-10', '2016-11-6', 0,"../images/events/easter-eggs.jpg");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SAA Color Smash', 3, 2, 32.10, false, 120.00, false, '2016-11-23', '2016-11-1', '2016-11-20', 0,"../images/events/rose-seal.png");
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Dishes for Wishes', 4, 2, 45.67, true, 250.00, true, '2016-10-25', '2016-10-1', '2016-10-23');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Deming Park Cookout', 4, 2, 123.45, false, 1200.00, false, '2016-11-2', '2016-10-11', '2016-11-1');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Dishes for Wishes', 4, 2, 45.67, true, 250.00, true, '2016-10-25', '2016-10-1', '2016-10-23', 5, "../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Deming Park Cookout', 4, 2, 123.45, false, 1200.00, false, '2016-11-2', '2016-10-11', '2016-11-1', 0, "../images/events/rose-seal.png");
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie on the Lawn', 5, 2, 20.00, true, 1200.00, true, '2016-11-30', '2016-11-10', '2016-11-28');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie on the Lawn', 5, 2, 20.00, true, 1200.00, true, '2016-11-30', '2016-11-10', '2016-11-28', 0, "../images/events/movie.png");
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Campus Beautification', 6, 2, 345.00, true, 500.00, false, '2016-10-27', '2016-10-5', '2016-10-25');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SHPE Cinco de Mayo', 6, 2, 50.00, false, 200.00, NULL, true, '2016-5-5', '2016-4-15', '2016-5-3');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'House Keepers Appreciation', 6, 2, 100.00, false, 500.00, true, '2017-1-15', '2017-1-1', '2017-1-14');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Paws on the Patio', 6, 2, 200.00, true, 200.00, false, '2017-2-7', '2017-1-20', '2017-2-6');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 6, 2, 0.00, false, 799.99, true, '2017-4-4', '2017-3-20', '2017-4-3');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tri Delta Teeter Totter-a-thon', 6, 2, 0.00, true, 300.00, false, '2017-5-20', '2017-5-1', '2017-5-19');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Campus Beautification', 6, 2, 345.00, true, 500.00, false, '2016-10-27', '2016-10-5', '2016-10-25', 0,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SHPE Cinco de Mayo', 6, 2, 50.00, false, 200.00, NULL, true, '2016-5-5', '2016-4-15', '2016-5-3', __,"IMAGE PATH!!!");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'House Keepers Appreciation', 6, 2, 100.00, false, 500.00, true, '2017-1-15', '2017-1-1', '2017-1-14', __,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Paws on the Patio', 6, 2, 200.00, true, 200.00, false, '2017-2-7', '2017-1-20', '2017-2-6', __,"IMAGE PATH!!!");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 6, 2, 0.00, false, 799.99, true, '2017-4-4', '2017-3-20', '2017-4-3', __,"IMAGE PATH!!!");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tri Delta Teeter Totter-a-thon', 6, 2, 0.00, true, 300.00, false, '2017-5-20', '2017-5-1', '2017-5-19', __,"../images/events/rose-seal.png");
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rose Riot', 7, 2, 250.00, false, 7500.00, true, '2017-3-7', '2017-2-24', '2017-3-6');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'ISA Global Cuisine Night', 7, 2, 250.00, true, 100.00, false, '2017-4-15', '2017-4-1', '2017-4-14');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Student Involvement Award Dinner', 7, 2, 250.00, false, 1000.00, true, '2017-6-1', '2017-5-10', '2017-5-30');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', 7, 2, 200.00, false, 7000.00, false, '2017-3-27', '2017-3-4', '2017-3-27');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', 7, 2, 0.00, false, 800.00, true, '2016-10-1', '2016-9-2', '2016-9-30');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', 7, 2, 20.00, false, 1200.00, false, '2017-10-2', '2017-9-2', '2017-10-1');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rose Riot', 7, 2, 250.00, false, 7500.00, true, '2017-3-7', '2017-2-24', '2017-3-6', __,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'ISA Global Cuisine Night', 7, 2, 250.00, true, 100.00, false, '2017-4-15', '2017-4-1', '2017-4-14', __,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Student Involvement Award Dinner', 7, 2, 250.00, false, 1000.00, true, '2017-6-1', '2017-5-10', '2017-5-30', __,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', 7, 2, 200.00, false, 7000.00, false, '2017-3-27', '2017-3-4', '2017-3-27', __,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', 7, 2, 0.00, false, 800.00, true, '2016-10-1', '2016-9-2', '2016-9-30', __,"IMAGE PATH!!!");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', 7, 2, 20.00, false, 1200.00, false, '2017-10-2', '2017-9-2', '2017-10-1', __,"IMAGE PATH!!!");
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tropical Sno', 8, 2, 34.21, true, 300.00, true, '2017-12-17', '2017-11-26', '2017-12-17');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland Tickets', 8, 2, 1000.01, false, 375.00, false, '2017-4-20', '2017-4-1', '2017-4-19');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tropical Sno', 8, 2, 34.21, true, 300.00, true, '2017-12-17', '2017-11-26', '2017-12-17', __,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland Tickets', 8, 2, 1000.01, false, 375.00, false, '2017-4-20', '2017-4-1', '2017-4-19', __,"IMAGE PATH!!!");
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Hall Improvement Funds', 9, 2, 10000.00, true, 10000.00, true, '2017-3-24', '2017-3-1', '2017-3-23');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, "Thomas' 22nd Birthday", 9, 2, 10000.00, true, 10000.00, false, '2017-2-6', '2017-1-1', '2017-2-1');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Hall Improvement Funds', 9, 2, 10000.00, true, 10000.00, true, '2017-3-24', '2017-3-1', '2017-3-23', __,"../images/events/rose-seal.png");
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, "Thomas' 22nd Birthday", 9, 2, 10000.00, true, 10000.00, false, '2017-2-6', '2017-1-1', '2017-2-1', __,"../images/events/rose-seal.png");
 =======
 -- If both week and qtr proposed are -1, the event was last year
 INSERT INTO Proposals VALUES (DEFAULT, '', 1, 'Planners', -1, -1, 7000.00, true, 7000.00, true, NULL, NULL, NULL);
