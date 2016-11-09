@@ -18,9 +18,9 @@ var editName;
                 html += "<h3 class='edit'>" + officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].membertype + "</h3>";
                 html += "<img src='../images/officers/" + removeSpaces(officer[i].membertype.toLowerCase()) + ".jpg' alt='" + officer[i].membertype + "'height='294' width='195'>";
                 html += "<p>Email: <a href='mailto:'" + officer[i].email + ">" + officer[i].email + "</a></p>";
-                html += "<p> Phone Number: " + officer[i].phoneNumber + "</p>";
-                html += "<p> Room: " + officer[i].roomNumber + "</p>";
-                html += "<p>Box #: " + officer[i].boxNumber + "</p>";
+                html += "<p> Phone Number: " + officer[i].phone_number + "</p>";
+                html += "<p> Room: " + officer[i].room_number + "</p>";
+                html += "<p>Box #: " + officer[i].cm + "</p>";
 
                 officerMap[officer[i].firstname + " " + officer[i].lastname] = officer[i].user_id;
 
@@ -232,12 +232,14 @@ function saveOfficer() {
         console.log("There was an error");
     }
     var titleText = document.getElementById("title-input-field").value;
+    var phoneText = document.getElementById("phone-text").value;
+    var cmText = document.getElementById("cm-text").value;
     //var titleText = "Sean";
     console.log(titleText);
 
     var firstName = fullname.split(" ")[0];
     var lastName = fullname.split(" ")[1];
-    xhr.send(JSON.stringify({ membertype: titleText, firstname: firstName, lastname: lastName}));
+    xhr.send(JSON.stringify({ membertype: titleText, firstname: firstName, lastname: lastName, phone_number: phoneText, cm: cmText}));
     return xhr;
 }
 function showModal(editImage) {
@@ -283,6 +285,7 @@ function showModal(editImage) {
     var phnNumInput = document.createElement("textarea");
     phnNumInput.setAttribute("rows", "1");
     phnNumInput.setAttribute("cols", "30");
+    phnNumInput.setAttribute("id", "phone-text");
     phnNumInput.innerHTML = parent.querySelectorAll(":nth-child(4)")[0].textContent.split(": ")[1];
 
     var CMInput = null;
@@ -291,6 +294,7 @@ function showModal(editImage) {
         CMInput = document.createElement("textarea");
         CMInput.setAttribute("rows", "1");
         CMInput.setAttribute("cols", "30");
+        CMInput.setAttribute("id", "cm-text");
         CMInput.innerHTML = parent.querySelectorAll(":nth-child(6)")[0].textContent.split(": ")[1];
     }
 
