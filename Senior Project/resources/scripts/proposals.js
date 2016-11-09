@@ -1,7 +1,47 @@
+function getOfficers() {
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
+    function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        if ("withCredentials" in xhr) {
+            xhr.open(method, url, true);
+
+        } else if (typeof XDomainRequest != "undefined") {
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+        } else {
+            xhr = null;
+        }
+        return xhr;
+    }
+    var xhr = createCORSRequest('GET', url);
+    if (!xhr) {
+        throw new Error('CORS not supported');
+    }
+    xhr.onload = function () {
+    }
+    xhr.onerror = function () {
+        console.log("There was an error");
+    }
+    return xhr;
+}
+
+function setAdmin(officers) {
+    officer = JSON.parse(officers);
+    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
+    for (var i = 0; i < officer.length; i++) {
+        if (officer[i].username === tempUser.username) {
+            var addProposalButton = document.getElementById("addProposal");
+            addProposalButton.style.display = "block";
+        }
+    }
+}
 
 
+(function () {
 
-(function() {
+    var officersxhr = getOfficers();
+    officersxhr.send();
+    setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
 
     var createNewProposal = document.getElementById("addProposal");
     createNewProposal.addEventListener("click", function (e) {
@@ -9,8 +49,6 @@
     }, false);
 
     function addProposal(event) {
-        
-
         var modal = document.getElementById('editModal');
         var span = document.getElementsByClassName("closeEdit")[0];
         var modalContent = document.getElementsByClassName("modal-content")[0];
@@ -62,23 +100,23 @@
         proposerInput.setAttribute("rows", "1");
         proposerInput.setAttribute("cols", "30");
 
-            var weekProposedInput = document.createElement("textarea");
+        var weekProposedInput = document.createElement("textarea");
         weekProposedInput.setAttribute("rows", "1");
         weekProposedInput.setAttribute("cols", "30");
 
-            var quarterInput = document.createElement("textarea");
+        var quarterInput = document.createElement("textarea");
         quarterInput.setAttribute("rows", "1");
         quarterInput.setAttribute("cols", "30");
 
-            var moneyRequestedInput = document.createElement("textarea");
+        var moneyRequestedInput = document.createElement("textarea");
         moneyRequestedInput.setAttribute("rows", "1");
         moneyRequestedInput.setAttribute("cols", "30");
 
-            var approvedInput = document.createElement("textarea");
+        var approvedInput = document.createElement("textarea");
         approvedInput.setAttribute("rows", "1");
         approvedInput.setAttribute("cols", "30");
 
-            var moneyAllocatedInput = document.createElement("textarea");
+        var moneyAllocatedInput = document.createElement("textarea");
         moneyAllocatedInput.setAttribute("rows", "1");
         moneyAllocatedInput.setAttribute("cols", "30");
 
@@ -86,7 +124,7 @@
         submitButton.setAttribute("id", "submit");
         submitButton.setAttribute("class", "modalButton");
         submitButton.innerHTML = "Submit";
-        submitButton.addEventListener("click", function () {submit()}, false);
+        submitButton.addEventListener("click", function () { submit() }, false);
         modalContent.appendChild(submitButton);
 
         var nameNode = document.getElementById("nameInput");
@@ -135,41 +173,11 @@
         modal.style.display = "block";
         span.onclick = function () {
             closeModal();
-            // modal.style.display = "none";
-            // nameNode.removeChild(nameNode.firstChild);
-            // costToAttendeeNode.removeChild(costToAttendeeNode.firstChild);
-            // imageNode.removeChild(imageNode.firstChild);
-            // descriptionNode.removeChild(descriptionNode.firstChild);
-            // signUpOpenDateNode.removeChild(signUpOpenDateNode.firstChild);
-            // eventDateNode.removeChild(eventDateNode.firstChild);
-            // signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
-            // proposerNode.removeChild(proposerNode.firstChild);
-            // weekProposedNode.removeChild(weekProposedNode.firstChild);
-            // quarterNode.removeChild(quarterNode.firstChild);
-            // moneyRequestedNode.removeChild(moneyRequestedNode.firstChild);
-            // approvedNode.removeChild(approvedNode.firstChild);
-            // moneyAllocatedNode.removeChild(moneyAllocatedNode.firstChild);
-            // modalContent.removeChild(submitButton);
 
         }
         window.onclick = function (event) {
             if (event.target == modal) {
                 closeModal();
-                // modal.style.display = "none";
-                // nameNode.removeChild(nameNode.firstChild);
-                // costToAttendeeNode.removeChild(costToAttendeeNode.firstChild);
-                // imageNode.removeChild(imageNode.firstChild);
-                // descriptionNode.removeChild(descriptionNode.firstChild);
-                // signUpOpenDateNode.removeChild(signUpOpenDateNode.firstChild);
-                // eventDateNode.removeChild(eventDateNode.firstChild);
-                // signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
-                // proposerNode.removeChild(proposerNode.firstChild);
-                // weekProposedNode.removeChild(weekProposedNode.firstChild);
-                // quarterNode.removeChild(quarterNode.firstChild);
-                // moneyRequestedNode.removeChild(moneyRequestedNode.firstChild);
-                // approvedNode.removeChild(approvedNode.firstChild);
-                // moneyAllocatedNode.removeChild(moneyAllocatedNode.firstChild);
-                // modalContent.removeChild(submitButton);
             }
         }
 
@@ -192,12 +200,10 @@
         }
 
         function submit() {
-
+            closeModal();
             var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/proposal/';
             function createCORSRequest(method, url) {
                 var xhr = new XMLHttpRequest();
-                console.log("xhr is: ");
-                console.log(xhr);
                 xhr.open(method, url, true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 return xhr;
@@ -209,115 +215,20 @@
 
             xhr.onload = function () {
                 var responseText = xhr.responseText;
-                console.log("Response text: " + responseText);
-        // return responseText;
             }
 
             xhr.onerror = function () {
                 console.log("There was an error");
             }
-            
+
             var approvedBool = false;
             if (approvedInput.value === "true") {
                 approvedBool = true;
             }
 
-            xhr.send(JSON.stringify({name: nameInput.value, cost_to_attendee: parseInt(costToAttendeeInput.value), event_date: eventDateInput.value, event_signup_open: signUpOpenDateInput.value, event_signup_close: signUpCloseDateInput.value, image_path: imageInput.value, description: descriptionInput.value, proposer: proposerInput.value, week_proposed: parseInt(weekProposedInput.value), quarter_proposed: parseInt(quarterInput.value), money_requested: parseInt(moneyRequestedInput.value), approved: approvedBool }));
-            console.log(xhr);
+            xhr.send(JSON.stringify({ name: nameInput.value, cost_to_attendee: parseInt(costToAttendeeInput.value), event_date: eventDateInput.value, event_signup_open: signUpOpenDateInput.value, event_signup_close: signUpCloseDateInput.value, image_path: imageInput.value, description: descriptionInput.value, proposer: proposerInput.value, week_proposed: parseInt(weekProposedInput.value), quarter_proposed: parseInt(quarterInput.value), money_requested: parseInt(moneyRequestedInput.value), approved: approvedBool }));
             return xhr;
         }
-            // console.log("lol");
-            // console.log(nameInput.value);
-            // closeModal();
 
-            // nameInput;
-            // costToAttendeeInput;
-            // eventDateInput;
-            // signUpOpenDateInput;
-            // signUpCloseDateInput;
-            // imageInput;
-            // descriptionInput;
-            // proposerInput;
-            // weekProposedInput;
-            // quarterInput;
-            // moneyRequestedInput;
-            // approvedInput;
-
-            // var xhr = createPostRequest();
-            // console.log(xhr);
-
-            
-
-            // var proposalToSend = {
-            //     name: nameInput.value,
-            //     cost_to_attendee: parseInt(costToAttendeeInput.value),
-                // event_date: eventDateInput.value,
-                // event_signup_open: signUpOpenDateInput.value,
-                // event_signup_close: signUpCloseDateInput.value,
-                // image_path: imageInput.value,
-                // description: descriptionInput.value,
-                // proposer: proposerInput.value,
-                // week_proposed: parseInt(weekProposedInput.value),
-                // quarter_proposed: parseInt(quarterInput.value),
-                // money_requested: parseInt(moneyRequestedInput.value),
-                // approved: approvedBool
-            // }
-
-            // console.log(proposalToSend);
-            // // console.log(JSON.stringify(proposalToSend));
-            // xhr.send('{"name": "FormTestProp0", "cost_to_attendee": 10.50, "event_date": "2016-11-10","event_signup_open": "2016-11-01", "event_signup_close": "2016-11-04", "image_path": "abc123", "description": "newFakeEvent", "proposer": "joe", "week_proposed": 5, "quarter_proposed": 1, "money_requested": 750, "approved": true}');
-            // console.log(xhr);
-
-            // function createPostRequest() {
-            //     var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
-            //     var url = apiURL + 'api/v1/proposal';
-            //     console.log(url);
-            //     function createCORSRequest(method, url) {
-            //         var xhr = new XMLHttpRequest();
-            //         if ("withCredentials" in xhr) {
-
-            //         // Check if the XMLHttpRequest object has a "withCredentials" property.
-            //         // "withCredentials" only exists on XMLHTTPRequest2 objects.
-            //             xhr.open(method, url, true);
-
-            //         } else if (typeof XDomainRequest != "undefined") {
-
-            //         // Otherwise, check if XDomainRequest.
-            //         // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-            //             xhr = new XDomainRequest();
-            //             xhr.open(method, url);
-            //             xhr.setRequestHeader("Content-Type", "application/json");
-
-            //         } else {
-
-            //         // Otherwise, CORS is not supported by the browser.
-            //             xhr = null;
-
-            //         }
-            //         return xhr;
-            //     }
-
-            //     var xhr = createCORSRequest('POST', url);
-            //     // console.log(xhr);
-            //     if (!xhr) {
-            //       throw new Error('CORS not supported');
-            //     }
-
-            //     xhr.onload = function () {
-            //         var responseText = xhr.responseText;
-            //         console.log("Response text: " + responseText);
-            //         // return responseText;
-            //     }
-
-            //     xhr.onerror = function() {
-            //         console.log("There was an error");
-            //     }
-            //     // xhr.send();
-            //     // console.log(xhr);
-            //     return xhr;
-
-            //}
-
-        }
-    //}
+    }
 })();

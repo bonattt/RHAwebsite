@@ -1,13 +1,64 @@
+var committeeMap = new Object();
+var committeeID;
+
+function getOfficers() {
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
+    function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        if ("withCredentials" in xhr) {
+            xhr.open(method, url, true);
+
+        } else if (typeof XDomainRequest != "undefined") {
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+        } else {
+            xhr = null;
+        }
+        return xhr;
+    }
+    var xhr = createCORSRequest('GET', url);
+    if (!xhr) {
+        throw new Error('CORS not supported');
+    }
+    xhr.onload = function () {
+    }
+    xhr.onerror = function () {
+        console.log("There was an error");
+    }
+    return xhr;
+}
+
+function setAdmin(officers) {
+    officer = JSON.parse(officers);
+    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
+    for (var i = 0; i < officer.length; i++) {
+        if (officer[i].username === tempUser.username) {
+            var adminValues = document.getElementsByClassName("edit");
+            for (var i = 0; i < adminValues.length; i++) {
+                var editImage = document.createElement("img");
+                editImage.setAttribute("src", "../images/edit.png");
+                adminValues[i].appendChild(editImage);
+                editImage.addEventListener("click", function (e) {
+                    showModal(e);
+                }, false);
+            }
+            var addCommitteeButton = document.getElementById("addCommittee");
+            addCommitteeButton.addEventListener("click", showEmptyModal);
+            //addCommitteeButton.style.display = "block";
+            return;
+        }
+    }
+}
+
 (function () {
     var xhr = getCommittees();
     xhr.send();
     setTimeout(function () { actuallyDoShit(xhr.responseText) }, 300);
 
     function actuallyDoShit(committee) {
-        console.log("committee is: " + committee);
         committee = JSON.parse(committee);
         for (var i = 0; i < committee.length; i++) {
-            console.log("Image path: " + committee[i].image);
+            committeeMap[committee[i].committeename] = committee[i].committeeid;
             if (i % 2 == 0) {
                 var html = "<div class='committeeWrapperRight' id='committeeWrapperRight'>";
                 html += "<div class='committees'><h3 class='edit'>" + committee[i].committeename + "</h3>";
@@ -22,70 +73,39 @@
 
             var committees = document.getElementById("committees");
             committees.innerHTML += html;
+            console.log("committee map is: ");
+            console.log(committeeMap);
         }
 
-        var isAdmin = true;
-        if (isAdmin) {
-            displayEditingPens();
-        }
-    }
-
-    function displayEditingPens() {
-        var adminValues = document.getElementsByClassName("edit");
-        for (var i = 0; i < adminValues.length; i++) {
-            var editImage = document.createElement("img");
-            editImage.setAttribute("src", "../images/edit.png");
-            adminValues[i].appendChild(editImage);
-            editImage.addEventListener("click", function (e) {
-                showModal(e);
-            }, false);
-        }
+        var officersxhr = getOfficers();
+        officersxhr.send();
+        setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
     }
 
     function getCommittees() {
         var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/committees';
-        console.log(url);
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
             if ("withCredentials" in xhr) {
-
-                // Check if the XMLHttpRequest object has a "withCredentials" property.
-                // "withCredentials" only exists on XMLHTTPRequest2 objects.
                 xhr.open(method, url, true);
-
             } else if (typeof XDomainRequest != "undefined") {
-
-                // Otherwise, check if XDomainRequest.
-                // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
                 xhr = new XDomainRequest();
                 xhr.open(method, url);
-
             } else {
-
-                // Otherwise, CORS is not supported by the browser.
                 xhr = null;
-
             }
             return xhr;
         }
-
         var xhr = createCORSRequest('GET', url);
-        // console.log(xhr);
         if (!xhr) {
             throw new Error('CORS not supported');
         }
-
         xhr.onload = function () {
             var responseText = xhr.responseText;
-            // console.log("Response text: " + responseText);
-            // return responseText;
         }
-
         xhr.onerror = function () {
             console.log("There was an error");
         }
-        // xhr.send();
-        // console.log(xhr);
         return xhr;
 
     }
@@ -165,14 +185,17 @@ function showModal(editImage) {
     var committeeInput = document.createElement("textarea");
     committeeInput.setAttribute("rows", "1");
     committeeInput.setAttribute("cols", "30");
+    committeeInput.setAttribute("id", "committee-text");
 
     var descInput = document.createElement("textarea");
     descInput.setAttribute("rows", "4");
     descInput.setAttribute("cols", "30");
+    descInput.setAttribute("id", "description-text");
 
     var imageInput = document.createElement("textarea");
     imageInput.setAttribute("rows", "1");
     imageInput.setAttribute("cols", "30");
+    imageInput.setAttribute("id", "image-text");
 
     var committeeNode = document.getElementById("committeeInput");
     var descNode = document.getElementById("descInput");
@@ -180,10 +203,12 @@ function showModal(editImage) {
 
     if (parent.parentElement.id == "committeeWrapperRight") {
         committeeInput.innerHTML = parent.querySelectorAll(":nth-child(1)")[0].textContent;
+        committeeID = committeeMap[parent.querySelectorAll(":nth-child(1)")[0].textContent];
         descInput.innerHTML = parent.querySelectorAll(":nth-child(2)")[0].textContent;
         imageInput.innerHTML = parent.nextSibling.currentSrc.split("images/committees/")[1];
     } else {
         committeeInput.innerHTML = parent.querySelectorAll(":nth-child(1)")[0].textContent;
+        committeeID = committeeMap[parent.querySelectorAll(":nth-child(1)")[0].textContent];
         descInput.innerHTML = parent.querySelectorAll(":nth-child(2)")[0].textContent;
         imageInput.innerHTML = parent.previousSibling.currentSrc.split("images/committees/")[1];
     }
@@ -195,6 +220,9 @@ function showModal(editImage) {
     descNode.appendChild(descInput);
     document.getElementById("image").innerHTML = image;
     imageNode.appendChild(imageInput);
+
+    var submitButton = document.getElementById("submit");
+    submitButton.addEventListener("click", submit);
 
 
     modal.style.display = "block";
@@ -214,4 +242,42 @@ function showModal(editImage) {
 
         }
     }
+}
+
+function submit(){
+    var modal = document.getElementById("myModal");
+    modal.style.display = "none";
+    saveCommittee();
+    location.reload();
+}
+
+function saveCommittee() {
+var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/committee/' + committeeID;
+function createCORSRequest(method, url) {
+    var xhr = new XMLHttpRequest();
+    console.log("xhr is: ");
+    console.log(xhr);
+    xhr.open(method, url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    return xhr;
+}
+var xhr = createCORSRequest('PUT', url);
+if (!xhr) {
+    throw new Error('CORS not supported');
+}
+
+xhr.onload = function () {
+    var responseText = xhr.responseText;
+    console.log("Response text: " + responseText);
+}
+
+xhr.onerror = function () {
+    console.log("There was an error");
+}
+var committeeName = document.getElementById("committee-text").value;
+var description = document.getElementById("description-text").value;
+var image = document.getElementById("image-text").value;
+xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
+return xhr;
+
 }
