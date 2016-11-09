@@ -1,3 +1,4 @@
+var officers;
 function displayUpcomingEvents() {
 
     var xhr = getEvents();
@@ -25,77 +26,92 @@ function displayUpcomingEvents() {
         var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events';
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-
-                // Check if the XMLHttpRequest object has a "withCredentials" property.
-                // "withCredentials" only exists on XMLHTTPRequest2 objects.
+           if ("withCredentials" in xhr) {
                 xhr.open(method, url, true);
 
             } else if (typeof XDomainRequest != "undefined") {
-
-                // Otherwise, check if XDomainRequest.
-                // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
                 xhr = new XDomainRequest();
                 xhr.open(method, url);
-
             } else {
-
-                // Otherwise, CORS is not supported by the browser.
                 xhr = null;
-
             }
             return xhr;
         }
-
         var xhr = createCORSRequest('GET', url);
-        // console.log(xhr);
         if (!xhr) {
             throw new Error('CORS not supported');
         }
-
         xhr.onload = function () {
-            // var responseText = xhr.responseText;
-            // console.log("Response text: " + responseText);
-            // return responseText;
         }
-
         xhr.onerror = function () {
             console.log("There was an error");
         }
-        // xhr.send();
-        // console.log(xhr);
         return xhr;
+    }
+}
 
+function getOfficers() {
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
+    function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        if ("withCredentials" in xhr) {
+            xhr.open(method, url, true);
+
+        } else if (typeof XDomainRequest != "undefined") {
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+        } else {
+            xhr = null;
+        }
+        return xhr;
+    }
+    var xhr = createCORSRequest('GET', url);
+    if (!xhr) {
+        throw new Error('CORS not supported');
+    }
+    xhr.onload = function () {
+    }
+    xhr.onerror = function () {
+        console.log("There was an error");
+    }
+    return xhr;
+}
+
+function setAdmin(officers) {
+    officer = JSON.parse(officers);
+    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
+    for (var i = 0; i < officer.length; i++) {
+        if (officer[i].username === tempUser.username) {
+                   var adminValues = document.getElementsByClassName("edit");
+        for (var i = 0; i < adminValues.length; i++) {
+            var editImage = document.createElement("img");
+            editImage.setAttribute("src", "../images/edit.png");
+            editImage.style.cssText = "float: right;";
+            adminValues[i].insertBefore(editImage, adminValues[i].firstChild);
+            editImage.addEventListener("click", function (e) {
+                showModal(e);
+            }, false);
+        }
+            return;
+        }
     }
 }
 
 (function () {
-    var isAdmin = true;
+    var xhr = getOfficers();
+    xhr.send();
+    setTimeout(function () { setAdmin(xhr.responseText) }, 300);
     var hasListener = false;
     var whatsnew = {};
 
     var title = document.getElementById("title");
-    if (JSON.parse(sessionStorage.getItem('userData'))){
+    if (JSON.parse(sessionStorage.getItem('userData'))) {
         title.innerHTML = "Hi, " + JSON.parse(sessionStorage.getItem('userData')).name.split(" ")[0] + "!";
     } else {
         title.innerHTML = "Hi!"
     }
     var logoutButton = document.getElementById("logout-button");
     logoutButton.addEventListener("click", logout);
-
-    if (isAdmin) {
-        var adminValues = document.getElementsByClassName("edit");
-        for (var i = 0; i < adminValues.length; i++) {
-            var editImage = document.createElement("img");
-            editImage.setAttribute("src", "../images/edit.png");
-            editImage.style.cssText = "float: right;";
-            // adminValues[i].appendChild(editImage);
-            adminValues[i].insertBefore(editImage, adminValues[i].firstChild);
-            editImage.addEventListener("click", function (e) {
-                showModal(e);
-            }, false);
-        }
-    }
 
     function getFrontPageNews() {
 
@@ -107,6 +123,20 @@ function displayUpcomingEvents() {
         $('#title').text(whatsnew.title);
         $('#shownDescription').text(whatsnew.shownDescription);
     }
+
+
+
+    $(document).ready(function () {
+        displayUpcomingEvents();
+
+    });
+
+})();
+
+function logout() {
+    sessionStorage.clear();
+    location.reload();
+}
 
     function showModal(editImage) {
         var modal = document.getElementById('myModal');
@@ -172,6 +202,7 @@ function displayUpcomingEvents() {
             whatsnewNode.removeChild(whatsnewNode.firstChild);
             descNode.removeChild(descNode.firstChild);
         }
+
     }
 
     $(document).ready(function () {
@@ -184,3 +215,4 @@ function logout() {
     sessionStorage.clear();
     location.reload();
 }
+
