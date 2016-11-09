@@ -192,99 +192,132 @@
         }
 
         function submit() {
-            console.log("lol");
-            console.log(nameInput.value);
-            closeModal();
 
-            nameInput;
-            costToAttendeeInput;
-            eventDateInput;
-            signUpOpenDateInput;
-            signUpCloseDateInput;
-            imageInput;
-            descriptionInput;
-            proposerInput;
-            weekProposedInput;
-            quarterInput;
-            moneyRequestedInput;
-            approvedInput;
+            var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/proposal/';
+            function createCORSRequest(method, url) {
+                var xhr = new XMLHttpRequest();
+                console.log("xhr is: ");
+                console.log(xhr);
+                xhr.open(method, url, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                return xhr;
+            }
+            var xhr = createCORSRequest('POST', url);
+            if (!xhr) {
+                throw new Error('CORS not supported');
+            }
 
-            var xhr = createPostRequest();
+            xhr.onload = function () {
+                var responseText = xhr.responseText;
+                console.log("Response text: " + responseText);
+        // return responseText;
+            }
 
+            xhr.onerror = function () {
+                console.log("There was an error");
+            }
+            
             var approvedBool = false;
             if (approvedInput.value === "true") {
                 approvedBool = true;
             }
 
-            var proposalToSend = {
-                name: nameInput.value,
-                cost_to_attendee: parseInt(costToAttendeeInput.value),
-                event_date: eventDateInput.value,
-                event_signup_open: signUpOpenDateInput.value,
-                event_signup_close: signUpCloseDateInput.value,
-                image_path: imageInput.value,
-                description: descriptionInput.value,
-                proposer: proposerInput.value,
-                week_proposed: parseInt(weekProposedInput.value),
-                quarter_proposed: parseInt(quarterInput.value),
-                money_requested: parseInt(moneyRequestedInput.value),
-                approved: approvedBool
-            }
+            xhr.send(JSON.stringify({name: nameInput.value, cost_to_attendee: parseInt(costToAttendeeInput.value), event_date: eventDateInput.value, event_signup_open: signUpOpenDateInput.value, event_signup_close: signUpCloseDateInput.value, image_path: imageInput.value, description: descriptionInput.value, proposer: proposerInput.value, week_proposed: parseInt(weekProposedInput.value), quarter_proposed: parseInt(quarterInput.value), money_requested: parseInt(moneyRequestedInput.value), approved: approvedBool }));
+            console.log(xhr);
+            return xhr;
+        }
+            // console.log("lol");
+            // console.log(nameInput.value);
+            // closeModal();
 
-            console.log(proposalToSend);
-            // console.log(JSON.stringify(proposalToSend));
-            xhr.send(proposalToSend);
+            // nameInput;
+            // costToAttendeeInput;
+            // eventDateInput;
+            // signUpOpenDateInput;
+            // signUpCloseDateInput;
+            // imageInput;
+            // descriptionInput;
+            // proposerInput;
+            // weekProposedInput;
+            // quarterInput;
+            // moneyRequestedInput;
+            // approvedInput;
 
-            function createPostRequest() {
-                var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
-                var url = apiURL + 'api/v1/proposal';
-                console.log(url);
-                function createCORSRequest(method, url) {
-                    var xhr = new XMLHttpRequest();
-                    if ("withCredentials" in xhr) {
+            // var xhr = createPostRequest();
+            // console.log(xhr);
 
-                    // Check if the XMLHttpRequest object has a "withCredentials" property.
-                    // "withCredentials" only exists on XMLHTTPRequest2 objects.
-                        xhr.open(method, url, true);
+            
 
-                    } else if (typeof XDomainRequest != "undefined") {
+            // var proposalToSend = {
+            //     name: nameInput.value,
+            //     cost_to_attendee: parseInt(costToAttendeeInput.value),
+                // event_date: eventDateInput.value,
+                // event_signup_open: signUpOpenDateInput.value,
+                // event_signup_close: signUpCloseDateInput.value,
+                // image_path: imageInput.value,
+                // description: descriptionInput.value,
+                // proposer: proposerInput.value,
+                // week_proposed: parseInt(weekProposedInput.value),
+                // quarter_proposed: parseInt(quarterInput.value),
+                // money_requested: parseInt(moneyRequestedInput.value),
+                // approved: approvedBool
+            // }
 
-                    // Otherwise, check if XDomainRequest.
-                    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-                        xhr = new XDomainRequest();
-                        xhr.open(method, url);
-                        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            // console.log(proposalToSend);
+            // // console.log(JSON.stringify(proposalToSend));
+            // xhr.send('{"name": "FormTestProp0", "cost_to_attendee": 10.50, "event_date": "2016-11-10","event_signup_open": "2016-11-01", "event_signup_close": "2016-11-04", "image_path": "abc123", "description": "newFakeEvent", "proposer": "joe", "week_proposed": 5, "quarter_proposed": 1, "money_requested": 750, "approved": true}');
+            // console.log(xhr);
 
-                    } else {
+            // function createPostRequest() {
+            //     var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
+            //     var url = apiURL + 'api/v1/proposal';
+            //     console.log(url);
+            //     function createCORSRequest(method, url) {
+            //         var xhr = new XMLHttpRequest();
+            //         if ("withCredentials" in xhr) {
 
-                    // Otherwise, CORS is not supported by the browser.
-                        xhr = null;
+            //         // Check if the XMLHttpRequest object has a "withCredentials" property.
+            //         // "withCredentials" only exists on XMLHTTPRequest2 objects.
+            //             xhr.open(method, url, true);
 
-                    }
-                    return xhr;
-                }
+            //         } else if (typeof XDomainRequest != "undefined") {
 
-                var xhr = createCORSRequest('POST', url);
-                // console.log(xhr);
-                if (!xhr) {
-                  throw new Error('CORS not supported');
-                }
+            //         // Otherwise, check if XDomainRequest.
+            //         // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+            //             xhr = new XDomainRequest();
+            //             xhr.open(method, url);
+            //             xhr.setRequestHeader("Content-Type", "application/json");
 
-                xhr.onload = function () {
-                    var responseText = xhr.responseText;
-                    console.log("Response text: " + responseText);
-                    // return responseText;
-                }
+            //         } else {
 
-                xhr.onerror = function() {
-                    console.log("There was an error");
-                }
-                // xhr.send();
-                // console.log(xhr);
-                return xhr;
+            //         // Otherwise, CORS is not supported by the browser.
+            //             xhr = null;
 
-            }
+            //         }
+            //         return xhr;
+            //     }
+
+            //     var xhr = createCORSRequest('POST', url);
+            //     // console.log(xhr);
+            //     if (!xhr) {
+            //       throw new Error('CORS not supported');
+            //     }
+
+            //     xhr.onload = function () {
+            //         var responseText = xhr.responseText;
+            //         console.log("Response text: " + responseText);
+            //         // return responseText;
+            //     }
+
+            //     xhr.onerror = function() {
+            //         console.log("There was an error");
+            //     }
+            //     // xhr.send();
+            //     // console.log(xhr);
+            //     return xhr;
+
+            //}
 
         }
-    }
+    //}
 })();
