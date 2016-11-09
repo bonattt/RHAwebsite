@@ -223,7 +223,6 @@
             }
 
             xhr.send(JSON.stringify({name: nameInput.value, cost_to_attendee: parseInt(costToAttendeeInput.value), event_date: eventDateInput.value, event_signup_open: signUpOpenDateInput.value, event_signup_close: signUpCloseDateInput.value, image_path: imageInput.value, description: descriptionInput.value, proposer: proposerInput.value, week_proposed: parseInt(weekProposedInput.value), quarter_proposed: parseInt(quarterInput.value), money_requested: parseInt(moneyRequestedInput.value), approved: approvedBool }));
-            console.log(xhr);
             return xhr;
         }
             // console.log("lol");
