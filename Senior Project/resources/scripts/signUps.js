@@ -6,6 +6,7 @@ var newEventPrice;
 var newEventImage;
 var newEventDescription;
 var newEventSignUpCloseDate;
+var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/"
 var nameInput = document.createElement("textarea");
 var priceInput = document.createElement("textarea");
 var descriptionInput = document.createElement("textarea");
@@ -110,6 +111,7 @@ function saveEvent() {
     }
     console.log("new event name is: ");
     console.log(newEventName);
+    console.log(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate }));
     xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate }));
     return xhr;
 
