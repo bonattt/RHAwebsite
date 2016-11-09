@@ -137,7 +137,7 @@ function displaySignUps() {
             }
             html += "<img class='signUpImage' src =" + proposal[i].image_path +"></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
-            html += "<a onclick='signUp()'><p class='signUpLink'> Sign Up </p></a>";
+            html += "<a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
             html += "<a id='myBtn' class='viewListLink'> View List </a>";
             html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
             html += "</div>";
@@ -276,10 +276,38 @@ function showEditModal(edit) {
 
 
 
-function signUp() {
+function signUp(eventID) {
+    var username = JSON.parse(sessionStorage.getItem("userData")).username;
+    console.log(username);
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/';
+    url += eventID + '/attendees/' + username;
+    console.log(url);
+    function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        return xhr;
+    }
+    var xhr = createCORSRequest('PUT', url);
+    if (!xhr) {
+        throw new Error('CORS not supported');
+    }
+
+    xhr.onload = function () {
+        var responseText = xhr.responseText;
+    }
+
+    xhr.onerror = function () {
+        console.log("There was an error");
+    }
+
+    xhr.send();
+
     var signUpSnackbar = document.getElementById("snackbar");
     signUpSnackbar.className = "show";
     setTimeout(function () { signUpSnackbar.className = signUpSnackbar.className.replace("show", ""); }, 3000);
+
+    return xhr; 
 }
 
 function moreInformationFunction(triggeringElement) {
