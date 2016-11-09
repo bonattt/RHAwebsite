@@ -14,6 +14,10 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+var RosefireTokenVerifier = require('rosefire-node');
+var SECRET = "hwiN2rg1Eu8wX350a9y5";
+var rosefire = new RosefireTokenVerifier(SECRET);
+console.log("hey there");
 
 app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/html/RHAhome.html');
@@ -45,6 +49,31 @@ app.get('/officers', function (req, res) {
 
 app.get('/committees', function (req, res) {
 	res.sendFile(__dirname + '/html/committees.html');
+});
+
+app.post('/foobar', function (req, res) {
+  var token = req.body.token;
+  if (!token) {
+    res.status(401).json({
+      error: 'Not authorized!1' + req.body.token
+    });
+    return;
+  }
+  // token = token.split(' ')[1];
+  rosefire.verify(token, function(err, authData) {
+    if (err) {
+      res.status(401).json({
+        error: 'Not authorized!2'
+      });
+    } else {
+      console.log(authData.username); // rockwotj
+      console.log(authData.issued_at); // <Date Object of issued time> 
+      console.log(authData.group); // STUDENT (Only there if options asked)
+      console.log(authData.expires) // <Date Object> (Only there if options asked)
+      res.json(authData);
+      //res.send(authData);
+    }
+  });
 });
 
 var server = app.listen(port, function() {
