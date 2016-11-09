@@ -482,7 +482,7 @@ INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Salvation Army Tree', 1, 1, 100.00
 
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Assassins', 3, 1, 0.00, true, 100.00, false, '2016-12-12', '2016-12-12', '2016-12-12', 0, '../images/events/assassins2.jpg');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'EWB Wallyball Tourney', 4, 1, 75.50, false, 80.00, true, '2016-12-15', '2016-12-1', '2016-13-', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'EWB Wallyball Tourney', 4, 1, 75.50, false, 80.00, true, '2016-12-15', '2016-12-1', '2016-12-4', 0, '../images/events/rose-seal.png');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Greatest Floor', 4, 1, 125.00, false, 2750.00, false, '2016-11-22', '2016-11-2', '2016-11-20', 0, '../images/events/rose-seal.png');
 
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Mr. Rose', 5, 1, 100.00, false, 150.00, true, '2016-11-27', '2016-11-1', '2016-11-20', 0, '../images/events/rose-seal.png');
@@ -505,7 +505,7 @@ INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Deming Park Cookout', 4, 2, 123.45
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie on the Lawn', 5, 2, 20.00, true, 1200.00, true, '2016-11-30', '2016-11-10', '2016-11-28', 0, '../images/events/movie.png');
 
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Campus Beautification', 6, 2, 345.00, true, 500.00, false, '2016-10-27', '2016-10-5', '2016-10-25', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SHPE Cinco de Mayo', 6, 2, 50.00, false, 200.00, NULL, true, '2016-5-5', '2016-4-15', '2016-5-3', 5, '../images/events/cinco-de-mayo.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SHPE Cinco de Mayo', 6, 2, 50.00, false, 200.00, true, '2016-5-5', '2016-4-15', '2016-5-3', 5, '../images/events/cinco-de-mayo.jpg');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'House Keepers Appreciation', 6, 2, 100.00, false, 500.00, true, '2017-1-15', '2017-1-1', '2017-1-14', 0, '../images/events/rose-seal.png');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Paws on the Patio', 6, 2, 200.00, true, 200.00, false, '2017-2-7', '2017-1-20', '2017-2-6', 5, '../images/events/paws-on-patio.jpg');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 6, 2, 0.00, false, 799.99, true, '2017-4-4', '2017-3-20', '2017-4-3', 0, '../images/events/blood-drive.jpg');
