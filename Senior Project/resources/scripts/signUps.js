@@ -111,7 +111,9 @@ function saveEvent() {
     }
     console.log("new event name is: ");
     console.log(newEventName);
+
     xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate }));
+
     return xhr;
 
 }
@@ -134,6 +136,7 @@ function displaySignUps() {
                 console.log(proposal[i].cost_to_attendee);
                 html += proposal[i].cost_to_attendee + "</p>";
             }
+            console.log(proposal[i].image_path);
             html += "<img class='signUpImage' src =" + proposal[i].image_path +"></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
             html += "<a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
@@ -230,6 +233,7 @@ function showEditModal(edit) {
 
     imageInput.setAttribute("rows", "1");
     imageInput.setAttribute("cols", "30");
+    console.log(editValue.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].src.split("images/")[1]);
     imageInput.innerHTML = editValue.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].currentSrc.split("images/")[1];
 
 
@@ -300,6 +304,7 @@ function signUp(eventID) {
     }
 
     xhr.send();
+    console.log("there's an xhr above me");
 
     var signUpSnackbar = document.getElementById("snackbar");
     signUpSnackbar.className = "show";

@@ -276,7 +276,7 @@ xhr.onerror = function () {
 }
 var committeeName = document.getElementById("committee-text").value;
 var description = document.getElementById("description-text").value;
-var image = document.getElementById("image-text").value;
+var image = "images/committees/" + document.getElementById("image-text").value;
 xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
 return xhr;
 
