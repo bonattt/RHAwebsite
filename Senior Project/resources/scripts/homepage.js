@@ -2,12 +2,10 @@ function displayUpcomingEvents() {
 
     var xhr = getEvents();
     xhr.send();
-    console.log(xhr);
     setTimeout(function () { actuallyDoShit(xhr.responseText) }, 300);
     // var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 
     function actuallyDoShit(proposal) {
-        console.log(proposal);
         proposal = JSON.parse(proposal);
 
         for (var i = 0; i < proposal.length; i++) {
@@ -17,7 +15,6 @@ function displayUpcomingEvents() {
             html += "<p>" + proposal[i].event_date + "</p></div></a></div>";
 
             var sidebar = document.getElementById("sidebarEvents");
-            console.log(sidebar);
             sidebar.innerHTML += html;
             // console.log(sidebar);
         }
@@ -26,7 +23,6 @@ function displayUpcomingEvents() {
 
     function getEvents() {
         var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events';
-        console.log(url);
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
             if ("withCredentials" in xhr) {
@@ -77,6 +73,15 @@ function displayUpcomingEvents() {
     var isAdmin = true;
     var hasListener = false;
     var whatsnew = {};
+
+    var title = document.getElementById("title");
+    if (JSON.parse(sessionStorage.getItem('userData'))){
+        title.innerHTML = "Hi, " + JSON.parse(sessionStorage.getItem('userData')).name.split(" ")[0] + "!";
+    } else {
+        title.innerHTML = "Hi!"
+    }
+    var logoutButton = document.getElementById("logout-button");
+    logoutButton.addEventListener("click", logout);
 
     if (isAdmin) {
         var adminValues = document.getElementsByClassName("edit");
@@ -171,9 +176,13 @@ function displayUpcomingEvents() {
     }
 
     $(document).ready(function () {
-        console.log("HELLO");
         displayUpcomingEvents();
 
     });
 
 })();
+
+function logout() {
+    sessionStorage.clear();
+    location.reload();
+}
