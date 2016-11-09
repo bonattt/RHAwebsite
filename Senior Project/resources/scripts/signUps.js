@@ -135,29 +135,15 @@ function displaySignUps() {
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
         }
-        console.log("events map is: ")
-        console.log(eventsMap);
-        var isAdmin = true;
-        if (isAdmin) {
-            displayEditingPens();
-        }
     }
 
-    function displayEditingPens() {
-        var adminValues = document.getElementsByClassName("edit");
-        for (var i = 0; i < adminValues.length; i++) {
-            var editImage = document.createElement("img");
-            editImage.setAttribute("src", "../images/edit.png");
-            adminValues[i].appendChild(editImage);
-            editImage.addEventListener("click", function (e) {
-                showEditModal(e);
-            }, false);
-        }
-    }
+    
+     var officersxhr = getOfficers();
+     officersxhr.send();
+     setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
 
     function getEvents() {
         var url = apiURL + 'api/v1/events';
-        console.log(url);
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
             if ("withCredentials" in xhr) {
@@ -189,8 +175,6 @@ function displaySignUps() {
 
         xhr.onload = function () {
             var responseText = xhr.responseText;
-            console.log("Response text: " + responseText);
-            // return responseText;
         }
 
         xhr.onerror = function () {
@@ -302,6 +286,51 @@ function moreInformationFunction(triggeringElement) {
 
 }
 
+function getOfficers() {
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
+    function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        if ("withCredentials" in xhr) {
+            xhr.open(method, url, true);
+
+        } else if (typeof XDomainRequest != "undefined") {
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+        } else {
+            xhr = null;
+        }
+        return xhr;
+    }
+    var xhr = createCORSRequest('GET', url);
+    if (!xhr) {
+        throw new Error('CORS not supported');
+    }
+    xhr.onload = function () {
+    }
+    xhr.onerror = function () {
+        console.log("There was an error");
+    }
+    return xhr;
+}
+
+function setAdmin(officers) {
+    officer = JSON.parse(officers);
+    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
+    for (var i = 0; i < officer.length; i++) {
+        if (officer[i].username === tempUser.username) {
+            var adminValues = document.getElementsByClassName("edit");
+            for (var i = 0; i < adminValues.length; i++) {
+                var editImage = document.createElement("img");
+                editImage.setAttribute("src", "../images/edit.png");
+                adminValues[i].appendChild(editImage);
+                editImage.addEventListener("click", function (e) {
+                    showEditModal(e);
+                }, false);
+            }
+            return;
+        }
+    }
+}
 (function () {
 
     var listLinks = document.getElementsByClassName("viewListLink");
@@ -309,8 +338,6 @@ function moreInformationFunction(triggeringElement) {
         var listLink = listLinks[i];
         listLink.addEventListener("click", showListModal, false);
     }
-
-    var isAdmin = true;
     apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
     newEvent = {};
 
@@ -345,7 +372,6 @@ function moreInformationFunction(triggeringElement) {
     }
 
     $(document).ready(function () {
-        console.log("HELLO");
         if (window.location.pathname.indexOf("pastEvents") > -1) {
             displayPastEvents();
         } else {
