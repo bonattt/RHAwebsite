@@ -113,6 +113,31 @@ router.get('/api/v1/officers', (req, res, next) => {
   });
 });
 
+/* GET all committees */
+router.get('/api/v1/committees', (req, res, next) => {
+  const results = [];
+
+  pg.connect(connectionString, (err, client, done) => {
+    if(err) {
+      done();
+      console;
+      console.log(err);
+      return res.status(500).json({success: false, data: "You did something so bad you broke the server =("});
+    }
+
+    const query = client.query('SELECT committeeID, committeeName, description, image FROM Committee;');
+    
+    query.on('row', (row) => {
+      results.push(row);
+    });
+
+    query.on('end', () => {
+      done();
+      return res.json(results);
+    });
+  });
+});
+
 /* PUT modify a member */
 router.put('/api/v1/member/:id', (req, res, next) => {
   const results = [];
