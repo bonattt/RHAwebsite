@@ -514,11 +514,11 @@ INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rose Riot', 7, 2, 250.00, true, 75
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'ISA Global Cuisine Night', 7, 2, 250.00, true, 100.00, false, '2017-4-15', '2017-4-1', '2017-4-14', 5, '../images/events/rose-seal.png');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Student Involvement Award Dinner', 7, 2, 250.00, false, 1000.00, true, '2017-6-1', '2017-5-10', '2017-5-30', 5, '../images/events/rose-seal.png');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', 7, 2, 200.00, false, 7000.00, false, '2017-3-27', '2017-3-4', '2017-3-27', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', 7, 2, 0.00, false, 800.00, true, '2016-10-1', '2016-9-2', '2016-9-30', 0, 'blood-drive.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', 7, 2, 20.00, false, 1200.00, false, '2017-10-2', '2017-9-2', '2017-10-1', 0, 'speedlawn.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', 7, 2, 0.00, false, 800.00, true, '2016-10-1', '2016-9-2', '2016-9-30', 0, '../images/events/blood-drive.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', 7, 2, 20.00, false, 1200.00, false, '2017-10-2', '2017-9-2', '2017-10-1', 0, '../images/events/speedlawn.jpg');
 
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tropical Sno', 8, 2, 34.21, true, 300.00, true, '2017-12-17', '2017-11-26', '2017-12-17', 5, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland Tickets', 8, 2, 1000.01, false, 375.00, false, '2017-4-20', '2017-4-1', '2017-4-19', 10,'rockout-for-ryland.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland Tickets', 8, 2, 1000.01, false, 375.00, false, '2017-4-20', '2017-4-1', '2017-4-19', 10,'../images/events/rockout-for-ryland.jpg');
 
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Hall Improvement Funds', 9, 2, 10000.00, true, 10000.00, true, '2017-3-24', '2017-3-1', '2017-3-23', 5, '../images/events/rose-seal.png');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Thomas 22nd Birthday', 9, 2, 10000.00, true, 10000.00, false, '2017-2-6', '2017-1-1', '2017-2-1', 9.99, '../images/events/rose-seal.png');
