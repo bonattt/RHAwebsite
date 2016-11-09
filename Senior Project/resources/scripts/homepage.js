@@ -26,7 +26,7 @@ function displayUpcomingEvents() {
         var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events';
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
+           if ("withCredentials" in xhr) {
                 xhr.open(method, url, true);
 
             } else if (typeof XDomainRequest != "undefined") {
@@ -184,9 +184,7 @@ function logout() {
             }
         }
 
-
         var submit = document.getElementById("submit");
-        submit.style.cssText = "height: 10%; width: 25%; font-size: 14px; float: right; color: black; margin-right: 40%;";
         new_submit = submit.cloneNode(true);
         new_submit.addEventListener("click", function () {
             submitChanges(newStuffInput, descInput)
@@ -196,6 +194,7 @@ function logout() {
 
 
         function submitChanges(header, description) {
+            console.log("lol");
             div.querySelectorAll(":nth-child(2)")[0].innerHTML = header.value;
             div.querySelectorAll(":nth-child(3)")[0].innerHTML = description.value;
 
@@ -203,4 +202,17 @@ function logout() {
             whatsnewNode.removeChild(whatsnewNode.firstChild);
             descNode.removeChild(descNode.firstChild);
         }
+
     }
+
+    $(document).ready(function () {
+        displayUpcomingEvents();
+    });
+
+})();
+
+function logout() {
+    sessionStorage.clear();
+    location.reload();
+}
+

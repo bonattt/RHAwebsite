@@ -6,6 +6,7 @@ var newEventPrice;
 var newEventImage;
 var newEventDescription;
 var newEventSignUpCloseDate;
+var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/"
 var nameInput = document.createElement("textarea");
 var priceInput = document.createElement("textarea");
 var descriptionInput = document.createElement("textarea");
@@ -110,6 +111,7 @@ function saveEvent() {
     }
     console.log("new event name is: ");
     console.log(newEventName);
+    console.log(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate }));
     xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate }));
     return xhr;
 
@@ -122,9 +124,18 @@ function displaySignUps() {
 
     function actuallyDoShit(proposal) {
         proposal = JSON.parse(proposal);
-        for (var i = 0; i < proposal.length; i++) {
-            var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - " + proposal[i].cost_to_attendee + "</p>";
-            html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
+
+        for(var i=0; i<proposal.length; i++){
+            var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - ";
+            if(proposal[i].cost_to_attendee == '$0.00') {
+                console.log(proposal[i].proposal_name + " should be free.");
+                html +="FREE</p>";  
+            } else {
+                console.log("This shit better have a cost greater than 0...");
+                console.log(proposal[i].cost_to_attendee);
+                html += proposal[i].cost_to_attendee + "</p>";
+            }
+            html += "<img class='signUpImage' src =" + proposal[i].image_path +"></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
             html += "<a onclick='signUp()'><p class='signUpLink'> Sign Up </p></a>";
             html += "<a id='myBtn' class='viewListLink'> View List </a>";
@@ -338,7 +349,10 @@ function setAdmin(officers) {
         var listLink = listLinks[i];
         listLink.addEventListener("click", showListModal, false);
     }
-    apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
+
+    var isAdmin = true;
+    var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
+
     newEvent = {};
 
 
