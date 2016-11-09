@@ -32,7 +32,7 @@ function displayPastEvents() {
             var html = "<div class='eventTile'><p class='signUpText'>" + proposal[i].proposal_name + " - " + proposal[i].cost_to_attendee + "</p>";
             html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
-            html += "<a id='myBtn' onclick='viewAttendees(" + proposal[i].proposal_id + ")' class='viewListLink'> View List </a>";
+            html += "<a id='" + proposal[i].proposal_id + "' class='viewListLink'> View List </a>";
             html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
             html += "</div>";
 
@@ -40,12 +40,11 @@ function displayPastEvents() {
             tileArea.innerHTML += html;
 
         }
-
+        makeListLinks();
     }
 
     function getEvents() {
         var url = apiURL + 'api/v1/pastevents';
-        console.log(url);
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
             console.log("xhr is: ");
@@ -112,7 +111,6 @@ function saveEvent() {
     }
     console.log("new event name is: ");
     console.log(newEventName);
-    console.log(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate }));
     xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate }));
     return xhr;
 
@@ -139,13 +137,14 @@ function displaySignUps() {
             html += "<img class='signUpImage' src =" + proposal[i].image_path +"></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
             html += "<a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
-            html += "<a id='myBtn' onclick='viewAttendees(" + proposal[i].proposal_id + ")' class='viewListLink'> View List </a>";
+            html += "<a id='" + proposal[i].proposal_id + "' class='viewListLink'> View List </a>";
             html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
             html += "</div>";
             eventsMap[proposal[i].proposal_name] = proposal[i].proposal_id;
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
+            makeListLinks();
         }
     }
 
@@ -279,10 +278,8 @@ function showEditModal(edit) {
 
 function signUp(eventID) {
     var username = JSON.parse(sessionStorage.getItem("userData")).username;
-    console.log(username);
     var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/';
     url += eventID + '/attendees/' + username;
-    console.log(url);
     function createCORSRequest(method, url) {
         var xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
@@ -371,12 +368,40 @@ function setAdmin(officers) {
         }
     }
 }
-(function () {
+
+function getAttendees(id) {
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/' + id;
+    function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        if ("withCredentials" in xhr) {
+            xhr.open(method, url, true);
+
+        } else if (typeof XDomainRequest != "undefined") {
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+        } else {
+            xhr = null;
+        }
+        return xhr;
+    }
+    var xhr = createCORSRequest('GET', url);
+    if (!xhr) {
+        throw new Error('CORS not supported');
+    }
+    //xhr.onload = function () {
+    //    console.log(xhr.responseText);
+    //}
+    xhr.onerror = function () {
+        console.log("There was an error");
+    }
+    return xhr;
+}
+function makeListLinks() {
 
     listLinks = document.getElementsByClassName("viewListLink");
     for (var i = 0; i < listLinks.length; i++) {
         var listLink = listLinks[i];
-        listLink.addEventListener("click", showListModal, false);
+        listLink.addEventListener("click", function (e) {showListModal(e);}, false);
     }
 
     var isAdmin = true;
@@ -386,48 +411,56 @@ function setAdmin(officers) {
 
 
 
-    function showListModal() {
-        var eventAttendees = [{
-            name: "Morgan Cook"
-        },
-            {
-                name: "Thomas Bonnatti"
-            }]
-        var modal = document.getElementById('listModal');
-        var span = document.getElementsByClassName("closeList")[0];
-        var list = document.getElementById("list");
-        var html = "";
-        for (var i = 0; i < eventAttendees.length; i++) {
-            console.log("The person at " + i + "is: " + eventAttendees[i].name);
-            html += "<br>" + eventAttendees[i].name;
-        }
-        list.innerHTML = "The attendees for this event are:";
-        list.innerHTML += html;
-        modal.style.display = "block";
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-        window.onclick = function (event) {
-            if (event.target == modal) {
+    function showListModal(event) {
+        var xhr = getAttendees(event.srcElement.id);
+        xhr.send();
+        xhr.onload = function () {
+            console.log(xhr.responseText);
+            var response = JSON.parse(xhr.responseText);
+            console.log(response[0].attendees);
+            var eventAttendees = response[0].attendees;
+            var modal = document.getElementById('listModal');
+            var span = document.getElementsByClassName("closeList")[0];
+            var list = document.getElementById("list");
+            var html = "";
+
+            var rightSide;
+            if(!eventAttendees) {
+                rightSide = 0;
+            } else {
+                rightSide = eventAttendees.length;
+            }
+
+            for (var i = 0; i < rightSide; i++) {
+                console.log("The person at " + i + "is: " + eventAttendees[i]);
+                html += "<br>" + eventAttendees[i];
+            }
+            list.innerHTML = "The attendees for this event are:";
+            list.innerHTML += html;
+            modal.style.display = "block";
+            span.onclick = function () {
                 modal.style.display = "none";
             }
-        }
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        } 
     }
+};
 
-    $(document).ready(function () {
+$(document).ready(function () {
         if (window.location.pathname.indexOf("pastEvents") > -1) {
             displayPastEvents();
         } else {
             displaySignUps();
         }
+        
     });
-
-
-})();
 
 function submit() {
     var modal = document.getElementById('editModal');
-    console.log("hey there!");
     modal.style.display = "none";
     nameNode.removeChild(nameNode.firstChild);
     priceNode.removeChild(priceNode.firstChild);
