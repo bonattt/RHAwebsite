@@ -209,8 +209,6 @@ function logout() {
         displayUpcomingEvents();
     });
 
-})();
-
 function logout() {
     sessionStorage.clear();
     location.reload();
