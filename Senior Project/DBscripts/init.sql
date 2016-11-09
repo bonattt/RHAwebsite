@@ -320,6 +320,7 @@ INSERT INTO Members VALUES (DEFAULT, 'szatkos', 'Scott', 'Szatkowski', 'Lakeside
 
 -- Off-campus
 INSERT INTO Members VALUES (DEFAULT, 'colotlk', 'Karina', 'Colotl', 'Off-campus', null, null, false, false, '{"Q1": [0, 0, 0, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members(username, firstname, lastname) VALUES ('cookmn', 'Morgan', 'Cook');
 
 --Advisors
 INSERT INTO Members VALUES (DEFAULT, 'rhodeska', 'Kyle', 'Rhodes', 'Apartments E 1', null, 'Advisor', false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}', 12, 1234567890, 110);
