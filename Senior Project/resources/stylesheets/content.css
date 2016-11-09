@@ -395,10 +395,10 @@ h3{
 #addOfficer, #addCommittee{
 	text-align: center;
 	font-size: 200%;
-	display: block;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 2.5%;
+	display: none;
 }
 
 /*Floor Money*/

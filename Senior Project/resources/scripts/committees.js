@@ -1,13 +1,60 @@
+function getOfficers() {
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
+    function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        if ("withCredentials" in xhr) {
+            xhr.open(method, url, true);
+
+        } else if (typeof XDomainRequest != "undefined") {
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+        } else {
+            xhr = null;
+        }
+        return xhr;
+    }
+    var xhr = createCORSRequest('GET', url);
+    if (!xhr) {
+        throw new Error('CORS not supported');
+    }
+    xhr.onload = function () {
+    }
+    xhr.onerror = function () {
+        console.log("There was an error");
+    }
+    return xhr;
+}
+
+function setAdmin(officers) {
+    officer = JSON.parse(officers);
+    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
+    for (var i = 0; i < officer.length; i++) {
+        if (officer[i].username === tempUser.username) {
+            var adminValues = document.getElementsByClassName("edit");
+            for (var i = 0; i < adminValues.length; i++) {
+                var editImage = document.createElement("img");
+                editImage.setAttribute("src", "../images/edit.png");
+                adminValues[i].appendChild(editImage);
+                editImage.addEventListener("click", function (e) {
+                    showModal(e);
+                }, false);
+            }
+            var addCommitteeButton = document.getElementById("addCommittee");
+            addCommitteeButton.addEventListener("click", showEmptyModal);
+            addCommitteeButton.style.display = "block";
+            return;
+        }
+    }
+}
+
 (function () {
     var xhr = getCommittees();
     xhr.send();
     setTimeout(function () { actuallyDoShit(xhr.responseText) }, 300);
 
     function actuallyDoShit(committee) {
-        console.log("committee is: " + committee);
         committee = JSON.parse(committee);
         for (var i = 0; i < committee.length; i++) {
-            console.log("Image path: " + committee[i].image);
             if (i % 2 == 0) {
                 var html = "<div class='committeeWrapperRight' id='committeeWrapperRight'>";
                 html += "<div class='committees'><h3 class='edit'>" + committee[i].committeename + "</h3>";
@@ -24,27 +71,13 @@
             committees.innerHTML += html;
         }
 
-        var isAdmin = true;
-        if (isAdmin) {
-            displayEditingPens();
-        }
-    }
-
-    function displayEditingPens() {
-        var adminValues = document.getElementsByClassName("edit");
-        for (var i = 0; i < adminValues.length; i++) {
-            var editImage = document.createElement("img");
-            editImage.setAttribute("src", "../images/edit.png");
-            adminValues[i].appendChild(editImage);
-            editImage.addEventListener("click", function (e) {
-                showModal(e);
-            }, false);
-        }
+        var officersxhr = getOfficers();
+        officersxhr.send();
+        setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
     }
 
     function getCommittees() {
         var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/committees';
-        console.log(url);
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
             if ("withCredentials" in xhr) {
