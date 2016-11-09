@@ -18,6 +18,7 @@ var imageNode = document.getElementById("imageInput");
 var descriptionNode = document.getElementById("descriptionInput");
 var signUpCloseDateNode = document.getElementById("signUpCloseDateInput");
 var editValue;
+var listLinks;
 
 function displayPastEvents() {
     var xhr = getEvents();
@@ -31,7 +32,7 @@ function displayPastEvents() {
             var html = "<div class='eventTile'><p class='signUpText'>" + proposal[i].proposal_name + " - " + proposal[i].cost_to_attendee + "</p>";
             html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
-            html += "<a id='myBtn' class='viewListLink'> View List </a>";
+            html += "<a id='myBtn' onclick='viewAttendees(" + proposal[i].proposal_id + ")' class='viewListLink'> View List </a>";
             html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
             html += "</div>";
 
@@ -138,7 +139,7 @@ function displaySignUps() {
             html += "<img class='signUpImage' src =" + proposal[i].image_path +"></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
             html += "<a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
-            html += "<a id='myBtn' class='viewListLink'> View List </a>";
+            html += "<a id='myBtn' onclick='viewAttendees(" + proposal[i].proposal_id + ")' class='viewListLink'> View List </a>";
             html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
             html += "</div>";
             eventsMap[proposal[i].proposal_name] = proposal[i].proposal_id;
@@ -372,7 +373,7 @@ function setAdmin(officers) {
 }
 (function () {
 
-    var listLinks = document.getElementsByClassName("viewListLink");
+    listLinks = document.getElementsByClassName("viewListLink");
     for (var i = 0; i < listLinks.length; i++) {
         var listLink = listLinks[i];
         listLink.addEventListener("click", showListModal, false);
