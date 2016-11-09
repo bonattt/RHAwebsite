@@ -13,6 +13,8 @@
 
         var modal = document.getElementById('editModal');
         var span = document.getElementsByClassName("closeEdit")[0];
+        var modalContent = document.getElementsByClassName("modal-content")[0];
+        console.log(modalContent);
 
         var name = "Event name: ";
         var costToAttendee = "Cost to attendee: ";
@@ -80,6 +82,13 @@
         moneyAllocatedInput.setAttribute("rows", "1");
         moneyAllocatedInput.setAttribute("cols", "30");
 
+        var submitButton = document.createElement("button");
+        submitButton.setAttribute("id", "submit");
+        submitButton.setAttribute("class", "modalButton");
+        submitButton.innerHTML = "Submit";
+        submitButton.addEventListener("click", function () {submit()}, false);
+        modalContent.appendChild(submitButton);
+
         var nameNode = document.getElementById("nameInput");
         var costToAttendeeNode = document.getElementById("costToAttendeeInput");
         var imageNode = document.getElementById("imageInput");
@@ -125,6 +134,46 @@
 
         modal.style.display = "block";
         span.onclick = function () {
+            closeModal();
+            // modal.style.display = "none";
+            // nameNode.removeChild(nameNode.firstChild);
+            // costToAttendeeNode.removeChild(costToAttendeeNode.firstChild);
+            // imageNode.removeChild(imageNode.firstChild);
+            // descriptionNode.removeChild(descriptionNode.firstChild);
+            // signUpOpenDateNode.removeChild(signUpOpenDateNode.firstChild);
+            // eventDateNode.removeChild(eventDateNode.firstChild);
+            // signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
+            // proposerNode.removeChild(proposerNode.firstChild);
+            // weekProposedNode.removeChild(weekProposedNode.firstChild);
+            // quarterNode.removeChild(quarterNode.firstChild);
+            // moneyRequestedNode.removeChild(moneyRequestedNode.firstChild);
+            // approvedNode.removeChild(approvedNode.firstChild);
+            // moneyAllocatedNode.removeChild(moneyAllocatedNode.firstChild);
+            // modalContent.removeChild(submitButton);
+
+        }
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                closeModal();
+                // modal.style.display = "none";
+                // nameNode.removeChild(nameNode.firstChild);
+                // costToAttendeeNode.removeChild(costToAttendeeNode.firstChild);
+                // imageNode.removeChild(imageNode.firstChild);
+                // descriptionNode.removeChild(descriptionNode.firstChild);
+                // signUpOpenDateNode.removeChild(signUpOpenDateNode.firstChild);
+                // eventDateNode.removeChild(eventDateNode.firstChild);
+                // signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
+                // proposerNode.removeChild(proposerNode.firstChild);
+                // weekProposedNode.removeChild(weekProposedNode.firstChild);
+                // quarterNode.removeChild(quarterNode.firstChild);
+                // moneyRequestedNode.removeChild(moneyRequestedNode.firstChild);
+                // approvedNode.removeChild(approvedNode.firstChild);
+                // moneyAllocatedNode.removeChild(moneyAllocatedNode.firstChild);
+                // modalContent.removeChild(submitButton);
+            }
+        }
+
+        function closeModal() {
             modal.style.display = "none";
             nameNode.removeChild(nameNode.firstChild);
             costToAttendeeNode.removeChild(costToAttendeeNode.firstChild);
@@ -139,36 +188,103 @@
             moneyRequestedNode.removeChild(moneyRequestedNode.firstChild);
             approvedNode.removeChild(approvedNode.firstChild);
             moneyAllocatedNode.removeChild(moneyAllocatedNode.firstChild);
-
+            modalContent.removeChild(submitButton);
         }
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-                nameNode.removeChild(nameNode.firstChild);
-                costToAttendeeNode.removeChild(costToAttendeeNode.firstChild);
-                imageNode.removeChild(imageNode.firstChild);
-                descriptionNode.removeChild(descriptionNode.firstChild);
-                signUpOpenDateNode.removeChild(signUpOpenDateNode.firstChild);
-                eventDateNode.removeChild(eventDateNode.firstChild);
-                signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
-                proposerNode.removeChild(proposerNode.firstChild);
-                weekProposedNode.removeChild(weekProposedNode.firstChild);
-                quarterNode.removeChild(quarterNode.firstChild);
-                moneyRequestedNode.removeChild(moneyRequestedNode.firstChild);
-                approvedNode.removeChild(approvedNode.firstChild);
-                moneyAllocatedNode.removeChild(moneyAllocatedNode.firstChild);
+
+        function submit() {
+            console.log("lol");
+            console.log(nameInput.value);
+            closeModal();
+
+            nameInput;
+            costToAttendeeInput;
+            eventDateInput;
+            signUpOpenDateInput;
+            signUpCloseDateInput;
+            imageInput;
+            descriptionInput;
+            proposerInput;
+            weekProposedInput;
+            quarterInput;
+            moneyRequestedInput;
+            approvedInput;
+
+            var xhr = createPostRequest();
+
+            var approvedBool = false;
+            if (approvedInput.value === "true") {
+                approvedBool = true;
             }
-        }
 
-        var submitButton = document.getElementById("submit");
-        new_submit = submitButton.cloneNode(true);
-        new_submit.addEventListener("click", function () {
-            doThing()
-        }, false);
-        submitButton.parentNode.replaceChild(new_submit, submitButton);
+            var proposalToSend = {
+                name: nameInput.value,
+                cost_to_attendee: parseInt(costToAttendeeInput.value),
+                event_date: eventDateInput.value,
+                event_signup_open: signUpOpenDateInput.value,
+                event_signup_close: signUpCloseDateInput.value,
+                image_path: imageInput.value,
+                description: descriptionInput.value,
+                proposer: proposerInput.value,
+                week_proposed: parseInt(weekProposedInput.value),
+                quarter_proposed: parseInt(quarterInput.value),
+                money_requested: parseInt(moneyRequestedInput.value),
+                approved: approvedBool
+            }
 
-        function doThing() {
-           console.log("lol");
+            console.log(proposalToSend);
+            // console.log(JSON.stringify(proposalToSend));
+            xhr.send(proposalToSend);
+
+            function createPostRequest() {
+                var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
+                var url = apiURL + 'api/v1/proposal';
+                console.log(url);
+                function createCORSRequest(method, url) {
+                    var xhr = new XMLHttpRequest();
+                    if ("withCredentials" in xhr) {
+
+                    // Check if the XMLHttpRequest object has a "withCredentials" property.
+                    // "withCredentials" only exists on XMLHTTPRequest2 objects.
+                        xhr.open(method, url, true);
+
+                    } else if (typeof XDomainRequest != "undefined") {
+
+                    // Otherwise, check if XDomainRequest.
+                    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+                        xhr = new XDomainRequest();
+                        xhr.open(method, url);
+                        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                    } else {
+
+                    // Otherwise, CORS is not supported by the browser.
+                        xhr = null;
+
+                    }
+                    return xhr;
+                }
+
+                var xhr = createCORSRequest('POST', url);
+                // console.log(xhr);
+                if (!xhr) {
+                  throw new Error('CORS not supported');
+                }
+
+                xhr.onload = function () {
+                    var responseText = xhr.responseText;
+                    console.log("Response text: " + responseText);
+                    // return responseText;
+                }
+
+                xhr.onerror = function() {
+                    console.log("There was an error");
+                }
+                // xhr.send();
+                // console.log(xhr);
+                return xhr;
+
+            }
+
         }
     }
 })();
