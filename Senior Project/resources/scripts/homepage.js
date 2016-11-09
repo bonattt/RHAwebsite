@@ -144,15 +144,15 @@ function logout() {
         var img = editImage.srcElement.innerHTML;
         var div = editImage.srcElement.parentElement;
 
-        var newStuff = "Header: ";
+        //var newStuff = "Header: ";
         var newStuffDesc = "Description: ";
 
-        var newStuffInput = document.createElement("textarea");
-        newStuffInput.setAttribute("rows", "1");
-        newStuffInput.setAttribute("cols", "20");
-        // newStuffInput.setAttribute("name", "");
-        newStuffInput.innerHTML = div.querySelectorAll(":nth-child(2)")[0].innerHTML;
-        // whatsnew["title"] = newStuffInput.innerHTML;
+        // var newStuffInput = document.createElement("textarea");
+        // newStuffInput.setAttribute("rows", "1");
+        // newStuffInput.setAttribute("cols", "20");
+        // // newStuffInput.setAttribute("name", "");
+        // newStuffInput.innerHTML = div.querySelectorAll(":nth-child(2)")[0].innerHTML;
+        // // whatsnew["title"] = newStuffInput.innerHTML;
 
         var descInput = document.createElement("textarea");
         descInput.setAttribute("rows", "4");
@@ -160,25 +160,25 @@ function logout() {
         descInput.innerHTML = div.querySelectorAll(":nth-child(3)")[0].innerHTML;
         // whatsnew["shownDescription"] = descInput.innerHTML;
 
-        var whatsnewNode = document.getElementById("whatsnewInput");
+        //var whatsnewNode = document.getElementById("whatsnewInput");
         var descNode = document.getElementById("descInput");
 
-        document.getElementById("whatsnew").innerHTML = newStuff;
-        whatsnewNode.appendChild(newStuffInput);
+        //document.getElementById("whatsnew").innerHTML = newStuff;
+        //whatsnewNode.appendChild(newStuffInput);
         document.getElementById("description").innerHTML = newStuffDesc;
         descNode.appendChild(descInput);
 
         modal.style.display = "block";
         span.onclick = function () {
             modal.style.display = "none";
-            whatsnewNode.removeChild(whatsnewNode.firstChild);
+            //whatsnewNode.removeChild(whatsnewNode.firstChild);
             descNode.removeChild(descNode.firstChild);
 
         }
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
-                whatsnewNode.removeChild(whatsnewNode.firstChild);
+                //whatsnewNode.removeChild(whatsnewNode.firstChild);
                 descNode.removeChild(descNode.firstChild);
 
             }
@@ -187,19 +187,19 @@ function logout() {
         var submit = document.getElementById("submit");
         new_submit = submit.cloneNode(true);
         new_submit.addEventListener("click", function () {
-            submitChanges(newStuffInput, descInput)
+            submitChanges(descInput)
         }, false);
         submit.parentNode.replaceChild(new_submit, submit);
 
 
 
-        function submitChanges(header, description) {
+        function submitChanges(description) {
             console.log("lol");
-            div.querySelectorAll(":nth-child(2)")[0].innerHTML = header.value;
+            //div.querySelectorAll(":nth-child(2)")[0].innerHTML = header.value;
             div.querySelectorAll(":nth-child(3)")[0].innerHTML = description.value;
 
             modal.style.display = "none";
-            whatsnewNode.removeChild(whatsnewNode.firstChild);
+            //whatsnewNode.removeChild(whatsnewNode.firstChild);
             descNode.removeChild(descNode.firstChild);
         }
 
