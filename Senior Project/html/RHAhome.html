@@ -7,7 +7,7 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">  </script>
 	<script src="../malihu-custom-scrollbar-plugin-master/jquery.mCustomScrollbar.concat.min.js">  </script>
 	<script src="../scripts/custom-scroll.js">  </script>
-	
+
 	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
 	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
 	<link rel="icon" href="../images/RHA.jpg">
@@ -16,29 +16,33 @@
 	</title>
 	<script type="text/javascript" src="../scripts/login-script.js">  </script>
 	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
+	<script src="./scripts/rosefire.js"></script>
+	<script src="./scripts/login.js"></script>
 
 </head>
 
 <body>
+	<button id="login-button">Login with RoseFire</button>
+	<button id="logout-button">Logout</button>
 	<div id="navBar"> </div>
 
 	<img class="scrollingImage" src="../images/homePagePicture.jpg">
 
 	<div class="edit newsArea">
-		<h1 id="title">What's new?</h1>
+		<h1 id="title"></h1>
 		<p id="shownDescription">Residence Hall Association is an organization for students living on campus in a residence hall. If you live in a residence
 			hall, then you are already a member. All you have to do is come to a meeting and have fun sharing ideas! R.H.A has several
 			responsibilities and plans events for on campus residents.</p>
 	</div>
 	</img>
-	
+
 	<div id="upcomingEvents">
 		<h3 class="sidebarTitle"> Upcoming Events </h3>
 		<div id="sidebar" class="mCustomScrollbar" data-mcs-theme="dark">
 			<div id="sidebarEvents"></div>
 		</div>
 	</div>
-	
+
 	<div class="tileArea">
 		<a class="tile" href="subwayCam">
 			<img class="image-tile" src="../images/subwaycam-screenshot2.png">
@@ -60,27 +64,27 @@
 			<img class="image-tile" src="../images/event-sign-ups.jpg">
 
 			</img>
-				<p class="image-text">Event Sign-Ups</p>
+			<p class="image-text">Event Sign-Ups</p>
 		</a>
 	</div>
 
 	<div class="footer">
-				<a class="socialMedia" href="https://www.facebook.com/RHITRHA">
-					<img src="../images/facebook(100x100).png">
-				</a>
-				<a class="socialMedia" href="https://twitter.com/RoseHulmanRHA">
-					<img src="../images/twitter(100x100).png">
-				</a>
-				<a class="socialMedia" href="https://www.instagram.com">
-					<img src="../images/instagram(100x100).png">
-				</a>
-				<a class="socialMedia" href="https://www.snapchat.com/">
-					<img src="../images/snapchat(100x100).png"> </img>
-				</a>
+		<a class="socialMedia" href="https://www.facebook.com/RHITRHA">
+			<img src="../images/facebook(100x100).png">
+		</a>
+		<a class="socialMedia" href="https://twitter.com/RoseHulmanRHA">
+			<img src="../images/twitter(100x100).png">
+		</a>
+		<a class="socialMedia" href="https://www.instagram.com">
+			<img src="../images/instagram(100x100).png">
+		</a>
+		<a class="socialMedia" href="https://www.snapchat.com/">
+			<img src="../images/snapchat(100x100).png"> </img>
+		</a>
 		<p> &copy; 2017 Rose-Hulman Institute of Technology, Residence Hall Association </p>
 	</div>
 
-		<div id="myModal" class="modal">
+	<div id="myModal" class="modal">
 		<div class="modal-content">
 			<span class="close">x</span>
 			<table class="modalTable">

@@ -55,14 +55,5 @@ window.onload = function() {
 		'                <a href="mailto:rhitrha@gmail.com"><li>Contact Us</li></a>'+
 		'            </ul>'+
 		'            </li>'+
-		'        </ul>'+
-		'    <div class="loginArea">'+
-		'        <form name="login-form">'+
-		'            Username'+
-		'            <input type="text" id="username-input"> </input>'+
-		'            Password'+
-		'            <input type="password" id="password-input"> </input>'+
-		'            <input name="Submit"  style="left-margin: 1px;" type="submit" value="login" onClick="JavaScript:handleClick()"/>'+
-		'        </form>'+
-		'    </div>'; // */
+		'        </ul>'; // */
 	}
