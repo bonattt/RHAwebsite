@@ -418,3 +418,7 @@ h3{
 			width: 70%;
 			margin: auto;
 }
+
+.carousel-control {
+	max-width: 3%;
+}
