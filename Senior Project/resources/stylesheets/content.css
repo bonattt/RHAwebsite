@@ -422,3 +422,12 @@ h3{
 .carousel-control {
 	max-width: 3%;
 }
+
+#myCarousel {
+
+}
+
+.carousel-inner {
+	width: 142.5%;
+	left: -21.25%;
+}
