@@ -410,3 +410,11 @@ h3{
 	margin-right: auto;
 	display: block;
 }
+
+/* bootstrap image carousel */
+.carousel-inner > .item > img, 
+	.carousel-inner > .item > a > img {
+			
+			width: 70%;
+			margin: auto;
+}
