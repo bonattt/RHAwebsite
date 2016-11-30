@@ -410,3 +410,28 @@ h3{
 	margin-right: auto;
 	display: block;
 }
+
+/* bootstrap image carousel */
+.carousel-inner > .item > img, 
+	.carousel-inner > .item > a > img {
+			/*width: 100%;*/
+			margin: auto;
+}
+
+.carousel-control {
+	max-width: 3%;
+}
+
+#myCarousel {
+	width: 102.5%;
+	left: -1.25%;
+}
+
+.carousel-img {
+	max-height: 345px;
+	min-height: 345px;
+}
+
+.carousel-inner {
+	z-index: -100;
+}

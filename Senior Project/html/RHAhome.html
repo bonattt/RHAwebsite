@@ -3,8 +3,12 @@
 
 <head>
 	<!-- custom scroll bar -->
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
 	<link rel="stylesheet" href="../malihu-custom-scrollbar-plugin-master/jquery.mCustomScrollbar.css" />
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">  </script>
 	<script src="../malihu-custom-scrollbar-plugin-master/jquery.mCustomScrollbar.concat.min.js">  </script>
 	<script src="../scripts/custom-scroll.js">  </script>
 
@@ -25,8 +29,34 @@
 	<button id="login-button">Login with RoseFire</button>
 	<button id="logout-button">Logout</button>
 	<div id="navBar"> </div>
+	
+	<div id="myCarousel" class="carousel slide" data-ride="carousel">
+		<ol class="carousel-indicators">
+			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			<li data-target="#myCarousel" data-slide-to="1"></li>
+		</ol>
+		
+		<div class="carousel-inner" role="listbox">
+			<div class="item active">
+				<img class="carousel-img" src="../images/homePagePicture(resized).jpg" alt="rha-image">
+			</div>
 
-	<img class="scrollingImage" src="../images/homePagePicture.jpg">
+			<div class="item">
+				<img class="carousel-img" src="https://www.cia.gov/library/publications/the-world-factbook/graphics/flags/large/ch-lgflag.gif" alt="Chania">
+			</div>
+		</div>
+		
+		<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+			<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+			<span class="sr-only"> Previous </span>
+		</a>
+		<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+			<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+			<span class="sr-only"> Next </span>
+		</a>
+	</div> 
+
+	<!-- <img class="scrollingImage" src="../images/homePagePicture.jpg"> -->
 
 	<div class="edit newsArea">
 		<h1 id="title"></h1>
