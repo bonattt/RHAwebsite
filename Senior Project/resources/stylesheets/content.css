@@ -415,7 +415,7 @@ h3{
 .carousel-inner > .item > img, 
 	.carousel-inner > .item > a > img {
 			
-			width: 70%;
+			width: 100%;
 			margin: auto;
 }
 
@@ -424,10 +424,16 @@ h3{
 }
 
 #myCarousel {
+	width: 102.5%;
+	left: -1.25%
+}
 
+.carousel-img {
+	max-height: 345px;
 }
 
 .carousel-inner {
-	width: 142.5%;
-	left: -21.25%;
+	/*padding: 0;
+	/*width: 142.5%;
+	left: -21.25%;*/
 }
