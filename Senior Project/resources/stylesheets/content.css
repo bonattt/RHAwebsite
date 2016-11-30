@@ -414,7 +414,7 @@ h3{
 /* bootstrap image carousel */
 .carousel-inner > .item > img, 
 	.carousel-inner > .item > a > img {
-			
+			/*width: 100%;*/
 			margin: auto;
 }
 
@@ -433,7 +433,5 @@ h3{
 }
 
 .carousel-inner {
-	/*padding: 0;
-	/*width: 142.5%;
-	left: -21.25%;*/
+	z-index: -100;
 }
