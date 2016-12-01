@@ -411,6 +411,7 @@ h3{
 	display: block;
 }
 
+<<<<<<< HEAD
 /* Dropdown Button */
 .dropbtn {
 	background-color: transparent;
@@ -452,4 +453,29 @@ h3{
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
     display: block;
+=======
+/* bootstrap image carousel */
+.carousel-inner > .item > img, 
+	.carousel-inner > .item > a > img {
+			/*width: 100%;*/
+			margin: auto;
+}
+
+.carousel-control {
+	max-width: 3%;
+}
+
+#myCarousel {
+	width: 102.5%;
+	left: -1.25%;
+}
+
+.carousel-img {
+	max-height: 345px;
+	min-height: 345px;
+}
+
+.carousel-inner {
+	z-index: -100;
+>>>>>>> refs/remotes/origin/master
 }
