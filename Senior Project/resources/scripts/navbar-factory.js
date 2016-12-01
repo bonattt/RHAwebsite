@@ -1,9 +1,10 @@
 
 window.onload = function() {
 	document.getElementById('navBar').innerHTML = 
-		'    <a href="/" >'+
+		'    <a href="/" class="rha-image-link">'+
 		'        <img src="./images/RHA.jpg" id="rha-image"></img>'+
 		'    </a>'+
+		'	<div id="links">' + 
 		'        <ul>'+
 		'        <li>'+
 		'            <a href="#"> <u> Events </u> </a>'+
@@ -14,7 +15,7 @@ window.onload = function() {
 		'            </ul>'+
 		'        </li>'+
 		'    </ul>'+
-		'    <ul> <li> | </li> <ul>'+
+		'    <ul> <li> </li> <ul>'+
 		'    <ul>'+
 		'        <li>'+
 		'            <a href="#"> Services </a>'+
@@ -23,7 +24,7 @@ window.onload = function() {
 		'            </ul>'+
 		'        </li>'+
 		'    </ul>'+
-		'    <ul> <li> | </li> <ul>'+
+		'    <ul> <li> </li> <ul>'+
 		'    <ul>'+
 		'        <li>'+
 		'            <a href="#"> <u> Forms </u> </a>'+
@@ -33,7 +34,7 @@ window.onload = function() {
 		'            </ul>'+
 		'        </li>'+
 		'    </ul>'+
-		'    <ul> <li> | </li> <ul>'+
+		'    <ul> <li> </li> <ul>'+
 		'    <ul>'+
 		'        <li>'+
 		'            <a href="#"> Halls </a>'+
@@ -43,7 +44,7 @@ window.onload = function() {
 		'            </ul>'+
 		'        </li>'+
 		'    </ul>'+
-		'    <ul> <li> | </li> <ul>'+
+		'    <ul> <li> </li> <ul>'+
 		'    <ul>'+
 		'        <li>'+
 		'            <a href="#"> <u> About Us </u> </a>'+
@@ -55,5 +56,6 @@ window.onload = function() {
 		'                <a href="mailto:rhitrha@gmail.com"><li>Contact Us</li></a>'+
 		'            </ul>'+
 		'            </li>'+
-		'        </ul>'; // */
+		'        </ul>'+
+		'		</div>'; // */
 	}
