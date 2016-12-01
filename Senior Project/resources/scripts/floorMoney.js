@@ -1,60 +1,9 @@
-(function () {
-    // var fund = [{
-    //     fund_name: "BSB0-1",
-    //     funds_amount: 30.45,
-    //     display_on_site: true
-    // },
-    //     {
-    //         fund_name: "BSB2",
-    //         funds_amount: 30.45,
-    //         display_on_site: false
-    //     },
-    //     {
-    //         fund_name: "BSB3",
-    //         funds_amount: 30.45,
-    //         display_on_site: true
-    //     },
-    //     {
-    //         fund_name: "Scharp",
-    //         funds_amount: 30.45,
-    //         display_on_site: true
-    //     },
-    //     {
-    //         fund_name: "Blum",
-    //         funds_amount: 30.45,
-    //         display_on_site: true
-    //     },
-    //     {
-    //     fund_name: "BSB0-1",
-    //     funds_amount: 30.45,
-    //     display_on_site: true
-    // },
-    //     {
-    //         fund_name: "BSB2",
-    //         funds_amount: 30.45,
-    //         display_on_site: false
-    //     },
-    //     {
-    //         fund_name: "BSB3",
-    //         funds_amount: 30.45,
-    //         display_on_site: true
-    //     },
-    //     {
-    //         fund_name: "Scharp",
-    //         funds_amount: 30.45,
-    //         display_on_site: true
-    //     },
-    //     {
-    //         fund_name: "Blum",
-    //         funds_amount: 30.45,
-    //         display_on_site: true
-    //     }];
-
+function setup() {
     var xhr = getEvents();
     xhr.send();
-    setTimeout(function() {doTheThings(xhr.responseText)}, 300);
+    setTimeout(function() {createHTMLFromResponseText(xhr.responseText)}, 300);
 
-    function doTheThings(funds) {
+    function createHTMLFromResponseText(funds) {
         funds = JSON.parse(funds);
 
         var html = "<table border='1' align='center' bordercolor='#808080' id='floor-money'><tbody><tr>";
@@ -124,7 +73,10 @@
         // console.log(xhr);
         return xhr;
 
-    }
-    
-    
-})(); 
+    }    
+} 
+
+
+window.onload = function() {
+    setup();
+};
