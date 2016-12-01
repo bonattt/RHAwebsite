@@ -50,12 +50,12 @@ function setAdmin(officers) {
     }
 }
 
-(function () {
+function setup() {
     var xhr = getCommittees();
     xhr.send();
-    setTimeout(function () { actuallyDoShit(xhr.responseText) }, 300);
+    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
-    function actuallyDoShit(committee) {
+    function createHTMLFromResponseText(committee) {
         committee = JSON.parse(committee);
         for (var i = 0; i < committee.length; i++) {
             committeeMap[committee[i].committeename] = committee[i].committeeid;
@@ -107,16 +107,8 @@ function setAdmin(officers) {
             console.log("There was an error");
         }
         return xhr;
-
     }
-
-})();
-
-function removeSpaces(thingToRemoveSpacesFrom) {
-    return thingToRemoveSpacesFrom.replace(" ", "");
 }
-
-
 
 
 function showEmptyModal() {
@@ -281,3 +273,8 @@ xhr.send(JSON.stringify({ committeename: committeeName, description: description
 return xhr;
 
 }
+
+
+$(document).ready(function() {
+    setup();
+});
