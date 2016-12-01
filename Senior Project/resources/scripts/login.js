@@ -1,6 +1,7 @@
 $(document).ready(function () {
     const registryToken = "c8950f98-0c9c-485a-b0af-754208d11d08";
     $("#login-button").click(function () {
+        console.log("clicking button :)");
         Rosefire.signIn(registryToken, function (error, rosefireUser) {
             if (error) {
                 console.log("Error communicating with Rosefire", error);

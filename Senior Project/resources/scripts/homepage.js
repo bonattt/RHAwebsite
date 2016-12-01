@@ -112,8 +112,8 @@ function setAdmin(officers) {
     } else {
         title.innerHTML = "Hi!"
     }
-    //var logoutButton = document.getElementById("logout-button");
-    //logoutButton.addEventListener("click", logout);
+    var logoutButton = document.getElementById("logout-button");
+    logoutButton.addEventListener("click", logout);
 
     function getFrontPageNews() {
 

@@ -453,7 +453,8 @@ h3{
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
     display: block;
-=======
+}
+
 /* bootstrap image carousel */
 .carousel-inner > .item > img, 
 	.carousel-inner > .item > a > img {
@@ -461,13 +462,22 @@ h3{
 			margin: auto;
 }
 
-.carousel-control {
-	max-width: 3%;
-}
+
 
 #myCarousel {
-	width: 102.5%;
-	left: -1.25%;
+	width: 93%;
+	z-index: -1;
+}
+
+.carousel-control {
+	height: 345px;
+	position: relative;
+	width: 3%;
+}
+
+.carousel-control, #myCarousel {
+	display: inline-block;
+	height: 345px;
 }
 
 .carousel-img {
@@ -476,6 +486,4 @@ h3{
 }
 
 .carousel-inner {
-	z-index: -100;
->>>>>>> refs/remotes/origin/master
 }
