@@ -37,7 +37,7 @@ function setAdmin(officers) {
 }
 
 
-(function () {
+function setup() {
 
     var officersxhr = getOfficers();
     officersxhr.send();
@@ -231,4 +231,8 @@ function setAdmin(officers) {
         }
 
     }
-})();
+}
+
+$(document).ready(function() {
+    setup();
+});

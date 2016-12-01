@@ -275,4 +275,6 @@ return xhr;
 }
 
 
+$(document).ready(function() {
     setup();
+});

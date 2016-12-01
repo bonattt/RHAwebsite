@@ -50,22 +50,24 @@ function setAdmin(officers) {
     }
 }
 
-(function () {
+
+
+function setup() {
     var officerId;
     var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 
     var xhr = getEvents();
     xhr.send();
-    setTimeout(function () { actuallyDoShit(xhr.responseText) }, 300);
+    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
-    function actuallyDoShit(officer) {
+    function createHTMLFromResponseText(officer) {
         officer = JSON.parse(officer);
 
         for (var i = 0; i < officer.length; i++) {
             if (officer[i].memberType != "") {
                 var html = "<div class='officer'>";
                 html += "<h3 class='edit'>" + officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].membertype + "</h3>";
-                html += "<img src='../images/officers/" + removeSpaces(officer[i].membertype.toLowerCase()) + ".jpg' alt='" + officer[i].membertype + "'height='294' width='195'>";
+                html += "<img src='../images/officers/" + officer[i].membertype.toLowerCase().replace(" ", "") + ".jpg' alt='" + officer[i].membertype + "'height='294' width='195'>";
                 html += "<p>Email: <a href='mailto:" + officer[i].username + "@rose-hulman.edu'>" + officer[i].username + "@rose-hulman.edu</a></p>";
                 html += "<p> Phone Number: " + officer[i].phone_number + "</p>";
                 html += "<p> Room: " + officer[i].hall + " " + officer[i].room_number + "</p>";
@@ -115,10 +117,6 @@ function setAdmin(officers) {
 
     }
 
-})();
-
-function removeSpaces(thingToRemoveSpacesFrom) {
-    return thingToRemoveSpacesFrom.replace(" ", "");
 }
 
 function showEmptyModal() {
@@ -358,3 +356,7 @@ function showModal(editImage) {
         }
     }
 }
+
+$(document).ready(function() {
+    setup();
+});
