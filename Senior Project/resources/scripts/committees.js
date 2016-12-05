@@ -30,20 +30,18 @@ function getOfficers() {
 
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
-        var adminValues = document.getElementsByClassName("edit");
-        for (var i = 0; i < adminValues.length; i++) {
-            var editImage = document.createElement("img");
-            editImage.setAttribute("src", "../images/edit.png");
-            adminValues[i].appendChild(editImage);
-            editImage.addEventListener("click", function (e) {
+        ///////////////////////////////////
+		var editButtons = insertEditButtons(showModal);
+			
+            //adminValues[i].appendChild(editImage);
+            /*editImage.addEventListener("click", function (e) {
                 showModal(e);
-            }, false);
-        }
-        var addCommitteeButton = document.getElementById("addCommittee");
-        addCommitteeButton.addEventListener("click", showEmptyModal);
-        //addCommitteeButton.style.display = "block";
-        return;
+            }, false);*/
     }
+    var addCommitteeButton = document.getElementById("addCommittee");
+    addCommitteeButton.addEventListener("click", showEmptyModal);
+    //addCommitteeButton.style.display = "block";
+    return;
 }
 
 function setup() {

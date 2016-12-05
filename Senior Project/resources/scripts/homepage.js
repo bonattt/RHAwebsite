@@ -83,7 +83,6 @@ function setAdmin(officers) {
 		for (var i = 0; i < adminValues.length; i++) {
 			var editImage = document.createElement("img");
 			editImage.setAttribute("src", "../images/edit.png");
-			editImage.style.cssText = "float: right;";
 			adminValues[i].insertBefore(editImage, adminValues[i].firstChild);
 			editImage.addEventListener("click", function (e) {
 				showModal(e);
