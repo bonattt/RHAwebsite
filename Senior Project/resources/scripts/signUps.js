@@ -128,7 +128,7 @@ function displaySignUps() {
     function actuallyDoShit(proposal) {
         proposal = JSON.parse(proposal);
 
-        for(var i=0; i<proposal.length; i++){
+        for (var i = 0; i < proposal.length; i++) {
             var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - ";
             if(proposal[i].cost_to_attendee == '$0.00') {
                 html +="FREE</p>";  
@@ -149,10 +149,10 @@ function displaySignUps() {
         }
     }
 
-    
-     var officersxhr = getOfficers();
-     officersxhr.send();
-     setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
+
+    var officersxhr = getOfficers();
+    officersxhr.send();
+    setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
 
     function getEvents() {
         var url = apiURL + 'api/v1/events';
@@ -308,7 +308,7 @@ function signUp(eventID) {
     signUpSnackbar.className = "show";
     setTimeout(function () { signUpSnackbar.className = signUpSnackbar.className.replace("show", ""); }, 3000);
 
-    return xhr; 
+    return xhr;
 }
 
 function moreInformationFunction(triggeringElement) {
@@ -370,7 +370,6 @@ function setAdmin(officers) {
                     showEditModal(e);
                 }, false);
             }
-            return;
         }
     }
 }
@@ -407,7 +406,7 @@ function makeListLinks() {
     listLinks = document.getElementsByClassName("viewListLink");
     for (var i = 0; i < listLinks.length; i++) {
         var listLink = listLinks[i];
-        listLink.addEventListener("click", function (e) {showListModal(e);}, false);
+        listLink.addEventListener("click", function (e) { showListModal(e); }, false);
     }
 
     var isAdmin = true;
@@ -431,7 +430,7 @@ function makeListLinks() {
             var html = "";
 
             var rightSide;
-            if(!eventAttendees) {
+            if (!eventAttendees) {
                 rightSide = 0;
             } else {
                 rightSide = eventAttendees.length;
@@ -452,18 +451,18 @@ function makeListLinks() {
                     modal.style.display = "none";
                 }
             }
-        } 
+        }
     }
 };
 
 $(document).ready(function () {
-        if (window.location.pathname.indexOf("pastEvents") > -1) {
-            displayPastEvents();
-        } else {
-            displaySignUps();
-        }
-        
-    });
+    if (window.location.pathname.indexOf("pastEvents") > -1) {
+        displayPastEvents();
+    } else {
+        displaySignUps();
+    }
+
+});
 
 function submit() {
     var modal = document.getElementById('editModal');

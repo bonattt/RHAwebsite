@@ -17,7 +17,6 @@ function displayUpcomingEvents() {
 
             var sidebar = document.getElementById("sidebarEvents");
             sidebar.innerHTML += html;
-            // console.log(sidebar);
         }
 
     }
@@ -79,6 +78,7 @@ function getOfficers() {
 
 function setAdmin(officers) {
     officer = JSON.parse(officers);
+    if(JSON.parse(sessionStorage.getItem("userData"))){
     var tempUser = JSON.parse(sessionStorage.getItem("userData"));
     if (!tempUser) {
         return;
@@ -98,6 +98,7 @@ function setAdmin(officers) {
             return;
         }
     }
+    }
 }
 
 function setup() {
@@ -113,8 +114,6 @@ function setup() {
     } else {
         title.innerHTML = "Hi!"
     }
-    var logoutButton = document.getElementById("logout-button");
-    logoutButton.addEventListener("click", logout);
 
     function getFrontPageNews() {
 
@@ -199,9 +198,3 @@ $(document).ready(function () {
     setup();
     displayUpcomingEvents();
 });
-
-function logout() {
-    sessionStorage.clear();
-    location.reload();
-}
-

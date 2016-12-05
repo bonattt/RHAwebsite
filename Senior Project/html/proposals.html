@@ -8,37 +8,35 @@
 	<title>
 		RHA | proposals
 	</title>
-	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
 <body>
 	<div id="navBar"> </div>
 	<div id="proposalsPage">
-	<h1>Proposals</h1>
-	<button id="addProposal">Add Proposal To Database</button>
-	<div id="directions">
-	<h3>Directions:</h3>
-	<ul>
-		<li>Include the name of your hall / organization and the dollar amount of the proposal in the subject line.</li>
-		<li>Attach a powerpoint with the following information to the email:
+		<h1>Proposals</h1>
+		<button id="addProposal">Add Proposal To Database</button>
+		<div id="directions">
+			<h3>Directions:</h3>
 			<ul>
-				<li>Who will be able to participate in the event</li>
-				<li>What the event is</li>
-				<li>When the event will be held</li>
-				<li>Where the event will be held</li>
-				<li>The dollar amount of the proposal</li>
+				<li>Include the name of your hall / organization and the dollar amount of the proposal in the subject line.</li>
+				<li>Attach a powerpoint with the following information to the email:
+					<ul>
+						<li>Who will be able to participate in the event</li>
+						<li>What the event is</li>
+						<li>When the event will be held</li>
+						<li>Where the event will be held</li>
+						<li>The dollar amount of the proposal</li>
+					</ul>
+				</li>
+				<li>Any additional information that you want RHA exec to know about your proposal</li>
 			</ul>
-		</li>
-		<li>Any additional information that you want RHA exec to know about your proposal</li>
-	</ul>
-	</div>
-	<h3 id="deadline">Please remember that all proposals must be submitted Monday by 6:15PM.</h3>
-	<a href="mailto:rhitrha@gmail.com" id="submit">Submit a Proposal</a>
-	<p id="proposalTemplate">Need ideas on how to format your proposal? <a href="http://www.rose-hulman.edu/rha/downloads/template.pptx" id="templateDownload">Download a Proposal Slide Template</a></p>
+		</div>
+		<h3 id="deadline">Please remember that all proposals must be submitted Monday by 6:15PM.</h3>
+		<a href="mailto:rhitrha@gmail.com" id="submit">Submit a Proposal</a>
+		<p id="proposalTemplate">Need ideas on how to format your proposal? <a href="http://www.rose-hulman.edu/rha/downloads/template.pptx" id="templateDownload">Download a Proposal Slide Template</a></p>
 	</div>
 
-		<div id="editModal" class="modal">
+	<div id="editModal" class="modal">
 		<div class="modal-content">
 			<span class="closeEdit">x</span>
 			<table class="modalTable">
@@ -98,7 +96,15 @@
 			<!-- <button id="submit" class="modalButton">Submit</button> -->
 		</div>
 	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+	<script>
+		window.jQuery || document.write('<script src="../scripts/jquery-3.1.1.js"><\/script>');
+	</script>
 </body>
+<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="./scripts/rosefire.js"></script>
 <script language="Javascript" src="../scripts/proposals.js"></script>
 
 </html>

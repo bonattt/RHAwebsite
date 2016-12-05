@@ -1,59 +1,81 @@
+window.onload = function () {
+	document.getElementById('navBar').innerHTML =
+		'    <a href="/" class="rha-image-link">' +
+		'        <img src="./images/RHA.jpg" id="rha-image"></img>' +
+		'    </a>' +
+		'	<div id="links">' +
+		'		<div class="dropdown">' +
+		'			<button class="dropbtn">Events</button>' +
+		'			<div class="dropdown-content">' +
+		'				<a href="sign-ups">Sign-Ups</a>' +
+		'				<a href="pastEvents">Past Events</a>' +
+		'				<a href="proposals">Submit a Proposal</a>' +
+		'			</div>' +
+		'		</div>' +
+		'		<div class="dropdown">' +
+		'			<button class="dropbtn">Services</button>' +
+		'			<div class="dropdown-content">' +
+		'				<a href="subwayCam">Subway Cam</a>' +
+		'			</div>' +
+		'		</div>' +
+		'		<div class="dropdown">' +
+		'			<button class="dropbtn">Forms</button>' +
+		'			<div class="dropdown-content">' +
+		'				<a href="http://www.rose-hulman.edu/rha/downloads/RHA_Reimbursement_Form.xlsm">Reimbursement Form</a>' +
+		'				<a href="http://www.rose-hulman.edu/rha/downloads/RHA_Payment_Form.xls">Payment Form</a>' +
+		'			</div>' +
+		'		</div>' +
+		'		<div class="dropdown">' +
+		'			<button class="dropbtn">Halls</button>' +
+		'			<div class="dropdown-content">' +
+		'				<a href="http://www.rose-hulman.edu/offices-and-services/student-life/campus-life/housing-and-residence-life.aspx">About Our Residence Halls</a>' +
+		'				<a href="floorMoney">Floor Money</a>' +
+		'			</div>' +
+		'		</div>' +
+		'		<div class="dropdown">' +
+		'			<button class="dropbtn">About Us</button>' +
+		'			<div class="dropdown-content">' +
+		'				<a href="http://www.rose-hulman.edu/rha/constitution.pdf">Constitution</a>' +
+		'				<a href="http://www.rose-hulman.edu/rha/procedural.pdf">Procedural Document</a>' +
+		'				<a href="officers">Officers</a>' +
+		'				<a href="committees">Committees</a>' +
+		'				<a href="mailto:rhitrha@gmail.com">Contact Us</a>' +
+		'			</div>' +
+		'		</div>' +
+		'	</div>' +
+		'		<button id="login-button">Login with RoseFire</button>';
 
-window.onload = function() {
-	document.getElementById('navBar').innerHTML = 
-		'    <a href="/" >'+
-		'        <img src="./images/RHA.jpg" id="rha-image"></img>'+
-		'    </a>'+
-		'        <ul>'+
-		'        <li>'+
-		'            <a href="#"> <u> Events </u> </a>'+
-		'            <ul>'+
-		'                <a href="sign-ups"><li>Sign-Ups</li></a>'+
-		'                <a href="pastEvents"><li>Past Events</li></a>'+
-		'                <a href="proposals"><li>Submit a Proposal</li></a>'+
-		'            </ul>'+
-		'        </li>'+
-		'    </ul>'+
-		'    <ul> <li> | </li> <ul>'+
-		'    <ul>'+
-		'        <li>'+
-		'            <a href="#"> Services </a>'+
-		'            <ul>'+
-		'                <a href="subwayCam"><li>Subway Cam</li></a>'+
-		'            </ul>'+
-		'        </li>'+
-		'    </ul>'+
-		'    <ul> <li> | </li> <ul>'+
-		'    <ul>'+
-		'        <li>'+
-		'            <a href="#"> <u> Forms </u> </a>'+
-		'            <ul>'+
-		'                <a href="http://www.rose-hulman.edu/rha/downloads/RHA_Reimbursement_Form.xlsm"><li>Reimbursement Form</li></a>'+
-		'                <a href="http://www.rose-hulman.edu/rha/downloads/RHA_Payment_Form.xls"><li>Payment Form</li></a>'+
-		'            </ul>'+
-		'        </li>'+
-		'    </ul>'+
-		'    <ul> <li> | </li> <ul>'+
-		'    <ul>'+
-		'        <li>'+
-		'            <a href="#"> Halls </a>'+
-		'            <ul>'+
-		'                <a href="http://www.rose-hulman.edu/offices-and-services/student-life/campus-life/housing-and-residence-life.aspx"><li>About Our Residence Halls</li></a>'+
-		'                <a href="floorMoney"><li>Floor Money</li></a>'+
-		'            </ul>'+
-		'        </li>'+
-		'    </ul>'+
-		'    <ul> <li> | </li> <ul>'+
-		'    <ul>'+
-		'        <li>'+
-		'            <a href="#"> <u> About Us </u> </a>'+
-		'            <ul>'+
-		'                <a href="officers"><li>Officers</li></a>'+
-		'                <a href="http://www.rose-hulman.edu/rha/constitution.pdf"><li>Constitution</li></a>'+
-		'                <a href="http://www.rose-hulman.edu/rha/procedural.pdf"><li>Procedural Document</li></a>'+
-		'                <a href="committees"><li>Committees</li></a>'+
-		'                <a href="mailto:rhitrha@gmail.com"><li>Contact Us</li></a>'+
-		'            </ul>'+
-		'            </li>'+
-		'        </ul>'; // */
+
+	var loginButton = document.getElementById("login-button");
+	var user = JSON.parse(sessionStorage.getItem("userData"));
+	if (user) {
+		loginButton.innerHTML = "Logout";
 	}
+    const registryToken = "c8950f98-0c9c-485a-b0af-754208d11d08";
+    $("#login-button").click(function () {
+		if (loginButton.innerHTML == "Login with RoseFire") {
+			login();
+		} else {
+			logout();
+		}
+    });
+
+	function logout() {
+		sessionStorage.clear();
+		location.reload();
+	}
+
+	function login() {
+		Rosefire.signIn(registryToken, function (error, rosefireUser) {
+			if (error) {
+				console.log("Error communicating with Rosefire", error);
+				return;
+			}
+			var userData = JSON.stringify(rosefireUser);
+			sessionStorage.setItem("userData", userData);
+			location.reload();
+			return;
+		})
+	}
+}
+
