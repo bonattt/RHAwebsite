@@ -126,18 +126,18 @@ function displaySignUps() {
     function actuallyDoShit(proposal) {
         proposal = JSON.parse(proposal);
 
-        for(var i=0; i<proposal.length; i++){
+        for (var i = 0; i < proposal.length; i++) {
             var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - ";
-            if(proposal[i].cost_to_attendee == '$0.00') {
+            if (proposal[i].cost_to_attendee == '$0.00') {
                 console.log(proposal[i].proposal_name + " should be free.");
-                html +="FREE</p>";  
+                html += "FREE</p>";
             } else {
                 console.log("This shit better have a cost greater than 0...");
                 console.log(proposal[i].cost_to_attendee);
                 html += proposal[i].cost_to_attendee + "</p>";
             }
             console.log(proposal[i].image_path);
-            html += "<img class='signUpImage' src =" + proposal[i].image_path +"></img>";
+            html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
             html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
             html += "<a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
             html += "<a id='" + proposal[i].proposal_id + "' class='viewListLink'> View List </a>";
@@ -151,10 +151,11 @@ function displaySignUps() {
         }
     }
 
-    
-     var officersxhr = getOfficers();
-     officersxhr.send();
-     setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
+
+    var officersxhr = getOfficers();
+    officersxhr.send();
+    console.log("calling set admin");
+    setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
 
     function getEvents() {
         var url = apiURL + 'api/v1/events';
@@ -310,7 +311,7 @@ function signUp(eventID) {
     signUpSnackbar.className = "show";
     setTimeout(function () { signUpSnackbar.className = signUpSnackbar.className.replace("show", ""); }, 3000);
 
-    return xhr; 
+    return xhr;
 }
 
 function moreInformationFunction(triggeringElement) {
@@ -356,20 +357,25 @@ function getOfficers() {
 }
 
 function setAdmin(officers) {
+    console.log("officers is: " + officers);
     officer = JSON.parse(officers);
-    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
-    for (var i = 0; i < officer.length; i++) {
-        if (officer[i].username === tempUser.username) {
-            var adminValues = document.getElementsByClassName("edit");
-            for (var i = 0; i < adminValues.length; i++) {
-                var editImage = document.createElement("img");
-                editImage.setAttribute("src", "../images/edit.png");
-                adminValues[i].appendChild(editImage);
-                editImage.addEventListener("click", function (e) {
-                    showEditModal(e);
-                }, false);
+    console.log(officer[1]);
+    if (JSON.parse(sessionStorage.getItem("userData"))) {
+        var tempUser = JSON.parse(sessionStorage.getItem("userData"));
+        for (var i = 0; i < officer.length; i++) {
+            console.log(officer[i]);
+            if (officer[i].username === tempUser.username) {
+                var adminValues = document.getElementsByClassName("edit");
+                for (var i = 0; i < adminValues.length; i++) {
+                    var editImage = document.createElement("img");
+                    editImage.setAttribute("src", "../images/edit.png");
+                    adminValues[i].appendChild(editImage);
+                    editImage.addEventListener("click", function (e) {
+                        showEditModal(e);
+                    }, false);
+                }
+                return;
             }
-            return;
         }
     }
 }
@@ -406,7 +412,7 @@ function makeListLinks() {
     listLinks = document.getElementsByClassName("viewListLink");
     for (var i = 0; i < listLinks.length; i++) {
         var listLink = listLinks[i];
-        listLink.addEventListener("click", function (e) {showListModal(e);}, false);
+        listLink.addEventListener("click", function (e) { showListModal(e); }, false);
     }
 
     var isAdmin = true;
@@ -430,7 +436,7 @@ function makeListLinks() {
             var html = "";
 
             var rightSide;
-            if(!eventAttendees) {
+            if (!eventAttendees) {
                 rightSide = 0;
             } else {
                 rightSide = eventAttendees.length;
@@ -451,18 +457,18 @@ function makeListLinks() {
                     modal.style.display = "none";
                 }
             }
-        } 
+        }
     }
 };
 
 $(document).ready(function () {
-        if (window.location.pathname.indexOf("pastEvents") > -1) {
-            displayPastEvents();
-        } else {
-            displaySignUps();
-        }
-        
-    });
+    if (window.location.pathname.indexOf("pastEvents") > -1) {
+        displayPastEvents();
+    } else {
+        displaySignUps();
+    }
+
+});
 
 function submit() {
     var modal = document.getElementById('editModal');
