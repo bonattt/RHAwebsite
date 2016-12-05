@@ -28,25 +28,21 @@ function getOfficers() {
     return xhr;
 }
 
-function setAdmin(officers) {
-    officer = JSON.parse(officers);
-    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
-    for (var i = 0; i < officer.length; i++) {
-        if (officer[i].username === tempUser.username) {
-            var adminValues = document.getElementsByClassName("edit");
-            for (var i = 0; i < adminValues.length; i++) {
-                var editImage = document.createElement("img");
-                editImage.setAttribute("src", "../images/edit.png");
-                adminValues[i].appendChild(editImage);
-                editImage.addEventListener("click", function (e) {
-                    showModal(e);
-                }, false);
-            }
-            var addCommitteeButton = document.getElementById("addCommittee");
-            addCommitteeButton.addEventListener("click", showEmptyModal);
-            //addCommitteeButton.style.display = "block";
-            return;
+function setAdmin(officers) {    
+    if (userIsOfficer(officers)) {
+        var adminValues = document.getElementsByClassName("edit");
+        for (var i = 0; i < adminValues.length; i++) {
+            var editImage = document.createElement("img");
+            editImage.setAttribute("src", "../images/edit.png");
+            adminValues[i].appendChild(editImage);
+            editImage.addEventListener("click", function (e) {
+                showModal(e);
+            }, false);
         }
+        var addCommitteeButton = document.getElementById("addCommittee");
+        addCommitteeButton.addEventListener("click", showEmptyModal);
+        //addCommitteeButton.style.display = "block";
+        return;
     }
 }
 

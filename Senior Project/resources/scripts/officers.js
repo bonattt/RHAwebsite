@@ -29,24 +29,19 @@ function getOfficers() {
 }
 
 function setAdmin(officers) {
-    officer = JSON.parse(officers);
-    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
-    for (var i = 0; i < officer.length; i++) {
-        if (officer[i].username === tempUser.username) {
-            var adminValues = document.getElementsByClassName("edit");
-            for (var i = 0; i < adminValues.length; i++) {
-                var editImage = document.createElement("img");
-                editImage.setAttribute("src", "../images/edit.png");
-                adminValues[i].appendChild(editImage);
-                editImage.addEventListener("click", function (e) {
-                    showModal(e);
-                }, false);
-            }
-            var addOfficeButton = document.getElementById("addOfficer");
-            addOfficeButton.addEventListener("click", showEmptyModal);
-            //addOfficeButton.style.display = "block";
-            return;
+    if (userIsOfficer(officers)) {
+        var adminValues = document.getElementsByClassName("edit");
+        for (var i = 0; i < adminValues.length; i++) {
+            var editImage = document.createElement("img");
+            editImage.setAttribute("src", "../images/edit.png");
+            adminValues[i].appendChild(editImage);
+            editImage.addEventListener("click", function (e) {
+                showModal(e);
+            }, false);
         }
+        var addOfficeButton = document.getElementById("addOfficer");
+        addOfficeButton.addEventListener("click", showEmptyModal);
+        //addOfficeButton.style.display = "block";
     }
 }
 
