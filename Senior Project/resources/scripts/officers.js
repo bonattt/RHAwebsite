@@ -31,6 +31,9 @@ function getOfficers() {
 function setAdmin(officers) {
     officer = JSON.parse(officers);
     var tempUser = JSON.parse(sessionStorage.getItem("userData"));
+    if (!tempUser) {
+        return;
+    }
     for (var i = 0; i < officer.length; i++) {
         if (officer[i].username === tempUser.username) {
             var adminValues = document.getElementsByClassName("edit");
