@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    console.log("it worked");
     const registryToken = "c8950f98-0c9c-485a-b0af-754208d11d08";
     $("#login-button").click(function () {
         console.log("clicking button :)");

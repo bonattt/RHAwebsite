@@ -43,5 +43,39 @@ window.onload = function () {
 		'			</div>' +
 		'		</div>' +
 		'	</div>' +
-		'		<button class="login-button" id="login-button">Login with RoseFire</button>';
+		'		<button id="login-button">Login with RoseFire</button>';
+
+
+	var loginButton = document.getElementById("login-button");
+	var user = JSON.parse(sessionStorage.getItem("userData"));
+	if (user) {
+		loginButton.innerHTML = "Logout";
+	}
+    const registryToken = "c8950f98-0c9c-485a-b0af-754208d11d08";
+    $("#login-button").click(function () {
+		if (loginButton.innerHTML == "Login with RoseFire") {
+			login();
+		} else {
+			logout();
+		}
+    });
+
+	function logout() {
+		sessionStorage.clear();
+		location.reload();
+	}
+
+	function login() {
+		Rosefire.signIn(registryToken, function (error, rosefireUser) {
+			if (error) {
+				console.log("Error communicating with Rosefire", error);
+				return;
+			}
+			var userData = JSON.stringify(rosefireUser);
+			sessionStorage.setItem("userData", userData);
+			location.reload();
+			return;
+		})
+	}
 }
+

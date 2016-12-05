@@ -31,16 +31,17 @@
     margin-left: 5%;
 }
 
-#rha-image, #links, .login-button{
+#rha-image, #links, #login-button{
     display: inline-block;
 }
 
-.login-button{
+#login-button{
     background: none;
     border: none;
     color: white;
     vertical-align: middle;
     height: 100%;
+    cursor: pointer;
 }
 
 #links{
