@@ -61,8 +61,6 @@ function setup() {
 
             var committees = document.getElementById("committees");
             committees.innerHTML += html;
-            console.log("committee map is: ");
-            console.log(committeeMap);
         }
 
         var officersxhr = getOfficers();

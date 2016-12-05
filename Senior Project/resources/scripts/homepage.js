@@ -17,7 +17,6 @@ function displayUpcomingEvents() {
 
             var sidebar = document.getElementById("sidebarEvents");
             sidebar.innerHTML += html;
-            // console.log(sidebar);
         }
 
     }
@@ -96,8 +95,6 @@ function setup() {
     } else {
         title.innerHTML = "Hi!"
     }
-    var logoutButton = document.getElementById("logout-button");
-    logoutButton.addEventListener("click", logout);
 
     function getFrontPageNews() {
 
@@ -182,9 +179,3 @@ $(document).ready(function () {
     setup();
     displayUpcomingEvents();
 });
-
-function logout() {
-    sessionStorage.clear();
-    location.reload();
-}
-
