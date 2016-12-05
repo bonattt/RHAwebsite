@@ -79,15 +79,7 @@ function getOfficers() {
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-        var adminValues = document.getElementsByClassName("edit");
-		for (var i = 0; i < adminValues.length; i++) {
-			var editImage = document.createElement("img");
-			editImage.setAttribute("src", "../images/edit.png");
-			adminValues[i].insertBefore(editImage, adminValues[i].firstChild);
-			editImage.addEventListener("click", function (e) {
-				showModal(e);
-			}, false);
-		}
+        var editButtons = insertEditButtonsBefore(showModal, {"style": "float: right;"});
     }
 }
 

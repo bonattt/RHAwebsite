@@ -23,3 +23,26 @@ var insertEditButtons = function(showModalFunc) {
 	}
 }
 
+var insertEditButtonsBefore = function(showModalFunc, attributes) {
+    var adminValues = document.getElementsByClassName("edit");
+	var buttonList = [];
+    for (var i = 0; i < adminValues.length; i++) {
+        var editButton = document.createElement("img");
+        editButton.setAttribute("src", "../images/edit.png");
+		if (attributes != undefined) {
+			appendAttributes(editButton, attributes);
+		}
+		editButton.addEventListener("click", showModalFunc, false);
+		adminValues[i].insertBefore(editButton, adminValues[i].firstChild);
+		buttonList.push(editButton);
+	}
+}
+
+var appendAttributes = function(element, attributes) {
+	for (attr in attributes) {
+		element.setAttribute(attr, attributes[attr]);
+	}
+}
+
+
+
