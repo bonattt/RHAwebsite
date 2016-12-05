@@ -30,13 +30,7 @@ function getOfficers() {
 
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
-        ///////////////////////////////////
 		var editButtons = insertEditButtons(showModal);
-			
-            //adminValues[i].appendChild(editImage);
-            /*editImage.addEventListener("click", function (e) {
-                showModal(e);
-            }, false);*/
     }
     var addCommitteeButton = document.getElementById("addCommittee");
     addCommitteeButton.addEventListener("click", showEmptyModal);
