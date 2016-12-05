@@ -26,14 +26,12 @@ function getOfficers() {
 }
 
 function setAdmin(officers) {
-    officer = JSON.parse(officers);
-    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
-    for (var i = 0; i < officer.length; i++) {
-        if (officer[i].username === tempUser.username) {
+    
+        if (userIsOfficer(officers)) {
             var addProposalButton = document.getElementById("addProposal");
             addProposalButton.style.display = "block";
         }
-    }
+    
 }
 
 
