@@ -26,12 +26,10 @@ function getOfficers() {
 }
 
 function setAdmin(officers) {
-    
-        if (userIsOfficer(officers)) {
-            var addProposalButton = document.getElementById("addProposal");
-            addProposalButton.style.display = "block";
-        }
-    
+    if (userIsOfficer(officers)) {
+        var addProposalButton = document.getElementById("addProposal");
+        addProposalButton.style.display = "block";
+    }
 }
 
 
