@@ -29,7 +29,6 @@ function setup() {
 
     function getEvents() {
         var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/funds';
-        console.log(url);
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
             if ("withCredentials" in xhr) {
@@ -62,7 +61,6 @@ function setup() {
 
         xhr.onload = function () {
             var responseText = xhr.responseText;
-            console.log("Response text: " + responseText);
             // return responseText;
         }
 
@@ -77,6 +75,10 @@ function setup() {
 } 
 
 
-window.onload = function() {
+// window.onload = function() {
+//     setup();
+// };
+
+document.addEventListener("DOMContentLoaded", function(event) {
     setup();
-};
+});
