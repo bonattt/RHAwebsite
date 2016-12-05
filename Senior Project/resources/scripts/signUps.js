@@ -357,16 +357,7 @@ function getOfficers() {
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-        ///////////////////////////////////
-		
-		
-            editImage.setAttribute("src", "../images/edit.png");
-            adminValues[i].appendChild(editImage);
-            editImage.addEventListener("click", function (e) {
-                showEditModal(e);
-            }, false);
-        }
-        return;
+		var editbuttons = insertEditButtons(showEditModal);
     }
 }
 
