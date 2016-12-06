@@ -151,11 +151,11 @@ function showEmptyModal() {
 }
 
 function showModal(editImage) {
-    console.log("this one");
+	var srcEvent = (editImage.srcElement || editImage.target);
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
 
-    var parent = editImage.srcElement.parentElement.parentElement;
+    var parent = srcEvent.parentElement.parentElement;
     var committee = "Committee: ";
     var description = "Description: ";
     var image = "Image: ";

@@ -224,11 +224,12 @@ function saveOfficer() {
     return xhr;
 }
 function showModal(editImage) {
+	var eventSrc = (editImage.target || editImage.srcElement);
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
-    var nameAndTitle = editImage.srcElement.parentElement.innerHTML;
+    var nameAndTitle = eventSrc.parentElement.innerHTML;
 
-    var parent = editImage.srcElement.parentElement.parentElement;
+    var parent = eventSrc.parentElement.parentElement;
 
     nameAndTitle = nameAndTitle.split(" - ");
     editName = nameAndTitle[0];

@@ -201,10 +201,11 @@ function displaySignUps() {
 
 function showEditModal(edit) {
     editValue = edit;
+	var eventSrc = (editValue.target || editValue.srcElement);
     var modal = document.getElementById('editModal');
     var span = document.getElementsByClassName("closeEdit")[0];
 
-    var title = editValue.srcElement.parentElement.innerHTML.split(" - ");
+    var title = eventSrc.parentElement.innerHTML.split(" - ");
     var name = "Event name: ";
     var price = "Price: ";
     var image = "Image: ";
@@ -222,17 +223,17 @@ function showEditModal(edit) {
 
     descriptionInput.setAttribute("rows", "4");
     descriptionInput.setAttribute("cols", "30");
-    descriptionInput.innerHTML = editValue.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML.split(" Sign-ups for this event will close on ")[0];
+    descriptionInput.innerHTML = eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML.split(" Sign-ups for this event will close on ")[0];
 
     signUpCloseDateInput.setAttribute("rows", "1");
     signUpCloseDateInput.setAttribute("cols", "30");
-    signUpCloseDateInput.innerHTML = editValue.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML.split(" Sign-ups for this event will close on ")[1].split(".")[0];
-    // console.log(editValue.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].currentSrc.split("images/")[1]);
+    signUpCloseDateInput.innerHTML = eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML.split(" Sign-ups for this event will close on ")[1].split(".")[0];
+    // console.log(eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].currentSrc.split("images/")[1]);
 
     imageInput.setAttribute("rows", "1");
     imageInput.setAttribute("cols", "30");
-    console.log(editValue.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].src.split("images/")[1]);
-    imageInput.innerHTML = editValue.srcElement.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].currentSrc.split("images/")[1];
+    console.log(eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].src.split("images/")[1]);
+    imageInput.innerHTML = eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].currentSrc.split("images/")[1];
 
 
 
@@ -464,7 +465,7 @@ function submit() {
     newEventDescription = descriptionInput.value;
     newEventSignUpCloseDate = signUpCloseDateInput.value;
 
-    var element = editValue.srcElement.parentElement;
+    var element = eventSrc.parentElement;
     element.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML = newEventDescription + " Sign-ups for this event will close on " + newEventSignUpCloseDate;
     console.log(element.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML);
     element.innerHTML = newEventName + " - " + newEventPrice;

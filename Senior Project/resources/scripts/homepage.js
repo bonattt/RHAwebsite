@@ -109,10 +109,11 @@ function setup() {
 }
 
 function showModal(editImage) {
+	var eventSrc = (editImage.srcElement || editImage.target);
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
-    var img = editImage.srcElement.innerHTML;
-    var div = editImage.srcElement.parentElement;
+    var img = eventSrc.innerHTML;
+    var div = eventSrc.parentElement;
 
     //var newStuff = "Header: ";
     var newStuffDesc = "Description: ";
