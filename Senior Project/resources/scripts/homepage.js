@@ -77,27 +77,8 @@ function getOfficers() {
 }
 
 function setAdmin(officers) {
-    officer = JSON.parse(officers);
-    if(JSON.parse(sessionStorage.getItem("userData"))){
-    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
-    if (!tempUser) {
-        return;
-    }
-    for (var i = 0; i < officer.length; i++) {
-        if (officer[i].username === tempUser.username) {
-                   var adminValues = document.getElementsByClassName("edit");
-        for (var i = 0; i < adminValues.length; i++) {
-            var editImage = document.createElement("img");
-            editImage.setAttribute("src", "../images/edit.png");
-            editImage.style.cssText = "float: right;";
-            adminValues[i].insertBefore(editImage, adminValues[i].firstChild);
-            editImage.addEventListener("click", function (e) {
-                showModal(e);
-            }, false);
-        }
-            return;
-        }
-    }
+    if (userIsOfficer(officers)) {
+        var editButtons = insertEditButtonsBefore(showModal, {"style": "float: right;"});
     }
 }
 
@@ -128,10 +109,11 @@ function setup() {
 }
 
 function showModal(editImage) {
+	var eventSrc = (editImage.srcElement || editImage.target);
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
-    var img = editImage.srcElement.innerHTML;
-    var div = editImage.srcElement.parentElement;
+    var img = eventSrc.innerHTML;
+    var div = eventSrc.parentElement;
 
     //var newStuff = "Header: ";
     var newStuffDesc = "Description: ";

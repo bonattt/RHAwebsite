@@ -28,29 +28,14 @@ function getOfficers() {
     return xhr;
 }
 
-function setAdmin(officers) {
-    officer = JSON.parse(officers);
-    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
-    if (!tempUser) {
-        return;
+function setAdmin(officers) {    
+    if (userIsOfficer(officers)) {
+		var editButtons = insertEditButtons(showModal);
     }
-    for (var i = 0; i < officer.length; i++) {
-        if (officer[i].username === tempUser.username) {
-            var adminValues = document.getElementsByClassName("edit");
-            for (var i = 0; i < adminValues.length; i++) {
-                var editImage = document.createElement("img");
-                editImage.setAttribute("src", "../images/edit.png");
-                adminValues[i].appendChild(editImage);
-                editImage.addEventListener("click", function (e) {
-                    showModal(e);
-                }, false);
-            }
-            var addCommitteeButton = document.getElementById("addCommittee");
-            addCommitteeButton.addEventListener("click", showEmptyModal);
-            //addCommitteeButton.style.display = "block";
-            return;
-        }
-    }
+    var addCommitteeButton = document.getElementById("addCommittee");
+    addCommitteeButton.addEventListener("click", showEmptyModal);
+    //addCommitteeButton.style.display = "block";
+    return;
 }
 
 function setup() {
@@ -166,11 +151,11 @@ function showEmptyModal() {
 }
 
 function showModal(editImage) {
-    console.log("this one");
+	var srcEvent = (editImage.srcElement || editImage.target);
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
 
-    var parent = editImage.srcElement.parentElement.parentElement;
+    var parent = srcEvent.parentElement.parentElement;
     var committee = "Committee: ";
     var description = "Description: ";
     var image = "Image: ";

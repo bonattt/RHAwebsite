@@ -29,28 +29,12 @@ function getOfficers() {
 }
 
 function setAdmin(officers) {
-    officer = JSON.parse(officers);
-    var tempUser = JSON.parse(sessionStorage.getItem("userData"));
-    if (!tempUser) {
-        return;
+    if (userIsOfficer(officers)) {
+		var editbuttons = insertEditButtons(showModal);
     }
-    for (var i = 0; i < officer.length; i++) {
-        if (officer[i].username === tempUser.username) {
-            var adminValues = document.getElementsByClassName("edit");
-            for (var i = 0; i < adminValues.length; i++) {
-                var editImage = document.createElement("img");
-                editImage.setAttribute("src", "../images/edit.png");
-                adminValues[i].appendChild(editImage);
-                editImage.addEventListener("click", function (e) {
-                    showModal(e);
-                }, false);
-            }
-            var addOfficeButton = document.getElementById("addOfficer");
-            addOfficeButton.addEventListener("click", showEmptyModal);
-            //addOfficeButton.style.display = "block";
-            return;
-        }
-    }
+    var addOfficeButton = document.getElementById("addOfficer");
+    addOfficeButton.addEventListener("click", showEmptyModal);
+    //addOfficeButton.style.display = "block";
 }
 
 
@@ -240,11 +224,12 @@ function saveOfficer() {
     return xhr;
 }
 function showModal(editImage) {
+	var eventSrc = (editImage.target || editImage.srcElement);
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
-    var nameAndTitle = editImage.srcElement.parentElement.innerHTML;
+    var nameAndTitle = eventSrc.parentElement.innerHTML;
 
-    var parent = editImage.srcElement.parentElement.parentElement;
+    var parent = eventSrc.parentElement.parentElement;
 
     nameAndTitle = nameAndTitle.split(" - ");
     editName = nameAndTitle[0];
