@@ -110,9 +110,9 @@ function setup() {
 
     var title = document.getElementById("title");
     if (JSON.parse(sessionStorage.getItem('userData'))) {
-        title.innerHTML = "Hi, " + JSON.parse(sessionStorage.getItem('userData')).name.split(" ")[0] + "!";
+        title.innerHTML = "Welcome, " + JSON.parse(sessionStorage.getItem('userData')).name.split(" ")[0] + "!";
     } else {
-        title.innerHTML = "Hi!"
+        title.innerHTML = "Welcome!"
     }
 
     function getFrontPageNews() {
