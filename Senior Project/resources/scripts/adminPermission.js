@@ -19,6 +19,10 @@ var insertEditButtons = function(showModalFunc, attributes) {
     for (var i = 0; i < adminValues.length; i++) {
         var editButton = document.createElement("img");
         editButton.setAttribute("src", "../images/edit.png");
+		editButton.setAttribute("class", "admin-edit-button btn btn-info btn-lg");
+		editButton.setAttribute("data-toggle", "modal");	// data-toggle="modal"
+		editButton.setAttribute("data-target", "#myModal");	// data-target="#myModal"
+		editButton.setAttribute("onclick", "console.log('a modal should appear!');");
 		if (attributes != undefined) {
 			appendAttributes(editButton, attributes);
 		}
