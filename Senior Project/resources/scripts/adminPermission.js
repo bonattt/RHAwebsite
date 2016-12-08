@@ -22,7 +22,7 @@ var insertEditButtons = function(showModalFunc, attributes) {
 		editButton.setAttribute("class", "admin-edit-button btn btn-info btn-lg");
 		editButton.setAttribute("data-toggle", "modal");	// data-toggle="modal"
 		editButton.setAttribute("data-target", "#myModal");	// data-target="#myModal"
-		editButton.setAttribute("onclick", "console.log('a modal should appear!');");
+		editButton.setAttribute("onclick", "setupEditModal('everyCommitteeEver');");
 		if (attributes != undefined) {
 			appendAttributes(editButton, attributes);
 		}

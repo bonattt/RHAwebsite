@@ -38,6 +38,16 @@ function setAdmin(officers) {
     return;
 }
 
+var setupEditModal = function(dataElementId) {
+	var dataset = document.getElementById(dataElementId).dataset;
+	
+	var nameField = document.getElementById("committee-modal-name");
+	nameField.value = dataset.name;
+	
+	var descriptionField = document.getElementById("committee-modal-desc");
+	descriptionField.value = dataset.desc;	
+}
+
 function setup() {
     var xhr = getCommittees();
     xhr.send();
