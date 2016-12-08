@@ -43,23 +43,20 @@ function setup() {
     xhr.send();
     setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
-    function createHTMLFromResponseText(committees) {
-        committees = JSON.parse(committees);
-		console.log("committees: ");
-        console.log(committees)
-		// *** TODO
-		for (var i = 0; i < committees.length; i++) {
-            committeeMap[committees[i].committeename] = committees[i].committeeid;
+    function createHTMLFromResponseText(committee) {
+        committee = JSON.parse(committee);
+        for (var i = 0; i < committee.length; i++) {
+            committeeMap[committee[i].committeename] = committee[i].committeeid;
             if (i % 2 == 0) {
                 var html = "<div class='committeeWrapperRight' id='committeeWrapperRight'>";
-                html += "<div class='committees'><h3 class='edit'>" + committees[i].committeename + "</h3>";
-                html += "<p>" + committees[i].description + "</p></div>";
-                html += "<image class='committeePhoto' src=" + committees[i].image + " alt=" + committees[i].committeename + "></div>";
+                html += "<div class='committees'><h3 class='edit'>" + committee[i].committeename + "</h3>";
+                html += "<p>" + committee[i].description + "</p></div>";
+                html += "<image class='committeePhoto' src=" + committee[i].image + " alt=" + committee[i].committeename + "></div>";
             } else {
                 var html = "<div class='committeeWrapperLeft' id='committeeWrapperLeft'>";
-                html += "<image class='committeePhoto' src=" + committees[i].image + " alt=" + committees[i].committeename + ">";
-                html += "<div class='committees'><h3 class='edit'>" + committees[i].committeename + "</h3>";
-                html += "<p>" + committees[i].description + "</p></div></div>";
+                html += "<image class='committeePhoto' src=" + committee[i].image + " alt=" + committee[i].committeename + ">";
+                html += "<div class='committees'><h3 class='edit'>" + committee[i].committeename + "</h3>";
+                html += "<p>" + committee[i].description + "</p></div></div>";
             }
 
             var committees = document.getElementById("committees");
@@ -93,7 +90,7 @@ function setup() {
             var responseText = xhr.responseText;
         }
         xhr.onerror = function () {
-            console.log("There was an Xhr error");
+            console.log("There was an error");
         }
         return xhr;
     }
@@ -158,8 +155,6 @@ function showModal(editImage) {
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
 
-	console.log("srcEvent: ");
-	console.log(srcEvent.parentElement.class);
     var parent = srcEvent.parentElement.parentElement;
     var committee = "Committee: ";
     var description = "Description: ";
