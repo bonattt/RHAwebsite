@@ -45,10 +45,16 @@ var setupEditModal = function(dataElementId) {
 	nameField.value = dataset.name;
 	
 	var descriptionField = document.getElementById("committee-modal-desc");
-	descriptionField.value = dataset.desc;	
+	descriptionField.value = dataset.desc;
 }
 
 function setup() {
+
+	var submitButton = document.getElementById("modal-submit");
+	submitButton.addEventListener("click", function() {
+		alert("TODO: add a database query here!");
+	});
+	
     var xhr = getCommittees();
     xhr.send();
     setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
