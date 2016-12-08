@@ -30,7 +30,7 @@ function getOfficers() {
 
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
-		var editButtons = insertEditButtons(showModal);
+		var editButtons = insertEditButtons(function() {});
     }
     var addCommitteeButton = document.getElementById("addCommittee");
     addCommitteeButton.addEventListener("click", showEmptyModal);
@@ -51,8 +51,19 @@ var setupEditModal = function(dataElementId) {
 function setup() {
 
 	var submitButton = document.getElementById("modal-submit");
-	submitButton.addEventListener("click", function() {
-		alert("TODO: add a database query here!");
+	submitButton.addEventListener("click", function(event) {
+		
+		var committeeId = document.getElementById("everyCommitteeEver").dataset.id;
+		var committeeName = document.getElementById("committee-modal-name").value;
+		var committeeDesc = document.getElementById("committee-modal-desc").value;
+		var committeeImg = document.getElementById("everyCommitteeEver").dataset.img;
+		
+		alert("TODO: add a database query here!\n" +
+			"\n id: " + committeeId +
+			"\n name: " + committeeName +
+			"\n description: " + committeeDesc +
+			"\n img: " + committeeImg
+		);
 	});
 	
     var xhr = getCommittees();
