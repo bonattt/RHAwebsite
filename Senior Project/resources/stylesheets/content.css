@@ -282,9 +282,6 @@ h3{
 .eventTextSignUps {
 	width: 55%;
 	text-align: center;
-	position: relative;
-	top: 50%;
-	transform: translateX(5%) translateY(-80%);
 }
 
 .eventActions {

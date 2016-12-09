@@ -30,8 +30,8 @@ function displayPastEvents() {
 
         for (var i = 0; i < proposal.length; i++) {
             var html = "<div class='eventTile'><p class='signUpText'>" + proposal[i].proposal_name + " - ";
-            if(proposal[i].cost_to_attendee == '$0.00') {
-                html +="FREE</p>";  
+            if (proposal[i].cost_to_attendee == '$0.00') {
+                html += "FREE</p>";
             } else {
                 html += proposal[i].cost_to_attendee + "</p>";
             }
@@ -129,19 +129,32 @@ function displaySignUps() {
         proposal = JSON.parse(proposal);
 
         for (var i = 0; i < proposal.length; i++) {
-            var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - ";
-            if(proposal[i].cost_to_attendee == '$0.00') {
-                html +="FREE</p>";  
+            // var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - ";
+            // if (proposal[i].cost_to_attendee == '$0.00') {
+            //     html += "FREE</p>";
+            // } else {
+            //     html += proposal[i].cost_to_attendee + "</p>";
+            // }
+            // html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
+            // html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
+            // html += "<a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
+            // html += "<a id='" + proposal[i].proposal_id + "' class='viewListLink'> View List </a>";
+            // html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
+            // html += "</div>";
+            // eventsMap[proposal[i].proposal_name] = proposal[i].proposal_id;
+            var cost = 0;
+            if (proposal[i].cost_to_attendee == '$0.00') {
+                cost = "FREE";
             } else {
-                html += proposal[i].cost_to_attendee + "</p>";
+                cost = proposal[i].cost_to_attendee;
             }
-            html += "<img class='signUpImage' src =" + proposal[i].image_path +"></img>";
-            html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
-            html += "<a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
-            html += "<a id='" + proposal[i].proposal_id + "' class='viewListLink'> View List </a>";
-            html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
-            html += "</div>";
-            eventsMap[proposal[i].proposal_name] = proposal[i].proposal_id;
+
+            var html = "<div class='row'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
+            html += "<div class='eventTextSignUps'><h1 class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
+            html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
+            html += "<h3 class='eventDate'>12/21/2016</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
+            html += "<p class='eventSignUpDate'>Sign-ups close on: 12/8/2016</p></div>";
+            html += "<div class='eventActions'><p>Sign Up</p><p>View List</p><p>Edit Event</p></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
@@ -357,7 +370,7 @@ function getOfficers() {
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-		var editbuttons = insertEditButtons(showEditModal);
+        var editbuttons = insertEditButtons(showEditModal);
     }
 }
 
