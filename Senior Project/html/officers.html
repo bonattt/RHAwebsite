@@ -31,6 +31,8 @@
 		<div id="officers"></div>
 	</div>
 	
+	<div id="generic-data-element" data-stuff="stuff">  </div>
+	
 	<div id="myModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<!-- Modal content-->
@@ -40,11 +42,46 @@
 					<h4 class="modal-title">Modal Header</h4>
 				</div>
 				<div class="modal-body">
-					
-						<label> name </label> <br/>
-						<input id="committee-modal-name" type="text" value="name"> </input>
-						<p> </p>
-						<textarea id="committee-modal-desc" type="textarea" value="description of the committee" style="min-width: 200px; min-height: 100px;"> </textarea>
+					<table>
+						<tbody>
+							<tr>
+								<td> <label> firstname </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input id="officers-modal-firstname" type="text" value="name"> </input> </td>
+							</tr>
+							
+							<tr>
+								<td> <label> lastname </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input id="officers-modal-lastname" type="text" value="name"> </input> </td>
+							</tr>
+							<tr>
+								<td> <label> member type </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input id="officers-modal-membertype" type="text" value="name"> </input> </td>
+							</tr>
+							<tr>
+								<td> <label> email </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input id="officers-modal-email" type="text" value="name"> </input> </td>
+							</tr>
+							<tr>
+								<td> <label> phone number </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input id="officers-modal-email" type="text" value="name"> </input> </td>
+							</tr>
+							<tr>
+								<td> <label> room </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input id="officers-modal-email" type="text" value="name"> </input> </td>
+							</tr>
+							<tr>
+								<td> <label> mailbox </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input id="officers-modal-email" type="text" value="name"> </input> </td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 				<div class="modal-footer">
 					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
