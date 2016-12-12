@@ -222,9 +222,6 @@ div.tileTitle p {
 	height: auto;
 	background-color: #721111;
 
-}
-
-.article {
 
 }
 
@@ -237,11 +234,21 @@ div.tileTitle p {
 	top: 50%;
 	left: 0;
 	width: 50%;
-	transform: translateX(7.5%) translateY(-50%);
+	transform: translateX(13%) translateY(-50%);
+}
+
+.text-only h2 {
+	font-size: 1.5vw;
+	text-align: center;
+	/*display: table-cell;*/
+	/*vertical-align: middle;*/
+	font-family: "Serif";
+	color: #FFFFFF;
 }
 
 .text-only p {
 	font-size: 30pt;
+	font-size: 2.5vw;
 	text-align: center;
 	display: table-cell;
 	vertical-align: middle;
@@ -283,6 +290,7 @@ div.tileTitle p {
 .textLink1 span {
 	color: white; 
 	font: bold 24px/45px Helvetica, Sans-Serif; 
+	font-size: 1.5vw;
 	letter-spacing: -1px;  
 	background: rgb(0, 0, 0); /* fallback color */
 	background: rgba(0, 0, 0, 0.7);
@@ -298,6 +306,7 @@ div.tileTitle p {
 .textLink2 span {
 	color: white; 
 	font: bold 24px/45px Helvetica, Sans-Serif; 
+	font-size: 1.5vw;
 	letter-spacing: -1px;  
 	background: rgb(0, 0, 0); /* fallback color */
 	background: rgba(0, 0, 0, 0.7);
@@ -307,16 +316,14 @@ div.tileTitle p {
 .aside {
 	position: relative;
 	float: right;
-	width: 40%;
+	width: 35%;
 }
 
 .imageLink {
-	/*height: 400px;*/
     overflow: hidden;
 }
 
 .imageLink img {
-	/*height: 300px;*/
 	width: 100%;
 	-webkit-transition: all 1.5s ease; /* Safari and Chrome */
     -moz-transition: all 1.5s ease;
@@ -325,8 +332,6 @@ div.tileTitle p {
 .imageLink img:hover {
 	-webkit-transform:scale(1.1); /* Safari and Chrome */
     -moz-transform:scale(1.1);
-/*  	-moz-filter: blur(2px);
-    -webkit-filter: blur(2px);*/
     overflow: hidden;
 }
 
