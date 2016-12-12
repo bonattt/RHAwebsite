@@ -30,7 +30,7 @@ function getOfficers() {
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-		var editbuttons = insertEditButtons(showModal);
+		var editbuttons = insertEditButtons(function() {});
     }
     var addOfficeButton = document.getElementById("addOfficer");
     addOfficeButton.addEventListener("click", showEmptyModal);
