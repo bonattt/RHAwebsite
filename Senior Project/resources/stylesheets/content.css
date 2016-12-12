@@ -206,32 +206,49 @@ h3{
 
 /* Proposals */
 #proposalsPage {
-	margin-left: auto;
-	margin-right: auto;
+	position: absolute;
+	margin-left: 20%;
+	margin-right: 20%;
+	margin-top: 2.5%;
+	margin-bottom: 5%;
+	height: 90%;
 	display: block;
+	/*background-color: rgba(131, 73, 73, 0.8);*/
+	z-index: -1; 
+	padding: 5%;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	/*opacity: 0.2;*/
 }
 
 #directions {
-	width:40%;
+	/*width:45%;*/
 	margin-left: auto;
 	margin-right: auto;
-	font-size: 22px;
+	font-size: 1.25vw;
 }
 
 #deadline {
 	text-align: center;
+	font-size: 1.25vw;
+	font-weight: bold;
 }
 
 #submit {
 	text-align: center;
 	font-size: 300%;
+	font-size: 2.5vw;
 	display: block;
 	color: 	#708090;
+	text-decoration: underline;
 }
 
 #proposalTemplate{
 	text-align: center;
 	font-size: 18px;
+	font-size: 1vw;
 }
 
 #templateDownload {
