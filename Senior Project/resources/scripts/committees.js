@@ -30,15 +30,15 @@ function getOfficers() {
 
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
-		var editButtons = insertEditButtons(function() {});
+		var editButtons = insertEditButtons(function() {}, 'everyCommitteeEver', 'committee-modal-');
     }
     var addCommitteeButton = document.getElementById("addCommittee");
     addCommitteeButton.addEventListener("click", showEmptyModal);
     //addCommitteeButton.style.display = "block";
     return;
 }
-
-var setupEditModal = function(dataElementId) {
+/*
+var setupEditModal = function(dataElementId, taretIdRoot) {
 	var dataset = document.getElementById(dataElementId).dataset;
 	
 	var nameField = document.getElementById("committee-modal-name");
@@ -47,7 +47,7 @@ var setupEditModal = function(dataElementId) {
 	var descriptionField = document.getElementById("committee-modal-desc");
 	descriptionField.value = dataset.desc;
 }
-
+*/
 function setup() {
 
 	var submitButton = document.getElementById("modal-submit");
