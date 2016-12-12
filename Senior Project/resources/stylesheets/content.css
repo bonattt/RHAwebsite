@@ -292,7 +292,7 @@ div.tileTitle p {
 .textLink2 {
 	position: absolute;
 	left: 0;
-	bottom: 10%;
+	bottom: 7%;
 }
 
 .textLink2 span {
@@ -323,8 +323,8 @@ div.tileTitle p {
 }
 
 .imageLink img:hover {
-	-webkit-transform:scale(1.15); /* Safari and Chrome */
-    -moz-transform:scale(1.15);
+	-webkit-transform:scale(1.1); /* Safari and Chrome */
+    -moz-transform:scale(1.1);
 /*  	-moz-filter: blur(2px);
     -webkit-filter: blur(2px);*/
     overflow: hidden;
