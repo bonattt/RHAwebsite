@@ -50,21 +50,7 @@ var setupEditModal = function(dataElementId, taretIdRoot) {
 */
 function setup() {
 
-	var submitButton = document.getElementById("modal-submit");
-	submitButton.addEventListener("click", function(event) {
-		
-		var committeeId = document.getElementById("everyCommitteeEver").dataset.id;
-		var committeeName = document.getElementById("committee-modal-name").value;
-		var committeeDesc = document.getElementById("committee-modal-desc").value;
-		var committeeImg = document.getElementById("everyCommitteeEver").dataset.img;
-		
-		alert("TODO: add a database query here!\n" +
-			"\n id: " + committeeId +
-			"\n name: " + committeeName +
-			"\n description: " + committeeDesc +
-			"\n img: " + committeeImg
-		);
-	});
+	enableSubmitButton("everyCommitteeEver", "committee-modal-");
 	
     var xhr = getCommittees();
     xhr.send();

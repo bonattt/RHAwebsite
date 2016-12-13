@@ -62,13 +62,30 @@ var setupEditModal = function(dataElementId, targetIdRoot) {
 		textField.value = dataset[attr];
 	}
 	
-	var nameField = document.getElementById(targetIdRoot + "name");
+	/*var nameField = document.getElementById(targetIdRoot + "name");
 	nameField.value = dataset.name;
 	
 	var descriptionField = document.getElementById(targetIdRoot + "desc");
-	descriptionField.value = dataset.desc;
+	descriptionField.value = dataset.desc; //*/
 }
 
+var enableSubmitButton = function(dataElementId, targetIdRoot) {
+	var submitButton = document.getElementById("modal-submit");
+	submitButton.addEventListener("click", function(event) {
+		var msg = "TODO: add a database query here! \n";
+		var dataset = document.getElementById(dataElementId).dataset;
+		for (attr in dataset) {
+			var textField = document.getElementById(targetIdRoot + attr);
+			if (textField != undefined) {
+				console.log("updating attr " + attr);
+				dataset[attr] = textField.value;
+			}
+			msg += attr + ": " + dataset[attr] + "\n";
+		}
+		console.log("An alert should appear");
+		alert(msg);
+	});
+}
 
 
 

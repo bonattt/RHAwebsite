@@ -40,6 +40,9 @@ function setAdmin(officers) {
 
 
 function setup() {
+	
+	enableSubmitButton("everyOfficerEver", "officers-modal-");
+
     var officerId;
     var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 
