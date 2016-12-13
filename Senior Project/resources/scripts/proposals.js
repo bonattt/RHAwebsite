@@ -116,12 +116,12 @@ function setup() {
         moneyAllocatedInput.setAttribute("rows", "1");
         moneyAllocatedInput.setAttribute("cols", "30");
 
-        var submitButton = document.createElement("button");
+        /* var submitButton = document.createElement("button");
         submitButton.setAttribute("id", "submit");
         submitButton.setAttribute("class", "modalButton");
         submitButton.innerHTML = "Submit";
         submitButton.addEventListener("click", function () { submit() }, false);
-        modalContent.appendChild(submitButton);
+        modalContent.appendChild(submitButton); */
 
         var nameNode = document.getElementById("nameInput");
         var costToAttendeeNode = document.getElementById("costToAttendeeInput");
@@ -177,7 +177,7 @@ function setup() {
             }
         }
 
-        function closeModal() {
+        /*function closeModal() {
             modal.style.display = "none";
             nameNode.removeChild(nameNode.firstChild);
             costToAttendeeNode.removeChild(costToAttendeeNode.firstChild);
@@ -193,10 +193,10 @@ function setup() {
             approvedNode.removeChild(approvedNode.firstChild);
             moneyAllocatedNode.removeChild(moneyAllocatedNode.firstChild);
             modalContent.removeChild(submitButton);
-        }
+        }*/
 
         function submit() {
-            closeModal();
+            //closeModal();
             var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/proposal/';
             function createCORSRequest(method, url) {
                 var xhr = new XMLHttpRequest();
