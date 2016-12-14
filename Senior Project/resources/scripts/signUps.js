@@ -114,7 +114,7 @@ function saveEvent() {
     console.log("new event name is: ");
     console.log(newEventName);
 
-    xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate }));
+    xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate, event_signup_open: newEventSignUpOpenDate, event_date: newEventDate }));
 
     return xhr;
 
@@ -148,13 +148,19 @@ function displaySignUps() {
             } else {
                 cost = proposal[i].cost_to_attendee;
             }
+            console.log(proposal[i].event_signup_open);
+            if(proposal[i].event_signup_open > new Date()){
+                console.log("true" + proposal[i].proposal_name);
+            }
+            var signUpCloseDate = new Date(proposal[i].event_signup_close);
+            var eventDate = new Date(proposal[i].event_date);
 
             var html = "<div class='row'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
             html += "<div class='eventTextSignUps'><h1 class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
             html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
-            html += "<h3 class='eventDate'>12/21/2016</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
-            html += "<p class='eventSignUpDate'>Sign-ups close on: 12/8/2016</p></div>";
-            html += "<div class='eventActions'><p>Sign Up</p><p>View List</p><p>Edit Event</p></div></div></div>";
+            html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
+            html += "<p class='eventSignUpDate'>Sign-ups close on: " + (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear() +  "</p></div>";
+            html += "<div class='eventActions'><a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a><p class='viewListLink'>View List</p><p class='editEvent'>Edit Event</p></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
