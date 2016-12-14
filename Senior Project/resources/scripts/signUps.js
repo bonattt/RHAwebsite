@@ -129,19 +129,6 @@ function displaySignUps() {
         proposal = JSON.parse(proposal);
 
         for (var i = 0; i < proposal.length; i++) {
-            // var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - ";
-            // if (proposal[i].cost_to_attendee == '$0.00') {
-            //     html += "FREE</p>";
-            // } else {
-            //     html += proposal[i].cost_to_attendee + "</p>";
-            // }
-            // html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
-            // html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
-            // html += "<a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
-            // html += "<a id='" + proposal[i].proposal_id + "' class='viewListLink'> View List </a>";
-            // html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
-            // html += "</div>";
-            // eventsMap[proposal[i].proposal_name] = proposal[i].proposal_id;
             var cost = 0;
             if (proposal[i].cost_to_attendee == '$0.00') {
                 cost = "FREE";
