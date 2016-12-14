@@ -29,17 +29,25 @@ function displayPastEvents() {
         proposal = JSON.parse(proposal);
 
         for (var i = 0; i < proposal.length; i++) {
-            var html = "<div class='eventTile'><p class='signUpText'>" + proposal[i].proposal_name + " - ";
+            var cost = 0;
             if (proposal[i].cost_to_attendee == '$0.00') {
-                html += "FREE</p>";
+                cost = "FREE";
             } else {
-                html += proposal[i].cost_to_attendee + "</p>";
+                cost = proposal[i].cost_to_attendee;
             }
-            html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
-            html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
-            html += "<a id='" + proposal[i].proposal_id + "' class='viewListLink'> View List </a>";
-            html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
+            console.log(proposal[i].event_signup_open);
+            if (proposal[i].event_signup_open > new Date()) {
+                console.log("true" + proposal[i].proposal_name);
+            }
+            var signUpCloseDate = new Date(proposal[i].event_signup_close);
+            var eventDate = new Date(proposal[i].event_date);
+
+            var html = "<div class='row'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
+            html += "<div class='eventTextSignUps'><h1 class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
+            html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
+            html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
             html += "</div>";
+            html += "<div class='eventActions'><p class='viewListLink'>View List</p></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
@@ -114,7 +122,7 @@ function saveEvent() {
     console.log("new event name is: ");
     console.log(newEventName);
 
-    xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate, event_signup_open: newEventSignUpOpenDate, event_date: newEventDate }));
+    xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate, event_signup_open: newEventSignUpOpenDate, event_date: newEventDate, attendees: newAttendees }));
 
     return xhr;
 
@@ -127,7 +135,7 @@ function displaySignUps() {
 
     function actuallyDoShit(proposal) {
         proposal = JSON.parse(proposal);
-
+        console.log(proposal);
         for (var i = 0; i < proposal.length; i++) {
             var cost = 0;
             if (proposal[i].cost_to_attendee == '$0.00') {
@@ -135,10 +143,11 @@ function displaySignUps() {
             } else {
                 cost = proposal[i].cost_to_attendee;
             }
-            console.log(proposal[i].event_signup_open);
-            if(proposal[i].event_signup_open > new Date()){
+            if (proposal[i].event_signup_open > new Date()) {
                 console.log("true" + proposal[i].proposal_name);
             }
+            var attendees = proposal[i].attendees;
+
             var signUpCloseDate = new Date(proposal[i].event_signup_close);
             var eventDate = new Date(proposal[i].event_date);
 
@@ -146,8 +155,15 @@ function displaySignUps() {
             html += "<div class='eventTextSignUps'><h1 class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
             html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
             html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
-            html += "<p class='eventSignUpDate'>Sign-ups close on: " + (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear() +  "</p></div>";
-            html += "<div class='eventActions'><a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a><p class='viewListLink'>View List</p><p class='editEvent'>Edit Event</p></div></div></div>";
+            html += "<p class='eventSignUpDate'>Sign-ups close on: " + (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear() + "</p></div>";
+            html += "<div class='eventActions'>";
+            var username = JSON.parse(sessionStorage.getItem("userData")).username;
+            if($.inArray(username, attendees) == -1){
+                html += "<a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
+            } else{
+                html += "<a onclick='unregister(" + proposal[i].proposal_id + ")'><p class='signUpLink'>Unregister</p></a>";
+            }
+            html += "<p class='viewListLink'>View List</p><p class='editEvent'>Edit Event</p></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
@@ -319,6 +335,39 @@ function signUp(eventID) {
     return xhr;
 }
 
+function unregister(eventID) {
+    var username = JSON.parse(sessionStorage.getItem("userData")).username;
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/';
+    url += eventID + '/attendees/' + username;
+    function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        return xhr;
+    }
+    var xhr = createCORSRequest('DELETE', url);
+    if (!xhr) {
+        throw new Error('CORS not supported');
+    }
+
+    xhr.onload = function () {
+        var responseText = xhr.responseText;
+    }
+
+    xhr.onerror = function () {
+        console.log("There was an error");
+    }
+
+    xhr.send();
+    console.log("there's an xhr above me");
+
+    var signUpSnackbar = document.getElementById("snackbar");
+    signUpSnackbar.className = "show";
+    setTimeout(function () { signUpSnackbar.className = signUpSnackbar.className.replace("show", ""); }, 3000);
+
+    return xhr;
+}
+
 function moreInformationFunction(triggeringElement) {
     var parentDiv = triggeringElement.parentElement.parentElement;
     var linkClicked = parentDiv.getElementsByClassName("moreInfoLink")[0];
@@ -413,7 +462,6 @@ function makeListLinks() {
         var xhr = getAttendees(event.srcElement.id);
         xhr.send();
         xhr.onload = function () {
-            console.log(xhr.responseText);
             var response = JSON.parse(xhr.responseText);
             console.log(response[0].attendees);
             var eventAttendees = response[0].attendees;
