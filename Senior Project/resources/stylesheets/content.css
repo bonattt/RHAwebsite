@@ -7,7 +7,7 @@ body {
 h1{
 	color: #696969;
 	text-align: center;
-	font-size: 72px;
+	font-size: 4vw;
 	margin-top: 20pt;
 }
 
@@ -440,6 +440,96 @@ h3{
 
 /* Sign ups */
 
+#signUps, #pastEvents {
+height: 150pt;
+    position: relative;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+    font-size: 55pt;
+    z-index: -1;
+}
+
+.col-sm-12 {
+	height: 350px;
+	background-color: #800000;
+	margin: 1%;
+	width: 98%;
+	opacity: 0.8;
+	border-radius: 20px;
+	color: white;
+}
+
+.eventImageSignUps {
+	width: 20%;
+	height: 95%;
+	border-radius: 50px;
+	position: relative;
+  	top: 50%;
+  	transform: translateY(-50%);
+	padding: 1%;
+}
+
+.eventTitle{
+	color: white;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.eventImageSignUps, .eventTextSignUps, .eventActions {
+	display: inline-block;
+}
+
+.eventTextSignUps {
+	width: 65%;
+	text-align: center;
+}
+
+.eventActions {
+	width: 10%;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	float: right;
+	font-size: 20pt;
+	color: white;
+}
+
+.eventActions p {
+	margin-top: 20%;
+	margin-bottom: 20%;
+	-webkit-transition: font 1s ease;
+	-moz-transition: font 1s ease;
+}
+
+.eventActions p:hover {
+	font-size: 24pt;
+}
+
+.costEventDateWrapper {
+	width: 40%;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+.cost, .eventDate {
+	display: inline-block;
+	width: 40%;
+	font-size: 14pt;
+}
+
+.eventDescription {
+	padding-left: 10%;
+	padding-right: 10%;
+	text-align: center;
+	display: inherit;
+	font-size: 20pt;
+}
+
+.eventSignUpDate {
+	font-size: 14pt;
+}
+
 .eventTile{
 	width: 33%;
     display: inline-block;
@@ -455,25 +545,21 @@ h3{
 	margin: auto auto auto auto;
 }
 
-.moreInfoLink, .signUpLink, .viewListLink {
-	width: 30%;
-	display: inline-block;
+.signUpLink, .eventActions a{
+	color: white;
+	text-decoration: none;
 }
 
 .signUpText {
 	font-size: 36px;
 }
 
-.signUpLink, .viewListLink, .moreInfoLink{
-	color: blue;
-}
-
-.signUpLink:hover, .viewListLink:hover, .moreInfoLink:hover{
+.signUpLink:hover, .viewListLink, .editEvent{
 	cursor: hand;
 	cursor: pointer;
 }
 
-#snackbar {
+#snackbar, #unregisterSnackbar {
     visibility: hidden;
     min-width: 250px;
     margin-left: -125px;
@@ -488,7 +574,7 @@ h3{
     bottom: 30px;
 }
 
-#snackbar.show {
+#snackbar.show, #unregisterSnackbar.show {
     visibility: visible;
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
@@ -664,4 +750,10 @@ h3{
 }
 
 .carousel-inner {
+}
+
+/* Bootstrap Overrides */
+
+img {
+	vertical-align: baseline;
 }
