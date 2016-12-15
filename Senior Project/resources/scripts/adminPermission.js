@@ -132,7 +132,11 @@ function xhrGetRequest(urlExtention) {
 }
 
 function xhrPostRequest(urlExtention) {
-	var xhr = createCORSRequestJSON('POST', url);
+	return createXhrRequestJSON('POST', urlExtention);
+}
+
+function createXhrRequestJSON(method, urlExtention) {
+	var xhr = createCORSRequestJSON(method, url);
 	if (!xhr) {
 		throw new Error('CORS not supported');
 	}
@@ -140,7 +144,7 @@ function xhrPostRequest(urlExtention) {
 		var responseText = xhr.responseText;
 	}
 	xhr.onerror = function () {
-		console.log("There was an error");
+		console.log("There was an error with an XHR " + method + " JSON(??) request.");
 	}
 	return xhr;
 }
