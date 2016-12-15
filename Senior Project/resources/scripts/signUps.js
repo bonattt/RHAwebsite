@@ -200,7 +200,8 @@ function displaySignUps() {
 }
 
 function showEditModal(edit) {
-    editValue = edit;
+    /* ////////////////////////////////////////////////////////////////////////
+	editValue = edit;
 	var eventSrc = (editValue.target || editValue.srcElement);
     var modal = document.getElementById('editModal');
     var span = document.getElementsByClassName("closeEdit")[0];
@@ -273,7 +274,7 @@ function showEditModal(edit) {
 
     var submitButton = document.getElementById("submit");
     submitButton.addEventListener("click", submit);
-
+	*/ ////////////////////////////////////////////////////////////////////////
 }
 
 

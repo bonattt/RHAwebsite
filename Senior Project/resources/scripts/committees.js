@@ -30,15 +30,28 @@ function getOfficers() {
 
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
-		var editButtons = insertEditButtons(showModal);
+		var editButtons = insertEditButtons(function() {}, 'everyCommitteeEver', 'committee-modal-');
     }
     var addCommitteeButton = document.getElementById("addCommittee");
     addCommitteeButton.addEventListener("click", showEmptyModal);
     //addCommitteeButton.style.display = "block";
     return;
 }
-
+/*
+var setupEditModal = function(dataElementId, taretIdRoot) {
+	var dataset = document.getElementById(dataElementId).dataset;
+	
+	var nameField = document.getElementById("committee-modal-name");
+	nameField.value = dataset.name;
+	
+	var descriptionField = document.getElementById("committee-modal-desc");
+	descriptionField.value = dataset.desc;
+}
+*/
 function setup() {
+
+	enableSubmitButton("everyCommitteeEver", "committee-modal-");
+	
     var xhr = getCommittees();
     xhr.send();
     setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
@@ -192,34 +205,9 @@ function showModal(editImage) {
     }
 
 
-    document.getElementById("committeeName").innerHTML = committee;
-    committeeNode.appendChild(committeeInput);
-    document.getElementById("description").innerHTML = description;
-    descNode.appendChild(descInput);
-    document.getElementById("image").innerHTML = image;
-    imageNode.appendChild(imageInput);
-
     var submitButton = document.getElementById("submit");
     submitButton.addEventListener("click", submit);
 
-
-    modal.style.display = "block";
-    span.onclick = function () {
-        modal.style.display = "none";
-        committeeNode.removeChild(committeeNode.firstChild);
-        descNode.removeChild(descNode.firstChild);
-        imageNode.removeChild(imageNode.firstChild);
-
-    }
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            committeeNode.removeChild(committeeNode.firstChild);
-            descNode.removeChild(descNode.firstChild);
-            imageNode.removeChild(imageNode.firstChild);
-
-        }
-    }
 }
 
 function submit(){

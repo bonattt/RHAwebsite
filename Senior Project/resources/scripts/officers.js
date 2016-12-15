@@ -30,7 +30,7 @@ function getOfficers() {
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-		var editbuttons = insertEditButtons(showModal);
+		var editbuttons = insertEditButtons(function() {}, 'everyOfficerEver', 'officers-modal-');
     }
     var addOfficeButton = document.getElementById("addOfficer");
     addOfficeButton.addEventListener("click", showEmptyModal);
@@ -40,6 +40,9 @@ function setAdmin(officers) {
 
 
 function setup() {
+	
+	enableSubmitButton("everyOfficerEver", "officers-modal-");
+
     var officerId;
     var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 
