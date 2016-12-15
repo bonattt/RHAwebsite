@@ -398,27 +398,44 @@ h3{
 /* Proposals */
 #proposalsPage {
 	position: absolute;
-	margin-left: 20%;
-	margin-right: 20%;
+	left: 50%;
+	transform: translateX(-50%);
 	margin-top: 2.5%;
-	margin-bottom: 5%;
-	height: 90%;
+	/*margin-bottom: 5%;*/
+	padding: 2.5%;
+	height: 75%;
+	width: 80%;
 	display: block;
-	/*background-color: rgba(131, 73, 73, 0.8);*/
+	background-color: rgb(250, 250, 246);
 	z-index: -1; 
-	padding: 5%;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
-	/*opacity: 0.2;*/
+	/*padding: 5%;*/
 }
 
 #directions {
-	/*width:45%;*/
+	background-color: rgb(136, 0, 21);
+	border-radius: 2%;
+	color: white;
+	padding: 2%;
+	position: absolute;
+	width:55%;
+	right: -10%;
+	top: 25%;
+	/*float: right;*/
 	margin-left: auto;
 	margin-right: auto;
 	font-size: 1.25vw;
+}
+
+#propbutton {
+	background-color: rgb(136, 0, 21);
+	border-radius: 2%;
+	color: white;
+	padding: 1.5%;
+	position: absolute;
+	bottom: -15%;
+	left: -5%;
+	/*float: left;*/
+	width: 45%;
 }
 
 #deadline {
@@ -428,12 +445,12 @@ h3{
 }
 
 #submitButton {
-	color: black;
+	color: white;
 	display: block;
 	margin: auto;
 	border: none;
 	border-radius: 10px;
-	background-color: #E2E2E2;
+	background-color: none;
 }
 
 #submitButtonLink {
@@ -469,9 +486,13 @@ h3{
 }
 
 #proposalTemplate{
+	position: absolute;
+	bottom: 0;
+	right: 1%;
+	font-weight: bold;
+	color: rgb(137, 0, 21);
 	text-align: center;
-	font-size: 18px;
-	font-size: 1vw;
+	font-size: 1.1vw;
 }
 
 #templateDownload {
