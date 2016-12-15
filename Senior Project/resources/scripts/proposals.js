@@ -39,10 +39,10 @@ function setup() {
     officersxhr.send();
     setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
 
-    var createNewProposal = document.getElementById("addProposal");
+    /*var createNewProposal = document.getElementById("addProposal");
     createNewProposal.addEventListener("click", function (e) {
         addProposal(e);
-    }, false);
+    }, false); */
 
     function addProposal(event) {
         var modal = document.getElementById('editModal');

@@ -10,6 +10,8 @@
 	</title>
 	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
 </head>
 
@@ -17,7 +19,7 @@
 	<div id="navBar"> </div>
 	<div id="proposalsPage">
 		<h1>Proposals</h1>
-		<button id="addProposal">Add Proposal To Database</button>
+		<button id="addProposal" data-toggle="modal" data-target="#myModal" onclick="console.log('button pushed');">Add Proposal To Database</button>
 		<div id="directions">
 			<h3>Directions:</h3>
 			<ul>

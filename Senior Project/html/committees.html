@@ -2,16 +2,21 @@
 <html lang="en">
 
 <head>
-	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
-	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
 	<link rel="icon" href="../images/RHA.jpg">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<title>
-		RHA | Committees
-	</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
+	
 	<script type="text/javascript" src="../scripts/navbar-factory.js">  </script>
 	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
 	<script type="text/javascript" src="./scripts/rosefire.js"></script>
+	
+	<title>
+		RHA | Committees
+	</title>
 </head>
 
 <body>
@@ -23,28 +28,38 @@
 	<button id="addCommittee">Add Committee</button>
 	<div id="committees"></div>
 	</div>
-
-	<div id="myModal" class="modal">
-		<div class="modal-content">
-			<span class="close">x</span>
-			<table class="modalTable">
-				<tr>
-					<td id="committeeName" class="title"></td>
-					<td id="committeeInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="description" class="title"></td>
-					<td id="descInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="image" class="title"></td>
-					<td id="imageInput" class="textArea"></td>
-				</tr>
-			</table>
-			<button id="submit" class="modalButton">Submit</button>
-		</div>
+	
+	<div 
+		id="everyCommitteeEver" 
+		data-id=1
+		data-name="some committee" 
+		data-desc="this committee's purpose is to train students to fight the evils of life-fibers!"
+		data-img="FAKER.png">
 	</div>
 
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Modal Header</h4>
+				</div>
+				<div class="modal-body">
+					
+						<label> name </label> <br/>
+						<input id="committee-modal-name" type="text" value="name"> </input>
+						<p> </p>
+						<textarea id="committee-modal-desc" type="textarea" value="description of the committee" style="min-width: 200px; min-height: 100px;"> </textarea>
+				</div>
+				<div class="modal-footer">
+					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 </body>
 
 </html>
