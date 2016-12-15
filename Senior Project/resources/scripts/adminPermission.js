@@ -120,7 +120,7 @@ function createCORSRequest(method, url) {
 	return xhr;
 }
 
-function createCORSRequestForSending(method, url) {
+function createCORSRequestJSON(method, url) {
 	var xhr = new XMLHttpRequest();
 	xhr.open(method, url, true);
 	xhr.setRequestHeader('Content-Type', 'application/json');
@@ -128,17 +128,36 @@ function createCORSRequestForSending(method, url) {
 }
 
 function xhrGetRequest(urlExtention) {
-        var xhr = createCORSRequest('GET', BASE_API_URL + urlExtention);
-        if (!xhr) {
-            throw new Error('CORS not supported');
-        }
-        xhr.onload = function () {
-            var responseText = xhr.responseText;
-        }
-        xhr.onerror = function () {
-            console.log("There was an error");
-        }
-        return xhr;
+	return createXhrRequest('GET', urlExtention);
+}
+
+function xhrPostRequest(urlExtention) {
+	var xhr = createCORSRequestJSON('POST', url);
+	if (!xhr) {
+		throw new Error('CORS not supported');
+	}
+	xhr.onload = function () {
+		var responseText = xhr.responseText;
+	}
+	xhr.onerror = function () {
+		console.log("There was an error");
+	}
+	return xhr;
+}
+
+function createXhrRequest(method, urlExtention) {
+	console.log("creating XHR " + method + " request");
+	var xhr = createCORSRequest(method, BASE_API_URL + urlExtention);
+	if (!xhr) {
+		throw new Error('CORS not supported');
+	}
+	xhr.onload = function () {
+		var responseText = xhr.responseText;
+	}
+	xhr.onerror = function () {
+		console.log("There was an error with an XHR " + method + " request.");
+	}
+	return xhr;
 }
 
 

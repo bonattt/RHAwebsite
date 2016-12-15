@@ -179,19 +179,7 @@ function setup() {
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 return xhr;
             }
-            var xhr = createCORSRequest('POST', url);
-            if (!xhr) {
-                throw new Error('CORS not supported');
-            }
-
-            xhr.onload = function () {
-                var responseText = xhr.responseText;
-            }
-
-            xhr.onerror = function () {
-                console.log("There was an error");
-            }
-
+            var xhr = xhrPostRequest(url);
             var approvedBool = false;
             if (approvedInput.value === "true") {
                 approvedBool = true;
