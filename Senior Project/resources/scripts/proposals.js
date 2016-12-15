@@ -172,14 +172,8 @@ function setup() {
 
         function submit() {
             closeModal();
-            var url = BASE_API_URL + 'proposal/';
-            function createCORSRequest(method, url) {
-                var xhr = new XMLHttpRequest();
-                xhr.open(method, url, true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                return xhr;
-            }
-            var xhr = xhrPostRequest(url);
+            var urlExtension = 'proposal/';
+            var xhr = xhrPostRequest(urlExtension);
             var approvedBool = false;
             if (approvedInput.value === "true") {
                 approvedBool = true;

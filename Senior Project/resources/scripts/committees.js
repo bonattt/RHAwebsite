@@ -1,33 +1,6 @@
 var committeeMap = new Object();
 var committeeID;
 
-function getOfficers() {
-    var url = BASE_API_URL + 'officers';
-    function createCORSRequest(method, url) {
-        var xhr = new XMLHttpRequest();
-        if ("withCredentials" in xhr) {
-            xhr.open(method, url, true);
-
-        } else if (typeof XDomainRequest != "undefined") {
-            xhr = new XDomainRequest();
-            xhr.open(method, url);
-        } else {
-            xhr = null;
-        }
-        return xhr;
-    }
-    var xhr = createCORSRequest('GET', url);
-    if (!xhr) {
-        throw new Error('CORS not supported');
-    }
-    xhr.onload = function () {
-    }
-    xhr.onerror = function () {
-        console.log("There was an error");
-    }
-    return xhr;
-}
-
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
 		var editButtons = insertEditButtons(function() {}, 'everyCommitteeEver', 'committee-modal-');
@@ -52,7 +25,8 @@ function setup() {
 
 	enableSubmitButton("everyCommitteeEver", "committee-modal-");
 	
-    var xhr = getCommittees();
+	var urlExtension = 'committees';
+    var xhr = xhrGetRequest(urlExtension);
     xhr.send();
     setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
@@ -79,33 +53,6 @@ function setup() {
         var officersxhr = getOfficers();
         officersxhr.send();
         setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
-    }
-
-    function getCommittees() {
-        var url = BASE_API_URL + 'committees';
-        function createCORSRequest(method, url) {
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-                xhr.open(method, url, true);
-            } else if (typeof XDomainRequest != "undefined") {
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-            } else {
-                xhr = null;
-            }
-            return xhr;
-        }
-        var xhr = createCORSRequest('GET', url);
-        if (!xhr) {
-            throw new Error('CORS not supported');
-        }
-        xhr.onload = function () {
-            var responseText = xhr.responseText;
-        }
-        xhr.onerror = function () {
-            console.log("There was an error");
-        }
-        return xhr;
     }
 }
 
@@ -221,18 +168,6 @@ function saveCommittee() {
 	var urlExtension = 'committee/' + committeeID;
 	
 	var xhr = xhrPutRequest(urlExtension);
-	if (!xhr) {
-		throw new Error('CORS not supported');
-	}
-
-	xhr.onload = function () {
-		var responseText = xhr.responseText;
-		console.log("Response text: " + responseText);
-	}
-
-	xhr.onerror = function () {
-		console.log("There was an error");
-	}
 	var committeeName = document.getElementById("committee-text").value;
 	var description = document.getElementById("description-text").value;
 	var image = "images/committees/" + document.getElementById("image-text").value;

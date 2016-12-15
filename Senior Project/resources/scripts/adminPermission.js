@@ -34,6 +34,7 @@ var insertEditButtons = function(showModalFunc, dataElementId, targetIdRoot, att
 		adminValues[i].appendChild(editButton);
 		buttonList.push(editButton);
 	}
+	return buttonList;
 }
 
 var insertEditButtonsBefore = function(showModalFunc, attributes) {
@@ -92,17 +93,8 @@ var enableSubmitButton = function(dataElementId, targetIdRoot) {
 }
 
 function getOfficers() {
-    var url = BASE_API_URL + 'officers';
-    
-    var xhr = createCORSRequest('GET', url);
-    if (!xhr) {
-        throw new Error('CORS not supported');
-    }
-    xhr.onload = function () {
-    }
-    xhr.onerror = function () {
-        console.log("There was an error");
-    }
+    var urlExtention = 'officers/';
+    var xhr = xhrGetRequest(urlExtention);
     return xhr;
 }
 

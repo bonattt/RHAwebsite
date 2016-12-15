@@ -133,25 +133,9 @@ function saveOfficer() {
     modal.style.display = "none";
     var fullname = document.getElementById("fullname").value;
     var officerID = officerMap[editName];
-    var url = BASE_API_URL + 'member/' + officerID;
-    function createCORSRequest(method, url) {
-        var xhr = new XMLHttpRequest();
-        xhr.open(method, url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        return xhr;
-    }
-    var xhr = createCORSRequest('PUT', url);
-    if (!xhr) {
-        throw new Error('CORS not supported');
-    }
-
-    xhr.onload = function () {
-        var responseText = xhr.responseText;
-    }
-
-    xhr.onerror = function () {
-        console.log("There was an error");
-    }
+    var urlExtension = 'member/' + officerID;
+    var xhr = xhrPutRequest(urlExtension);
+   
     var titleText = document.getElementById("title-input-field").value;
     var emailText = document.getElementById("email-text").value;
     var phoneText = document.getElementById("phone-text").value;
