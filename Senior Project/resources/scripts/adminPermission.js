@@ -1,4 +1,8 @@
 
+// append something to this
+const BASE_API_URL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/';
+
+
 var userIsOfficer = function(officers) {
 	officer = JSON.parse(officers);
     var tempUser = JSON.parse(sessionStorage.getItem("userData"));
@@ -88,20 +92,8 @@ var enableSubmitButton = function(dataElementId, targetIdRoot) {
 }
 
 function getOfficers() {
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
-    function createCORSRequest(method, url) {
-        var xhr = new XMLHttpRequest();
-        if ("withCredentials" in xhr) {
-            xhr.open(method, url, true);
-
-        } else if (typeof XDomainRequest != "undefined") {
-            xhr = new XDomainRequest();
-            xhr.open(method, url);
-        } else {
-            xhr = null;
-        }
-        return xhr;
-    }
+    var url = BASE_API_URL + 'officers';
+    
     var xhr = createCORSRequest('GET', url);
     if (!xhr) {
         throw new Error('CORS not supported');
@@ -112,6 +104,41 @@ function getOfficers() {
         console.log("There was an error");
     }
     return xhr;
+}
+
+function createCORSRequest(method, url) {
+	var xhr = new XMLHttpRequest();
+	if ("withCredentials" in xhr) {
+		xhr.open(method, url, true);
+
+	} else if (typeof XDomainRequest != "undefined") {
+		xhr = new XDomainRequest();
+		xhr.open(method, url);
+	} else {
+		xhr = null;
+	}
+	return xhr;
+}
+
+function createCORSRequestForSending(method, url) {
+	var xhr = new XMLHttpRequest();
+	xhr.open(method, url, true);
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	return xhr;
+}
+
+function xhrGetRequest(urlExtention) {
+        var xhr = createCORSRequest('GET', BASE_API_URL + urlExtention);
+        if (!xhr) {
+            throw new Error('CORS not supported');
+        }
+        xhr.onload = function () {
+            var responseText = xhr.responseText;
+        }
+        xhr.onerror = function () {
+            console.log("There was an error");
+        }
+        return xhr;
 }
 
 
