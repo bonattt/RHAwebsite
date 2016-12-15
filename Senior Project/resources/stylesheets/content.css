@@ -249,6 +249,15 @@ h3{
 
 /* Sign ups */
 
+#signUps, #pastEvents {
+height: 150pt;
+    position: relative;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+    font-size: 55pt;
+    z-index: -1;
+}
+
 .col-sm-12 {
 	height: 350px;
 	background-color: #800000;
@@ -256,7 +265,7 @@ h3{
 	width: 98%;
 	opacity: 0.8;
 	border-radius: 20px;
-	color: #EDEDEC;
+	color: white;
 }
 
 .eventImageSignUps {
@@ -270,7 +279,7 @@ h3{
 }
 
 .eventTitle{
-	color: #EDEDEC;
+	color: white;
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
@@ -290,6 +299,7 @@ h3{
 	transform: translateY(-50%);
 	float: right;
 	font-size: 20pt;
+	color: white;
 }
 
 .eventActions p {
@@ -358,7 +368,7 @@ h3{
 	cursor: pointer;
 }
 
-#snackbar {
+#snackbar, #unregisterSnackbar {
     visibility: hidden;
     min-width: 250px;
     margin-left: -125px;
@@ -373,7 +383,7 @@ h3{
     bottom: 30px;
 }
 
-#snackbar.show {
+#snackbar.show, #unregisterSnackbar.show {
     visibility: visible;
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;

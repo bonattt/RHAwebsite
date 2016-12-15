@@ -35,11 +35,6 @@ function displayPastEvents() {
             } else {
                 cost = proposal[i].cost_to_attendee;
             }
-            console.log(proposal[i].event_signup_open);
-            if (proposal[i].event_signup_open > new Date()) {
-                console.log("true" + proposal[i].proposal_name);
-            }
-            var signUpCloseDate = new Date(proposal[i].event_signup_close);
             var eventDate = new Date(proposal[i].event_date);
 
             var html = "<div class='row'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
@@ -47,13 +42,13 @@ function displayPastEvents() {
             html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
             html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
             html += "</div>";
-            html += "<div class='eventActions'><p class='viewListLink'>View List</p></div></div></div>";
+            html += "<div class='eventActions'><a onclick='showListModal(" + proposal[i].proposal_id + ")'><p class='viewListLink'>View List</p></a></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
 
         }
-        makeListLinks();
+        // makeListLinks();
     }
 
     function getEvents() {
@@ -143,31 +138,39 @@ function displaySignUps() {
             } else {
                 cost = proposal[i].cost_to_attendee;
             }
-            if (proposal[i].event_signup_open > new Date()) {
-                console.log("true" + proposal[i].proposal_name);
+
+            var signUpCloseDate = new Date(proposal[i].event_signup_close);
+            var signUpOpenDate = new Date(proposal[i].event_signup_open);
+
+            if (signUpOpenDate > new Date()) {
+                var signUpHTML = "<p class='eventSignUpDate'>Sign-ups open on: " + (signUpOpenDate.getMonth() + 1) + "/" + signUpOpenDate.getUTCDate() + "/" + signUpOpenDate.getFullYear() + "</p>";
+            } else {
+                var signUpHTML = "<p class='eventSignUpDate'>Sign-ups close on: " + (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear() + "</p>";
             }
             var attendees = proposal[i].attendees;
 
-            var signUpCloseDate = new Date(proposal[i].event_signup_close);
             var eventDate = new Date(proposal[i].event_date);
 
             var html = "<div class='row'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
             html += "<div class='eventTextSignUps'><h1 class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
             html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
             html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
-            html += "<p class='eventSignUpDate'>Sign-ups close on: " + (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear() + "</p></div>";
+            html += signUpHTML + "</div>";
             html += "<div class='eventActions'>";
             var username = JSON.parse(sessionStorage.getItem("userData")).username;
-            if($.inArray(username, attendees) == -1){
-                html += "<a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
-            } else{
-                html += "<a onclick='unregister(" + proposal[i].proposal_id + ")'><p class='signUpLink'>Unregister</p></a>";
+            if (signUpOpenDate < new Date()) {
+                if ($.inArray(username, attendees) == -1) {
+                    html += "<a id='signUpLink" + proposal[i].proposal_id + "' onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
+                } else {
+                    html += "<a id='signUpLink" + proposal[i].proposal_id + "' onclick='unregister(" + proposal[i].proposal_id + ")'><p class='signUpLink'>Unregister</p></a>";
+                }
+                html += "<a onclick='showListModal(" + proposal[i].proposal_id + ")'><p class='viewListLink'>View List</p></a>"
             }
-            html += "<p class='viewListLink'>View List</p><p class='editEvent'>Edit Event</p></div></div></div>";
+            html += "<p class='editEvent'>Edit Event</p></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
-            makeListLinks();
+            //makeListLinks();
         }
     }
 
@@ -332,6 +335,8 @@ function signUp(eventID) {
     signUpSnackbar.className = "show";
     setTimeout(function () { signUpSnackbar.className = signUpSnackbar.className.replace("show", ""); }, 3000);
 
+    var signUpLink = document.getElementById("signUpLink" + eventID);
+    signUpLink.outerHTML = "<a id='signUpLink" + eventID + "' onclick='unregister(" + eventID + ")'><p class='signUpLink'>Unregister</p></a>";
     return xhr;
 }
 
@@ -361,10 +366,12 @@ function unregister(eventID) {
     xhr.send();
     console.log("there's an xhr above me");
 
-    var signUpSnackbar = document.getElementById("snackbar");
+    var signUpSnackbar = document.getElementById("unregisterSnackbar");
     signUpSnackbar.className = "show";
     setTimeout(function () { signUpSnackbar.className = signUpSnackbar.className.replace("show", ""); }, 3000);
 
+    var signUpLink = document.getElementById("signUpLink" + eventID);
+    signUpLink.outerHTML = "<a id='signUpLink" + eventID + "' onclick='signUp(" + eventID + ")'><p class='signUpLink'> Sign Up </p></a>";
     return xhr;
 }
 
@@ -455,46 +462,44 @@ function makeListLinks() {
     var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 
     newEvent = {};
+};
 
+function showListModal(event) {
+    var xhr = getAttendees(event);
+    xhr.send();
+    xhr.onload = function () {
+        var response = JSON.parse(xhr.responseText);
+        console.log(response[0].attendees);
+        var eventAttendees = response[0].attendees;
+        var modal = document.getElementById('listModal');
+        var span = document.getElementsByClassName("closeList")[0];
+        var list = document.getElementById("list");
+        var html = "";
 
+        var rightSide;
+        if (!eventAttendees) {
+            rightSide = 0;
+        } else {
+            rightSide = eventAttendees.length;
+        }
 
-    function showListModal(event) {
-        var xhr = getAttendees(event.srcElement.id);
-        xhr.send();
-        xhr.onload = function () {
-            var response = JSON.parse(xhr.responseText);
-            console.log(response[0].attendees);
-            var eventAttendees = response[0].attendees;
-            var modal = document.getElementById('listModal');
-            var span = document.getElementsByClassName("closeList")[0];
-            var list = document.getElementById("list");
-            var html = "";
-
-            var rightSide;
-            if (!eventAttendees) {
-                rightSide = 0;
-            } else {
-                rightSide = eventAttendees.length;
-            }
-
-            for (var i = 0; i < rightSide; i++) {
-                console.log("The person at " + i + "is: " + eventAttendees[i]);
-                html += "<br>" + eventAttendees[i];
-            }
-            list.innerHTML = "The attendees for this event are:";
-            list.innerHTML += html;
-            modal.style.display = "block";
-            span.onclick = function () {
+        for (var i = 0; i < rightSide; i++) {
+            console.log("The person at " + i + "is: " + eventAttendees[i]);
+            html += "<br>" + eventAttendees[i];
+        }
+        list.innerHTML = "The attendees for this event are:";
+        list.innerHTML += html;
+        modal.style.display = "block";
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == modal) {
                 modal.style.display = "none";
-            }
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
             }
         }
     }
-};
+}
 
 $(document).ready(function () {
     if (window.location.pathname.indexOf("pastEvents") > -1) {
