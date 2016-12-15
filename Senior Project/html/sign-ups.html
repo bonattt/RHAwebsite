@@ -2,8 +2,6 @@
 <html lang="en">
 
 <head>
-	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
-	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
 	<link rel="icon" href="../images/RHA.jpg">
 	<title>
 		RHA | event sign-ups
@@ -14,11 +12,11 @@
 <body>
 
 	<div id="navBar"></div>
-	<h1>Sign-ups</h1>
+	<h1 id="signUps">Sign-ups</h1>
 
 	<div class="pageBody">
 		<div id="snackbar">You have successfully signed up for the event.</div>
-
+		<div id="unregisterSnackbar">You have successfully unregistered for the event.</div>
 		<div class="eventTileArea">
 		</div>
 	</div>
@@ -52,41 +50,12 @@
 			</div>
 		</div>
 	</div>
-	
-	<!-- 
-	<div id="editModal" class="modal">
-		<div class="modal-content">
-			<span class="closeEdit">x</span>
-			<table class="modalTable">
-				<tr>
-					<td id="name" class="title"></td>
-					<td id="nameInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="price" class="title"></td>
-					<td id="priceInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="image" class="title"></td>
-					<td id="imageInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="description" class="title"></td>
-					<td id="descriptionInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="signUpCloseDate" class="title"></td>
-					<td id="signUpCloseDateInput" class="textArea"></td>
-				</tr>
-			</table>
-			<button id="submit" class="modalButton">Submit</button>
-		</div>
-	</div>
-	-->
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
 
 	<script>
 		window.jQuery || document.write('<script src="../scripts/jquery-3.1.1.js"><\/script>');

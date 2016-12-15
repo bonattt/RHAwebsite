@@ -29,23 +29,26 @@ function displayPastEvents() {
         proposal = JSON.parse(proposal);
 
         for (var i = 0; i < proposal.length; i++) {
-            var html = "<div class='eventTile'><p class='signUpText'>" + proposal[i].proposal_name + " - ";
-            if(proposal[i].cost_to_attendee == '$0.00') {
-                html +="FREE</p>";  
+            var cost = 0;
+            if (proposal[i].cost_to_attendee == '$0.00') {
+                cost = "FREE";
             } else {
-                html += proposal[i].cost_to_attendee + "</p>";
+                cost = proposal[i].cost_to_attendee;
             }
-            html += "<img class='signUpImage' src =" + proposal[i].image_path + "></img>";
-            html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
-            html += "<a id='" + proposal[i].proposal_id + "' class='viewListLink'> View List </a>";
-            html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
+            var eventDate = new Date(proposal[i].event_date);
+
+            var html = "<div class='row edit'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
+            html += "<div class='eventTextSignUps'><h1 class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
+            html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
+            html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
             html += "</div>";
+            html += "<div class='eventActions'><a onclick='showListModal(" + proposal[i].proposal_id + ")'><p class='viewListLink'>View List</p></a></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
 
         }
-        makeListLinks();
+        // makeListLinks();
     }
 
     function getEvents() {
@@ -114,7 +117,7 @@ function saveEvent() {
     console.log("new event name is: ");
     console.log(newEventName);
 
-    xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate }));
+    xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate, event_signup_open: newEventSignUpOpenDate, event_date: newEventDate, attendees: newAttendees }));
 
     return xhr;
 
@@ -127,25 +130,47 @@ function displaySignUps() {
 
     function actuallyDoShit(proposal) {
         proposal = JSON.parse(proposal);
-
+        console.log(proposal);
         for (var i = 0; i < proposal.length; i++) {
-            var html = "<div class='eventTile'><p class='signUpText edit'>" + proposal[i].proposal_name + " - ";
-            if(proposal[i].cost_to_attendee == '$0.00') {
-                html +="FREE</p>";  
+            var cost = 0;
+            if (proposal[i].cost_to_attendee == '$0.00') {
+                cost = "FREE";
             } else {
-                html += proposal[i].cost_to_attendee + "</p>";
+                cost = proposal[i].cost_to_attendee;
             }
-            html += "<img class='signUpImage' src =" + proposal[i].image_path +"></img>";
-            html += "<a><p onclick='moreInformationFunction(this)' class='moreInfoLink'>" + "Show Details" + "</p></a>";
-            html += "<a onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
-            html += "<a id='" + proposal[i].proposal_id + "' class='viewListLink'> View List </a>";
-            html += "<div class='moreInformation'>" + proposal[i].description + " Sign-ups for this event will close on " + proposal[i].event_signup_close + ".</div>";
-            html += "</div>";
-            eventsMap[proposal[i].proposal_name] = proposal[i].proposal_id;
+
+            var signUpCloseDate = new Date(proposal[i].event_signup_close);
+            var signUpOpenDate = new Date(proposal[i].event_signup_open);
+
+            if (signUpOpenDate > new Date()) {
+                var signUpHTML = "<p class='eventSignUpDate'>Sign-ups open on: " + (signUpOpenDate.getMonth() + 1) + "/" + signUpOpenDate.getUTCDate() + "/" + signUpOpenDate.getFullYear() + "</p>";
+            } else {
+                var signUpHTML = "<p class='eventSignUpDate'>Sign-ups close on: " + (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear() + "</p>";
+            }
+            var attendees = proposal[i].attendees;
+
+            var eventDate = new Date(proposal[i].event_date);
+
+            var html = "<div class='row'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
+            html += "<div class='eventTextSignUps'><h1 class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
+            html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
+            html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
+            html += signUpHTML + "</div>";
+            html += "<div class='eventActions'>";
+            var username = JSON.parse(sessionStorage.getItem("userData")).username;
+            if (signUpOpenDate < new Date()) {
+                if ($.inArray(username, attendees) == -1) {
+                    html += "<a id='signUpLink" + proposal[i].proposal_id + "' onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
+                } else {
+                    html += "<a id='signUpLink" + proposal[i].proposal_id + "' onclick='unregister(" + proposal[i].proposal_id + ")'><p class='signUpLink'>Unregister</p></a>";
+                }
+                html += "<a onclick='showListModal(" + proposal[i].proposal_id + ")'><p class='viewListLink'>View List</p></a>"
+            }
+            html += "<p class='editEvent'>Edit Event</p></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
-            makeListLinks();
+            //makeListLinks();
         }
     }
 
@@ -199,84 +224,6 @@ function displaySignUps() {
 
 }
 
-function showEditModal(edit) {
-    /* ////////////////////////////////////////////////////////////////////////
-	editValue = edit;
-	var eventSrc = (editValue.target || editValue.srcElement);
-    var modal = document.getElementById('editModal');
-    var span = document.getElementsByClassName("closeEdit")[0];
-
-    var title = eventSrc.parentElement.innerHTML.split(" - ");
-    var name = "Event name: ";
-    var price = "Price: ";
-    var image = "Image: ";
-    var description = "Description: ";
-    var signUpCloseDate = "Sign-up close date: ";
-    eventId = eventsMap[title[0]];
-
-    nameInput.setAttribute("rows", "1");
-    nameInput.setAttribute("cols", "30");
-    nameInput.innerHTML = title[0];
-
-    priceInput.setAttribute("rows", "1");
-    priceInput.setAttribute("cols", "30");
-    priceInput.innerHTML = title[1].split("<")[0];
-
-    descriptionInput.setAttribute("rows", "4");
-    descriptionInput.setAttribute("cols", "30");
-    descriptionInput.innerHTML = eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML.split(" Sign-ups for this event will close on ")[0];
-
-    signUpCloseDateInput.setAttribute("rows", "1");
-    signUpCloseDateInput.setAttribute("cols", "30");
-    signUpCloseDateInput.innerHTML = eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML.split(" Sign-ups for this event will close on ")[1].split(".")[0];
-    // console.log(eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].currentSrc.split("images/")[1]);
-
-    imageInput.setAttribute("rows", "1");
-    imageInput.setAttribute("cols", "30");
-    console.log(eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].src.split("images/")[1]);
-    imageInput.innerHTML = eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].currentSrc.split("images/")[1];
-
-
-
-    document.getElementById("name").innerHTML = name;
-    nameNode.appendChild(nameInput);
-    document.getElementById("price").innerHTML = price;
-    priceNode.appendChild(priceInput);
-    document.getElementById("image").innerHTML = image;
-    imageNode.appendChild(imageInput);
-    document.getElementById("description").innerHTML = description;
-    descriptionNode.appendChild(descriptionInput);
-    document.getElementById("signUpCloseDate").innerHTML = signUpCloseDate;
-    signUpCloseDateNode.appendChild(signUpCloseDateInput);
-
-
-
-    modal.style.display = "block";
-    span.onclick = function () {
-        modal.style.display = "none";
-        nameNode.removeChild(nameNode.firstChild);
-        priceNode.removeChild(priceNode.firstChild);
-        imageNode.removeChild(imageNode.firstChild);
-        descriptionNode.removeChild(descriptionNode.firstChild);
-        signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
-
-    }
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            nameNode.removeChild(nameNode.firstChild);
-            priceNode.removeChild(priceNode.firstChild);
-            imageNode.removeChild(imageNode.firstChild);
-            descriptionNode.removeChild(descriptionNode.firstChild);
-            signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
-        }
-    }
-
-    var submitButton = document.getElementById("submit");
-    submitButton.addEventListener("click", submit);
-	*/ ////////////////////////////////////////////////////////////////////////
-}
-
 
 
 
@@ -310,6 +257,43 @@ function signUp(eventID) {
     signUpSnackbar.className = "show";
     setTimeout(function () { signUpSnackbar.className = signUpSnackbar.className.replace("show", ""); }, 3000);
 
+    var signUpLink = document.getElementById("signUpLink" + eventID);
+    signUpLink.outerHTML = "<a id='signUpLink" + eventID + "' onclick='unregister(" + eventID + ")'><p class='signUpLink'>Unregister</p></a>";
+    return xhr;
+}
+
+function unregister(eventID) {
+    var username = JSON.parse(sessionStorage.getItem("userData")).username;
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/';
+    url += eventID + '/attendees/' + username;
+    function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        return xhr;
+    }
+    var xhr = createCORSRequest('DELETE', url);
+    if (!xhr) {
+        throw new Error('CORS not supported');
+    }
+
+    xhr.onload = function () {
+        var responseText = xhr.responseText;
+    }
+
+    xhr.onerror = function () {
+        console.log("There was an error");
+    }
+
+    xhr.send();
+    console.log("there's an xhr above me");
+
+    var signUpSnackbar = document.getElementById("unregisterSnackbar");
+    signUpSnackbar.className = "show";
+    setTimeout(function () { signUpSnackbar.className = signUpSnackbar.className.replace("show", ""); }, 3000);
+
+    var signUpLink = document.getElementById("signUpLink" + eventID);
+    signUpLink.outerHTML = "<a id='signUpLink" + eventID + "' onclick='signUp(" + eventID + ")'><p class='signUpLink'> Sign Up </p></a>";
     return xhr;
 }
 
@@ -357,7 +341,7 @@ function getOfficers() {
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-		var editbuttons = insertEditButtons(showEditModal);
+        var editbuttons = insertEditButtons(showEditModal);
     }
 }
 
@@ -400,47 +384,44 @@ function makeListLinks() {
     var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 
     newEvent = {};
+};
 
+function showListModal(event) {
+    var xhr = getAttendees(event);
+    xhr.send();
+    xhr.onload = function () {
+        var response = JSON.parse(xhr.responseText);
+        console.log(response[0].attendees);
+        var eventAttendees = response[0].attendees;
+        var modal = document.getElementById('listModal');
+        var span = document.getElementsByClassName("closeList")[0];
+        var list = document.getElementById("list");
+        var html = "";
 
+        var rightSide;
+        if (!eventAttendees) {
+            rightSide = 0;
+        } else {
+            rightSide = eventAttendees.length;
+        }
 
-    function showListModal(event) {
-        var xhr = getAttendees(event.srcElement.id);
-        xhr.send();
-        xhr.onload = function () {
-            console.log(xhr.responseText);
-            var response = JSON.parse(xhr.responseText);
-            console.log(response[0].attendees);
-            var eventAttendees = response[0].attendees;
-            var modal = document.getElementById('listModal');
-            var span = document.getElementsByClassName("closeList")[0];
-            var list = document.getElementById("list");
-            var html = "";
-
-            var rightSide;
-            if (!eventAttendees) {
-                rightSide = 0;
-            } else {
-                rightSide = eventAttendees.length;
-            }
-
-            for (var i = 0; i < rightSide; i++) {
-                console.log("The person at " + i + "is: " + eventAttendees[i]);
-                html += "<br>" + eventAttendees[i];
-            }
-            list.innerHTML = "The attendees for this event are:";
-            list.innerHTML += html;
-            modal.style.display = "block";
-            span.onclick = function () {
+        for (var i = 0; i < rightSide; i++) {
+            console.log("The person at " + i + "is: " + eventAttendees[i]);
+            html += "<br>" + eventAttendees[i];
+        }
+        list.innerHTML = "The attendees for this event are:";
+        list.innerHTML += html;
+        modal.style.display = "block";
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == modal) {
                 modal.style.display = "none";
-            }
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
             }
         }
     }
-};
+}
 
 $(document).ready(function () {
     if (window.location.pathname.indexOf("pastEvents") > -1) {
