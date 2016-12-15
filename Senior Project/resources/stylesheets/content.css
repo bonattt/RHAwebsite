@@ -236,13 +236,45 @@ h3{
 	font-weight: bold;
 }
 
-#submit {
+#submitButton {
+	color: black;
+	display: block;
+	margin: auto;
+	border: none;
+	border-radius: 10px;
+	background-color: #E2E2E2;
+}
+
+#submitButtonLink {
+	color: black;
+	display: block;
+	margin: auto;
+	/*width: 50%;*/
+}
+
+#submitButtonLink:hover {
+	text-decoration: none;
+}
+
+#submitButtonLink:focus {
+	text-decoration: none;
+}
+
+#submitMaintext {
 	text-align: center;
 	font-size: 300%;
 	font-size: 2.5vw;
 	display: block;
-	color: 	#708090;
-	text-decoration: underline;
+	/*color: 	#708090;*/
+	text-decoration: none;
+}
+
+#submitSubtext {
+
+}
+
+#submit:hover {
+	text-decoration: none;
 }
 
 #proposalTemplate{
