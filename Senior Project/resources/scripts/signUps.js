@@ -37,7 +37,7 @@ function displayPastEvents() {
             }
             var eventDate = new Date(proposal[i].event_date);
 
-            var html = "<div class='row'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
+            var html = "<div class='row edit'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
             html += "<div class='eventTextSignUps'><h1 class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
             html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
             html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
@@ -222,84 +222,6 @@ function displaySignUps() {
 
     }
 
-}
-
-function showEditModal(edit) {
-    /* ////////////////////////////////////////////////////////////////////////
-	editValue = edit;
-	var eventSrc = (editValue.target || editValue.srcElement);
-    var modal = document.getElementById('editModal');
-    var span = document.getElementsByClassName("closeEdit")[0];
-
-    var title = eventSrc.parentElement.innerHTML.split(" - ");
-    var name = "Event name: ";
-    var price = "Price: ";
-    var image = "Image: ";
-    var description = "Description: ";
-    var signUpCloseDate = "Sign-up close date: ";
-    eventId = eventsMap[title[0]];
-
-    nameInput.setAttribute("rows", "1");
-    nameInput.setAttribute("cols", "30");
-    nameInput.innerHTML = title[0];
-
-    priceInput.setAttribute("rows", "1");
-    priceInput.setAttribute("cols", "30");
-    priceInput.innerHTML = title[1].split("<")[0];
-
-    descriptionInput.setAttribute("rows", "4");
-    descriptionInput.setAttribute("cols", "30");
-    descriptionInput.innerHTML = eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML.split(" Sign-ups for this event will close on ")[0];
-
-    signUpCloseDateInput.setAttribute("rows", "1");
-    signUpCloseDateInput.setAttribute("cols", "30");
-    signUpCloseDateInput.innerHTML = eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML.split(" Sign-ups for this event will close on ")[1].split(".")[0];
-    // console.log(eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].currentSrc.split("images/")[1]);
-
-    imageInput.setAttribute("rows", "1");
-    imageInput.setAttribute("cols", "30");
-    console.log(eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].src.split("images/")[1]);
-    imageInput.innerHTML = eventSrc.parentElement.parentElement.querySelectorAll(":nth-child(2)")[0].currentSrc.split("images/")[1];
-
-
-
-    document.getElementById("name").innerHTML = name;
-    nameNode.appendChild(nameInput);
-    document.getElementById("price").innerHTML = price;
-    priceNode.appendChild(priceInput);
-    document.getElementById("image").innerHTML = image;
-    imageNode.appendChild(imageInput);
-    document.getElementById("description").innerHTML = description;
-    descriptionNode.appendChild(descriptionInput);
-    document.getElementById("signUpCloseDate").innerHTML = signUpCloseDate;
-    signUpCloseDateNode.appendChild(signUpCloseDateInput);
-
-
-
-    modal.style.display = "block";
-    span.onclick = function () {
-        modal.style.display = "none";
-        nameNode.removeChild(nameNode.firstChild);
-        priceNode.removeChild(priceNode.firstChild);
-        imageNode.removeChild(imageNode.firstChild);
-        descriptionNode.removeChild(descriptionNode.firstChild);
-        signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
-
-    }
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            nameNode.removeChild(nameNode.firstChild);
-            priceNode.removeChild(priceNode.firstChild);
-            imageNode.removeChild(imageNode.firstChild);
-            descriptionNode.removeChild(descriptionNode.firstChild);
-            signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
-        }
-    }
-
-    var submitButton = document.getElementById("submit");
-    submitButton.addEventListener("click", submit);
-	*/ ////////////////////////////////////////////////////////////////////////
 }
 
 
