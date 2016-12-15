@@ -1,29 +1,4 @@
-function getOfficers() {
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
-    function createCORSRequest(method, url) {
-        var xhr = new XMLHttpRequest();
-        if ("withCredentials" in xhr) {
-            xhr.open(method, url, true);
 
-        } else if (typeof XDomainRequest != "undefined") {
-            xhr = new XDomainRequest();
-            xhr.open(method, url);
-        } else {
-            xhr = null;
-        }
-        return xhr;
-    }
-    var xhr = createCORSRequest('GET', url);
-    if (!xhr) {
-        throw new Error('CORS not supported');
-    }
-    xhr.onload = function () {
-    }
-    xhr.onerror = function () {
-        console.log("There was an error");
-    }
-    return xhr;
-}
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
