@@ -19,7 +19,7 @@
 	<div id="navBar"> </div>
 	<div id="proposalsPage">
 		<h1>Propose An Event</h1>
-		<button id="addProposal">Add Proposal To Database</button>
+		<button id="addProposal" data-toggle="modal" data-target="#myModal" onclick="console.log('button pushed');">Add Proposal To Database</button>
 		<div id="directions">
 			<p>Have a fun idea for an event that you want to see done? Send a proposal to RHA and it will be reviewed to potentially become a hosted event! When submitting a proposal, be sure to include the following in your e-mail: </p>
 			<ul>
@@ -47,7 +47,26 @@
 		<h3 id="deadline">Please remember that all proposals must be submitted Monday by 6:15PM.</h3>
 		<p id="proposalTemplate">Need ideas on how to format your proposal? <a href="http://www.rose-hulman.edu/rha/downloads/template.pptx" id="templateDownload">Download a Proposal Slide Template</a></p>
 	</div>
-
+	
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Modal Header</h4>
+				</div>
+				<div class="modal-body">
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- old modal
 	<div id="editModal" class="modal">
 		<div class="modal-content">
 			<span class="closeEdit">x</span>
@@ -105,9 +124,10 @@
 					<td id="moneyAllocatedInput" class="textArea"></td>
 				</tr>
 			</table>
-			<!-- <button id="submit" class="modalButton">Submit</button> -->
+			<button id="submit" class="modalButton">Submit</button>
 		</div>
 	</div>
+	old modal --> 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 	<script>

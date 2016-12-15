@@ -1,6 +1,7 @@
 
 body {
 	margin: 10pt;
+	font-family: "Segoe UI","Segoe",Tahoma,Helvetica,Arial,sans-serif;
 }
 
 h1{
@@ -30,8 +31,9 @@ h1{
 }
 
 .footer {
+	bottom: 0;
+	position: relative;
 	padding: 1%;
-	margin: -1.5%;
 	text-align: center;
 	background-color: #696969;
 }
@@ -145,6 +147,195 @@ h1{
 .socialMedia{
 	margin: 1%;
 }
+
+.left-tile {
+	width: 100%;
+	height: 800px;
+}
+
+.right-tile {
+	width: 100%;
+	height: 800px;
+	background: #800000;
+	color: #EDEDEC;
+}
+
+.left-tile div.tileTitle {
+	display: block;
+	float: left;
+}
+
+div.tileTitle h2 {
+	padding-top: 10%;
+	font-size: 60pt;
+}
+
+div.tileTitle p {
+	padding: 10%;
+	font-size: 36pt;
+}
+
+.right-tile div.tileTitle {
+	display: block;
+	float: right;
+}
+
+.left-tile div.tileImage {
+	display: block;
+	float: right;
+}
+
+.right-tile div.tileImage {
+	display: block;
+	float: left;
+}
+
+.tileImage{
+	padding: 5%;
+	width: 40%;
+	position: relative;
+  	top: 50%;
+	transform: translateY(-50%);
+}
+
+.tileTitle {
+	text-align: center;
+	width: 50%;
+}
+
+.tileImage img {
+	width: 100%;
+	height: 100%;
+}
+
+.tileImage, .tileTitle{
+	display: inline-block;
+}
+
+/* ------------------- */
+
+.section {
+	position: relative;
+	left: 0;
+	right: 0;
+	overflow: auto;
+	height: auto;
+	background-color: #721111;
+
+
+}
+
+.aside {
+	background-color: #FFFFFF;
+}
+
+.text-only {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	width: 50%;
+	transform: translateX(13%) translateY(-50%);
+}
+
+.text-only h2 {
+	font-size: 1.5vw;
+	text-align: center;
+	/*display: table-cell;*/
+	/*vertical-align: middle;*/
+	font-family: "Serif";
+	color: #FFFFFF;
+}
+
+.text-only p {
+	font-size: 30pt;
+	font-size: 2.5vw;
+	text-align: center;
+	display: table-cell;
+	vertical-align: middle;
+	font-family: "Serif";
+	color: #FFFFFF;
+	/*text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;*/
+}
+
+.learnMore {
+	margin: 0 auto;
+	display: block;
+	border: none;
+	background-color: #630e09;
+	color: white;
+	font-size: 12pt;
+	text-decoration: none;
+	width: 150px;
+	height: 50px;
+	border-radius: 5px;
+
+	-webkit-transition: all 0.5s ease; /* Safari and Chrome */
+    -moz-transition: all 0.5s ease;
+}
+
+.learnMore:hover {
+	background-color: #5b1a16;
+}
+
+.learnMore:focus {
+	outline: none;
+}
+
+.textLink1 {
+	position: absolute;
+	left: 0;
+	top: 35%;
+}
+
+.textLink1 span {
+	color: white; 
+	font: bold 24px/45px Helvetica, Sans-Serif; 
+	font-size: 1.5vw;
+	letter-spacing: -1px;  
+	background: rgb(0, 0, 0); /* fallback color */
+	background: rgba(0, 0, 0, 0.7);
+	padding: 10px;
+}
+
+.textLink2 {
+	position: absolute;
+	left: 0;
+	bottom: 7%;
+}
+
+.textLink2 span {
+	color: white; 
+	font: bold 24px/45px Helvetica, Sans-Serif; 
+	font-size: 1.5vw;
+	letter-spacing: -1px;  
+	background: rgb(0, 0, 0); /* fallback color */
+	background: rgba(0, 0, 0, 0.7);
+	padding: 10px;
+}
+
+.aside {
+	position: relative;
+	float: right;
+	width: 35%;
+}
+
+.imageLink {
+    overflow: hidden;
+}
+
+.imageLink img {
+	width: 100%;
+	-webkit-transition: all 1.5s ease; /* Safari and Chrome */
+    -moz-transition: all 1.5s ease;
+}
+
+.imageLink img:hover {
+	-webkit-transform:scale(1.1); /* Safari and Chrome */
+    -moz-transform:scale(1.1);
+    overflow: hidden;
+}
+
+/* ------------------- */
 
 /* Subway Cam */
 
@@ -372,19 +563,6 @@ h3{
     to {bottom: 0; opacity: 0;}
 }
 
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
-}
-
 .modal-content {
     background-color: white;
     margin: 15% auto;
@@ -404,7 +582,7 @@ h3{
 	margin-right: auto;
 	margin-top: 5%;
 	margin-bottom: 5%;
-}
+} 
 
 .modalTable {
 	width: 100%;
@@ -510,7 +688,9 @@ h3{
 			margin: auto;
 }
 
-
+#carousel-id {
+	height: 500px;
+}
 
 #myCarousel {
 	width: 93%;
@@ -518,19 +698,18 @@ h3{
 }
 
 .carousel-control {
-	height: 345px;
 	position: relative;
 	width: 3%;
 }
 
 .carousel-control, #myCarousel {
 	display: inline-block;
-	height: 345px;
+	height: 500px;
 }
 
 .carousel-img {
-	max-height: 345px;
-	min-height: 345px;
+	max-height: 500px;
+	min-height: 500px;
 }
 
 .carousel-inner {
