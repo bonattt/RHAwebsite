@@ -218,33 +218,26 @@ function submit(){
 }
 
 function saveCommittee() {
-var url = BASE_API_URL + 'committee/' + committeeID;
-function createCORSRequest(method, url) {
-    var xhr = new XMLHttpRequest();
-    console.log("xhr is: ");
-    console.log(xhr);
-    xhr.open(method, url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    return xhr;
-}
-var xhr = createCORSRequest('PUT', url);
-if (!xhr) {
-    throw new Error('CORS not supported');
-}
+	var urlExtension = 'committee/' + committeeID;
+	
+	var xhr = xhrPutRequest(urlExtension);
+	if (!xhr) {
+		throw new Error('CORS not supported');
+	}
 
-xhr.onload = function () {
-    var responseText = xhr.responseText;
-    console.log("Response text: " + responseText);
-}
+	xhr.onload = function () {
+		var responseText = xhr.responseText;
+		console.log("Response text: " + responseText);
+	}
 
-xhr.onerror = function () {
-    console.log("There was an error");
-}
-var committeeName = document.getElementById("committee-text").value;
-var description = document.getElementById("description-text").value;
-var image = "images/committees/" + document.getElementById("image-text").value;
-xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
-return xhr;
+	xhr.onerror = function () {
+		console.log("There was an error");
+	}
+	var committeeName = document.getElementById("committee-text").value;
+	var description = document.getElementById("description-text").value;
+	var image = "images/committees/" + document.getElementById("image-text").value;
+	xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
+	return xhr;
 
 }
 

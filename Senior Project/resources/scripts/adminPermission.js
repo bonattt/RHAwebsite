@@ -135,7 +135,13 @@ function xhrPostRequest(urlExtention) {
 	return createXhrRequestJSON('POST', urlExtention);
 }
 
+function xhrPutRequest(urlExtention) {
+	return createXhrRequestJSON('PUT', urlExtention);
+}
+
 function createXhrRequestJSON(method, urlExtention) {
+	console.log("creating XHR " + method + " JSON(??) request");
+	checkUrlExtension(urlExtention);
 	var xhr = createCORSRequestJSON(method, url);
 	if (!xhr) {
 		throw new Error('CORS not supported');
@@ -151,6 +157,7 @@ function createXhrRequestJSON(method, urlExtention) {
 
 function createXhrRequest(method, urlExtention) {
 	console.log("creating XHR " + method + " request");
+	checkUrlExtension(urlExtention);
 	var xhr = createCORSRequest(method, BASE_API_URL + urlExtention);
 	if (!xhr) {
 		throw new Error('CORS not supported');
@@ -164,5 +171,11 @@ function createXhrRequest(method, urlExtention) {
 	return xhr;
 }
 
+function checkUrlExtension(url) {
+	if (url.includes(BASE_API_URL )) {
+		console.log('!!! WARNING !!!\n\ta url containing the full API extension' +
+					'was passed into a function expecting an extension');
+	}
+}
 
 
