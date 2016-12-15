@@ -74,7 +74,29 @@ var setupEditModal = function(dataElementId, targetIdRoot) {
 	descriptionField.value = dataset.desc; //*/
 }
 
-var enableSubmitButton = function(dataElementId, targetIdRoot) {
+var enableSubmitButton = function(dataElementId, targetIdRoot, apiExtention) {
+	if (apiExtention == undefined) {
+		SUBMIT_ALERT(dataElementId, targetIdRoot);
+		return;
+	}	
+	var submitButton = document.getElementById("modal-submit");
+	submitButton.addEventListener("click", function(event) {
+		var dataset = document.getElementById(dataElementId).dataset;
+		var json_data = {}
+		for (attr in dataset) {
+			var textField = document.getElementById(targetIdRoot + attr);
+			if (textField != undefined) {
+				dataset[attr] = textField.value;
+				json_data[attr] = textField.value;
+			} else {
+				json_data[attr] = dataset[attr];
+			}
+		}
+		alert(JSON.stringify(json_data));
+	});
+}
+
+var SUBMIT_ALERT = function(dataElementId, targetIdRoot) {
 	var submitButton = document.getElementById("modal-submit");
 	submitButton.addEventListener("click", function(event) {
 		var msg = "TODO: add a database query here! \n";
@@ -87,8 +109,7 @@ var enableSubmitButton = function(dataElementId, targetIdRoot) {
 			}
 			msg += attr + ": " + dataset[attr] + "\n";
 		}
-		console.log("An alert should appear");
-		alert(msg);
+		alert('msg')
 	});
 }
 

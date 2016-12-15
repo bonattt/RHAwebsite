@@ -22,8 +22,8 @@ var setupEditModal = function(dataElementId, taretIdRoot) {
 }
 */
 function setup() {
-
-	enableSubmitButton("everyCommitteeEver", "committee-modal-");
+	var apiExtension = 'committees/';
+	enableSubmitButton("everyCommitteeEver", "committee-modal-", apiExtension);
 	
 	var urlExtension = 'committees';
     var xhr = xhrGetRequest(urlExtension);
