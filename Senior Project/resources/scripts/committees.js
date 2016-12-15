@@ -2,7 +2,7 @@ var committeeMap = new Object();
 var committeeID;
 
 function getOfficers() {
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
+    var url = BASE_API_URL + 'officers';
     function createCORSRequest(method, url) {
         var xhr = new XMLHttpRequest();
         if ("withCredentials" in xhr) {
@@ -82,7 +82,7 @@ function setup() {
     }
 
     function getCommittees() {
-        var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/committees';
+        var url = BASE_API_URL + 'committees';
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
             if ("withCredentials" in xhr) {
@@ -218,7 +218,7 @@ function submit(){
 }
 
 function saveCommittee() {
-var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/committee/' + committeeID;
+var url = BASE_API_URL + 'committee/' + committeeID;
 function createCORSRequest(method, url) {
     var xhr = new XMLHttpRequest();
     console.log("xhr is: ");

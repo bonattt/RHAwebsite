@@ -172,7 +172,7 @@ function setup() {
 
         function submit() {
             closeModal();
-            var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/proposal/';
+            var url = BASE_API_URL + 'proposal/';
             function createCORSRequest(method, url) {
                 var xhr = new XMLHttpRequest();
                 xhr.open(method, url, true);

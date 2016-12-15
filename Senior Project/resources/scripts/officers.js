@@ -19,7 +19,6 @@ function setup() {
 	enableSubmitButton("everyOfficerEver", "officers-modal-");
 
     var officerId;
-    var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 
     var xhr = xhrGetRequest('officers');
     xhr.send();
@@ -134,7 +133,7 @@ function saveOfficer() {
     modal.style.display = "none";
     var fullname = document.getElementById("fullname").value;
     var officerID = officerMap[editName];
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/member/' + officerID;
+    var url = BASE_API_URL + 'member/' + officerID;
     function createCORSRequest(method, url) {
         var xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
