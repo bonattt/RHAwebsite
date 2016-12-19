@@ -9,8 +9,8 @@
 		RHA | proposals
 	</title>
 	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
 </head>
@@ -18,10 +18,15 @@
 <body>
 	<div id="navBar"> </div>
 	<div id="proposalsPage">
-		<h1>Proposals</h1>
+		<h1>EVENT <br> PROPOSALS</h1>
 		<button id="addProposal" data-toggle="modal" data-target="#myModal" onclick="console.log('button pushed');">Add Proposal To Database</button>
+		<div>
+			<img id="propPic1" src="../images/events/cooking-competition.jpg">
+			<img id="propPic2" src="../images/events/ski-trip.jpg">
+		</div>
 		<div id="directions">
-			<h3>Directions:</h3>
+			<p>Have a fun idea for an event that you want to see done? Send a proposal to RHA and it will be reviewed to potentially become a hosted event! When submitting a proposal, 
+				be sure to include the following in your e-mail: </p>
 			<ul>
 				<li>Include the name of your hall / organization and the dollar amount of the proposal in the subject line.</li>
 				<li>Attach a powerpoint with the following information to the email:
@@ -36,9 +41,18 @@
 				<li>Any additional information that you want RHA exec to know about your proposal</li>
 			</ul>
 		</div>
-		<h3 id="deadline">Please remember that all proposals must be submitted Monday by 6:15PM.</h3>
-		<a href="mailto:rhitrha@gmail.com" id="submit">Submit a Proposal</a>
-		<p id="proposalTemplate">Need ideas on how to format your proposal? <a href="http://www.rose-hulman.edu/rha/downloads/template.pptx" id="templateDownload">Download a Proposal Slide Template</a></p>
+		<div id="propbutton">
+			<button id="submitButton">
+				<a href="mailto:rhitrha@gmail.com" id="submitButtonLink"> 
+					<span id="submitMaintext">Submit a Proposal</span>
+					<span id="submitSubtext">(this will open a new e-mail)</span> 
+				</a>
+			</button>
+		
+		
+			<h3 id="deadline">Please remember that all proposals must be submitted Monday by 6:15PM.</h3>
+		</div>
+		<p id="proposalTemplate">Need ideas on how to format your proposal? <br><a href="http://www.rose-hulman.edu/rha/downloads/template.pptx" id="templateDownload">Download a Proposal Slide Template</a></p>
 	</div>
 	
 	<div id="myModal" class="modal fade" role="dialog">
@@ -58,69 +72,6 @@
 			</div>
 		</div>
 	</div>
-	
-	<!-- old modal
-	<div id="editModal" class="modal">
-		<div class="modal-content">
-			<span class="closeEdit">x</span>
-			<table class="modalTable">
-				<tr>
-					<td id="name" class="title"></td>
-					<td id="nameInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="costToAttendee" class="title"></td>
-					<td id="costToAttendeeInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="image" class="title"></td>
-					<td id="imageInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="description" class="title"></td>
-					<td id="descriptionInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="signUpOpenDate" class="title"></td>
-					<td id="signUpOpenDateInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="eventDate" class="title"></td>
-					<td id="eventDateInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="signUpCloseDate" class="title"></td>
-					<td id="signUpCloseDateInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="proposer" class="title"></td>
-					<td id="proposerInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="weekProposed" class="title"></td>
-					<td id="weekProposedInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="quarter" class="title"></td>
-					<td id="quarterInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="moneyRequested" class="title"></td>
-					<td id="moneyRequestedInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="approved" class="title"></td>
-					<td id="approvedInput" class="textArea"></td>
-				</tr>
-				<tr>
-					<td id="moneyAllocated" class="title"></td>
-					<td id="moneyAllocatedInput" class="textArea"></td>
-				</tr>
-			</table>
-			<!-- <button id="submit" class="modalButton">Submit</button> - ->
-		</div>
-	</div>
-	old modal --> 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 	<script>
