@@ -1,5 +1,6 @@
 function setup() {
-    var xhr = getEvents();
+	var urlExtension = 'funds/';
+	var xhr = xhrGetRequest(urlExtension);
     xhr.send();
     setTimeout(function() {createHTMLFromResponseText(xhr.responseText)}, 300);
 
@@ -26,59 +27,7 @@ function setup() {
         var floorMoneyTable = document.getElementById("floorMoneyTable");
         floorMoneyTable.innerHTML += html;
     }
-
-    function getEvents() {
-        var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/funds';
-        function createCORSRequest(method, url) {
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-
-            // Check if the XMLHttpRequest object has a "withCredentials" property.
-            // "withCredentials" only exists on XMLHTTPRequest2 objects.
-                xhr.open(method, url, true);
-
-            } else if (typeof XDomainRequest != "undefined") {
-
-            // Otherwise, check if XDomainRequest.
-            // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-
-            } else {
-
-            // Otherwise, CORS is not supported by the browser.
-                xhr = null;
-
-            }
-            return xhr;
-        }
-
-        var xhr = createCORSRequest('GET', url);
-        // console.log(xhr);
-        if (!xhr) {
-          throw new Error('CORS not supported');
-        }
-
-        xhr.onload = function () {
-            var responseText = xhr.responseText;
-            // return responseText;
-        }
-
-        xhr.onerror = function() {
-            console.log("There was an error");
-        }
-        // xhr.send();
-        // console.log(xhr);
-        return xhr;
-
-    }    
 } 
-
-
-// window.onload = function() {
-//     setup();
-// };
-
 document.addEventListener("DOMContentLoaded", function(event) {
     setup();
 });

@@ -126,9 +126,9 @@ function saveEvent() {
 function displaySignUps() {
     var xhr = getEvents();
     xhr.send();
-    setTimeout(function () { actuallyDoShit(xhr.responseText) }, 300);
+    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
-    function actuallyDoShit(proposal) {
+    function createHTMLFromResponseText(proposal) {
         proposal = JSON.parse(proposal);
         for (var i = 0; i < proposal.length; i++) {
             var cost = 0;
