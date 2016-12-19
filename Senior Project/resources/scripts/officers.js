@@ -1,32 +1,7 @@
 var officerMap = new Object();
 var editName;
 
-function getOfficers() {
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
-    function createCORSRequest(method, url) {
-        var xhr = new XMLHttpRequest();
-        if ("withCredentials" in xhr) {
-            xhr.open(method, url, true);
 
-        } else if (typeof XDomainRequest != "undefined") {
-            xhr = new XDomainRequest();
-            xhr.open(method, url);
-        } else {
-            xhr = null;
-        }
-        return xhr;
-    }
-    var xhr = createCORSRequest('GET', url);
-    if (!xhr) {
-        throw new Error('CORS not supported');
-    }
-    xhr.onload = function () {
-    }
-    xhr.onerror = function () {
-        console.log("There was an error");
-    }
-    return xhr;
-}
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
@@ -44,9 +19,8 @@ function setup() {
 	enableSubmitButton("everyOfficerEver", "officers-modal-");
 
     var officerId;
-    var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 
-    var xhr = getEvents();
+    var xhr = xhrGetRequest('officers');
     xhr.send();
     setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
@@ -74,39 +48,6 @@ function setup() {
         officersxhr.send();
         setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
     }
-
-    function getEvents() {
-        var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
-        function createCORSRequest(method, url) {
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-                xhr.open(method, url, true);
-
-            } else if (typeof XDomainRequest != "undefined") {
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-
-            } else {
-                xhr = null;
-            }
-            return xhr;
-        }
-        var xhr = createCORSRequest('GET', url);
-        if (!xhr) {
-            throw new Error('CORS not supported');
-        }
-
-        xhr.onload = function () {
-            var responseText = xhr.responseText;
-        }
-
-        xhr.onerror = function () {
-            console.log("There was an error");
-        }
-        return xhr;
-
-    }
-
 }
 
 function showEmptyModal() {
@@ -192,25 +133,9 @@ function saveOfficer() {
     modal.style.display = "none";
     var fullname = document.getElementById("fullname").value;
     var officerID = officerMap[editName];
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/member/' + officerID;
-    function createCORSRequest(method, url) {
-        var xhr = new XMLHttpRequest();
-        xhr.open(method, url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        return xhr;
-    }
-    var xhr = createCORSRequest('PUT', url);
-    if (!xhr) {
-        throw new Error('CORS not supported');
-    }
-
-    xhr.onload = function () {
-        var responseText = xhr.responseText;
-    }
-
-    xhr.onerror = function () {
-        console.log("There was an error");
-    }
+    var urlExtension = 'member/' + officerID;
+    var xhr = xhrPutRequest(urlExtension);
+   
     var titleText = document.getElementById("title-input-field").value;
     var emailText = document.getElementById("email-text").value;
     var phoneText = document.getElementById("phone-text").value;
