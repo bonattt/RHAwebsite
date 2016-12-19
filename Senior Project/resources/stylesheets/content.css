@@ -254,7 +254,7 @@ div.tileTitle p {
 	vertical-align: middle;
 	font-family: "Serif";
 	color: #FFFFFF;
-	/*text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;*/
+	
 }
 
 .learnMore {
@@ -434,27 +434,37 @@ h3{
 	/*float: right;*/
 	margin-left: auto;
 	margin-right: auto;
-	font-size: 1.125vw;
+	font-size: 1.11vw;
 	/*font-size: 1.25vw;*/
 }
 
+#directions > p {
+	font-weight: bold;
+	font-size: 1.15vw;
+	font-family: "Arial Black", sans-serif;
+}
+
 #propbutton {
-	background-color: rgb(136, 0, 21);
 	border-radius: 2%;
-	color: white;
 	padding: 1.5%;
 	position: absolute;
-	bottom: -15%;
+	bottom: -12%;
 	left: -2%;
-	/*float: left;*/
 	width: 475px;
 }
+
+#propbutton > button {
+	background-color: rgb(136, 0, 21);
+	width: 300px;
+	height: 80px;
+}
+
 
 #propPic1 {
 	width: 25%;
 	height: auto;
-	min-height: ;
-	min-width: ;
+	/*min-height: ;*/
+	/*min-width: ;*/
 	position: absolute;
 	left: 2%;
 	top: 7%;
@@ -472,6 +482,7 @@ h3{
 	text-align: center;
 	font-size: 10pt;
 	font-weight: bold;
+	color: black;
 }
 
 #submitButton {
@@ -503,12 +514,12 @@ h3{
 	/*font-size: 300%;*/
 	font-size: 20pt;
 	display: block;
-	/*color: 	#708090;*/
+	color: white;
 	text-decoration: none;
 }
 
 #submitSubtext {
-
+	color: white;
 }
 
 #submit:hover {
