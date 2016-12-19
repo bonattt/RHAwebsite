@@ -411,19 +411,31 @@ h3{
 	/*padding: 5%;*/
 }
 
+#proposalsPage > h1 {
+	position: absolute;
+	right: 32.5%;
+	top: 2.5%;
+	font-size: 400%;
+	text-align: left;
+	font-family: Stencil Std, fantasy, sans-serif;
+}
+
+
 #directions {
 	background-color: rgb(136, 0, 21);
 	border-radius: 2%;
 	color: white;
 	padding: 2%;
 	position: absolute;
-	width:55%;
-	right: -10%;
+	width: 900px;
+	max-width: 60%;
+	right: -8.5%;
 	top: 25%;
 	/*float: right;*/
 	margin-left: auto;
 	margin-right: auto;
-	font-size: 1.25vw;
+	font-size: 1.125vw;
+	/*font-size: 1.25vw;*/
 }
 
 #propbutton {
@@ -433,14 +445,32 @@ h3{
 	padding: 1.5%;
 	position: absolute;
 	bottom: -15%;
-	left: -5%;
+	left: -2%;
 	/*float: left;*/
-	width: 45%;
+	width: 475px;
+}
+
+#propPic1 {
+	width: 25%;
+	height: auto;
+	min-height: ;
+	min-width: ;
+	position: absolute;
+	left: 2%;
+	top: 7%;
+}
+
+#propPic2 {
+	width: 23%;
+	height: auto;
+	position: absolute;
+	left: 18%;
+	top: 31%;
 }
 
 #deadline {
 	text-align: center;
-	font-size: 1.25vw;
+	font-size: 10pt;
 	font-weight: bold;
 }
 
@@ -470,8 +500,8 @@ h3{
 
 #submitMaintext {
 	text-align: center;
-	font-size: 300%;
-	font-size: 2.5vw;
+	/*font-size: 300%;*/
+	font-size: 20pt;
 	display: block;
 	/*color: 	#708090;*/
 	text-decoration: none;
@@ -492,7 +522,8 @@ h3{
 	font-weight: bold;
 	color: rgb(137, 0, 21);
 	text-align: center;
-	font-size: 1.1vw;
+	font-size: 11pt;
+	/*font-size: 1.1vw;*/
 }
 
 #templateDownload {
