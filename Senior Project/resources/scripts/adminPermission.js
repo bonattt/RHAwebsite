@@ -1,4 +1,8 @@
 
+// append something to this
+const BASE_API_URL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/';
+
+
 var userIsOfficer = function(officers) {
 	officer = JSON.parse(officers);
     var tempUser = JSON.parse(sessionStorage.getItem("userData"));
@@ -30,6 +34,7 @@ var insertEditButtons = function(showModalFunc, dataElementId, targetIdRoot, att
 		adminValues[i].appendChild(editButton);
 		buttonList.push(editButton);
 	}
+	return buttonList;
 }
 
 var insertEditButtonsBefore = function(showModalFunc, attributes) {
@@ -87,5 +92,82 @@ var enableSubmitButton = function(dataElementId, targetIdRoot) {
 	});
 }
 
+function getOfficers() {
+    var urlExtention = 'officers/';
+    var xhr = xhrGetRequest(urlExtention);
+    return xhr;
+}
+
+function createCORSRequest(method, url) {
+	var xhr = new XMLHttpRequest();
+	if ("withCredentials" in xhr) {
+		xhr.open(method, url, true);
+
+	} else if (typeof XDomainRequest != "undefined") {
+		xhr = new XDomainRequest();
+		xhr.open(method, url);
+	} else {
+		xhr = null;
+	}
+	return xhr;
+}
+
+function createCORSRequestJSON(method, url) {
+	var xhr = new XMLHttpRequest();
+	xhr.open(method, url, true);
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	return xhr;
+}
+
+function xhrGetRequest(urlExtention) {
+	return createXhrRequest('GET', urlExtention);
+}
+
+function xhrPostRequest(urlExtention) {
+	return createXhrRequestJSON('POST', urlExtention);
+}
+
+function xhrPutRequest(urlExtention) {
+	return createXhrRequestJSON('PUT', urlExtention);
+}
+
+function createXhrRequestJSON(method, urlExtention) {
+	console.log("creating XHR " + method + " JSON(??) request");
+	checkUrlExtension(urlExtention);
+	var xhr = createCORSRequestJSON(method, url);
+	if (!xhr) {
+		throw new Error('CORS not supported');
+	}
+	xhr.onload = function () {
+		var responseText = xhr.responseText;
+	}
+	xhr.onerror = function () {
+		console.log("There was an error with an XHR " + method + " JSON(??) request.");
+	}
+	return xhr;
+}
+
+function createXhrRequest(method, urlExtention) {
+	console.log("creating XHR " + method + " request");
+	checkUrlExtension(urlExtention);
+	var xhr = createCORSRequest(method, BASE_API_URL + urlExtention);
+	if (!xhr) {
+		throw new Error('CORS not supported');
+	}
+	xhr.onload = function () {
+		var responseText = xhr.responseText;
+	}
+	xhr.onerror = function () {
+		console.log("There was an error with an XHR " + method + " request.");
+	}
+	return xhr;
+}
+
+function checkUrlExtension(url) {
+	if (url.includes(BASE_API_URL )) {
+		console.log('!!! WARNING !!!\n\ta url containing the full API extension' +
+					'was passed into a function expecting an extension');
+	}
+}
 
 
