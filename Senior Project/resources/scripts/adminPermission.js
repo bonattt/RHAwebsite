@@ -1,4 +1,3 @@
-
 // append something to this
 const BASE_API_URL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/';
 
@@ -17,7 +16,7 @@ var userIsOfficer = function(officers) {
 	return false;
 }
 
-var insertEditButtons = function(showModalFunc, dataElementId, targetIdRoot, attributes) {
+var insertEditButtons = function (showModalFunc, dataElementId, targetIdRoot, attributes) {
     var adminValues = document.getElementsByClassName("edit");
 	var buttonList = [];
     for (var i = 0; i < adminValues.length; i++) {
@@ -26,7 +25,7 @@ var insertEditButtons = function(showModalFunc, dataElementId, targetIdRoot, att
 		editButton.setAttribute("class", "admin-edit-button btn btn-info btn-lg");
 		editButton.setAttribute("data-toggle", "modal");	// data-toggle="modal"
 		editButton.setAttribute("data-target", "#myModal");	// data-target="#myModal"
-		editButton.setAttribute("onclick", "setupEditModal('"+dataElementId+"', '"+targetIdRoot+"');");
+		editButton.setAttribute("onclick", "setupEditModal('" + dataElementId + "', '" + targetIdRoot + "');");
 		if (attributes != undefined) {
 			appendAttributes(editButton, attributes);
 		}
@@ -37,7 +36,7 @@ var insertEditButtons = function(showModalFunc, dataElementId, targetIdRoot, att
 	return buttonList;
 }
 
-var insertEditButtonsBefore = function(showModalFunc, attributes) {
+var insertEditButtonsBefore = function (showModalFunc, attributes) {
     var adminValues = document.getElementsByClassName("edit");
 	var buttonList = [];
     for (var i = 0; i < adminValues.length; i++) {
@@ -52,21 +51,21 @@ var insertEditButtonsBefore = function(showModalFunc, attributes) {
 	}
 }
 
-var appendAttributes = function(element, attributes) {
+var appendAttributes = function (element, attributes) {
 	for (attr in attributes) {
 		element.setAttribute(attr, attributes[attr]);
 	}
 }
 
-var setupEditModal = function(dataElementId, targetIdRoot) {
+var setupEditModal = function (dataElementId, targetIdRoot) {
 	console.log("adminPermission.SETUP EDIT MODAL");
 	var dataset = document.getElementById(dataElementId).dataset;
 	for (attr in dataset) {
 		var textField = document.getElementById(targetIdRoot + attr);
-		if (textField == undefined) {continue;}
+		if (textField == undefined) { continue; }
 		textField.value = dataset[attr];
 	}
-	
+
 	/*var nameField = document.getElementById(targetIdRoot + "name");
 	nameField.value = dataset.name;
 	
@@ -74,9 +73,9 @@ var setupEditModal = function(dataElementId, targetIdRoot) {
 	descriptionField.value = dataset.desc; //*/
 }
 
-var enableSubmitButton = function(dataElementId, targetIdRoot) {
+var enableSubmitButton = function (dataElementId, targetIdRoot) {
 	var submitButton = document.getElementById("modal-submit");
-	submitButton.addEventListener("click", function(event) {
+	submitButton.addEventListener("click", function (event) {
 		var msg = "TODO: add a database query here! \n";
 		var dataset = document.getElementById(dataElementId).dataset;
 		for (attr in dataset) {

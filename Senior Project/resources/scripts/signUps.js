@@ -130,7 +130,6 @@ function displaySignUps() {
 
     function createHTMLFromResponseText(proposal) {
         proposal = JSON.parse(proposal);
-        console.log(proposal);
         for (var i = 0; i < proposal.length; i++) {
             var cost = 0;
             if (proposal[i].cost_to_attendee == '$0.00') {
@@ -140,21 +139,26 @@ function displaySignUps() {
             }
 
             var signUpCloseDate = new Date(proposal[i].event_signup_close);
+            signUpCloseDate = (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear();
             var signUpOpenDate = new Date(proposal[i].event_signup_open);
+            var signUpOpenDateFormatted = (signUpOpenDate.getMonth() + 1) + "/" + signUpOpenDate.getUTCDate() + "/" + signUpOpenDate.getFullYear();
 
             if (signUpOpenDate > new Date()) {
-                var signUpHTML = "<p class='eventSignUpDate'>Sign-ups open on: " + (signUpOpenDate.getMonth() + 1) + "/" + signUpOpenDate.getUTCDate() + "/" + signUpOpenDate.getFullYear() + "</p>";
+                var signUpHTML = "<p class='eventSignUpDate'>Sign-ups open on: " + signUpOpenDateFormatted + "</p>";
             } else {
-                var signUpHTML = "<p class='eventSignUpDate'>Sign-ups close on: " + (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear() + "</p>";
+                var signUpHTML = "<p class='eventSignUpDate'>Sign-ups close on: " + signUpCloseDate + "</p>";
             }
             var attendees = proposal[i].attendees;
 
             var eventDate = new Date(proposal[i].event_date);
+            eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
 
             var html = "<div class='row'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
-            html += "<div class='eventTextSignUps'><h1 class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
+            html += "<div class='eventTextSignUps' id='eventTextSignUps' data-name='" + proposal[i].proposal_name + "' data-cost='" + cost + "' data-eventDate='" + eventDate;
+            html += "' data-signupsclosedate='" + signUpCloseDate + "' data-signupsopendate='" + signUpOpenDateFormatted + "' data-description='" + proposal[i].description + "'>";
+            html += "<h1 id='editEventName' class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
             html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
-            html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
+            html += "<h3 class='eventDate'>" + eventDate + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
             html += signUpHTML + "</div>";
             html += "<div class='eventActions'>";
             var username = JSON.parse(sessionStorage.getItem("userData")).username;
@@ -166,18 +170,23 @@ function displaySignUps() {
                 }
                 html += "<a onclick='showListModal(" + proposal[i].proposal_id + ")'><p class='viewListLink'>View List</p></a>"
             }
-            html += "<p class='editEvent'>Edit Event</p></div></div></div>";
+            html += "<p id='editEvent' class='editEvent' data-toggle='modal' data-target='#myModal'>Edit Event</p></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
             //makeListLinks();
         }
+
+        var editEventButtons = document.getElementsByClassName("editEvent");
+
+        var eventTextSignUps = document.getElementById("eventTextSignUps");
+        setupEditModal('eventTextSignUps', 'signups-modal-');
     }
 
 
     var officersxhr = getOfficers();
     officersxhr.send();
-    setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
+    //setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
 
     function getEvents() {
         var url = apiURL + 'api/v1/events';
@@ -339,11 +348,11 @@ function getOfficers() {
     return xhr;
 }
 
-function setAdmin(officers) {
-    if (userIsOfficer(officers)) {
-        var editbuttons = insertEditButtons(showEditModal);
-    }
-}
+// function setAdmin(officers) {
+//     if (userIsOfficer(officers)) {
+//         var editbuttons = insertEditButtons(showEditModal);
+//     }
+// }
 
 function getAttendees(id) {
     var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/' + id;
