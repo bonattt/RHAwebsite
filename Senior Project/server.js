@@ -39,6 +39,7 @@ app.get('/subwayCam', function (req, res) {
 	res.sendFile(__dirname + '/html/subwayCam.html');
 });
 
+
 app.get('/floorMoney', function (req, res) {
 	res.sendFile(__dirname + '/html/floorMoney.html');
 });
