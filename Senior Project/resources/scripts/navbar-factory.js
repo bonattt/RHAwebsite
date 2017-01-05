@@ -43,7 +43,7 @@ window.onload = function () {
 		'			</div>' +
 		'		</div>' +
 		'	</div>' +
-		'		<button id="login-button">Login with RoseFire</button>';
+		'		<button id="login-button">Login</button>';
 
 
 	var loginButton = document.getElementById("login-button");
@@ -53,7 +53,7 @@ window.onload = function () {
 	}
     const registryToken = "c8950f98-0c9c-485a-b0af-754208d11d08";
     $("#login-button").click(function () {
-		if (loginButton.innerHTML == "Login with RoseFire") {
+		if (loginButton.innerHTML == "Login") {
 			login();
 		} else {
 			logout();
