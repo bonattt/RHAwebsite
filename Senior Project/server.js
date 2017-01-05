@@ -39,6 +39,17 @@ app.get('/subwayCam', function (req, res) {
 	res.sendFile(__dirname + '/html/subwayCam.html');
 });
 
+app.get('/photoGallery', function (req, res) {
+	res.sendFile(__dirname + '/html/photoGallery.html');
+});
+
+app.get('/reserveEquipment', function (req, res) {
+	res.sendFile(__dirname + '/html/reserveEquipment.html');
+});
+
+app.get('/activeMembersList', function (req, res) {
+	res.sendFile(__dirname + '/html/activeMembersList.html');
+});
 
 app.get('/floorMoney', function (req, res) {
 	res.sendFile(__dirname + '/html/floorMoney.html');
