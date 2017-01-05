@@ -875,3 +875,11 @@ height: 150pt;
 img {
 	vertical-align: baseline;
 }
+
+/* Photo Gallery */
+
+.photoGalleryImage {
+	height: 24%;
+	width: 24%;
+	overflow: none;
+}
