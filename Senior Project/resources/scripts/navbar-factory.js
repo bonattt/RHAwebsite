@@ -17,6 +17,9 @@ window.onload = function () {
 		'			<div class="dropdown-content">' +
 		'				<a href="subwayCam">Subway Cam</a>' +
 		'				<a href="http://movies.rose-hulman.edu">Movie Server</a>' +
+		'				<a href="photoGallery">Photo Gallery</a>' +
+		'				<a href="reserveEquipment">Reserve Equipment</a>' +
+		'				<a href="activeMembersList">Active Members List</a>' +
 		'			</div>' +
 		'		</div>' +
 		'		<div class="dropdown">' +
