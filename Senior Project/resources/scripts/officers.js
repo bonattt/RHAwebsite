@@ -1,11 +1,12 @@
 var officerMap = new Object();
 var editName;
+const API_EXTENSION = '';
 
 
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-		var editbuttons = insertEditButtons(function() {}, 'everyOfficerEver', 'officers-modal-');
+		var editbuttons = insertEditButtons(function() {}, 'officer', 'officers-modal-');
     }
     var addOfficeButton = document.getElementById("addOfficer");
     addOfficeButton.addEventListener("click", showEmptyModal);
@@ -13,10 +14,24 @@ function setAdmin(officers) {
 }
 
 
-
 function setup() {
 	
-	enableSubmitButton("everyOfficerEver", "officers-modal-");
+	/*enableSubmitButton("everyOfficerEver", "officers-modal-", function(json) {
+		editName = json.firstname + ' ' + json.lastname
+		console.log("editName: " + editName);
+		var officerID = officerMap[editName];
+		console.log("oficerID: " + officerID);
+		// console.log("officerMap: ");
+		// console.log(officerMap);
+		var urlExtension = 'member/' + officerID;
+		var xhr = xhrPutRequest(urlExtension);
+		console.log("email: " + json.email);
+		json.username = json.email.split("@")[0];
+		console.log("username: " + json.username);
+		alert(JSON.stringify(json));
+		// xhr.send(JSON.stringify(json));
+		// location.reload();
+	});*/
 
     var officerId;
 
@@ -29,18 +44,32 @@ function setup() {
 
         for (var i = 0; i < officer.length; i++) {
             if (officer[i].memberType != "") {
+				var fields = ["firstname", "lastname", "username",
+					"membertype", "phone_number", "room_number", "hall", "cm"];
                 var html = "<div class='officer'>";
-                html += "<h3 class='edit'>" + officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].membertype + "</h3>";
+                html += "<h3 class='edit' id='officer" + officer[i].user_id + "'>" 
+				
+				html += officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].membertype
+				html += "</h3>";
                 html += "<img src='../images/officers/" + officer[i].membertype.toLowerCase().replace(" ", "") + ".jpg' alt='" + officer[i].membertype + "'height='294' width='195'>";
                 html += "<p>Email: <a href='mailto:" + officer[i].username + "@rose-hulman.edu'>" + officer[i].username + "@rose-hulman.edu</a></p>";
                 html += "<p> Phone Number: " + officer[i].phone_number + "</p>";
                 html += "<p> Room: " + officer[i].hall + " " + officer[i].room_number + "</p>";
                 html += "<p>Box #: " + officer[i].cm + "</p>";
 
-                officerMap[officer[i].firstname + " " + officer[i].lastname] = officer[i].user_id;
+                officerMap[officer[i].username] = officer[i].user_id;
 
                 var officers = document.getElementById("officers");
                 officers.innerHTML += html;
+				
+				var dataset = document.getElementById('officer' + officer[i].user_id).dataset;
+				var fields = ["firstname", "lastname", "username",
+					"membertype", "phone_number", "room_number", "hall", "cm"];
+                console.log("about to set fields");
+				fields.forEach(function(field){
+                    console.log("setting field " + field + " to " + officer[i][field]);
+					dataset[field] = officer[i][field];
+				});
             }
         }
 
@@ -48,6 +77,10 @@ function setup() {
         officersxhr.send();
         setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
     }
+}
+
+function addDataset(fields, officer) {
+	
 }
 
 function showEmptyModal() {

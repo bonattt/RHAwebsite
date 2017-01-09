@@ -1,7 +1,9 @@
 
 // append something to this
 const BASE_API_URL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/';
+var button_presses = 0;
 
+var modal_event_handlers = [];
 
 var userIsOfficer = function(officers) {
 	officer = JSON.parse(officers);
@@ -17,16 +19,19 @@ var userIsOfficer = function(officers) {
 	return false;
 }
 
-var insertEditButtons = function(showModalFunc, dataElementId, targetIdRoot, attributes) {
+var insertEditButtons = function(showModalFunc, dataElementRoot, targetIdRoot, attributes) {
     var adminValues = document.getElementsByClassName("edit");
 	var buttonList = [];
     for (var i = 0; i < adminValues.length; i++) {
+		var id = adminValues[i].id;
         var editButton = document.createElement("img");
+        console.log("setupEditModal('" + id + "', '"+targetIdRoot+"')");
         editButton.setAttribute("src", "../images/edit.png");
 		editButton.setAttribute("class", "admin-edit-button btn btn-info btn-lg");
 		editButton.setAttribute("data-toggle", "modal");	// data-toggle="modal"
 		editButton.setAttribute("data-target", "#myModal");	// data-target="#myModal"
-		editButton.setAttribute("onclick", "setupEditModal('"+dataElementId+"', '"+targetIdRoot+"');");
+		//editButton.setAttribute("onclick", "setupEditModal('"+ dataElementRoot + id + "', '"+targetIdRoot+"');");
+		editButton.setAttribute("onclick", "setupEditModal('"+ id + "', '"+targetIdRoot+"');");
 		if (attributes != undefined) {
 			appendAttributes(editButton, attributes);
 		}
@@ -60,12 +65,17 @@ var appendAttributes = function(element, attributes) {
 
 var setupEditModal = function(dataElementId, targetIdRoot) {
 	console.log("adminPermission.SETUP EDIT MODAL");
+	console.log("edit data ID = " + dataElementId);
 	var dataset = document.getElementById(dataElementId).dataset;
+	console.log(dataset);
 	for (attr in dataset) {
+		console.log("dataset." + attr + " = " + dataset[attr]);
 		var textField = document.getElementById(targetIdRoot + attr);
-		if (textField == undefined) {continue;}
-		textField.value = dataset[attr];
+		if (textField != undefined) {
+            textField.value = dataset[attr];
+        } else {console.log("DEBUG -- undefined");}
 	}
+    enableSubmitButton(dataElementId, targetIdRoot, function() {});
 	
 	/*var nameField = document.getElementById(targetIdRoot + "name");
 	nameField.value = dataset.name;
@@ -74,13 +84,27 @@ var setupEditModal = function(dataElementId, targetIdRoot) {
 	descriptionField.value = dataset.desc; //*/
 }
 
-var enableSubmitButton = function(dataElementId, targetIdRoot, apiExtention) {
-	if (apiExtention == undefined) {
-		SUBMIT_ALERT(dataElementId, targetIdRoot);
-		return;
-	}	
+var clearSubmitHandlers = function(element, inputMode) {
+    if (inputMode == undefined) {
+        inputMode = 'click';
+    }
+    modal_event_handlers.forEach(function(handler) {
+        element.removeEventListener(inputMode, handler);
+    });
+}
+
+var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc) {
+	console.log('enabling submit button!!');
+	//if (apiExtention == undefined) {
+		//SUBMIT_ALERT(dataElementId, targetIdRoot);
+		//return;
+	//}
 	var submitButton = document.getElementById("modal-submit");
-	submitButton.addEventListener("click", function(event) {
+	var cancelButton = document.getElementById("modal-cancel");
+    var handleSubmitButton = function(event) {
+        alert('handled ' + (++button_presses) + ' button presses');
+        clearSubmitHandlers(submitButton);
+		console.log('submit button presses!');
 		var dataset = document.getElementById(dataElementId).dataset;
 		var json_data = {}
 		for (attr in dataset) {
@@ -92,14 +116,22 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, apiExtention) {
 				json_data[attr] = dataset[attr];
 			}
 		}
-		alert(JSON.stringify(json_data));
-	});
+		// alert(JSON.stringify(json_data));
+		console.log('submitFunc:');
+		submitFunc(json_data);
+	};
+    modal_event_handlers.push(handleSubmitButton); // global varialbe.
+	submitButton.addEventListener("click", handleSubmitButton);
+    cancelButton.addEventListener("click", function(event) { clearSubmitHandlers(submitButton) });
 }
 
 var SUBMIT_ALERT = function(dataElementId, targetIdRoot) {
 	var submitButton = document.getElementById("modal-submit");
+	msg = "please add the API extension as an arguement to the function 'enableSubmitButton'"; 
+	console.log(msg);
+	alert(msg);
 	submitButton.addEventListener("click", function(event) {
-		var msg = "TODO: add a database query here! \n";
+		/*var msg = "TODO: add a database query here! \n";
 		var dataset = document.getElementById(dataElementId).dataset;
 		for (attr in dataset) {
 			var textField = document.getElementById(targetIdRoot + attr);
@@ -108,8 +140,8 @@ var SUBMIT_ALERT = function(dataElementId, targetIdRoot) {
 				dataset[attr] = textField.value;
 			}
 			msg += attr + ": " + dataset[attr] + "\n";
-		}
-		alert('msg')
+		} //*/
+		alert(msg);
 	});
 }
 
@@ -155,7 +187,7 @@ function xhrPutRequest(urlExtention) {
 function createXhrRequestJSON(method, urlExtention) {
 	console.log("creating XHR " + method + " JSON(??) request");
 	checkUrlExtension(urlExtention);
-	var xhr = createCORSRequestJSON(method, url);
+	var xhr = createCORSRequestJSON(method, BASE_API_URL + urlExtention);
 	if (!xhr) {
 		throw new Error('CORS not supported');
 	}
