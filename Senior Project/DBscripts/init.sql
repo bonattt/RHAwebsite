@@ -55,6 +55,24 @@ CREATE TABLE Committee (
         image varchar(100)
 );
 
+CREATE TABLE Equipment (
+        equipment_id SERIAL PRIMARY KEY,
+        equipmentName varchar(30);
+        equipmentDescription varchar(500),
+        rentalTimeInDays int DEFAULT 2
+);
+
+CREATE TABLE Rentals (
+        rental_id SERIAL PRIMARY KEY,
+        member_id INT references Members (user_id),
+        equipment_id INT references Equipment (equipment_id),
+        approved_by INT references Members (user_id),
+        reason_for_rental varchar(100),
+        rented_on DATE,
+        return_on DATE,
+        due_by DATE
+);
+
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
                                         Feud, and more. We also show movies outdoors on the big screen, and sponsor an Easter egg hunt in the spring. We also
@@ -72,16 +90,6 @@ INSERT into Committee VALUES (DEFAULT, 'Publicity', 'Publicity committee is for 
                                         include making the iconic RHA light board being happily in full support of R.H.A. activities, but can vary week to week.
                                         Frequently, we combine with service to create "surblicity" to create one epic force of a committee. Come check it out!', '../images/committees/publicity.jpg');
 
-CREATE TABLE FrontPageNews (
-        newsID SERIAL PRIMARY KEY,
-        title varchar(20),
-        description varchar(500),
-        datePosted DATE
-);
-
-INSERT INTO FrontPageNews VALUES (DEFAULT, ' What''s new? ', 'Residence Hall Association is an organization for students living on campus in a residence hall. If you live in a residence
-                        hall, then you are already a member. All you have to do is come to a meeting and have fun sharing ideas! R.H.A has several
-                        responsibilities and plans events for on campus residents.', null);
 
 -- Most entries below this point are temporary. Once the database has been begun regular use, these inserts will become obselete
 -- BSB 1
