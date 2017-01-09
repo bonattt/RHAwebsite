@@ -23,15 +23,15 @@ var insertEditButtons = function(showModalFunc, dataElementRoot, targetIdRoot, a
     var adminValues = document.getElementsByClassName("edit");
 	var buttonList = [];
     for (var i = 0; i < adminValues.length; i++) {
-		var id = adminValues[i].id;
+		var elementId = adminValues[i].id;
         var editButton = document.createElement("img");
-        console.log("setupEditModal('" + id + "', '"+targetIdRoot+"')");
+        console.log("setupEditModal('" + elementId + "', '"+targetIdRoot+"')");
         editButton.setAttribute("src", "../images/edit.png");
 		editButton.setAttribute("class", "admin-edit-button btn btn-info btn-lg");
 		editButton.setAttribute("data-toggle", "modal");	// data-toggle="modal"
 		editButton.setAttribute("data-target", "#myModal");	// data-target="#myModal"
 		//editButton.setAttribute("onclick", "setupEditModal('"+ dataElementRoot + id + "', '"+targetIdRoot+"');");
-		editButton.setAttribute("onclick", "setupEditModal('"+ id + "', '"+targetIdRoot+"');");
+		editButton.setAttribute("onclick", "setupEditModal('"+ elementId + "', '"+targetIdRoot+"');");
 		if (attributes != undefined) {
 			appendAttributes(editButton, attributes);
 		}

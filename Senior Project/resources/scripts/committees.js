@@ -3,7 +3,7 @@ var committeeID;
 
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
-		var editButtons = insertEditButtons(function() {}, 'everyCommitteeEver', 'committee-modal-');
+		var editButtons = insertEditButtons(function() {}, 'committee', 'committee-modal-');
     }
     var addCommitteeButton = document.getElementById("addCommittee");
     addCommitteeButton.addEventListener("click", showEmptyModal);
@@ -23,7 +23,7 @@ var setupEditModal = function(dataElementId, taretIdRoot) {
 */
 function setup() {
 	var apiExtension = 'committees/';
-	enableSubmitButton("everyCommitteeEver", "committee-modal-", apiExtension);
+	// enableSubmitButton("everyCommitteeEver", "committee-modal-", apiExtension);
 	
 	var urlExtension = 'committees';
     var xhr = xhrGetRequest(urlExtension);
@@ -33,21 +33,29 @@ function setup() {
     function createHTMLFromResponseText(committee) {
         committee = JSON.parse(committee);
         for (var i = 0; i < committee.length; i++) {
-            committeeMap[committee[i].committeename] = committee[i].committeeid;
+            var id = committee[i].committeeid
+            committeeMap[committee[i].committeename] = id;
             if (i % 2 == 0) {
-                var html = "<div class='committeeWrapperRight' id='committeeWrapperRight'>";
-                html += "<div class='committees'><h3 class='edit'>" + committee[i].committeename + "</h3>";
+                var html = "<div class='committeeWrapperRight'>";
+                html += "<div class='committees'><h3 class='edit' id='committee" + id + "'>" + committee[i].committeename + "</h3>";
                 html += "<p>" + committee[i].description + "</p></div>";
                 html += "<image class='committeePhoto' src=" + committee[i].image + " alt=" + committee[i].committeename + "></div>";
             } else {
-                var html = "<div class='committeeWrapperLeft' id='committeeWrapperLeft'>";
+                var html = "<div class='committeeWrapperLeft'>";
                 html += "<image class='committeePhoto' src=" + committee[i].image + " alt=" + committee[i].committeename + ">";
-                html += "<div class='committees'><h3 class='edit'>" + committee[i].committeename + "</h3>";
+                html += "<div class='committees'><h3 class='edit' id='committee" + id + "'>" + committee[i].committeename + "</h3>";
                 html += "<p>" + committee[i].description + "</p></div></div>";
             }
 
             var committees = document.getElementById("committees");
             committees.innerHTML += html;
+            
+            var dataset = document.getElementById('committee' + id).dataset;
+            var fields = ["committeename", "committeeid", "description", "image"]
+            fields.forEach(function(field) {
+                console.log("setting field " + field + " to " + committee[i][field]);
+                dataset[field] = committee[i][field];
+            });
         }
 
         var officersxhr = getOfficers();
