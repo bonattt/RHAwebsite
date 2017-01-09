@@ -1,4 +1,3 @@
-
 // append something to this
 const BASE_API_URL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/';
 var button_presses = 0;
@@ -42,7 +41,7 @@ var insertEditButtons = function(showModalFunc, dataElementRoot, targetIdRoot, a
 	return buttonList;
 }
 
-var insertEditButtonsBefore = function(showModalFunc, attributes) {
+var insertEditButtonsBefore = function (showModalFunc, attributes) {
     var adminValues = document.getElementsByClassName("edit");
 	var buttonList = [];
     for (var i = 0; i < adminValues.length; i++) {
@@ -57,13 +56,13 @@ var insertEditButtonsBefore = function(showModalFunc, attributes) {
 	}
 }
 
-var appendAttributes = function(element, attributes) {
+var appendAttributes = function (element, attributes) {
 	for (attr in attributes) {
 		element.setAttribute(attr, attributes[attr]);
 	}
 }
 
-var setupEditModal = function(dataElementId, targetIdRoot) {
+var setupEditModal = function (dataElementId, targetIdRoot) {
 	console.log("adminPermission.SETUP EDIT MODAL");
 	console.log("edit data ID = " + dataElementId);
 	var dataset = document.getElementById(dataElementId).dataset;
@@ -73,9 +72,12 @@ var setupEditModal = function(dataElementId, targetIdRoot) {
 		var textField = document.getElementById(targetIdRoot + attr);
 		if (textField != undefined) {
             textField.value = dataset[attr];
-        } else {console.log("DEBUG -- undefined");}
+        }
 	}
     enableSubmitButton(dataElementId, targetIdRoot, function() {});
+    if (textField != undefined) { 
+        textField.value = dataset[attr];
+    }
 	
 	/*var nameField = document.getElementById(targetIdRoot + "name");
 	nameField.value = dataset.name;
