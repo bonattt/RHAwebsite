@@ -1,6 +1,5 @@
 // append something to this
 const BASE_API_URL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/';
-var button_presses = 0;
 
 var modal_event_handlers = [];
 
@@ -18,7 +17,7 @@ var userIsOfficer = function(officers) {
 	return false;
 }
 
-var insertEditButtons = function(showModalFunc, dataElementRoot, targetIdRoot, attributes) {
+var insertEditButtons = function(modalSubmitFunc, dataElementRoot, targetIdRoot, attributes) {
     var adminValues = document.getElementsByClassName("edit");
 	var buttonList = [];
     for (var i = 0; i < adminValues.length; i++) {
@@ -34,14 +33,14 @@ var insertEditButtons = function(showModalFunc, dataElementRoot, targetIdRoot, a
 		if (attributes != undefined) {
 			appendAttributes(editButton, attributes);
 		}
-		editButton.addEventListener("click", showModalFunc, false);
+		editButton.addEventListener("click", modalSubmitFunc, false);
 		adminValues[i].appendChild(editButton);
 		buttonList.push(editButton);
 	}
 	return buttonList;
 }
 
-var insertEditButtonsBefore = function (showModalFunc, attributes) {
+var insertEditButtonsBefore = function (modalSubmitFunc, attributes) {
     var adminValues = document.getElementsByClassName("edit");
 	var buttonList = [];
     for (var i = 0; i < adminValues.length; i++) {
@@ -50,7 +49,7 @@ var insertEditButtonsBefore = function (showModalFunc, attributes) {
 		if (attributes != undefined) {
 			appendAttributes(editButton, attributes);
 		}
-		editButton.addEventListener("click", showModalFunc, false);
+		editButton.addEventListener("click", modalSubmitFunc, false);
 		adminValues[i].insertBefore(editButton, adminValues[i].firstChild);
 		buttonList.push(editButton);
 	}
@@ -74,7 +73,17 @@ var setupEditModal = function (dataElementId, targetIdRoot) {
             textField.value = dataset[attr];
         }
 	}
-    enableSubmitButton(dataElementId, targetIdRoot, function() {});
+    enableSubmitButton(dataElementId, targetIdRoot, function(json_data, put_id) {
+        console.log('sending API put request');
+        console.log(json_data);
+        var apiUrl = 'committee/' + put_id
+        var xhr = xhrPutRequest(apiUrl);
+        alert('sending API put request...\napi url: "' + apiUrl + '"');
+        xhr.send();
+        setTimeout(function () { 
+            console.log(xhr.responseText);
+        }, 300);
+    });
     if (textField != undefined) { 
         textField.value = dataset[attr];
     }
@@ -104,7 +113,6 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc) {
 	var submitButton = document.getElementById("modal-submit");
 	var cancelButton = document.getElementById("modal-cancel");
     var handleSubmitButton = function(event) {
-        alert('handled ' + (++button_presses) + ' button presses');
         clearSubmitHandlers(submitButton);
 		console.log('submit button presses!');
 		var dataset = document.getElementById(dataElementId).dataset;
@@ -120,7 +128,8 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc) {
 		}
 		// alert(JSON.stringify(json_data));
 		console.log('submitFunc:');
-		submitFunc(json_data);
+        var committeeId = dataset.committeeid;
+		submitFunc(json_data, committeeId);
 	};
     modal_event_handlers.push(handleSubmitButton); // global varialbe.
 	submitButton.addEventListener("click", handleSubmitButton);
@@ -195,9 +204,12 @@ function createXhrRequestJSON(method, urlExtention) {
 	}
 	xhr.onload = function () {
 		var responseText = xhr.responseText;
+        alert('Xhr ' + method + 'completed successfully!.');
 	}
 	xhr.onerror = function () {
-		console.log("There was an error with an XHR " + method + " JSON(??) request.");
+        var msg = "There was an error with an XHR " + method + " JSON(??) request.";
+        alert(msg);
+		console.log(msg);
 	}
 	return xhr;
 }

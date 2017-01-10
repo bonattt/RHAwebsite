@@ -53,7 +53,7 @@ function setup() {
             var dataset = document.getElementById('committee' + id).dataset;
             var fields = ["committeename", "committeeid", "description", "image"]
             fields.forEach(function(field) {
-                console.log("setting field " + field + " to " + committee[i][field]);
+                // console.log("setting field " + field + " to " + committee[i][field]);
                 dataset[field] = committee[i][field];
             });
         }
