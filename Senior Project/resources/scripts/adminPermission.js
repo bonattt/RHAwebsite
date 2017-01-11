@@ -17,23 +17,36 @@ var userIsOfficer = function(officers) {
 	return false;
 }
 
-var insertEditButtons = function(modalSubmitFunc, dataElementRoot, targetIdRoot, attributes) {
+var insertEditButtons = function(dataElementRoot, targetIdRoot, submitFunc, attributes) {
     var adminValues = document.getElementsByClassName("edit");
 	var buttonList = [];
     for (var i = 0; i < adminValues.length; i++) {
 		var elementId = adminValues[i].id;
         var editButton = document.createElement("img");
-        console.log("setupEditModal('" + elementId + "', '"+targetIdRoot+"')");
         editButton.setAttribute("src", "../images/edit.png");
 		editButton.setAttribute("class", "admin-edit-button btn btn-info btn-lg");
 		editButton.setAttribute("data-toggle", "modal");	// data-toggle="modal"
 		editButton.setAttribute("data-target", "#myModal");	// data-target="#myModal"
 		//editButton.setAttribute("onclick", "setupEditModal('"+ dataElementRoot + id + "', '"+targetIdRoot+"');");
-		editButton.setAttribute("onclick", "setupEditModal('"+ elementId + "', '"+targetIdRoot+"');");
+		// editButton.setAttribute("onclick", "setupEditModal('"+ elementId + "', '"+targetIdRoot+"');");
+        editButton.addEventListener("click", function(arg1, arg2, arg3) {
+            return function(event) {
+                console.log(arg1);
+                console.log(arg2);
+                console.log(arg3);
+                setupEditModal(arg1, arg2, arg3);
+            };
+        }(elementId, targetIdRoot, submitFunc));
+        /*
+         * this is messy, but basically I need to curry so that the
+         * actionListener for the button press has the values in its
+         * local environment because the environment where the function
+         * is created changes the values that are used.
+         */
 		if (attributes != undefined) {
 			appendAttributes(editButton, attributes);
 		}
-		editButton.addEventListener("click", modalSubmitFunc, false);
+		// editButton.addEventListener("click", modalSubmitFunc, false);
 		adminValues[i].appendChild(editButton);
 		buttonList.push(editButton);
 	}
@@ -62,32 +75,18 @@ var appendAttributes = function (element, attributes) {
 }
 
 var setupEditModal = function (dataElementId, targetIdRoot, submitFunc) {
-	console.log("adminPermission.SETUP EDIT MODAL");
-	console.log("edit data ID = " + dataElementId);
-	var dataset = document.getElementById(dataElementId).dataset;
-	console.log(dataset);
+    console.log(dataElementId);
+    console.log(targetIdRoot);
+    console.log(submitFunc);
+    var dataset = document.getElementById(dataElementId).dataset;
 	for (attr in dataset) {
-		console.log("dataset." + attr + " = " + dataset[attr]);
 		var textField = document.getElementById(targetIdRoot + attr);
 		if (textField != undefined) {
             textField.value = dataset[attr];
         }
 	}
-    enableSubmitButton(dataElementId, targetIdRoot, function(json_data, put_id) {
-        // *** this is where I'm working ***
-        console.log('sending API put request');
-        console.log(json_data);
-        var apiUrl = 'committee/' + put_id
-        var xhr = xhrPutRequest(apiUrl);
-        var body = {"description": json_data.description} // , "committeeName": "test committee"};
-        console.log(json_data.description);
-        alert('sending API put request...\napi url: "' + apiUrl + '"');
-        console.log(xhr);
-        xhr.send(JSON.stringify(body));
-        setTimeout(function () { 
-            console.log(xhr.responseText);
-        }, 300);
-    });
+    enableSubmitButton(dataElementId, targetIdRoot, submitFunc);
+    
     if (textField != undefined) { 
         textField.value = dataset[attr];
     }
@@ -109,7 +108,6 @@ var clearSubmitHandlers = function(element, inputMode) {
 }
 
 var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc) {
-	console.log('enabling submit button!!');
 	//if (apiExtention == undefined) {
 		//SUBMIT_ALERT(dataElementId, targetIdRoot);
 		//return;
@@ -118,7 +116,6 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc) {
 	var cancelButton = document.getElementById("modal-cancel");
     var handleSubmitButton = function(event) {
         clearSubmitHandlers(submitButton);
-		console.log('submit button presses!');
 		var dataset = document.getElementById(dataElementId).dataset;
 		var json_data = {}
 		for (attr in dataset) {
@@ -131,7 +128,6 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc) {
 			}
 		}
 		// alert(JSON.stringify(json_data));
-		console.log('submitFunc:');
         var committeeId = dataset.committeeid;
 		submitFunc(json_data, committeeId);
 	};
@@ -143,7 +139,6 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc) {
 var SUBMIT_ALERT = function(dataElementId, targetIdRoot) {
 	var submitButton = document.getElementById("modal-submit");
 	msg = "please add the API extension as an arguement to the function 'enableSubmitButton'"; 
-	console.log(msg);
 	alert(msg);
 	submitButton.addEventListener("click", function(event) {
 		/*var msg = "TODO: add a database query here! \n";
@@ -219,7 +214,6 @@ function xhrPutRequest(urlExtention) {
 }
 
 function createXhrRequestJSON(method, urlExtention) {
-	console.log("creating XHR " + method + " JSON(??) request");
 	checkUrlExtension(urlExtention);
     var fullApiUrl = BASE_API_URL + urlExtention;
 	var xhr = createCORSRequestJSON(method, fullApiUrl);
@@ -234,13 +228,11 @@ function createXhrRequestJSON(method, urlExtention) {
 	xhr.onerror = function () {
         var msg = "There was an error with an XHR " + method + " JSON(??) request.";
         alert(msg);
-		console.log(msg);
 	}
 	return xhr;
 }
 
 function createXhrRequest(method, urlExtention) {
-	console.log("creating XHR " + method + " request");
 	checkUrlExtension(urlExtention);
 	var xhr = createCORSRequest(method, BASE_API_URL + urlExtention);
 	if (!xhr) {
@@ -250,7 +242,6 @@ function createXhrRequest(method, urlExtention) {
 		var responseText = xhr.responseText;
 	}
 	xhr.onerror = function () {
-		console.log("There was an error with an XHR " + method + " request.");
 	}
 	return xhr;
 }

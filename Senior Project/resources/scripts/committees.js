@@ -3,7 +3,21 @@ var committeeID;
 
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
-		var editButtons = insertEditButtons(function() {}, 'committee', 'committee-modal-');
+		var editButtons = insertEditButtons('committee', 'committee-modal-', function(json_data, put_id) {
+            // *** this is where I'm working ***
+            console.log('sending API put request');
+            console.log(json_data);
+            var apiUrl = 'committee/' + put_id
+            var xhr = xhrPutRequest(apiUrl);
+            var body = {"description": json_data.description} // , "committeeName": "test committee"};
+            console.log(json_data.description);
+            alert('sending API put request...\napi url: "' + apiUrl + '"');
+            console.log(xhr);
+            xhr.send(JSON.stringify(body));
+            setTimeout(function () { 
+                console.log(xhr.responseText);
+            }, 300);
+        });
     }
     var addCommitteeButton = document.getElementById("addCommittee");
     addCommitteeButton.addEventListener("click", showEmptyModal);
