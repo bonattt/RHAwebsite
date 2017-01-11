@@ -61,7 +61,7 @@ var appendAttributes = function (element, attributes) {
 	}
 }
 
-var setupEditModal = function (dataElementId, targetIdRoot) {
+var setupEditModal = function (dataElementId, targetIdRoot, submitFunc) {
 	console.log("adminPermission.SETUP EDIT MODAL");
 	console.log("edit data ID = " + dataElementId);
 	var dataset = document.getElementById(dataElementId).dataset;
@@ -74,12 +74,16 @@ var setupEditModal = function (dataElementId, targetIdRoot) {
         }
 	}
     enableSubmitButton(dataElementId, targetIdRoot, function(json_data, put_id) {
+        // *** this is where I'm working ***
         console.log('sending API put request');
         console.log(json_data);
         var apiUrl = 'committee/' + put_id
         var xhr = xhrPutRequest(apiUrl);
+        var body = {"description": json_data.description} // , "committeeName": "test committee"};
+        console.log(json_data.description);
         alert('sending API put request...\napi url: "' + apiUrl + '"');
-        xhr.send();
+        console.log(xhr);
+        xhr.send(JSON.stringify(body));
         setTimeout(function () { 
             console.log(xhr.responseText);
         }, 300);
@@ -180,6 +184,9 @@ function createCORSRequestJSON(method, url) {
 	var xhr = new XMLHttpRequest();
 	xhr.open(method, url, true);
 	xhr.setRequestHeader('Content-Type', 'application/json');
+	// xhr.setRequestHeader('Cache-Control', 'no-cache');
+	// xhr.setRequestHeader('Postman-Token', '50080db4-9d36-83cd-d446-2dd286337b12');
+	xhr.setRequestHeader('Host', 'rha-website-1.csse.rose-hulman.edu:3000');
 	return xhr;
 }
 
@@ -191,6 +198,22 @@ function xhrPostRequest(urlExtention) {
 	return createXhrRequestJSON('POST', urlExtention);
 }
 
+function httpPut(urlExtention, jsonBody, onload) {
+    checkUrlExtension(urlExtention);
+    var fullApiUrl = BASE_API_URL + urlExtention;
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            
+        }
+    }
+    xhr.open("PUT", fullApiUrl, true);
+    xhr.send(jsonBody);
+    
+    
+}
+
+
 function xhrPutRequest(urlExtention) {
 	return createXhrRequestJSON('PUT', urlExtention);
 }
@@ -198,7 +221,9 @@ function xhrPutRequest(urlExtention) {
 function createXhrRequestJSON(method, urlExtention) {
 	console.log("creating XHR " + method + " JSON(??) request");
 	checkUrlExtension(urlExtention);
-	var xhr = createCORSRequestJSON(method, BASE_API_URL + urlExtention);
+    var fullApiUrl = BASE_API_URL + urlExtention;
+	var xhr = createCORSRequestJSON(method, fullApiUrl);
+    // alert('url: ' + fullApiUrl);
 	if (!xhr) {
 		throw new Error('CORS not supported');
 	}
