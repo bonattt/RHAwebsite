@@ -869,6 +869,22 @@ height: 150pt;
 .carousel-inner {
 }
 
+/* Equipment Reservation */
+
+#calendar-description {
+	width: 50%;
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+#calendar-frame {
+	position: relative;
+  	left: 50%;
+  	bottom: 20%;
+	transform: translatex(-50%);
+}
+
 /* Bootstrap Overrides */
 
 img {
