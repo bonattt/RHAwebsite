@@ -138,25 +138,34 @@ function submit() {
     var name = document.getElementById("name").value;
     var costToAttendee = document.getElementById("costToAttendee").value;
     var image = document.getElementById("imageFile").value;
-    var description = document.getElementById("description").innerHTML;
-    document.getElementById("signUpOpenDate").innerHTML = signUpOpenDate;
-    document.getElementById("eventDate").innerHTML = eventDate;
-    document.getElementById("signUpCloseDate").innerHTML = signUpCloseDate;
-    document.getElementById("proposer").innerHTML = proposer;
-    document.getElementById("weekProposed").innerHTML = weekProposed;
-    document.getElementById("quarter").innerHTML = quarter;
-    document.getElementById("moneyRequested").innerHTML = moneyRequested;
-    document.getElementById("approved").innerHTML = approved;
-    document.getElementById("moneyAllocated").innerHTML = moneyAllocated;
+    var description = document.getElementById("description").value;
+    var signUpOpenDate = document.getElementById("signUpOpenDate").value;
+    var eventDate = document.getElementById("eventDate").value;
+    var signUpCloseDate = document.getElementById("signUpCloseDate").value;
+    var proposer = document.getElementById("proposer").value;
+    var weekProposed = document.getElementById("weekProposed").value;
+    var quarter = document.getElementById("quarterProposed").value;
+    var moneyRequested = document.getElementById("moneyRequested").value;
+    var approved = document.getElementById("approved").value;
+    var moneyAllocated = document.getElementById("moneyAllocated").value;
+    var files = document.getElementById("imageFile").files;
 
+
+    var formData = new formData();
+    formData.append("newFile", )
     photoxhr.open('POST', photoAPIURL, true);
     photoxhr.send();
 
     photoxhr.addEventListener('readystatechange', function (e) {
         if(photoxhr.readyState == 4 && photoxhr.status == 200) {
             var dbxhr = new XMLHttpRequest();
+            dbxhr.setRequestHeader('Content-Type', 'multipart/form-data');
             dbxhr.open('POST', dbAPIURL, true);
             dbxhr.send();
+
+            dbxhr.onerror = function () {
+                console.log("There was an error");
+            }
         }
     }, false);
     console.log('I got to the submit function!');
