@@ -5,7 +5,27 @@ http = require('http');
 fs = require('fs');
 url = require('url');
 express = require('express');
+multer = require('multer');
 app = express();
+var eventPhotoStorage =  multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './resources/images/events');
+  },
+  filename: function (req, file, callback) {
+    callback(null, file.fieldname + '-' + Date.now());
+  }
+});
+var carouselPhotoStorage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './resources/images/carousel');
+  },
+  filename: function (req, file, callback) {
+    callback(null, file.fieldname + '-' + Date.now());
+  }
+});
+
+var uploadEventPhoto = multer({ storage : eventPhotoStorage}).single('proposalPhoto');
+var uploadCarouselPhoto = multer({ storage: carouselPhotoStorage}).single('carouselPhoto');
 
 app.use(express.static('resources'));
 
@@ -14,6 +34,7 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
 var RosefireTokenVerifier = require('rosefire-node');
 var SECRET = "hwiN2rg1Eu8wX350a9y5";
 var rosefire = new RosefireTokenVerifier(SECRET);
@@ -49,6 +70,34 @@ app.get('/officers', function (req, res) {
 
 app.get('/committees', function (req, res) {
 	res.sendFile(__dirname + '/html/committees.html');
+});
+
+app.get('/uploadTest', function(req, res) {
+  res.sendFile(__dirname + '/html/uploadTest.html')
+});
+
+app.post('/api/v1/carouselPhoto', function(req, res) { //we will need to make this more secure (only let those that have admin permissions make this call)
+  console.log("before calling upload:" + req.files);
+  uploadCarouselPhoto(req, res, function(err) {
+    if(err) {
+      console.log("inside upload:" + req.files);
+      console.log(err);
+      return res.end("Error uploading file.");
+    }
+    res.end("File is uploaded");
+  });
+});
+
+app.post('/api/v1/eventPhoto', function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
+  console.log("before calling upload:" + req.files);
+  uploadEventPhoto(req, res, function(err) {
+    if(err) {
+      console.log("inside upload:" + req.files);
+      console.log(err);
+      return res.end("Error uploading file.");
+    }
+    res.end("File is uploaded");
+  });
 });
 
 app.post('/foobar', function (req, res) {
