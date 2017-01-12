@@ -3,7 +3,16 @@ var committeeID;
 
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
-		var editButtons = insertEditButtons(function() {}, 'everyCommitteeEver', 'committee-modal-');
+		var editButtons = insertEditButtons('committee', 'committee-modal-', 'committeeid',
+                function(json_data, put_id) {
+            // *** this is where I'm working ***
+            var apiUrl = 'committee/' + put_id
+            var xhr = xhrPutRequest(apiUrl);
+            var body = {"description": json_data.description, "committeename": json_data.committeename} // , "committeeName": "test committee"};
+            xhr.send(JSON.stringify(body));
+            setTimeout(function () { 
+            }, 300);
+        });
     }
     var addCommitteeButton = document.getElementById("addCommittee");
     addCommitteeButton.addEventListener("click", showEmptyModal);
@@ -19,11 +28,11 @@ var setupEditModal = function(dataElementId, taretIdRoot) {
 	
 	var descriptionField = document.getElementById("committee-modal-desc");
 	descriptionField.value = dataset.desc;
-}
+}   
 */
 function setup() {
-
-	enableSubmitButton("everyCommitteeEver", "committee-modal-");
+	var apiExtension = 'committees/';
+	// enableSubmitButton("everyCommitteeEver", "committee-modal-", apiExtension);
 	
 	var urlExtension = 'committees';
     var xhr = xhrGetRequest(urlExtension);
@@ -33,21 +42,29 @@ function setup() {
     function createHTMLFromResponseText(committee) {
         committee = JSON.parse(committee);
         for (var i = 0; i < committee.length; i++) {
-            committeeMap[committee[i].committeename] = committee[i].committeeid;
+            var id = committee[i].committeeid
+            committeeMap[committee[i].committeename] = id;
             if (i % 2 == 0) {
-                var html = "<div class='committeeWrapperRight' id='committeeWrapperRight'>";
-                html += "<div class='committees'><h3 class='edit'>" + committee[i].committeename + "</h3>";
+                var html = "<div class='committeeWrapperRight'>";
+                html += "<div class='committees'><h3 class='edit' id='committee" + id + "'>" + committee[i].committeename + "</h3>";
                 html += "<p>" + committee[i].description + "</p></div>";
                 html += "<image class='committeePhoto' src=" + committee[i].image + " alt=" + committee[i].committeename + "></div>";
             } else {
-                var html = "<div class='committeeWrapperLeft' id='committeeWrapperLeft'>";
+                var html = "<div class='committeeWrapperLeft'>";
                 html += "<image class='committeePhoto' src=" + committee[i].image + " alt=" + committee[i].committeename + ">";
-                html += "<div class='committees'><h3 class='edit'>" + committee[i].committeename + "</h3>";
+                html += "<div class='committees'><h3 class='edit' id='committee" + id + "'>" + committee[i].committeename + "</h3>";
                 html += "<p>" + committee[i].description + "</p></div></div>";
             }
 
             var committees = document.getElementById("committees");
             committees.innerHTML += html;
+            
+            var dataset = document.getElementById('committee' + id).dataset;
+            var fields = ["committeename", "committeeid", "description", "image"]
+            fields.forEach(function(field) {
+                // console.log("setting field " + field + " to " + committee[i][field]);
+                dataset[field] = committee[i][field];
+            });
         }
 
         var officersxhr = getOfficers();
@@ -161,18 +178,18 @@ function submit(){
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
     saveCommittee();
-    location.reload();
+    window.location.reload();
 }
 
 function saveCommittee() {
-	var urlExtension = 'committee/' + committeeID;
-	
-	var xhr = xhrPutRequest(urlExtension);
-	var committeeName = document.getElementById("committee-text").value;
-	var description = document.getElementById("description-text").value;
-	var image = "images/committees/" + document.getElementById("image-text").value;
-	xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
-	return xhr;
+    var urlExtension = 'committee/' + committeeID;
+    
+    var xhr = xhrPutRequest(urlExtension);
+    var committeeName = document.getElementById("committee-text").value;
+    var description = document.getElementById("description-text").value;
+    var image = "images/committees/" + document.getElementById("image-text").value;
+    xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
+    return xhr;
 
 }
 

@@ -22,8 +22,15 @@ var listLinks;
 
 function displayPastEvents() {
     var xhr = getEvents();
+    xhr.onload = function () {
+        createHTMLFromResponseText(xhr.responseText) 
+    }
     xhr.send();
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+    // setTimeout(function () {createHTMLFromResponseText(xhr.responseText)}, 300);
+    // usign xhr.onload should be more reliable and responsive:
+    // The page load won't fail if it takes more than 300 ms to receive a response,
+    // and the load won't be slowed down if the response is faster than 300 ms
+    // PLEASE APPLY THIS CHANGE ANYWHERE YOU SEE THIS ERROR REPEATED.    
 
     function createHTMLFromResponseText(proposal) {
         proposal = JSON.parse(proposal);
@@ -46,6 +53,8 @@ function displayPastEvents() {
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
+            
+            
 
         }
         // makeListLinks();
@@ -153,9 +162,10 @@ function displaySignUps() {
             var eventDate = new Date(proposal[i].event_date);
             eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
 
+            var proposal_id = proposal[i].proposal_id;
+            
             var html = "<div class='row'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
-            html += "<div class='eventTextSignUps' id='eventTextSignUps' data-name='" + proposal[i].proposal_name + "' data-cost='" + cost + "' data-eventDate='" + eventDate;
-            html += "' data-signupsclosedate='" + signUpCloseDate + "' data-signupsopendate='" + signUpOpenDateFormatted + "' data-description='" + proposal[i].description + "'>";
+            html += "<div class='eventTextSignUps' id='eventTextSignUps" + proposal_id + "'>";
             html += "<h1 id='editEventName' class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
             html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
             html += "<h3 class='eventDate'>" + eventDate + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
@@ -164,17 +174,31 @@ function displaySignUps() {
             var username = JSON.parse(sessionStorage.getItem("userData")).username;
             if (signUpOpenDate < new Date()) {
                 if ($.inArray(username, attendees) == -1) {
-                    html += "<a id='signUpLink" + proposal[i].proposal_id + "' onclick='signUp(" + proposal[i].proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
+                    html += "<a id='signUpLink" + proposal_id + "' onclick='signUp(" + proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
                 } else {
-                    html += "<a id='signUpLink" + proposal[i].proposal_id + "' onclick='unregister(" + proposal[i].proposal_id + ")'><p class='signUpLink'>Unregister</p></a>";
+                    html += "<a id='signUpLink" + proposal_id + "' onclick='unregister(" + proposal_id + ")'><p class='signUpLink'>Unregister</p></a>";
                 }
-                html += "<a onclick='showListModal(" + proposal[i].proposal_id + ")'><p class='viewListLink'>View List</p></a>"
+                html += "<a onclick='showListModal(" + proposal_id + ")'><p class='viewListLink'>View List</p></a>"
             }
             html += "<p id='editEvent' class='editEvent' data-toggle='modal' data-target='#myModal'>Edit Event</p></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
             //makeListLinks();
+            
+            var fields = [
+                    "proposal_id",
+                    "proposal_name",
+                    "event_data",
+                    "event_signup_open",
+                    "event_signup_close", 
+                    "description"
+                ];
+            var dataset = document.getElementById('eventTextSignUps' + proposal_id);
+            fields.forEach(function(field){
+					dataset[field] = proposal[i][field];
+				});
+                
         }
 
         var editEventButtons = document.getElementsByClassName("editEvent");
