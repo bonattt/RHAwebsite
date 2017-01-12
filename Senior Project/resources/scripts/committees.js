@@ -10,7 +10,7 @@ function setAdmin(officers) {
             console.log(json_data);
             var apiUrl = 'committee/' + put_id
             var xhr = xhrPutRequest(apiUrl);
-            var body = {"description": json_data.description} // , "committeeName": "test committee"};
+            var body = {"description": json_data.description, "committeename": json_data.committeename} // , "committeeName": "test committee"};
             console.log(json_data.description);
             alert('sending API put request...\napi url: "' + apiUrl + '"');
             console.log(xhr);
