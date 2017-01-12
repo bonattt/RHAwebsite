@@ -5,6 +5,10 @@
     <link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
     <link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
     <link rel="icon" href="images/RHA.jpg">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <title>
         RHA | Reserve Equipment
     </title>
@@ -12,6 +16,7 @@
     <script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
     <script type="text/javascript" src="./scripts/rosefire.js"></script>
     <script type="test/javascript" src="../scripts/login.js"></script>
+    <script type="text/javascript" src="../scripts/equipmentReservation.js"></script>
 
 </head>
 
@@ -24,13 +29,16 @@
     </div>
     <h1>Reserve Equipment</h1>
 
-    <button id="calendar-add-button"> Add a Calendar </button>
+    <button id="calendar-add-button" data-toggle="modal" data-target="#myModal"> Add a Calendar </button>
+    <button id="test-calendar-button">I'm a test!</button>
 
     <div>
         <p id="calendar-description">Planning an event and need equipment? Reserve it ahead of time, or see when its available to use with your friends! Simply select the piece of equipment you're interested in, and click "View Availability" to display a calendar.</p>
     </div>
 
-    <iframe id="calendar-frame" src="https://calendar.google.com/calendar/embed?showTitle=0&amp;mode=WEEK&amp;height=450&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=qeg7arc27qhl0lbi1kbnkl3g0c%40group.calendar.google.com&amp;color=%23875509&amp;ctz=America%2FNew_York" style="border-width:0" width="500" height="450" frameborder="0" scrolling="no"></iframe>
+    <div id="calendar-wrapper">
+        <iframe id="calendar-frame" src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=450&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=qeg7arc27qhl0lbi1kbnkl3g0c%40group.calendar.google.com&amp;color=%23875509&amp;ctz=America%2FNew_York" style="border-width:0" width="500" height="450" frameborder="0" scrolling="no"></iframe>
+    </div>
 
     </div>
 
@@ -39,9 +47,18 @@
         data-id=1
         data-name="Corn Holio" 
         data-desc="I am the great cornholio"
-        data-embed='<iframe id="calendar-frame" src="https://calendar.google.com/calendar/embed?showTitle=0&amp;mode=WEEK&amp;height=450&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=qeg7arc27qhl0lbi1kbnkl3g0c%40group.calendar.google.com&amp;color=%23875509&amp;ctz=America%2FNew_York" style="border-width:0" width="500" height="450" frameborder="0" scrolling="no"></iframe>'>
+        data-embed='<iframe id="calendar-frame" src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=450&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=qeg7arc27qhl0lbi1kbnkl3g0c%40group.calendar.google.com&amp;color=%23875509&amp;ctz=America%2FNew_York" style="border-width:0" width="500" height="450" frameborder="0" scrolling="no"></iframe>'>
     </div>
     
+    <div
+        id="calendar2"
+        data-id=2
+        data-name="Testerino"
+        data=desc="My body is devoted to science"
+        data-embed='<iframe id="calendar-frame" src="https://calendar.google.com/calendar/embed?&amp;mode=WEEK&amp;height=450&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=salur93%40gmail.com&amp;color=%2329527A&amp;ctz=America%2FNew_York" style="border-width:0" width="500" height="450" frameborder="0" scrolling="no"></iframe>'>
+
+    </div>
+
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -53,9 +70,11 @@
                 <div class="modal-body">
                     
                         <label> name </label> <br/>
-                        <input id="committee-modal-name" type="text" value="name"> </input>
-                        <p> </p>
-                        <textarea id="committee-modal-desc" type="textarea" value="description of the committee" style="min-width: 200px; min-height: 100px;"> </textarea>
+                        <input id="calendar-modal-name" type="text" value="name"> </input>
+                        <br>
+                        <textarea id="calendar-modal-desc" type="textarea" value="description of the calendar" style="min-width: 200px; min-height: 100px;"> </textarea>
+                        <br>
+                        <textarea id="calendar-modal-embed" type="textarea" value="embed text for the desired calendar" styel="mid-width: 200px; min-height: 100px"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
