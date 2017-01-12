@@ -122,6 +122,10 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc, idFie
 			} else {
 				json_data[attr] = dataset[attr];
 			}
+            
+            if (json_data[attr] == '') {
+                delete json_data[attr]
+            }
 		}
 		// alert(JSON.stringify(json_data));
         var apiurl_id = dataset[idFieldName];
