@@ -124,7 +124,6 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc, idFie
 			}
 		}
 		// alert(JSON.stringify(json_data));
-        console.log(dataset);
         var apiurl_id = dataset[idFieldName];
 		submitFunc(json_data, apiurl_id);
 	};
@@ -204,11 +203,9 @@ function createXhrRequestJSON(method, urlExtention) {
 	}
 	xhr.onload = function () {
 		var responseText = xhr.responseText;
-        alert('Xhr ' + method + 'completed successfully!.');
 	}
 	xhr.onerror = function () {
         var msg = "There was an error with an XHR " + method + " JSON(??) request.";
-        alert(msg);
 	}
 	return xhr;
 }
