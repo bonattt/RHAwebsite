@@ -28,7 +28,7 @@ var setupEditModal = function(dataElementId, taretIdRoot) {
 	
 	var descriptionField = document.getElementById("committee-modal-desc");
 	descriptionField.value = dataset.desc;
-}
+}   
 */
 function setup() {
 	var apiExtension = 'committees/';
@@ -178,18 +178,18 @@ function submit(){
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
     saveCommittee();
-    location.reload();
+    window.location.reload();
 }
 
 function saveCommittee() {
-	var urlExtension = 'committee/' + committeeID;
-	
-	var xhr = xhrPutRequest(urlExtension);
-	var committeeName = document.getElementById("committee-text").value;
-	var description = document.getElementById("description-text").value;
-	var image = "images/committees/" + document.getElementById("image-text").value;
-	xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
-	return xhr;
+    var urlExtension = 'committee/' + committeeID;
+    
+    var xhr = xhrPutRequest(urlExtension);
+    var committeeName = document.getElementById("committee-text").value;
+    var description = document.getElementById("description-text").value;
+    var image = "images/committees/" + document.getElementById("image-text").value;
+    xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
+    return xhr;
 
 }
 

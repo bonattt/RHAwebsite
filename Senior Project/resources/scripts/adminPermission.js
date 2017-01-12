@@ -48,7 +48,7 @@ var insertEditButtons = function(dataElementRoot, targetIdRoot, idFieldName, sub
 
 var generateEditButtonListener = function(elementId, targetIdRoot, submitFunc, idFieldName) {
      return function(event) {
-                setupEditModal(elementId, targetIdRoot, submitFunc, idFieldName);
+        setupEditModal(elementId, targetIdRoot, submitFunc, idFieldName);
      };
 }
 
@@ -177,7 +177,7 @@ function createCORSRequestJSON(method, url) {
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	// xhr.setRequestHeader('Cache-Control', 'no-cache');
 	// xhr.setRequestHeader('Postman-Token', '50080db4-9d36-83cd-d446-2dd286337b12');
-	xhr.setRequestHeader('Host', 'rha-website-1.csse.rose-hulman.edu:3000');
+	// xhr.setRequestHeader('Host', 'rha-website-1.csse.rose-hulman.edu:3000');
 	return xhr;
 }
 
