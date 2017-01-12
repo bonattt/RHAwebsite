@@ -874,3 +874,42 @@ height: 150pt;
 img {
 	vertical-align: baseline;
 }
+
+/* Photo Gallery */
+
+.photoGalleryImage {
+	height: 350px;
+	width: 350px;
+	margin: 7.5px;
+}
+
+#photoGalleryWrapper {
+	text-align: center;
+}
+
+#photoModal {
+	display: none;
+	opacity: 1;
+}
+
+#photo {
+	display: block;
+	max-width: 80%;
+	max-height: 80%;
+	margin: auto;
+	overflow: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	position: fixed;
+}
+
+#photoGalleryClose {
+	position: fixed;
+	top: 5%;
+	right: 5%;
+	color: white;
+	opacity: 1;
+	font-size: 3vw;
+}

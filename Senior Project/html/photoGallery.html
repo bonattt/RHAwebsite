@@ -2,33 +2,47 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
-    <link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
-    <link rel="icon" href="images/RHA.jpg">
+	<link rel="icon" href="../images/RHA.jpg">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
+
+	<script type="text/javascript" src="./scripts/rosefire.js"></script>
+	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
+	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
+    <script language="Javascript" src="../scripts/photoGallery.js">  </script>
+
     <title>
         RHA | Photo Gallery
     </title>
-
-    <script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
-    <script type="text/javascript" src="./scripts/rosefire.js"></script>
-    <script type="test/javascript" src="../scripts/login.js"></script>
-
 </head>
 
 <body>
+    <div id="pageContent">
+        <div id="navBar">
 
-    <div id="navBar">
+        </div>
+
+
+        <div id="photoGalleryWrapper">
+            <h1>Photo Gallery</h1>
+            <img class="photoGalleryImage" src="../images/execChristmasPhoto.jpg" alt="" data-toggle="modal" data-target="#photoModal">
+            <img class="photoGalleryImage" src="../images/TTAT.jpg" alt="">
+            <img class="photoGalleryImage" src="../images/hobsonsFarm.jpg" alt="">
+            <img class="photoGalleryImage" src="../images/kingsIsland.jpg" alt="">
+            <img class="photoGalleryImage" src="../images/skyZone.jpg" alt="">
+            <img class="photoGalleryImage" src="../images/events/tri-hop.png" alt="">
+        </div>
 
     </div>
 
+    <div id="photoModal" class="modal fade in" role="dialog">
+        <p class="close" id="photoGalleryClose" data-dismiss = "modal">&times;</p>
+        <img id="photo">
     </div>
-    <h1>Photo Gallery</h1>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-    <script>
-		window.jQuery || document.write('<script src="../scripts/jquery-3.1.1.js"><\/script>');
-	</script>
 </body>
 
 </html>
