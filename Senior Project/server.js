@@ -7,7 +7,7 @@ url = require('url');
 express = require('express');
 multer = require('multer');
 app = express();
-var eventPhotoStorage =  multer.diskStorage({
+/*var eventPhotoStorage =  multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, './resources/images/events');
   },
@@ -22,10 +22,10 @@ var carouselPhotoStorage = multer.diskStorage({
   filename: function (req, file, callback) {
     callback(null, file.fieldname + '-' + Date.now());
   }
-});
+}); */
 
-var uploadEventPhoto = multer({ storage : eventPhotoStorage}).single('proposalPhoto');
-var uploadCarouselPhoto = multer({ storage: carouselPhotoStorage}).single('carouselPhoto');
+var upload = multer({dest: 'resources/images/events/'});
+var type = upload.single('imageFile');
 
 app.use(express.static('resources'));
 
@@ -76,7 +76,7 @@ app.get('/uploadTest', function(req, res) {
   res.sendFile(__dirname + '/html/uploadTest.html')
 });
 
-app.post('/api/v1/carouselPhoto', function(req, res) { //we will need to make this more secure (only let those that have admin permissions make this call)
+/*app.post('/api/v1/carouselPhoto', function(req, res) { //we will need to make this more secure (only let those that have admin permissions make this call)
   console.log("before calling upload:" + req.files);
   uploadCarouselPhoto(req, res, function(err) {
     if(err) {
@@ -86,19 +86,23 @@ app.post('/api/v1/carouselPhoto', function(req, res) { //we will need to make th
     }
     res.end("File is uploaded");
   });
-});
+}); */
 
-app.post('/api/v1/eventPhoto', function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
-  console.log("before calling upload:" + req.files);
-  uploadEventPhoto(req, res, function(err) {
-    if(err) {
-      console.log("inside upload:" + req.files);
-      console.log(err);
-      return res.end("Error uploading file.");
-    }
-    res.end("File is uploaded");
+app.post('/api/v1/eventPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
+    console.log(req);
+    console.log("0");
+    var tmp_path = JSON.parse(req.file.imageFile).path;
+    console.log("1");
+    var target_path = 'uploads/' + req.file.imageFile.originalname;
+    console.log("2");
+    fs.readFile(tmp_path, function(err, data) {
+      console.log("3");
+      fs.writeFile(target_path, data, function(err) {
+        console.log("4");
+        res.render('complete');
+      });
+    });
   });
-});
 
 app.post('/foobar', function (req, res) {
   var token = req.body.token;
