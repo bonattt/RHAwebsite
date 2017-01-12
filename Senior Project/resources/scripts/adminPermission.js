@@ -25,15 +25,11 @@ var insertEditButtons = function(dataElementRoot, targetIdRoot, idFieldName, sub
         var editButton = document.createElement("img");
         editButton.setAttribute("src", "../images/edit.png");
 		editButton.setAttribute("class", "admin-edit-button btn btn-info btn-lg");
-		editButton.setAttribute("data-toggle", "modal");	// data-toggle="modal"
-		editButton.setAttribute("data-target", "#myModal");	// data-target="#myModal"
-		//editButton.setAttribute("onclick", "setupEditModal('"+ dataElementRoot + id + "', '"+targetIdRoot+"');");
-		// editButton.setAttribute("onclick", "setupEditModal('"+ elementId + "', '"+targetIdRoot+"');");
-        editButton.addEventListener("click", function(arg1, arg2, arg3) {
-            return function(event) {
-                setupEditModal(arg1, arg2, arg3, idFieldName);
-            };
-        }(elementId, targetIdRoot, submitFunc));
+		editButton.setAttribute("data-toggle", "modal");
+		editButton.setAttribute("data-target", "#myModal");
+        editButton.addEventListener("click", 
+                generateEditButtonListener(elementId, targetIdRoot, submitFunc, idFieldName)
+            );
         /*
          * this is messy, but basically I need to curry so that the
          * actionListener for the button press has the values in its
@@ -48,6 +44,12 @@ var insertEditButtons = function(dataElementRoot, targetIdRoot, idFieldName, sub
 		buttonList.push(editButton);
 	}
 	return buttonList;
+}
+
+var generateEditButtonListener = function(elementId, targetIdRoot, submitFunc, idFieldName) {
+     return function(event) {
+                setupEditModal(elementId, targetIdRoot, submitFunc, idFieldName);
+     };
 }
 
 var insertEditButtonsBefore = function (modalSubmitFunc, attributes) {
