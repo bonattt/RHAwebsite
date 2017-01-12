@@ -9,9 +9,8 @@ function setAdmin(officers) {
             var apiUrl = 'committee/' + put_id
             var xhr = xhrPutRequest(apiUrl);
             var body = {"description": json_data.description, "committeename": json_data.committeename} // , "committeeName": "test committee"};
+            xhr.onload = function() { location.reload() };
             xhr.send(JSON.stringify(body));
-            setTimeout(function () { 
-            }, 300);
         });
     }
     var addCommitteeButton = document.getElementById("addCommittee");
