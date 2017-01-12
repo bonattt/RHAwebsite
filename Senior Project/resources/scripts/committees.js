@@ -6,17 +6,11 @@ function setAdmin(officers) {
 		var editButtons = insertEditButtons('committee', 'committee-modal-', 'committeeid',
                 function(json_data, put_id) {
             // *** this is where I'm working ***
-            console.log('sending API put request');
-            console.log(json_data);
             var apiUrl = 'committee/' + put_id
             var xhr = xhrPutRequest(apiUrl);
             var body = {"description": json_data.description, "committeename": json_data.committeename} // , "committeeName": "test committee"};
-            console.log(json_data.description);
-            alert('sending API put request...\napi url: "' + apiUrl + '"');
-            console.log(xhr);
             xhr.send(JSON.stringify(body));
             setTimeout(function () { 
-                console.log(xhr.responseText);
             }, 300);
         });
     }
