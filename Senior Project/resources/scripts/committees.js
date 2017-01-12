@@ -3,7 +3,8 @@ var committeeID;
 
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
-		var editButtons = insertEditButtons('committee', 'committee-modal-', function(json_data, put_id) {
+		var editButtons = insertEditButtons('committee', 'committee-modal-', 'committeeid',
+                function(json_data, put_id) {
             // *** this is where I'm working ***
             console.log('sending API put request');
             console.log(json_data);

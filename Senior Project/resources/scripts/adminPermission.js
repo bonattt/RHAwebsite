@@ -17,7 +17,7 @@ var userIsOfficer = function(officers) {
 	return false;
 }
 
-var insertEditButtons = function(dataElementRoot, targetIdRoot, submitFunc, attributes) {
+var insertEditButtons = function(dataElementRoot, targetIdRoot, idFieldName, submitFunc, attributes) {
     var adminValues = document.getElementsByClassName("edit");
 	var buttonList = [];
     for (var i = 0; i < adminValues.length; i++) {
@@ -31,10 +31,7 @@ var insertEditButtons = function(dataElementRoot, targetIdRoot, submitFunc, attr
 		// editButton.setAttribute("onclick", "setupEditModal('"+ elementId + "', '"+targetIdRoot+"');");
         editButton.addEventListener("click", function(arg1, arg2, arg3) {
             return function(event) {
-                console.log(arg1);
-                console.log(arg2);
-                console.log(arg3);
-                setupEditModal(arg1, arg2, arg3);
+                setupEditModal(arg1, arg2, arg3, idFieldName);
             };
         }(elementId, targetIdRoot, submitFunc));
         /*
@@ -74,10 +71,7 @@ var appendAttributes = function (element, attributes) {
 	}
 }
 
-var setupEditModal = function (dataElementId, targetIdRoot, submitFunc) {
-    console.log(dataElementId);
-    console.log(targetIdRoot);
-    console.log(submitFunc);
+var setupEditModal = function (dataElementId, targetIdRoot, submitFunc, idFieldName) {
     var dataset = document.getElementById(dataElementId).dataset;
 	for (attr in dataset) {
 		var textField = document.getElementById(targetIdRoot + attr);
@@ -85,7 +79,7 @@ var setupEditModal = function (dataElementId, targetIdRoot, submitFunc) {
             textField.value = dataset[attr];
         }
 	}
-    enableSubmitButton(dataElementId, targetIdRoot, submitFunc);
+    enableSubmitButton(dataElementId, targetIdRoot, submitFunc, idFieldName);
     
     if (textField != undefined) { 
         textField.value = dataset[attr];
@@ -107,7 +101,7 @@ var clearSubmitHandlers = function(element, inputMode) {
     });
 }
 
-var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc) {
+var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc, idFieldName) {
 	//if (apiExtention == undefined) {
 		//SUBMIT_ALERT(dataElementId, targetIdRoot);
 		//return;
@@ -128,15 +122,16 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc) {
 			}
 		}
 		// alert(JSON.stringify(json_data));
-        var committeeId = dataset.committeeid;
-		submitFunc(json_data, committeeId);
+        console.log(dataset);
+        var apiurl_id = dataset[idFieldName];
+		submitFunc(json_data, apiurl_id);
 	};
     modal_event_handlers.push(handleSubmitButton); // global varialbe.
 	submitButton.addEventListener("click", handleSubmitButton);
     cancelButton.addEventListener("click", function(event) { clearSubmitHandlers(submitButton) });
 }
 
-var SUBMIT_ALERT = function(dataElementId, targetIdRoot) {
+/*var SUBMIT_ALERT = function(dataElementId, targetIdRoot) {
 	var submitButton = document.getElementById("modal-submit");
 	msg = "please add the API extension as an arguement to the function 'enableSubmitButton'"; 
 	alert(msg);
@@ -150,10 +145,10 @@ var SUBMIT_ALERT = function(dataElementId, targetIdRoot) {
 				dataset[attr] = textField.value;
 			}
 			msg += attr + ": " + dataset[attr] + "\n";
-		} //*/
+		} // * /
 		alert(msg);
 	});
-}
+}*/
 
 function getOfficers() {
     var urlExtention = 'officers/';
@@ -192,22 +187,6 @@ function xhrGetRequest(urlExtention) {
 function xhrPostRequest(urlExtention) {
 	return createXhrRequestJSON('POST', urlExtention);
 }
-
-function httpPut(urlExtention, jsonBody, onload) {
-    checkUrlExtension(urlExtention);
-    var fullApiUrl = BASE_API_URL + urlExtention;
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            
-        }
-    }
-    xhr.open("PUT", fullApiUrl, true);
-    xhr.send(jsonBody);
-    
-    
-}
-
 
 function xhrPutRequest(urlExtention) {
 	return createXhrRequestJSON('PUT', urlExtention);

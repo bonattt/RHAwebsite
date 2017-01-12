@@ -6,7 +6,16 @@ const API_EXTENSION = '';
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-		var editbuttons = insertEditButtons(function() {}, 'officer', 'officers-modal-');
+		var editbuttons = insertEditButtons(
+                    'officer',
+                    'officers-modal-',
+                    'user_id',
+                    function(json_data, put_id) {
+            var apiUrl = 'member/' + put_id
+            var xhr = xhrPutRequest(apiUrl);
+            alert('sending API put request...\napi url: "' + apiUrl + '"');
+            xhr.send(JSON.stringify({"memberType": json_data.membertype}));
+        });
     }
     var addOfficeButton = document.getElementById("addOfficer");
     addOfficeButton.addEventListener("click", showEmptyModal);
@@ -44,8 +53,6 @@ function setup() {
 
         for (var i = 0; i < officer.length; i++) {
             if (officer[i].memberType != "") {
-				var fields = ["firstname", "lastname", "username",
-					"membertype", "phone_number", "room_number", "hall", "cm"];
                 var html = "<div class='officer'>";
                 html += "<h3 class='edit' id='officer" + officer[i].user_id + "'>" 
 				
@@ -63,7 +70,7 @@ function setup() {
                 officers.innerHTML += html;
 				
 				var dataset = document.getElementById('officer' + officer[i].user_id).dataset;
-				var fields = ["firstname", "lastname", "username",
+				var fields = ["user_id", "firstname", "lastname", "username",
 					"membertype", "phone_number", "room_number", "hall", "cm"];
                 console.log("about to set fields");
 				fields.forEach(function(field){
@@ -72,10 +79,12 @@ function setup() {
 				});
             }
         }
-
         var officersxhr = getOfficers();
-        officersxhr.send();
-        setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
+        officersxhr.onload = function () {
+            setAdmin(officersxhr.responseText);
+        } 
+        officersxhr.send(); 
+        // setTimeout(function () { setAdmin(officersxhr.responseText) }, 300); // */
     }
 }
 
