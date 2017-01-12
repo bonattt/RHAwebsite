@@ -14,7 +14,15 @@ function setAdmin(officers) {
             var apiUrl = 'member/' + put_id
             var xhr = xhrPutRequest(apiUrl);
             alert('sending API put request...\napi url: "' + apiUrl + '"');
-            xhr.send(JSON.stringify({"memberType": json_data.membertype}));
+            xhr.send(JSON.stringify({
+                "membertype": json_data.membertype,
+                "firstname": json_data.firstname,
+                "lastname": json_data.lastname,
+                "phone_number": json_data.phone_number,
+                "room_number": json_data.room_number,
+                "hall": json_data.hall,
+                "cm": json_data.cm
+            }));
         });
     }
     var addOfficeButton = document.getElementById("addOfficer");
