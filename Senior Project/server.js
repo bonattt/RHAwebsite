@@ -89,13 +89,14 @@ app.get('/uploadTest', function(req, res) {
 }); */
 
 app.post('/api/v1/eventPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
-    console.log(req.file);
-    console.log("0");
     var tmp_path = req.file.path;
     var target_path = 'resources/images/events/' + req.file.filename + '_' + req.file.originalname;
     fs.readFile(tmp_path, function(err, data) {
       fs.writeFile(target_path, data);
       fs.unlink(tmp_path);
+      res.filePath = target_path;
+      console.log(res);
+      return res;
     });
   });
 

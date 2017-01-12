@@ -50,7 +50,6 @@ function submit() {
 
     var name = document.getElementById("name").value;
     var costToAttendee = document.getElementById("costToAttendee").value;
-    var image = document.getElementById("imageFile").value;
     var description = document.getElementById("description").value;
     var signUpOpenDate = document.getElementById("signUpOpenDate").value;
     var eventDate = document.getElementById("eventDate").value;
@@ -66,13 +65,21 @@ function submit() {
 
     var formData = new FormData();
     formData.append("imageFile", files[0]);
-    console.log(formData.get("imageFile"));
     photoxhr.open('POST', photoAPIURL, true);
-    photoxhr.send(formData);
 
-    photoxhr.addEventListener('readystatechange', function (e) {
+    photoxhr.onreadystatechange = function (e) {
+        console.log("I'm playing in the stateChange!");
         if(photoxhr.readyState == 4 && photoxhr.status == 200) {
+            var response = photoxhr.responseText;
+            console.log(response);
             var dbxhr = new XMLHttpRequest();
+            var dbObject = {};
+            dbObject["name"] = name;
+            dbObject["cost_to_attendee"] = costToAttendee;
+            dbObject["event_date"] = eventDate;
+            dbObject["event_signup_open"] = signUpOpenDate;
+            dbObject["event_signup_close"] = signUpCloseDate;
+
             dbxhr.open('POST', dbAPIURL, true);
             dbxhr.send();
 
@@ -80,8 +87,9 @@ function submit() {
                 console.log("There was an error");
             }
         }
-    }, false);
-    console.log('I got to the submit function!');
+    };
+
+    photoxhr.send(formData);
 }
 
 $(document).ready(function() {
