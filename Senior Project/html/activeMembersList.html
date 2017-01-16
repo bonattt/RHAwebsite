@@ -30,6 +30,69 @@
 	<span>
 		<div id="activeMembersTable"></div>
 	</span>
+
+ 	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog"> 
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Modal Header</h4>
+				</div>
+				<div class="modal-body">
+					<table>
+						<tbody>
+							<tr>
+								<td> <label> firstname </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="member-modal-firstname" type="text" value="name"> </input> </td>
+							</tr>
+							
+							<tr>
+								<td> <label> lastname </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="member-modal-lastname" type="text" value="name"> </input> </td>
+							</tr>
+							<tr>
+								<td> <label> member type </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-membertype" type="text" value="name"> </input> </td>
+							</tr>
+							<tr>
+								<td> <label> username </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-username" type="text" value="name"> </input> </td>
+							</tr>
+							<tr>
+								<td> <label> phone number </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-phone_number" type="text" value="name"> </input> </td>
+							</tr>
+							<tr>
+								<td> <label> hall </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-hall" type="text" value="name"> </input> </td>
+							</tr>
+							<tr>
+								<td> <label> room </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-room_number" type="text" value="name"> </input> </td>
+							</tr>
+							<tr>
+								<td> <label> mailbox </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-cm" type="text" value="name"> </input> </td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <script>
