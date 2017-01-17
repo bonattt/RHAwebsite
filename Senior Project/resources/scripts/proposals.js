@@ -67,12 +67,11 @@ function submit() {
     formData.append("imageFile", files[0]);
     photoxhr.open('POST', photoAPIURL, true);
 
-    photoxhr.send(formData);
-    
     photoxhr.onreadystatechange = function (e) {
         console.log("I'm playing in the stateChange!");
         if(photoxhr.readyState == 4 && photoxhr.status == 200) {
-            var response = photoxhr.responseText;
+            console.log("ReadyState was 4 and status 200!")
+            var image_path = photoxhr.responseText.filepath;
             console.log(response);
             var dbxhr = new XMLHttpRequest();
             var dbObject = {};
@@ -81,15 +80,28 @@ function submit() {
             dbObject["event_date"] = eventDate;
             dbObject["event_signup_open"] = signUpOpenDate;
             dbObject["event_signup_close"] = signUpCloseDate;
+            dbObject["proposer"] = proposer;
+            dbObject["week_proposed"] = weekProposed;
+            dbObject["quarter_proposed"] = quarter;
+            dbObject["money_requested"] = moneyRequested;
+            dbObject["approved"] = approved;
+            dbObject["money_allocated"] = moneyAllocated;
+            dbObject["image_path"] = image_path;
 
             dbxhr.open('POST', dbAPIURL, true);
-            dbxhr.send();
-
             dbxhr.onerror = function () {
                 console.log("There was an error");
             }
+
+            dbxhr.send(JSON.stringify(dbObject));
+
+            
         }
     };
+
+    photoxhr.send(formData);
+    
+    
 
 }
 
