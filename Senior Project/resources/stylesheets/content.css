@@ -922,3 +922,7 @@ img {
 td {
 	padding: 5px;
 }
+
+#radioButtons{
+	text-align: center;
+}
