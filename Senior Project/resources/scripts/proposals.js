@@ -67,6 +67,8 @@ function submit() {
     formData.append("imageFile", files[0]);
     photoxhr.open('POST', photoAPIURL, true);
 
+    photoxhr.send(formData);
+    
     photoxhr.onreadystatechange = function (e) {
         console.log("I'm playing in the stateChange!");
         if(photoxhr.readyState == 4 && photoxhr.status == 200) {
@@ -89,7 +91,6 @@ function submit() {
         }
     };
 
-    photoxhr.send(formData);
 }
 
 $(document).ready(function() {
