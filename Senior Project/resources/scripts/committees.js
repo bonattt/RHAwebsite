@@ -42,8 +42,9 @@ function setup() {
 	
 	var urlExtension = 'committees';
     var xhr = xhrGetRequest(urlExtension);
+    xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) }
     xhr.send();
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+    // setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
     function createHTMLFromResponseText(committee) {
         committee = JSON.parse(committee);
