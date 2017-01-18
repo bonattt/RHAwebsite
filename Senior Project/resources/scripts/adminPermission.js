@@ -17,7 +17,7 @@ var userIsOfficer = function(officers) {
 	return false;
 }
 
-var insertEditButtons = function(dataElementRoot, targetIdRoot, idFieldName, submitFunc, attributes) {
+var insertEditButtons = function(dataElementRoot, uiElementRootId, idFieldName, submitFunc, attributes) {
     var adminValues = document.getElementsByClassName("edit");
 	var buttonList = [];
     for (var i = 0; i < adminValues.length; i++) {
@@ -28,7 +28,7 @@ var insertEditButtons = function(dataElementRoot, targetIdRoot, idFieldName, sub
 		editButton.setAttribute("data-toggle", "modal");
 		editButton.setAttribute("data-target", "#myModal");
         editButton.addEventListener("click", 
-                generateEditButtonListener(elementId, targetIdRoot, submitFunc, idFieldName)
+                generateEditButtonListener(elementId, uiElementRootId, submitFunc, idFieldName)
             );
         /*
          * this is messy, but basically I need to curry so that the
@@ -46,11 +46,15 @@ var insertEditButtons = function(dataElementRoot, targetIdRoot, idFieldName, sub
 	return buttonList;
 }
 
-var generateEditButtonListener = function(dataElementId, targetIdRoot, submitFunc, idFieldName) {
-     console.log("edit callback created for " + dataElementId + ", " + targetIdRoot);
+// dataElementId    - the id of the HTML5 data attributes which will be used to populate the modal's fields
+// uiElementRootId  - the root id of the modal's fields which will be populated
+// submitFunc       - the function which is called uppon pressing the submit button.
+// idFieldName      - the value of this field will passed to submitFunc for use in the API url.
+var generateEditButtonListener = function(dataElementId, uiElementRootId, submitFunc, idFieldName) {
+     console.log("edit callback created for " + dataElementId + ", " + uiElementRootId);
      return function(event) {
-                console.log("edit button pressed for " + dataElementId + ", " + targetIdRoot);
-                setupEditModal(dataElementId, targetIdRoot, submitFunc, idFieldName);
+                console.log("edit button pressed for " + dataElementId + ", " + uiElementRootId);
+                setupEditModal(dataElementId, uiElementRootId, submitFunc, idFieldName);
      };
 }
 
@@ -75,25 +79,25 @@ var appendAttributes = function (element, attributes) {
 	}
 }
 
-var setupEditModal = function (dataElementId, targetIdRoot, submitFunc, idFieldName) {
+var setupEditModal = function (dataElementId, uiElementRootId, submitFunc, idFieldName) {
     console.log('dataset id = ' + dataElementId);
     var dataset = document.getElementById(dataElementId).dataset;
 	for (attr in dataset) {
-		var textField = document.getElementById(targetIdRoot + attr);
+		var textField = document.getElementById(uiElementRootId + attr);
 		if (textField != undefined) {
             textField.value = dataset[attr];
         }
 	}
-    enableSubmitButton(dataElementId, targetIdRoot, submitFunc, idFieldName);
+    enableSubmitButton(dataElementId, uiElementRootId, submitFunc, idFieldName);
     
     if (textField != undefined) { 
         textField.value = dataset[attr];
     }
 	
-	/*var nameField = document.getElementById(targetIdRoot + "name");
+	/*var nameField = document.getElementById(uiElementRootId + "name");
 	nameField.value = dataset.name;
 	
-	var descriptionField = document.getElementById(targetIdRoot + "desc");
+	var descriptionField = document.getElementById(uiElementRootId + "desc");
 	descriptionField.value = dataset.desc; //*/
 }
 
@@ -106,9 +110,9 @@ var clearSubmitHandlers = function(element, inputMode) {
     });
 }
 
-var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc, idFieldName) {
+var enableSubmitButton = function(dataElementId, uiElementRootId, submitFunc, idFieldName) {
 	//if (apiExtention == undefined) {
-		//SUBMIT_ALERT(dataElementId, targetIdRoot);
+		//SUBMIT_ALERT(dataElementId, uiElementRootId);
 		//return;
 	//}
 	var submitButton = document.getElementById("modal-submit");
@@ -118,7 +122,7 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc, idFie
 		var dataset = document.getElementById(dataElementId).dataset;
 		var json_data = {}
 		for (attr in dataset) {
-			var textField = document.getElementById(targetIdRoot + attr);
+			var textField = document.getElementById(uiElementRootId + attr);
 			if (textField != undefined) {
 				dataset[attr] = textField.value;
 				json_data[attr] = textField.value;
@@ -136,7 +140,7 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc, idFie
     cancelButton.addEventListener("click", function(event) { clearSubmitHandlers(submitButton) });
 }
 
-/*var SUBMIT_ALERT = function(dataElementId, targetIdRoot) {
+/*var SUBMIT_ALERT = function(dataElementId, uiElementRootId) {
 	var submitButton = document.getElementById("modal-submit");
 	msg = "please add the API extension as an arguement to the function 'enableSubmitButton'"; 
 	alert(msg);
@@ -144,7 +148,7 @@ var enableSubmitButton = function(dataElementId, targetIdRoot, submitFunc, idFie
 		/*var msg = "TODO: add a database query here! \n";
 		var dataset = document.getElementById(dataElementId).dataset;
 		for (attr in dataset) {
-			var textField = document.getElementById(targetIdRoot + attr);
+			var textField = document.getElementById(uiElementRootId + attr);
 			if (textField != undefined) {
 				console.log("updating attr " + attr);
 				dataset[attr] = textField.value;
@@ -236,5 +240,3 @@ function checkUrlExtension(url) {
 					'was passed into a function expecting an extension');
 	}
 }
-
-
