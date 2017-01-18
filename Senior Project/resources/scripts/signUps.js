@@ -139,53 +139,14 @@ function displaySignUps() {
 
     function createHTMLFromResponseText(proposal) {
         proposal = JSON.parse(proposal);
+        var editButtons = [];
+        
         for (var i = 0; i < proposal.length; i++) {
-            var cost = 0;
-            if (proposal[i].cost_to_attendee == '$0.00') {
-                cost = "FREE";
-            } else {
-                cost = proposal[i].cost_to_attendee;
-            }
-
-            var signUpCloseDate = new Date(proposal[i].event_signup_close);
-            signUpCloseDate = (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear();
-            var signUpOpenDate = new Date(proposal[i].event_signup_open);
-            var signUpOpenDateFormatted = (signUpOpenDate.getMonth() + 1) + "/" + signUpOpenDate.getUTCDate() + "/" + signUpOpenDate.getFullYear();
-
-            if (signUpOpenDate > new Date()) {
-                var signUpHTML = "<p class='eventSignUpDate'>Sign-ups open on: " + signUpOpenDateFormatted + "</p>";
-            } else {
-                var signUpHTML = "<p class='eventSignUpDate'>Sign-ups close on: " + signUpCloseDate + "</p>";
-            }
-            var attendees = proposal[i].attendees;
-
-            var eventDate = new Date(proposal[i].event_date);
-            eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
-
             var proposal_id = proposal[i].proposal_id;
-            
-            var html = "<div class='row'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
-            html += "<div class='eventTextSignUps' id='eventTextSignUps" + proposal_id + "'>";
-            html += "<h1 id='editEventName' class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
-            html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
-            html += "<h3 class='eventDate'>" + eventDate + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
-            html += signUpHTML + "</div>";
-            html += "<div class='eventActions'>";
-            var username = JSON.parse(sessionStorage.getItem("userData")).username;
-            if (signUpOpenDate < new Date()) {
-                if ($.inArray(username, attendees) == -1) {
-                    html += "<a id='signUpLink" + proposal_id + "' onclick='signUp(" + proposal_id + ")'><p class='signUpLink'> Sign Up </p></a>";
-                } else {
-                    html += "<a id='signUpLink" + proposal_id + "' onclick='unregister(" + proposal_id + ")'><p class='signUpLink'>Unregister</p></a>";
-                }
-                html += "<a onclick='showListModal(" + proposal_id + ")'><p class='viewListLink'>View List</p></a>"
-            }
-            html += "<p id='editEvent' class='editEvent' data-toggle='modal' data-target='#myModal'>Edit Event</p></div></div></div>";
-
+            var html = generatePageHTML(proposal[i]);
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
             //makeListLinks();
-            
             var fields = [
                     "proposal_id",
                     "proposal_name",
@@ -199,12 +160,53 @@ function displaySignUps() {
 					dataset[field] = proposal[i][field];
 				});
                 
+            /* html += "<p id='editEvent" + proposal_id + "' class='editEvent' " + 
+            // "data-toggle='modal' data-target='#myModal'" +
+            ">Edit Event</p></div></div></div>";    // */
+            
+            var editButton = document.createElement("a");
+            editButton.setAttribute('id', 'editEvent' + proposal_id);
+            editButton.setAttribute('class', 'editEvent');
+//            editButton.dataset.toggle = 'modal';
+//            editButton.dataset.target = '#myModal';
+            editButton.addEventListener('click', function() {
+                alert('making action listener in ' + proposal_id);
+                return function() {
+                    alert('click ' + proposal_id)
+                }}())
+            editButtons.push(editButton);
+  
+            var btnTxt = document.createTextNode('Edit Events');
+            editButton.appendChild(btnTxt);
+            
+            var eventActions = document.getElementById("eventActions" + proposal_id);
+            eventActions.appendChild(editButton);
+            
+            
+            /*editButtons.push(document.getElementById('editEvent' + proposal_id));
+            newEditButtons.push(editButtons[i].cloneNode(true));
+            newEditButtons[i].addEventListener("click", function() {
+                alert('clicked ' + proposal_id);
+            }, false);
+            editButtons[i].parentNode.replaceChild(newEditButtons[i], editButtons[i]); // */
+            
+            /* var submit = document.getElementById("submit");
+            new_submit = submit.cloneNode(true);
+            new_submit.addEventListener("click", function () {
+                submitChanges(descInput)
+            }, false);
+            submit.parentNode.replaceChild(new_submit, submit); //*/                        
         }
+        editButtons.forEach(function(element) {
+            console.log(element)
+            element.click();
+        });
+        
 
-        var editEventButtons = document.getElementsByClassName("editEvent");
+        // var editEventButtons = document.getElementsByClassName("editEvent");
 
-        var eventTextSignUps = document.getElementById("eventTextSignUps");
-        setupEditModal('eventTextSignUps', 'signups-modal-');
+        // var eventTextSignUps = document.getElementById("eventTextSignUps");
+        //setupEditModal('eventTextSignUps', 'signups-modal-');
     }
 
 
@@ -252,13 +254,62 @@ function displaySignUps() {
         }
         // xhr.send();
         return xhr;
-
     }
-
 }
 
+function generatePageHTML(proposal, proposal_id, cost, eventDate) {
+    var cost = 0;
+    if (proposal.cost_to_attendee == '$0.00') {
+        cost = "FREE";
+    } else {
+        cost = proposal.cost_to_attendee;
+    }
+    var signUpCloseDate = new Date(proposal.event_signup_close);
+    signUpCloseDate = (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear();
+    var signUpOpenDate = new Date(proposal.event_signup_open);
+    var signUpOpenDateFormatted = (signUpOpenDate.getMonth() + 1) + "/" + signUpOpenDate.getUTCDate() + "/" + signUpOpenDate.getFullYear();
+    if (signUpOpenDate > new Date()) {
+        var signUpHTML = "<p class='eventSignUpDate'>Sign-ups open on: " + signUpOpenDateFormatted + "</p>";
+    } else {
+        var signUpHTML = "<p class='eventSignUpDate'>Sign-ups close on: " + signUpCloseDate + "</p>";
+    }
+    var attendees = proposal.attendees;
+    var eventDate = new Date(proposal.event_date);
+    eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
+    var proposal_id = proposal.proposal_id;
 
-
+    var html = "<div class='row'><div class='col-sm-12'>" +
+            "<img class='eventImageSignUps' src='" +
+            proposal.image_path + "' alt='Event Image'>";
+    html += "<div class='eventTextSignUps' id='eventTextSignUps" +
+            proposal_id + "'>";
+    html += "<h1 id='editEventName' class='eventTitle'>" +
+            proposal.proposal_name + "</h1>";
+    html += "<div class='costEventDateWrapper'> " +
+            "<h3 class='cost'>" + cost + "</h3>";
+    html += "<h3 class='eventDate'>" + eventDate +
+            "</h3></div><br/><p class='eventDescription'>" +
+            proposal.description + "</p><br/><br/>";
+    html += signUpHTML + "</div>";
+    html += "<div id='eventActions" + proposal_id + "' class='eventActions'>";
+    
+    var username = JSON.parse(sessionStorage.getItem("userData")).username;
+    if (signUpOpenDate < new Date()) {
+        if ($.inArray(username, attendees) == -1) {
+            html += "<a id='signUpLink" + proposal_id + "' onclick='signUp(" + proposal_id + ")'>" +
+                    "<p class='signUpLink'> Sign Up </p></a>";
+        } else {
+            html += "<a id='signUpLink" + proposal_id +
+                    "' onclick='unregister(" + proposal_id + ")'>" +
+                    "<p class='signUpLink'>Unregister</p></a>";
+        }
+        html += "<a onclick='showListModal(" + proposal_id + ")'><p class='viewListLink'>View List</p></a>"
+    }
+    /* html += "<p id='editEvent" + proposal_id + "' class='editEvent' " + 
+            // "data-toggle='modal' data-target='#myModal'" +
+            ">Edit Event</p></div></div></div>";    // */
+    return html;
+}
 
 function signUp(eventID) {
     var username = JSON.parse(sessionStorage.getItem("userData")).username;

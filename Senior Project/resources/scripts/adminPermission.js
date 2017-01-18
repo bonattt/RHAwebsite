@@ -46,9 +46,11 @@ var insertEditButtons = function(dataElementRoot, targetIdRoot, idFieldName, sub
 	return buttonList;
 }
 
-var generateEditButtonListener = function(elementId, targetIdRoot, submitFunc, idFieldName) {
+var generateEditButtonListener = function(dataElementId, targetIdRoot, submitFunc, idFieldName) {
+     console.log("edit callback created for " + dataElementId + ", " + targetIdRoot);
      return function(event) {
-                setupEditModal(elementId, targetIdRoot, submitFunc, idFieldName);
+                console.log("edit button pressed for " + dataElementId + ", " + targetIdRoot);
+                setupEditModal(dataElementId, targetIdRoot, submitFunc, idFieldName);
      };
 }
 
@@ -74,6 +76,7 @@ var appendAttributes = function (element, attributes) {
 }
 
 var setupEditModal = function (dataElementId, targetIdRoot, submitFunc, idFieldName) {
+    console.log('dataset id = ' + dataElementId);
     var dataset = document.getElementById(dataElementId).dataset;
 	for (attr in dataset) {
 		var textField = document.getElementById(targetIdRoot + attr);
