@@ -2,46 +2,44 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" href="../images/RHA.jpg">
     <link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
     <link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
-    <link rel="icon" href="images/RHA.jpg">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+
+    <script type="text/javascript" src="../scripts/navbar-factory.js">  </script>
+    <script language="Javascript" src="../scripts/adminPermission.js">  </script>
+    <script type="text/javascript" src="./scripts/rosefire.js"></script>
+
     <title>
         RHA | Reserve Equipment
     </title>
-
-    <script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
-    <script type="text/javascript" src="./scripts/rosefire.js"></script>
-    <script type="test/javascript" src="../scripts/login.js"></script>
-    <script type="text/javascript" src="../scripts/equipmentReservation.js"></script>
-
 </head>
 
 <body>
+    <div id="navBar"> </div>
+    <div id="proposalsPage">
+        <h1>Equipment <br> Reservation</h1>
+        
+        <div id="directions">
+            <p>These are some directions.</p>
+            
+        </div>
 
-    <div id="navBar">
-
-    </div>
-
-    </div>
-    <h1>Reserve Equipment</h1>
-
-    <button id="calendar-add-button" data-toggle="modal" data-target="#myModal"> Add a Calendar </button>
-    <button id="test-calendar-button">I'm a test!</button>
-
-    <div>
-        <p id="calendar-description">Planning an event and need equipment? Reserve it ahead of time, or see when its available to use with your friends! Simply select the piece of equipment you're interested in, and click "View Availability" to display a calendar.</p>
+        <div id="reservation-info">
+            <p>Here is some info!</p>
+        </div>
+        
+        <h3 id="equipment-deadline">Please remember that all equipment must be submitted by 5:00PM on their respective return date.</h3>
     </div>
 
     <div id="calendar-wrapper">
-        <iframe id="calendar-frame" src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=450&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=qeg7arc27qhl0lbi1kbnkl3g0c%40group.calendar.google.com&amp;color=%23875509&amp;ctz=America%2FNew_York" style="border-width:0" width="500" height="450" frameborder="0" scrolling="no"></iframe>
-    </div>
-
-    </div>
-
+            <iframe id="calendar-frame" src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=450&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=qeg7arc27qhl0lbi1kbnkl3g0c%40group.calendar.google.com&amp;color=%23875509&amp;ctz=America%2FNew_York" style="border-width:0" width="500" height="450" frameborder="0" scrolling="no"></iframe>
+        </div>
+    
     <div 
         id="calendar1" 
         data-id=1
@@ -84,11 +82,7 @@
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-    <script>
-		window.jQuery || document.write('<script src="../scripts/jquery-3.1.1.js"><\/script>');
-	</script>
 </body>
+<script type="text/javascript" src="../scripts/equipmentReservation.js"></script>
 
 </html>
