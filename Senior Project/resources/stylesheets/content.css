@@ -883,8 +883,10 @@ height: 150pt;
 
 #calendar-wrapper {
 	position: absolute;
-  	right: 10%;
-  	bottom: 12%;
+  	right: 4.75%;
+  	bottom: 5%;
+  	width: 45%;
+  	height: 55%;
 }
 
 #equipment-deadline {
@@ -904,6 +906,21 @@ height: 150pt;
 	left: 10%;
 	font-weight: bold;
 	color: black;
+}
+
+#calendar-selector {
+	position: absolute;
+	height: 30px;
+	width: 900px;
+	max-width: 60%;
+	right: -8.5%;
+	top: 36%;
+	/*float: right;*/
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 0.85vw;
+	/*font-size: 1.25vw;*/
+
 }
 
 /* Bootstrap Overrides */
