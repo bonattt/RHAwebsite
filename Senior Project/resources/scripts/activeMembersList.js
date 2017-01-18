@@ -37,7 +37,7 @@ function drawAllMembersTable(members) {
         if (countForColoring % 2 == 0) {
             html += "<tr bgcolor='#f0f0f0' id='memberType" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
         } else {
-            html += "<tr id='memberType" + i + "'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
+            html += "<tr id='memberType" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
         }
         html += "<td>" + members[i].hall + "</td>";
         html += "<td>" + members[i].active + "</td></tr>";
@@ -77,7 +77,7 @@ function drawActiveMembersTable(members) {
             if (countForColoring % 2 == 0) {
                 html += "<tr bgcolor='#f0f0f0' id='memberType" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
             } else {
-                html += "<tr id='memberType" + i + "'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
+                html += "<tr id='memberType" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
             }
             html += "<td>" + members[i].hall + "</td>";
             html += "<td>" + members[i].active + "</td></tr>";
