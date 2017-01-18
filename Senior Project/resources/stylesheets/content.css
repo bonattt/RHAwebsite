@@ -913,3 +913,16 @@ img {
 	opacity: 1;
 	font-size: 3vw;
 }
+
+#membersTable {
+	border-collapse: collapse;
+	margin-top: 25px;
+}
+
+td {
+	padding: 5px;
+}
+
+#radioButtons{
+	text-align: center;
+}

@@ -2,37 +2,114 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
-    <link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
-    <link rel="icon" href="images/RHA.jpg">
-    <title>
-        RHA | Active Members List
-    </title>
+	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
+	<link rel="icon" href="images/RHA.jpg">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<title>
+		RHA | Active Members List
+	</title>
 
-    <script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
-    <script type="text/javascript" src="./scripts/rosefire.js"></script>
-    <script type="test/javascript" src="../scripts/login.js"></script>
-	
+	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
+	<script type="text/javascript" src="./scripts/rosefire.js"></script>
+	<script type="test/javascript" src="../scripts/login.js"></script>
+
 	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
-    <script type="text/javascript" src="../scripts/activeMembersList.js"></script>
+	<script type="text/javascript" src="../scripts/activeMembersList.js"></script>
 
 </head>
 
 <body>
 
-    <div id="navBar">
+	<div id="navBar">
+	</div>
 
-    </div>
-
-    </div>
-    <h1>Active Members List</h1>
-    </div>
+	</div>
+	<h1>Members List</h1>
+	</div>
+	<form action="" id="radioButtons">
+		<input type="radio" class="allMembers" id="allMembers" name="members" checked="checked">All Members<br>
+		<input type="radio" class="activeMembers" id="activeMembers" name="members">Active Members<br>
+	</form>
 	<span>
 		<div id="activeMembersTable"></div>
 	</span>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-    <script>
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Modal Header</h4>
+				</div>
+				<div class="modal-body">
+					<table>
+						<tbody>
+							<tr>
+								<td> <label> firstname </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="member-modal-firstname" type="text" value="name"> </input>
+								</td>
+							</tr>
+
+							<tr>
+								<td> <label> lastname </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="member-modal-lastname" type="text" value="name"> </input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label> member type </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-membertype" type="text" value="name"> </input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label> username </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-username" type="text" value="name"> </input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label> phone number </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-phone_number" type="text" value="name"> </input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label> hall </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-hall" type="text" value="name"> </input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label> room </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-room_number" type="text" value="name"> </input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label> mailbox </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="officers-modal-cm" type="text" value="name"> </input>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+	<script>
 		window.jQuery || document.write('<script src="../scripts/jquery-3.1.1.js"><\/script>');
 	</script>
 </body>
