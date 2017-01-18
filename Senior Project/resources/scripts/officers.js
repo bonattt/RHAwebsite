@@ -1,11 +1,34 @@
 var officerMap = new Object();
 var editName;
+const API_EXTENSION = '';
 
 
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-		var editbuttons = insertEditButtons(function() {}, 'everyOfficerEver', 'officers-modal-');
+		var editbuttons = insertEditButtons(
+                    'officer',
+                    'officers-modal-',
+                    'user_id',
+                    function(json_data, put_id) {
+            var apiUrl = 'member/' + put_id
+            var xhr = xhrPutRequest(apiUrl);
+            alert('sending API put request...\napi url: "' + apiUrl + '"');
+            delete json_data.user_id;
+            delete json_data.username;
+            xhr.onload = function() { location.reload() };
+            xhr.send(JSON.stringify(json_data)
+            /*{
+                "membertype": json_data.membertype,
+                "firstname": json_data.firstname,
+                "lastname": json_data.lastname,
+                "phone_number": json_data.phone_number,
+                "room_number": json_data.room_number,
+                "hall": json_data.hall,
+                "cm": json_data.cm
+            }) // */
+            );
+        });
     }
     var addOfficeButton = document.getElementById("addOfficer");
     addOfficeButton.addEventListener("click", showEmptyModal);
@@ -13,10 +36,24 @@ function setAdmin(officers) {
 }
 
 
-
 function setup() {
 	
-	enableSubmitButton("everyOfficerEver", "officers-modal-");
+	/*enableSubmitButton("everyOfficerEver", "officers-modal-", function(json) {
+		editName = json.firstname + ' ' + json.lastname
+		console.log("editName: " + editName);
+		var officerID = officerMap[editName];
+		console.log("oficerID: " + officerID);
+		// console.log("officerMap: ");
+		// console.log(officerMap);
+		var urlExtension = 'member/' + officerID;
+		var xhr = xhrPutRequest(urlExtension);
+		console.log("email: " + json.email);
+		json.username = json.email.split("@")[0];
+		console.log("username: " + json.username);
+		alert(JSON.stringify(json));
+		// xhr.send(JSON.stringify(json));
+		// location.reload();
+	});*/
 
     var officerId;
 
@@ -30,24 +67,42 @@ function setup() {
         for (var i = 0; i < officer.length; i++) {
             if (officer[i].memberType != "") {
                 var html = "<div class='officer'>";
-                html += "<h3 class='edit'>" + officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].membertype + "</h3>";
+                html += "<h3 class='edit' id='officer" + officer[i].user_id + "'>" 
+				
+				html += officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].membertype
+				html += "</h3>";
                 html += "<img src='../images/officers/" + officer[i].membertype.toLowerCase().replace(" ", "") + ".jpg' alt='" + officer[i].membertype + "'height='294' width='195'>";
                 html += "<p>Email: <a href='mailto:" + officer[i].username + "@rose-hulman.edu'>" + officer[i].username + "@rose-hulman.edu</a></p>";
                 html += "<p> Phone Number: " + officer[i].phone_number + "</p>";
                 html += "<p> Room: " + officer[i].hall + " " + officer[i].room_number + "</p>";
                 html += "<p>Box #: " + officer[i].cm + "</p>";
 
-                officerMap[officer[i].firstname + " " + officer[i].lastname] = officer[i].user_id;
+                officerMap[officer[i].username] = officer[i].user_id;
 
                 var officers = document.getElementById("officers");
                 officers.innerHTML += html;
+				
+				var dataset = document.getElementById('officer' + officer[i].user_id).dataset;
+				var fields = ["user_id", "firstname", "lastname", "username",
+					"membertype", "phone_number", "room_number", "hall", "cm"];
+                console.log("about to set fields");
+				fields.forEach(function(field){
+                    console.log("setting field " + field + " to " + officer[i][field]);
+					dataset[field] = officer[i][field];
+				});
             }
         }
-
         var officersxhr = getOfficers();
-        officersxhr.send();
-        setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
+        officersxhr.onload = function () {
+            setAdmin(officersxhr.responseText);
+        } 
+        officersxhr.send(); 
+        // setTimeout(function () { setAdmin(officersxhr.responseText) }, 300); // */
     }
+}
+
+function addDataset(fields, officer) {
+	
 }
 
 function showEmptyModal() {
