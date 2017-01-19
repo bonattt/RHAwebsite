@@ -20,6 +20,8 @@ var signUpCloseDateNode = document.getElementById("signUpCloseDateInput");
 var editValue;
 var listLinks;
 
+const MODAL_FIELD_ROOT_ID = "signups-modal-";
+
 function displayPastEvents() {
     var xhr = getEvents();
     xhr.onload = function () {
@@ -53,9 +55,6 @@ function displayPastEvents() {
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
-            
-            
-
         }
         // makeListLinks();
     }
@@ -143,28 +142,17 @@ function displaySignUps() {
         
         for (var i = 0; i < proposal.length; i++) {
             var proposal_id = proposal[i].proposal_id;
-            var html = generatePageHTML(proposal[i]);
+            var eventHtml = generatePageHTML(proposal[i]);
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
-            tileArea.innerHTML += html;
+            tileArea.appendChild(eventHtml);
+            //tileArea.innerHTML += html;
             //makeListLinks();
-            var fields = [
-                    "proposal_id",
-                    "proposal_name",
-                    "event_data",
-                    "event_signup_open",
-                    "event_signup_close", 
-                    "description"
-                ];
-            var dataset = document.getElementById('eventTextSignUps' + proposal_id);
-            fields.forEach(function(field){
-					dataset[field] = proposal[i][field];
-				});
-                
+            
             /* html += "<p id='editEvent" + proposal_id + "' class='editEvent' " + 
             // "data-toggle='modal' data-target='#myModal'" +
             ">Edit Event</p></div></div></div>";    // */
             
-            var editButton = document.createElement("a");
+            /*var editButton = document.createElement("a");
             editButton.setAttribute('id', 'editEvent' + proposal_id);
             editButton.setAttribute('class', 'editEvent');
 //            editButton.dataset.toggle = 'modal';
@@ -180,7 +168,7 @@ function displaySignUps() {
             editButton.appendChild(btnTxt);
             
             var eventActions = document.getElementById("eventActions" + proposal_id);
-            eventActions.appendChild(editButton);
+            eventActions.appendChild(editButton); //*/
             
             
             /*editButtons.push(document.getElementById('editEvent' + proposal_id));
@@ -257,6 +245,21 @@ function displaySignUps() {
     }
 }
 
+var getSignupDateHtml = function(proposal, signUpCloseDate, signUpOpenDate, signUpOpenDateFormatted) {
+    
+    var signUpHtml = document.createElement('p');
+    signUpHtml.setAttribute('class', 'eventSignUpDate');
+    if (signUpOpenDate > new Date()) {
+        // var signUpHTML = "<p class='eventSignUpDate'>Sign-ups open on: " + signUpOpenDateFormatted + "</p>";
+        var textNode = document.createTextNode("Sign-ups open on: " + signUpOpenDateFormatted);
+    } else {
+        // var signUpHTML = "<p class='eventSignUpDate'>Sign-ups close on: " + signUpCloseDate + "</p>";
+        var textNode = document.createTextNode('Sign-ups close on: ' + signUpCloseDate);
+    }
+    signUpHtml.appendChild(textNode);
+    return signUpHtml;
+}
+
 function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     var cost = 0;
     if (proposal.cost_to_attendee == '$0.00') {
@@ -264,51 +267,206 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     } else {
         cost = proposal.cost_to_attendee;
     }
+    
     var signUpCloseDate = new Date(proposal.event_signup_close);
     signUpCloseDate = (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear();
     var signUpOpenDate = new Date(proposal.event_signup_open);
     var signUpOpenDateFormatted = (signUpOpenDate.getMonth() + 1) + "/" + signUpOpenDate.getUTCDate() + "/" + signUpOpenDate.getFullYear();
-    if (signUpOpenDate > new Date()) {
-        var signUpHTML = "<p class='eventSignUpDate'>Sign-ups open on: " + signUpOpenDateFormatted + "</p>";
-    } else {
-        var signUpHTML = "<p class='eventSignUpDate'>Sign-ups close on: " + signUpCloseDate + "</p>";
-    }
+    
+    var signupHtml = getSignupDateHtml(proposal, signUpCloseDate, signUpOpenDate, signUpOpenDateFormatted);
+    
     var attendees = proposal.attendees;
     var eventDate = new Date(proposal.event_date);
     eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
     var proposal_id = proposal.proposal_id;
-
-    var html = "<div class='row'><div class='col-sm-12'>" +
-            "<img class='eventImageSignUps' src='" +
-            proposal.image_path + "' alt='Event Image'>";
-    html += "<div class='eventTextSignUps' id='eventTextSignUps" +
-            proposal_id + "'>";
-    html += "<h1 id='editEventName' class='eventTitle'>" +
-            proposal.proposal_name + "</h1>";
-    html += "<div class='costEventDateWrapper'> " +
-            "<h3 class='cost'>" + cost + "</h3>";
-    html += "<h3 class='eventDate'>" + eventDate +
-            "</h3></div><br/><p class='eventDescription'>" +
-            proposal.description + "</p><br/><br/>";
-    html += signUpHTML + "</div>";
-    html += "<div id='eventActions" + proposal_id + "' class='eventActions'>";
     
+    ///////////////////////////////////////////////////////////////////////
+    var rowDiv = document.createElement('div');
+    rowDiv.setAttribute('class', 'row');
+    
+    var colDiv = document.createElement('div');
+    colDiv.setAttribute('class', 'col-sm-12');
+    rowDiv.appendChild(colDiv);
+    
+    var imgTag = document.createElement('img');
+    imgTag.setAttribute('class', 'eventImageSignUps');
+    imgTag.setAttribute('src', proposal.image_path);
+    imgTag.setAttribute('alt', 'Event Image');
+    colDiv.appendChild(imgTag);
+    
+    var eventTextSignUps = getEventTextSignupsHtml(proposal, cost, eventDate);
+    colDiv.appendChild(eventTextSignUps);
+    
+    /*var html = "<div class='row'>"
+                    "<div class='col-sm-12'>" +
+                        "<img class='eventImageSignUps' src='" +
+            proposal.image_path + "' alt='Event Image'>";
+    html +=             "<div class='eventTextSignUps' id='eventTextSignUps" +
+            proposal_id + "'>";
+    html +=                 "<h1 id='editEventName' class='eventTitle'>" +
+            proposal.proposal_name + "</h1>";
+    html +=                 "<div class='costEventDateWrapper'> " +
+                                "<h3 class='cost'>" + cost + "</h3>";
+    html +=                     "<h3 class='eventDate'>" + eventDate + "</h3>"
+                            "</div><br/>" +
+                            "<p class='eventDescription'>" +
+            proposal.description + "</p><br/><br/>";
+    html +=             signUpHTML + 
+                    "</div>"; //*/
+    ////////////////////////////////////////////////////////////////////////
     var username = JSON.parse(sessionStorage.getItem("userData")).username;
+    var eventActionDiv = getEventActionDiv(proposal_id, username, signUpOpenDate, attendees);
+    colDiv.appendChild(eventActionDiv);
+    
+    return rowDiv;
+}
+
+function getEventTextSignupsHtml (proposal, cost, eventDate) {
+    var proposal_id = proposal.proposal_id;
+
+    var eventTextSignUps = document.createElement('div');
+    eventTextSignUps.setAttribute('class', 'eventTextSignUps');
+    eventTextSignUps.setAttribute('id', 'eventTextSignUps' + proposal_id);
+    
+    var fields = [
+            "proposal_id",
+            "proposal_name",
+            "event_data",
+            "event_signup_open",
+            "event_signup_close", 
+            "description"
+        ];
+    fields.forEach(function(field){
+            eventTextSignUps.dataset[field] = proposal[field];
+        });
+        
+    
+    var eventName = document.createElement('h1');
+    eventName.setAttribute('class', 'eventTitle');
+    eventName.appendChild(document.createTextNode(proposal.proposal_name));
+    eventTextSignUps.appendChild(eventName);
+    
+    var costDateWrapper = document.createElement('div');
+    costDateWrapper.setAttribute('class', 'costEventDateWrapper');
+    eventTextSignUps.appendChild(costDateWrapper);
+    
+    var costText = document.createElement('h3');
+    costText.setAttribute('class', 'cost');
+    costText.appendChild(document.createTextNode(cost));
+    costDateWrapper.appendChild(costText);
+    
+    costDateWrapper.appendChild(document.createElement('br'));
+    
+    var dateText = document.createElement('h3');
+    costText.setAttribute('class', 'eventDate');
+    costText.appendChild(document.createTextNode(eventDate));
+    costDateWrapper.appendChild(costText);
+    
+    var eventDesc = document.createElement('p');
+    eventDesc.setAttribute('class', 'eventDescription');
+    eventDesc.appendChild(document.createTextNode(proposal.description));
+    eventTextSignUps.appendChild(eventDesc);
+    
+    return eventTextSignUps;
+}
+
+function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
+    // html += "<div id='eventActions" + proposal_id + "' class='eventActions'>";
+    var eventActionDiv = document.createElement('div');
+    eventActionDiv.setAttribute('id', 'eventActions'+proposal_id);
+    eventActionDiv.setAttribute('class', 'eventActions');
+
+    // signup / unregister button, ? event is current 
     if (signUpOpenDate < new Date()) {
+        var signupLink = document.createElement('a');
+        signupLink.setAttribute('id', 'signUpLink'+proposal_id);
         if ($.inArray(username, attendees) == -1) {
-            html += "<a id='signUpLink" + proposal_id + "' onclick='signUp(" + proposal_id + ")'>" +
-                    "<p class='signUpLink'> Sign Up </p></a>";
+            signupLink.addEventListener('click', function() {signUp(proposal_id + "")});
+            var innerParagraph = document.createElement('p');
+            innerParagraph.setAttribute('class', 'signUpLink');
+            innerParagraph.appendChild(document.createTextNode('Sign Up'));
+            signupLink.appendChild(innerParagraph);
         } else {
-            html += "<a id='signUpLink" + proposal_id +
-                    "' onclick='unregister(" + proposal_id + ")'>" +
-                    "<p class='signUpLink'>Unregister</p></a>";
+            signupLink.addEventListener('click', function() {unregister(proposal_id)});
+            var innerParagraph = document.createElement('p');
+            innerParagraph.setAttribute('class', 'signUpLink');
+            innerParagraph.appendChild(document.createTextNode('Unregister'));
+            signupLink.appendChild(innerParagraph);
         }
-        html += "<a onclick='showListModal(" + proposal_id + ")'><p class='viewListLink'>View List</p></a>"
+    } else {
+        var signupLink = document.createElement('p');
+        signupLink.setAttribute('class', 'signUpLink');
+        signupLink.appendChild(document.createTextNode('signups closed'));    
     }
+    eventActionDiv.appendChild(signupLink);
+    
+    var showListLink = document.createElement('a');
+    showListLink.addEventListener('click', function() {showListModal(proposal_id)});
+    var innerParagraph2 = document.createElement('p');
+    innerParagraph2.setAttribute('class', 'viewListLink');
+    innerParagraph2.appendChild(document.createTextNode('View List'));
+    showListLink.appendChild(innerParagraph2);
+    eventActionDiv.appendChild(showListLink);
+    
+    var editButton = document.createElement('a');
+    editButton.addEventListener('click', generateEditButtonListener(
+            dataElementId(proposal_id), MODAL_FIELD_ROOT_ID, function(json_data, put_id) { // submitFunc
+                var apiExtension = "event/" + put_id;
+                var xhr = xhrPutRequest(apiExtension);
+                var body = {
+                    "proposal_name": json_data.proposal_name,
+                    "cost_to_attendee": json_data.cost_to_attendee,
+                    "description": json_data.description,
+                    "event_date": json_data.event_data,
+                    "event_signup_open": json_data.event_signup_open,
+                    "event_signup_close": json_data.event_signup_close                    
+                }
+                xhr.onload = function() {console.log('successfully delivered API call!');}
+                alert('sending API call to ' + BASE_API_URL + apiExtension);
+                xhr.send(JSON.stringify(body));
+            }, "proposal_id"
+    ));
+    editButton.dataset.toggle = 'modal';
+    editButton.dataset.target = '#myModal';
+    var innerParagraph3 = document.createElement('p');
+    innerParagraph3.setAttribute('class', 'editEvent');
+    innerParagraph3.setAttribute('id', 'editEvent' + proposal_id);
+    innerParagraph3.appendChild(document.createTextNode('Edit Events'));
+    editButton.appendChild(innerParagraph3);
+    eventActionDiv.appendChild(editButton);
+    return eventActionDiv;
+    
     /* html += "<p id='editEvent" + proposal_id + "' class='editEvent' " + 
             // "data-toggle='modal' data-target='#myModal'" +
             ">Edit Event</p></div></div></div>";    // */
-    return html;
+    
+    // html += "<a onclick='showListModal(" + proposal_id + ")'><p class='viewListLink'>View List</p></a>"
+    
+     /*var editButton = document.createElement("a");
+            editButton.setAttribute('id', 'editEvent' + proposal_id);
+            editButton.setAttribute('class', 'editEvent');
+//            editButton.dataset.toggle = 'modal';
+//            editButton.dataset.target = '#myModal';
+            editButton.addEventListener('click', function() {
+                alert('making action listener in ' + proposal_id);
+                return function() {
+                    alert('click ' + proposal_id)
+                }}())
+            editButtons.push(editButton);
+  
+            var btnTxt = document.createTextNode('Edit Events');
+            editButton.appendChild(btnTxt);
+            
+            var eventActions = document.getElementById("eventActions" + proposal_id);
+            eventActions.appendChild(editButton); //*/
+}
+
+function dataElementId(proposal_id) {
+    return 'eventTextSignUps' + proposal_id;
+}
+
+function targetIdRoot() {
+    
 }
 
 function signUp(eventID) {
