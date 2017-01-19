@@ -229,7 +229,7 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     imgTag.setAttribute('alt', 'Event Image');
     colDiv.appendChild(imgTag);
     
-    var eventTextSignUps = getEventTextSignupsHtml(proposal, cost, eventDate);
+    var eventTextSignUps = getEventTextSignupsHtml(proposal, cost, eventDate, signUpOpenDate);
     colDiv.appendChild(eventTextSignUps);
     
     var username = JSON.parse(sessionStorage.getItem("userData")).username;
@@ -239,7 +239,7 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     return rowDiv;
 }
 
-function getEventTextSignupsHtml (proposal, cost, eventDate) {
+function getEventTextSignupsHtml (proposal, cost, eventDate, signUpOpenDate) {
     var proposal_id = proposal.proposal_id;
 
     var eventTextSignUps = document.createElement('div');
@@ -273,17 +273,28 @@ function getEventTextSignupsHtml (proposal, cost, eventDate) {
     costText.appendChild(document.createTextNode(cost));
     costDateWrapper.appendChild(costText);
     
-    costDateWrapper.appendChild(document.createElement('br'));
-    
     var dateText = document.createElement('h3');
-    costText.setAttribute('class', 'eventDate');
-    costText.appendChild(document.createTextNode(eventDate));
-    costDateWrapper.appendChild(costText);
+    dateText.setAttribute('class', 'eventDate');
+    dateText.appendChild(document.createTextNode(eventDate));
+    costDateWrapper.appendChild(dateText);
     
     var eventDesc = document.createElement('p');
     eventDesc.setAttribute('class', 'eventDescription');
     eventDesc.appendChild(document.createTextNode(proposal.description));
     eventTextSignUps.appendChild(eventDesc);
+    
+    eventTextSignUps.appendChild(document.createElement('br'));
+    eventTextSignUps.appendChild(document.createElement('br'));
+    
+    var signupsDate = document.createElement('p');
+    var dateStr = (signUpOpenDate.getMonth()+1) + '/' + signUpOpenDate.getDate() + '/' + signUpOpenDate.getFullYear();
+    signupsDate.setAttribute('class', 'eventSignUpDate');
+    if (signUpOpenDate > new Date()) {
+        signupsDate.appendChild(document.createTextNode('Sign-ups open on: ' + dateStr));
+    } else {
+        signupsDate.appendChild(document.createTextNode('Sign-ups close on: ' + dateStr));
+    }
+    eventTextSignUps.appendChild(signupsDate);
     
     return eventTextSignUps;
 }
