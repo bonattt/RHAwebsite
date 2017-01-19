@@ -2,6 +2,10 @@ function setup() {
 	// var addButton = document.getElementById("calendar-add-button");
 	// addButton.addEventListener("click", function() {addNewCalendar("calendar1", "calendar-modal-")});
 
+	var xhr = xhrGetRequest('equipment');
+	xhr.send();
+	setTimeout(function () { populateCalendarData(xhr.responseText) }, 300);
+
 	var select = document.getElementById("calendar-selector");
 	select.onchange = function() {
 		var selIndex = select.selectedIndex + 1;
@@ -13,7 +17,30 @@ function setup() {
 		switchCalendarView(calendarToSelect);
 	}
 
-	var dataset = document.getElementById("calendar2").dataset;
+	// var dataset = document.getElementById("calendar2").dataset;
+}
+
+function populateCalendarData(calendars) {
+	console.log(calendars);
+	calendars = JSON.parse(calendars);
+	var body = document.getElementsByTagName('body')[0];
+	var selector = document.getElementById('calendar-selector');
+
+	for (var i = 0; i < calendars.length; i++) {
+		var data = document.createElement('div');
+		data.setAttribute('id', 'calendar' + i);
+		data.setAttribute('data-id', calendars[i].equipmentid);
+		data.setAttribute('data-name', calendars[i].equipmentname);
+		data.setAttribute('data-desc', calendars[i].equipmentdescription);
+		data.setAttribute('data-embed', calendars[i].equipmentembed);
+
+		body.appendChild(data);
+
+		var option = document.createElement('option');
+		option.setAttribute('value', calendars[i].equipmentid);
+
+		selector.appendChild(option);
+	}
 }
 
  function addNewCalendar(dataElementId, targetIdRoot) {

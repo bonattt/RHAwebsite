@@ -56,11 +56,15 @@ CREATE TABLE Committee (
 );
 
 CREATE TABLE Equipment (
-        equipment_id SERIAL PRIMARY KEY,
-        equipmentName varchar(30);
+        equipmentID SERIAL PRIMARY KEY,
+        equipmentName varchar(30),
         equipmentDescription varchar(500),
+        equipmentEmbed varchar(500),
         rentalTimeInDays int DEFAULT 2
 );
+
+insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipmentEmbed, rentalTimeInDays) values (DEFAULT, 'Equipment1', 'This is equipment 1', '<iframe id="calendar-frame" src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=450&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=qeg7arc27qhl0lbi1kbnkl3g0c%40group.calendar.google.com&amp;color=%23875509&amp;ctz=America%2FNew_York"style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>', 3);
+
 
 CREATE TABLE Rentals (
         rental_id SERIAL PRIMARY KEY,
