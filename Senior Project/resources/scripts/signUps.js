@@ -410,21 +410,7 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     
     var editButton = document.createElement('a');
     editButton.addEventListener('click', generateEditButtonListener(
-            dataElementId(proposal_id), MODAL_FIELD_ROOT_ID, function(json_data, put_id) { // submitFunc
-                var apiExtension = "event/" + put_id;
-                var xhr = xhrPutRequest(apiExtension);
-                var body = {
-                    "proposal_name": json_data.proposal_name,
-                    "cost_to_attendee": json_data.cost_to_attendee,
-                    "description": json_data.description,
-                    "event_date": json_data.event_data,
-                    "event_signup_open": json_data.event_signup_open,
-                    "event_signup_close": json_data.event_signup_close                    
-                }
-                xhr.onload = function() {console.log('successfully delivered API call!');}
-                alert('sending API call to ' + BASE_API_URL + apiExtension);
-                xhr.send(JSON.stringify(body));
-            }, "proposal_id"
+            dataElementId(proposal_id), MODAL_FIELD_ROOT_ID, submitFunc, "proposal_id"
     ));
     editButton.dataset.toggle = 'modal';
     editButton.dataset.target = '#myModal';
@@ -459,6 +445,15 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
             
             var eventActions = document.getElementById("eventActions" + proposal_id);
             eventActions.appendChild(editButton); //*/
+}
+
+function submitFunc(json_data, put_id) {
+    // submitFunc
+    var apiExtension = "event/" + put_id;
+    var xhr = xhrPutRequest(apiExtension);
+    xhr.onload = function() {console.log('successfully delivered API call!');}
+    alert('sending API call to ' + BASE_API_URL + apiExtension);
+    xhr.send(JSON.stringify(json_data));
 }
 
 function dataElementId(proposal_id) {
