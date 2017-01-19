@@ -90,7 +90,7 @@ var setupEditModal = function (dataElementId, uiElementRootId, submitFunc, idFie
 	}
     enableSubmitButton(dataElementId, uiElementRootId, submitFunc, idFieldName);
     
-    if (textField != undefined) { 
+    if (textField != undefined) {
         textField.value = dataset[attr];
     }
 	
@@ -100,6 +100,8 @@ var setupEditModal = function (dataElementId, uiElementRootId, submitFunc, idFie
 	var descriptionField = document.getElementById(uiElementRootId + "desc");
 	descriptionField.value = dataset.desc; //*/
 }
+
+var populateModalFields
 
 var clearSubmitHandlers = function(element, inputMode) {
     if (inputMode == undefined) {

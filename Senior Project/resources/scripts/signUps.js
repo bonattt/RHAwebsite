@@ -93,9 +93,7 @@ function displayPastEvents() {
         }
         // xhr.send();
         return xhr;
-
     }
-
 }
 
 function saveEvent() {
@@ -116,7 +114,6 @@ function saveEvent() {
     xhr.onload = function () {
         var responseText = xhr.responseText;
         console.log("Response text: " + responseText);
-        // return responseText;
     }
 
     xhr.onerror = function () {
@@ -128,7 +125,6 @@ function saveEvent() {
     xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate, event_signup_open: newEventSignUpOpenDate, event_date: newEventDate, attendees: newAttendees }));
 
     return xhr;
-
 }
 
 function displaySignUps() {
@@ -144,86 +140,28 @@ function displaySignUps() {
             var proposal_id = proposal[i].proposal_id;
             var eventHtml = generatePageHTML(proposal[i]);
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
-            tileArea.appendChild(eventHtml);
-            //tileArea.innerHTML += html;
-            //makeListLinks();
-            
-            /* html += "<p id='editEvent" + proposal_id + "' class='editEvent' " + 
-            // "data-toggle='modal' data-target='#myModal'" +
-            ">Edit Event</p></div></div></div>";    // */
-            
-            /*var editButton = document.createElement("a");
-            editButton.setAttribute('id', 'editEvent' + proposal_id);
-            editButton.setAttribute('class', 'editEvent');
-//            editButton.dataset.toggle = 'modal';
-//            editButton.dataset.target = '#myModal';
-            editButton.addEventListener('click', function() {
-                alert('making action listener in ' + proposal_id);
-                return function() {
-                    alert('click ' + proposal_id)
-                }}())
-            editButtons.push(editButton);
-  
-            var btnTxt = document.createTextNode('Edit Events');
-            editButton.appendChild(btnTxt);
-            
-            var eventActions = document.getElementById("eventActions" + proposal_id);
-            eventActions.appendChild(editButton); //*/
-            
-            
-            /*editButtons.push(document.getElementById('editEvent' + proposal_id));
-            newEditButtons.push(editButtons[i].cloneNode(true));
-            newEditButtons[i].addEventListener("click", function() {
-                alert('clicked ' + proposal_id);
-            }, false);
-            editButtons[i].parentNode.replaceChild(newEditButtons[i], editButtons[i]); // */
-            
-            /* var submit = document.getElementById("submit");
-            new_submit = submit.cloneNode(true);
-            new_submit.addEventListener("click", function () {
-                submitChanges(descInput)
-            }, false);
-            submit.parentNode.replaceChild(new_submit, submit); //*/                        
+            tileArea.appendChild(eventHtml);                      
         }
         editButtons.forEach(function(element) {
             console.log(element)
             element.click();
         });
-        
-
-        // var editEventButtons = document.getElementsByClassName("editEvent");
-
-        // var eventTextSignUps = document.getElementById("eventTextSignUps");
-        //setupEditModal('eventTextSignUps', 'signups-modal-');
     }
-
-
+    
     var officersxhr = getOfficers();
     officersxhr.send();
-    //setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
 
     function getEvents() {
         var url = apiURL + 'api/v1/events';
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
             if ("withCredentials" in xhr) {
-
-                // Check if the XMLHttpRequest object has a "withCredentials" property.
-                // "withCredentials" only exists on XMLHTTPRequest2 objects.
                 xhr.open(method, url, true);
-
             } else if (typeof XDomainRequest != "undefined") {
-
-                // Otherwise, check if XDomainRequest.
-                // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
                 xhr = new XDomainRequest();
                 xhr.open(method, url);
-
             } else {
-
-                // Otherwise, CORS is not supported by the browser.
                 xhr = null;
-
             }
             return xhr;
         }
@@ -250,10 +188,8 @@ var getSignupDateHtml = function(proposal, signUpCloseDate, signUpOpenDate, sign
     var signUpHtml = document.createElement('p');
     signUpHtml.setAttribute('class', 'eventSignUpDate');
     if (signUpOpenDate > new Date()) {
-        // var signUpHTML = "<p class='eventSignUpDate'>Sign-ups open on: " + signUpOpenDateFormatted + "</p>";
         var textNode = document.createTextNode("Sign-ups open on: " + signUpOpenDateFormatted);
     } else {
-        // var signUpHTML = "<p class='eventSignUpDate'>Sign-ups close on: " + signUpCloseDate + "</p>";
         var textNode = document.createTextNode('Sign-ups close on: ' + signUpCloseDate);
     }
     signUpHtml.appendChild(textNode);
@@ -280,7 +216,6 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
     var proposal_id = proposal.proposal_id;
     
-    ///////////////////////////////////////////////////////////////////////
     var rowDiv = document.createElement('div');
     rowDiv.setAttribute('class', 'row');
     
@@ -297,23 +232,6 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     var eventTextSignUps = getEventTextSignupsHtml(proposal, cost, eventDate);
     colDiv.appendChild(eventTextSignUps);
     
-    /*var html = "<div class='row'>"
-                    "<div class='col-sm-12'>" +
-                        "<img class='eventImageSignUps' src='" +
-            proposal.image_path + "' alt='Event Image'>";
-    html +=             "<div class='eventTextSignUps' id='eventTextSignUps" +
-            proposal_id + "'>";
-    html +=                 "<h1 id='editEventName' class='eventTitle'>" +
-            proposal.proposal_name + "</h1>";
-    html +=                 "<div class='costEventDateWrapper'> " +
-                                "<h3 class='cost'>" + cost + "</h3>";
-    html +=                     "<h3 class='eventDate'>" + eventDate + "</h3>"
-                            "</div><br/>" +
-                            "<p class='eventDescription'>" +
-            proposal.description + "</p><br/><br/>";
-    html +=             signUpHTML + 
-                    "</div>"; //*/
-    ////////////////////////////////////////////////////////////////////////
     var username = JSON.parse(sessionStorage.getItem("userData")).username;
     var eventActionDiv = getEventActionDiv(proposal_id, username, signUpOpenDate, attendees);
     colDiv.appendChild(eventActionDiv);
@@ -331,7 +249,7 @@ function getEventTextSignupsHtml (proposal, cost, eventDate) {
     var fields = [
             "proposal_id",
             "proposal_name",
-            "event_data",
+            "event_date",
             "event_signup_open",
             "event_signup_close", 
             "description"
@@ -421,47 +339,24 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     editButton.appendChild(innerParagraph3);
     eventActionDiv.appendChild(editButton);
     return eventActionDiv;
-    
-    /* html += "<p id='editEvent" + proposal_id + "' class='editEvent' " + 
-            // "data-toggle='modal' data-target='#myModal'" +
-            ">Edit Event</p></div></div></div>";    // */
-    
-    // html += "<a onclick='showListModal(" + proposal_id + ")'><p class='viewListLink'>View List</p></a>"
-    
-     /*var editButton = document.createElement("a");
-            editButton.setAttribute('id', 'editEvent' + proposal_id);
-            editButton.setAttribute('class', 'editEvent');
-//            editButton.dataset.toggle = 'modal';
-//            editButton.dataset.target = '#myModal';
-            editButton.addEventListener('click', function() {
-                alert('making action listener in ' + proposal_id);
-                return function() {
-                    alert('click ' + proposal_id)
-                }}())
-            editButtons.push(editButton);
-  
-            var btnTxt = document.createTextNode('Edit Events');
-            editButton.appendChild(btnTxt);
-            
-            var eventActions = document.getElementById("eventActions" + proposal_id);
-            eventActions.appendChild(editButton); //*/
 }
 
 function submitFunc(json_data, put_id) {
     // submitFunc
-    var apiExtension = "event/" + put_id;
-    var xhr = xhrPutRequest(apiExtension);
-    xhr.onload = function() {console.log('successfully delivered API call!');}
-    alert('sending API call to ' + BASE_API_URL + apiExtension);
+    delete json_data.proposal_id;
+    console.log(json_data);
+    var apiExtension = "events/" + put_id;
+	var xhr = xhrPutRequest(apiExtension);
+    xhr.onload = function() {
+        console.log('successfully delivered API call!');
+        location.reload();
+    }
+    console.log(xhr);
     xhr.send(JSON.stringify(json_data));
 }
 
 function dataElementId(proposal_id) {
     return 'eventTextSignUps' + proposal_id;
-}
-
-function targetIdRoot() {
-    
 }
 
 function signUp(eventID) {
@@ -576,12 +471,6 @@ function getOfficers() {
     return xhr;
 }
 
-// function setAdmin(officers) {
-//     if (userIsOfficer(officers)) {
-//         var editbuttons = insertEditButtons(showEditModal);
-//     }
-// }
-
 function getAttendees(id) {
     var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/' + id;
     function createCORSRequest(method, url) {
@@ -601,9 +490,6 @@ function getAttendees(id) {
     if (!xhr) {
         throw new Error('CORS not supported');
     }
-    //xhr.onload = function () {
-    //    console.log(xhr.responseText);
-    //}
     xhr.onerror = function () {
         console.log("There was an error");
     }
