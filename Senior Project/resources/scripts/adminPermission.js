@@ -53,8 +53,8 @@ var insertEditButtons = function(dataElementRoot, uiElementRootId, idFieldName, 
 var generateEditButtonListener = function(dataElementId, uiElementRootId, submitFunc, idFieldName) {
      console.log("edit callback created for " + dataElementId + ", " + uiElementRootId);
      return function(event) {
-                console.log("edit button pressed for " + dataElementId + ", " + uiElementRootId);
-                setupEditModal(dataElementId, uiElementRootId, submitFunc, idFieldName);
+            console.log("edit button pressed for " + dataElementId + ", " + uiElementRootId);
+            setupEditModal(dataElementId, uiElementRootId, submitFunc, idFieldName);
      };
 }
 
@@ -129,9 +129,12 @@ var enableSubmitButton = function(dataElementId, uiElementRootId, submitFunc, id
 			} else {
 				json_data[attr] = dataset[attr];
 			}
+            
+            if (json_data[attr] == '') {
+                delete json_data[attr]
+            }
 		}
 		// alert(JSON.stringify(json_data));
-        console.log(dataset);
         var apiurl_id = dataset[idFieldName];
 		submitFunc(json_data, apiurl_id);
 	};
@@ -185,7 +188,7 @@ function createCORSRequestJSON(method, url) {
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	// xhr.setRequestHeader('Cache-Control', 'no-cache');
 	// xhr.setRequestHeader('Postman-Token', '50080db4-9d36-83cd-d446-2dd286337b12');
-	xhr.setRequestHeader('Host', 'rha-website-1.csse.rose-hulman.edu:3000');
+	// xhr.setRequestHeader('Host', 'rha-website-1.csse.rose-hulman.edu:3000');
 	return xhr;
 }
 
@@ -211,11 +214,9 @@ function createXhrRequestJSON(method, urlExtention) {
 	}
 	xhr.onload = function () {
 		var responseText = xhr.responseText;
-        alert('Xhr ' + method + 'completed successfully!.');
 	}
 	xhr.onerror = function () {
         var msg = "There was an error with an XHR " + method + " JSON(??) request.";
-        alert(msg);
 	}
 	return xhr;
 }

@@ -6,18 +6,11 @@ function setAdmin(officers) {
 		var editButtons = insertEditButtons('committee', 'committee-modal-', 'committeeid',
                 function(json_data, put_id) {
             // *** this is where I'm working ***
-            console.log('sending API put request');
-            console.log(json_data);
             var apiUrl = 'committee/' + put_id
             var xhr = xhrPutRequest(apiUrl);
             var body = {"description": json_data.description, "committeename": json_data.committeename} // , "committeeName": "test committee"};
-            console.log(json_data.description);
-            alert('sending API put request...\napi url: "' + apiUrl + '"');
-            console.log(xhr);
+            xhr.onload = function() { location.reload() };
             xhr.send(JSON.stringify(body));
-            setTimeout(function () { 
-                console.log(xhr.responseText);
-            }, 300);
         });
     }
     var addCommitteeButton = document.getElementById("addCommittee");
@@ -34,7 +27,7 @@ var setupEditModal = function(dataElementId, taretIdRoot) {
 	
 	var descriptionField = document.getElementById("committee-modal-desc");
 	descriptionField.value = dataset.desc;
-}
+}   
 */
 function setup() {
 	var apiExtension = 'committees/';
@@ -185,18 +178,18 @@ function submit(){
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
     saveCommittee();
-    location.reload();
+    window.location.reload();
 }
 
 function saveCommittee() {
-	var urlExtension = 'committee/' + committeeID;
-	
-	var xhr = xhrPutRequest(urlExtension);
-	var committeeName = document.getElementById("committee-text").value;
-	var description = document.getElementById("description-text").value;
-	var image = "images/committees/" + document.getElementById("image-text").value;
-	xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
-	return xhr;
+    var urlExtension = 'committee/' + committeeID;
+    
+    var xhr = xhrPutRequest(urlExtension);
+    var committeeName = document.getElementById("committee-text").value;
+    var description = document.getElementById("description-text").value;
+    var image = "images/committees/" + document.getElementById("image-text").value;
+    xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
+    return xhr;
 
 }
 
