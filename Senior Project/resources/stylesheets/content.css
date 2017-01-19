@@ -884,9 +884,19 @@ height: 150pt;
 #calendar-wrapper {
 	position: absolute;
   	right: 4.75%;
-  	bottom: 5%;
+  	bottom: 2%;
   	width: 45%;
-  	height: 55%;
+  	height: 50%;
+}
+
+#calendar-last-updated {
+	position: absolute;
+	right: 4.75%;
+	bottom: 52%;
+	width: 45%;
+	font-size: 10pt;
+	color: black;
+	font-weight: bold;
 }
 
 #equipment-deadline {
@@ -902,8 +912,9 @@ height: 150pt;
 
 #reservation-info {
 	position: absolute;
-	top: 40%;
-	left: 10%;
+	top: 30%;
+	left: 0;
+	width: 40%;
 	font-weight: bold;
 	color: black;
 }
@@ -914,7 +925,7 @@ height: 150pt;
 	width: 900px;
 	max-width: 60.1%;
 	right: -8.55%;
-	top: 36%;
+	top: 40%;
 	/*float: right;*/
 	margin-left: auto;
 	margin-right: auto;

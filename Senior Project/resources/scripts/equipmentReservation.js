@@ -62,6 +62,58 @@ function populateCalendarData(calendars) {
 	descriptionField.value = dataset.desc; //*/
 }
 
+function lastUpdated() {
+	var update, date, currDate, currTime, today;
+	update = document.getElementById("calendar-last-updated");
+	while (update.hasChildNodes()) {
+		update.removeChild(update.lastChild);
+	}
+	date = document.createElement("p");
+
+	today = new Date();
+
+	var day = today.getDay();
+
+	if(day == 0) {
+		day = "Sunday";
+	} else if (day == 1) {
+		day = "Monday";
+	} else if(day == 2) {
+		day = "Tuesday";
+	} else if(day == 3) {
+		day = "Wednesday";
+	} else if(day == 4) {
+		day = "Thursday";
+	} else if (day == 5) {
+		day = "Friday";
+	} else {
+		day = "Saturday";
+	}
+
+	var minutes = today.getMinutes();
+	if (minutes.length < 3) {
+		minutes = "0" + minutes;
+	}
+
+	var AMorPM;
+
+	var hours = today.getHours();
+	if (hours > 12) {
+		AMorPM = " PM";
+		hours = hours % 12;
+	} else {
+		AMorPM = " AM";
+	}
+
+	currDate = day + ", " + (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
+	currTime = hours + ":" + minutes + AMorPM;
+
+	date.innerHTML = "This calendar was last updated on " + currDate + " at " + currTime;
+
+	update.appendChild(date);
+
+}
+
 function switchCalendarView(calendarToView) {
 	console.log("I'm happening!");
 	var calendarFrame = document.getElementById("calendar-wrapper");
@@ -74,7 +126,7 @@ function switchCalendarView(calendarToView) {
 	console.log(calendarToView.getAttribute("data-embed"));
 
 	calendarFrame.innerHTML = calendarToView.getAttribute("data-embed");
-
+	lastUpdated();
 };
 
 $(document).ready(function() {
