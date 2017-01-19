@@ -1,5 +1,6 @@
 
 var displayingAllMembers = true;
+var table = document.createElement('table');
 
 function setup() {
     var urlExtension = 'members/';
@@ -28,76 +29,106 @@ function showModal() {
 
 function drawAllMembersTable(members) {
     members = JSON.parse(members);
-    var floorMoneyTable = document.getElementById("activeMembersTable");
-    floorMoneyTable.innerHTML = "";
-    var html = "<table border='1' align='center' bordercolor='#808080' id='membersTable'><tbody><tr>";
-    html += "<td align='middle' width='200'><b>Name</b></td><td align='middle' width='200'><b>Hall</b></td>";
-    var countForColoring = 0;
-    for (var i = 0; i < members.length - 1; i += 1) {
-        if (countForColoring % 2 == 0) {
-            html += "<tr bgcolor='#f0f0f0' id='member" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
-        } else {
-            html += "<tr id='member" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
-        }
-        html += "<td>" + members[i].hall + "</td></tr>";
-        countForColoring++;
-    }
-    floorMoneyTable.innerHTML += html;
-    var table = document.getElementById("membersTable");
-    var rows = table.getElementsByTagName("tr");
-    for (i = 0; i < members.length - 1; i++) {
-        row = table.rows[i];
-        var dataset = document.getElementById('member' + i).dataset;
-        var fields = ["firstname", "lastname", "username", "membertype", "phone_number", "hall", "room_number", "cm", "active"]
-        fields.forEach(function (field) {
-            console.log("setting field " + field + " to " + members[i][field]);
-            dataset[field] = members[i][field];
-        });
-        document.getElementById("member-modal-name").innerHTML = members[i].firstname;
+    var body = document.getElementsByTagName('body')[0];
+    table.innerHTML = "";
+    table.setAttribute('border', 1);
+    table.setAttribute('align', 'center');
+    table.setAttribute('bordercolor', '#808080');
+    table.setAttribute('id', 'membersTable');
 
-        //row.addEventListener("click", showModal);
+    var tbdy = document.createElement('tbody');
+    var tdName = document.createElement('td');
+    tdName.setAttribute('align', 'middle');
+    tdName.setAttribute('width', 200);
+    tdName.innerHTML = "Name";
+
+    var tdHall = document.createElement('td');
+    tdHall.setAttribute('align', 'middle');
+    tdHall.setAttribute('width', 200);
+    tdHall.innerHTML = "Hall";
+    tbdy.appendChild(tdName);
+    tbdy.appendChild(tdHall);
+    var countForColoring = 0;
+    for (var i = 0; i < members.length - 1; i++) {
+        tr = document.createElement('tr');
+        tr.setAttribute('member', i);
+        tr.setAttribute('data-toggle', 'modal');
+        tr.setAttribute('data-target', '#myModal');
+        var pos = i;
+        tr.addEventListener("click", function () { setUpModal(members, pos) });
+        if (countForColoring % 2 == 0) {
+            tr.setAttribute('bgcolor', '#f0f0f0');
+        }
+        countForColoring++;
+
+        var td = document.createElement('td');
+        td.innerHTML = members[i].firstname + " " + members[i].lastname;
+
+        var td2 = document.createElement('td');
+        td2.innerHTML = members[i].hall;
+        tr.appendChild(td);
+        tr.appendChild(td2);
+        tbdy.appendChild(tr);
     }
-    //}
+    table.appendChild(tbdy);
+    body.appendChild(table);
+}
+
+
+
+
+function setUpModal(members, pos) {
+    console.log(pos);
+    document.getElementById("member-modal-name").innerHTML = members[pos].firstname;
+
 }
 
 function drawActiveMembersTable(members) {
     members = JSON.parse(members);
-    var floorMoneyTable = document.getElementById("activeMembersTable");
-    floorMoneyTable.innerHTML = "";
-    var html = "<table border='1' align='center' bordercolor='#808080' id='membersTable'><tbody><tr>";
-    html += "<td align='middle' width='200'><b>Name</b></td><td align='middle' width='200'><b>Hall</b></td>";
-    var countForColoring = 0;
-    for (var i = 0; i < members.length - 1; i += 1) {
-        if (members[i].active) {
-            if (countForColoring % 2 == 0) {
-                html += "<tr bgcolor='#f0f0f0' id='memberType" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
-            } else {
-                html += "<tr id='memberType" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
-            }
-            html += "<td>" + members[i].hall + "</td></tr>";
-            countForColoring++;
-        }
-        //floorMoneyTable.innerHTML += html;
-        //console.log(html);
-        //html = "";
-        //var tr = document.getElementById("memberID" + i);
-        //tr.addEventListener("click", showModal);
-    }
-    floorMoneyTable.innerHTML += html;
-    //for (var i = 0; i < funds.length - 1; i += 1) {
-    // var getBy = i;
-    // console.log(getBy);
-    // var tr = floorMoneyTable.getElementById(getBy);
-    // console.log(tr);
-    // tr.addEventListener("click", showModal);
-    var table = document.getElementById("membersTable");
-    var rows = table.getElementsByTagName("tr");
-    for (i = 0; i < rows.length; i++) {
-        row = table.rows[i];
+    table.innerHTML = "";
+    var body = document.getElementsByTagName('body')[0];
+    table.setAttribute('border', 1);
+    table.setAttribute('align', 'center');
+    table.setAttribute('bordercolor', '#808080');
+    table.setAttribute('id', 'membersTable');
 
-        //row.addEventListener("click", showModal);
+    var tbdy = document.createElement('tbody');
+    var tdName = document.createElement('td');
+    tdName.setAttribute('align', 'middle');
+    tdName.setAttribute('width', 200);
+    tdName.innerHTML = "Name";
+
+    var tdHall = document.createElement('td');
+    tdHall.setAttribute('align', 'middle');
+    tdHall.setAttribute('width', 200);
+    tdHall.innerHTML = "Hall";
+    tbdy.appendChild(tdName);
+    tbdy.appendChild(tdHall);
+    var countForColoring = 0;
+    for (var i = 0; i < members.length - 1; i++) {
+        if (members[i].active) {
+            tr = document.createElement('tr');
+            tr.setAttribute('member', i);
+            tr.setAttribute('data-toggle', 'modal');
+            tr.setAttribute('data-target', '#myModal');
+            tr.addEventListener("click", function () { setUpModal(members, i) });
+            if (countForColoring % 2 == 0) {
+                tr.setAttribute('bgcolor', '#f0f0f0');
+            }
+            countForColoring++;
+
+            var td = document.createElement('td');
+            td.innerHTML = members[i].firstname + " " + members[i].lastname;
+
+            var td2 = document.createElement('td');
+            td2.innerHTML = members[i].hall;
+            tr.appendChild(td);
+            tr.appendChild(td2);
+            tbdy.appendChild(tr);
+        }
     }
-    //}
+    table.appendChild(tbdy);
+    body.appendChild(table);
 }
 
 function displayOtherTable(members) {
