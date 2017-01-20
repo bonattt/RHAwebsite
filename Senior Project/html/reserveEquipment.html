@@ -2,33 +2,103 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" href="../images/RHA.jpg">
     <link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
     <link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
-    <link rel="icon" href="images/RHA.jpg">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <script type="text/javascript" src="../scripts/navbar-factory.js">  </script>
+    <script language="Javascript" src="../scripts/adminPermission.js">  </script>
+    <script type="text/javascript" src="./scripts/rosefire.js"></script>
+
     <title>
         RHA | Reserve Equipment
     </title>
-
-    <script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
-    <script type="text/javascript" src="./scripts/rosefire.js"></script>
-    <script type="test/javascript" src="../scripts/login.js"></script>
-
 </head>
 
 <body>
+    <div id="navBar"> </div>
+    <div id="proposalsPage">
+        <h1>Equipment <br> Reservation</h1>
+        
+        <div id="directions">
+            <p>Interested in renting some equipment from RHA? Select from the drop down below and view its availability!</p>
+        </div>
 
-    <div id="navBar">
+        <select id="calendar-selector">
+            <option value="default" selected="selected">Choose a piece of equipment.</option>
+            <!-- <option value="calendar1">Cornholio</option>
+            <option value="calendar2">Testerino</option> -->
+        </select>
+            
 
+        <div id="reservation-info">
+            <p>RHA has recently opened up their equipment for reservation by students and faculty. Here you are able to select and view the available times that a piece of 
+                equipment is available. Some things to know before renting:</p>
+            <br>
+            <ul>
+                <li>You may only rent one piece of equipment at a time.</li>
+                <li>Each item may only be reserved for at most 3 days.</li>
+                <li>You can reserve an item at most two weeks in advance.</li>
+                <li>Late penalties may be enforced, varying on the demand of the item.</li>
+            </ul>
+        </div>
+        
+        <h3 id="equipment-deadline">Please remember that all equipment must be returned by 5:00PM on their respective return date.</h3>
     </div>
 
+    <div id="calendar-last-updated">
     </div>
-    <h1>Reserve Equipment</h1>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-    <script>
-		window.jQuery || document.write('<script src="../scripts/jquery-3.1.1.js"><\/script>');
-	</script>
+    <div id="calendar-wrapper">
+        </div>
+    
+   <!--  <div 
+        id="calendar1" 
+        data-id=1
+        data-name="Corn Holio" 
+        data-desc="I am the great cornholio"
+        data-embed='<iframe id="calendar-frame" src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=450&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=qeg7arc27qhl0lbi1kbnkl3g0c%40group.calendar.google.com&amp;color=%23875509&amp;ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>'>
+    </div>
+    
+    <div
+        id="calendar2"
+        data-id=2
+        data-name="Testerino"
+        data=desc="My body is devoted to science"
+        data-embed='<iframe id="calendar-frame" src="https://calendar.google.com/calendar/embed?&amp;mode=WEEK&amp;height=450&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=salur93%40gmail.com&amp;color=%2329527A&amp;ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>'>
+
+    </div> -->
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    
+                        <label> name </label> <br/>
+                        <input id="calendar-modal-name" type="text" value="name"> </input>
+                        <br>
+                        <textarea id="calendar-modal-desc" type="textarea" value="description of the calendar" style="min-width: 200px; min-height: 100px;"> </textarea>
+                        <br>
+                        <textarea id="calendar-modal-embed" type="textarea" value="embed text for the desired calendar" styel="mid-width: 200px; min-height: 100px"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
+<script type="text/javascript" src="../scripts/equipmentReservation.js"></script>
 
 </html>
