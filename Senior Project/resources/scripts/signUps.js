@@ -20,6 +20,14 @@ var signUpCloseDateNode = document.getElementById("signUpCloseDateInput");
 var editValue;
 var listLinks;
 
+const EVENT_DATE = 'signups-modal-event_date';
+const SIGNUPS_CLOSE = 'signups-modal-event_signup_close';
+const SIGNUPS_OPEN = 'signups-modal-event_signup_open';
+const DEFAULT_HOURS = 11;
+const DEFAULT_MINUTES = 0;
+const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"];
 const MODAL_FIELD_ROOT_ID = "signups-modal-";
 
 function displayPastEvents() {
@@ -142,6 +150,10 @@ function displaySignUps() {
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.appendChild(eventHtml);                      
         }
+        populateDateSelect(EVENT_DATE);
+        populateDateSelect(SIGNUPS_OPEN);
+        populateDateSelect(SIGNUPS_CLOSE);
+        
         editButtons.forEach(function(element) {
             console.log(element)
             element.click();
@@ -338,6 +350,7 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     eventActionDiv.appendChild(showListLink);
     
     var editButton = document.createElement('a');
+    editButton.addEventListener('click', getSetupModalDates(dataElementId(proposal_id)));
     editButton.addEventListener('click', generateEditButtonListener(
             dataElementId(proposal_id), MODAL_FIELD_ROOT_ID, submitFunc, "proposal_id"
     ));
@@ -346,24 +359,82 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     var innerParagraph3 = document.createElement('p');
     innerParagraph3.setAttribute('class', 'editEvent');
     innerParagraph3.setAttribute('id', 'editEvent' + proposal_id);
-    innerParagraph3.appendChild(document.createTextNode('Edit Events'));
+    innerParagraph3.appendChild(document.createTextNode('Edit Event'));
     editButton.appendChild(innerParagraph3);
     eventActionDiv.appendChild(editButton);
     return eventActionDiv;
 }
 
+function getSetupModalDates(dataElementId) {
+    return function(event) {
+        console.log('setting modal date');
+        setupModalDates(EVENT_DATE, dataElementId, "event_date");
+        setupModalDates(SIGNUPS_OPEN, dataElementId, "event_signup_open");
+        setupModalDates(SIGNUPS_CLOSE, dataElementId, "event_signup_close");
+    }
+}
+
+function setupModalDates(rootId, dataElementId, field) {
+    var date = new Date(document.getElementById(dataElementId).dataset[field]);
+    var day_event_date = document.getElementById(rootId + "_day");
+    var month_event_date = document.getElementById(rootId + "_month");
+    var year_event_date = document.getElementById(rootId + "_year");
+    day_event_date.value = date.getDate();
+    month_event_date.value = MONTH_NAMES[date.getMonth()];
+    year_event_date.value = date.getFullYear();
+}
+
+
+function populateDateSelect(divId) {
+    var div = document.getElementById(divId);
+    var date = new Date();
+    div.appendChild(generateOptions(divId + '_month', 0 , 12, 1, MONTH_NAMES));
+    div.appendChild(generateOptions(divId + '_day', 1 , 31, 1));
+    div.appendChild(generateOptions(divId + '_year', 2016 , 2019, 1));
+}
+
+function generateOptions(idAttr, start, end, step, names) {
+    var select = document.createElement('select');
+    select.setAttribute('id', idAttr);
+    for (var i = start; i < end; i += step) {
+        var option = document.createElement('option');
+        if (typeof names == "undefined") {
+            option.appendChild(document.createTextNode(i));
+        } else {
+            option.appendChild(document.createTextNode(names[i]));
+        }
+        select.appendChild(option);
+    }
+    return select;
+}
+
 function submitFunc(json_data, put_id) {
     // submitFunc
     delete json_data.proposal_id;
+    json_data.event_date = composeDate(EVENT_DATE);
+    json_data.event_signup_open = composeDate(SIGNUPS_OPEN);
+    json_data.event_signup_close = composeDate(SIGNUPS_CLOSE);
     console.log(json_data);
     var apiExtension = "events/" + put_id;
 	var xhr = xhrPutRequest(apiExtension);
     xhr.onload = function() {
         console.log('successfully delivered API call!');
-        location.reload();
+        // location.reload();
     }
-    console.log(xhr);
     xhr.send(JSON.stringify(json_data));
+}
+
+function composeDate(modalId) {
+    var date = new Date();
+    var monthName = document.getElementById(modalId + '_month').value
+    date.setMonth(MONTH_NAMES.indexOf(monthName));
+    date.setFullYear(document.getElementById(modalId + '_year').value);
+    date.setDate(document.getElementById(modalId + '_day').value);
+    
+    console.log(date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear());
+    //date.setHours(DEFAULT_HOURS);   
+    //date.setMinutes(DEFAULT_MINUTES);
+    return date;
 }
 
 function dataElementId(proposal_id) {

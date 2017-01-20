@@ -37,7 +37,7 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Modal Header</h4>
 				</div>
-				<div class="modal-body">
+				<div id="signups-modal-body" class="modal-body">
 
 					<label>Name</label> <br/>
 					<input id="signups-modal-proposal_name" type="text" value="name"> </input><br/><br/>
@@ -45,19 +45,18 @@
 					<input id="signups-modal-cost_to_attendee" type="text" value="cost"> </input><br/><br/>
 					<label>Description</label> <br/>
 					<textarea id="signups-modal-description" type="text" value="description"> </textarea><br/><br/>
-					<label>Event Date</label> <br/>
-                    <label> Month </label>
-                    <select id="signups-modal-month_select">
-                        <option> 1 </option>
-                    </select>
-                    <label> Date </label>
-                    <select id="signups-modal-date_select">
-                        <option> 1 </option>
-                    </select>
-                    <label> Year </label>
-                    <select id="signups-modal-year_select">
-                        <option> 2017 </option>
-                    </select>
+
+                    <div id="signups-modal-event_date"> 
+                        <label>Event Date</label> <br/>
+                    </div> <br/>
+					
+                    <div id="signups-modal-event_signup_open"> 
+                        <label>Signups Open Date</label> <br/>
+                    </div> <br/>
+					
+                    <div id="signups-modal-event_signup_close"> 
+                        <label>Signups Close Date</label> <br/>
+                    </div> <br/>
 					<!--
                     <input id="signups-modal-event_date" type="text" value="eventDate"> </input><br/><br/>
 					<label>Sign Ups Open Date</label> <br/>
