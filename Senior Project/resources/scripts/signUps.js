@@ -419,7 +419,7 @@ function submitFunc(json_data, put_id) {
 	var xhr = xhrPutRequest(apiExtension);
     xhr.onload = function() {
         console.log('successfully delivered API call!');
-        // location.reload();
+        location.reload();
     }
     xhr.send(JSON.stringify(json_data));
 }
@@ -429,7 +429,7 @@ function composeDate(modalId) {
     var monthName = document.getElementById(modalId + '_month').value
     date.setMonth(MONTH_NAMES.indexOf(monthName));
     date.setFullYear(document.getElementById(modalId + '_year').value);
-    date.setDate(document.getElementById(modalId + '_day').value);
+    date.setDate(document.getElementById(modalId + '_day').value-1);
     
     console.log(date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear());
     //date.setHours(DEFAULT_HOURS);   
