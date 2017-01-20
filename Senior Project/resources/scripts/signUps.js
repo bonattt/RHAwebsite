@@ -261,6 +261,7 @@ function getEventTextSignupsHtml (proposal, cost, eventDate, signUpOpenDate) {
     var fields = [
             "proposal_id",
             "proposal_name",
+            "cost_to_attendee",
             "event_date",
             "event_signup_open",
             "event_signup_close", 
