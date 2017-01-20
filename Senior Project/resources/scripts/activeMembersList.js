@@ -54,8 +54,11 @@ function drawAllMembersTable(members) {
         tr.setAttribute('member', i);
         tr.setAttribute('data-toggle', 'modal');
         tr.setAttribute('data-target', '#myModal');
-        var pos = i;
-        tr.addEventListener("click", function () { setUpModal(members, pos) });
+
+        function doClosure() {
+        tr.addEventListener("click", function () { setUpModal(members, i) });
+        }
+        doClosure();
         if (countForColoring % 2 == 0) {
             tr.setAttribute('bgcolor', '#f0f0f0');
         }
@@ -73,9 +76,6 @@ function drawAllMembersTable(members) {
     table.appendChild(tbdy);
     body.appendChild(table);
 }
-
-
-
 
 function setUpModal(members, pos) {
     console.log(pos);
