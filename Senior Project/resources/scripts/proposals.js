@@ -46,7 +46,7 @@ function submit() {
     var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/eventPhoto';
     var photoxhr = new XMLHttpRequest();
 
-    var dbAPIURL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/proposal/';
+    var dbAPIURL = 'http://rha-website-1.csse.rose-hulman.edu:3000/API/v1/proposal';
 
     var name = document.getElementById("name").value;
     var costToAttendee = document.getElementById("costToAttendee").value;
@@ -71,11 +71,10 @@ function submit() {
         console.log("I'm playing in the stateChange!");
         if(photoxhr.readyState == 4 && photoxhr.status == 200) {
             console.log("ReadyState was 4 and status 200!")
-            var image_path = photoxhr.responseText.filepath;
-            console.log(response);
+            var image_path = JSON.parse(photoxhr.responseText).filepath;
             var dbxhr = new XMLHttpRequest();
             var dbObject = {};
-            dbObject["name"] = name;
+            dbObject["proposal_name"] = name;
             dbObject["cost_to_attendee"] = costToAttendee;
             dbObject["event_date"] = eventDate;
             dbObject["event_signup_open"] = signUpOpenDate;
@@ -89,12 +88,12 @@ function submit() {
             dbObject["image_path"] = image_path;
 
             dbxhr.open('POST', dbAPIURL, true);
+            dbxhr.setRequestHeader('Content-Type', 'application/json');
             dbxhr.onerror = function () {
                 console.log("There was an error");
             }
 
             dbxhr.send(JSON.stringify(dbObject));
-
             
         }
     };
