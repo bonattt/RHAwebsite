@@ -2,6 +2,10 @@
 const BASE_API_URL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/';
 
 var modal_event_handlers = [];
+var delete_confirm_handlers = [];
+var delete_init_handlers = [];
+
+var selected_element_id;
 
 var userIsOfficer = function(officers) {
 	officer = JSON.parse(officers);
@@ -30,6 +34,9 @@ var insertEditButtons = function(dataElementRoot, uiElementRootId, idFieldName, 
         editButton.addEventListener("click", 
                 generateEditButtonListener(elementId, uiElementRootId, submitFunc, idFieldName)
             );
+        editButton.addEventListener('click', function(clickedId) {
+            return function() {selected_element_id = clickedId}
+        } (elementId));
         /*
          * this is messy, but basically I need to curry so that the
          * actionListener for the button press has the values in its
@@ -54,6 +61,13 @@ var generateEditButtonListener = function(dataElementId, uiElementRootId, submit
      console.log("edit callback created for " + dataElementId + ", " + uiElementRootId);
      return function(event) {
             console.log("edit button pressed for " + dataElementId + ", " + uiElementRootId);
+            var deleteBtn = document.getElementById('modal-delete');
+            if (deleteBtn != null && typeof deleteBtn != "undefined") {
+                deleteBtn.disabled = false;
+            } else {
+                console.log(deleteBtn);
+                alert('no delete button');
+            }
             setupEditModal(dataElementId, uiElementRootId, submitFunc, idFieldName);
      };
 }
@@ -89,7 +103,6 @@ var setupEditModal = function (dataElementId, uiElementRootId, submitFunc, idFie
         }
 	}
     enableSubmitButton(dataElementId, uiElementRootId, submitFunc, idFieldName);
-    
     if (textField != undefined) {
         textField.value = dataset[attr];
     }
@@ -101,7 +114,6 @@ var setupEditModal = function (dataElementId, uiElementRootId, submitFunc, idFie
 	descriptionField.value = dataset.desc; //*/
 }
 
-var populateModalFields
 
 var clearSubmitHandlers = function(element, inputMode) {
     if (inputMode == undefined) {
@@ -110,6 +122,34 @@ var clearSubmitHandlers = function(element, inputMode) {
     modal_event_handlers.forEach(function(handler) {
         element.removeEventListener(inputMode, handler);
     });
+}
+
+var enableDeleteInit = function(dataElementid, apiIdField, btnId, deleteFunc) {
+    var deleteBtn = document.getElementById(btnId);
+    delete_init_handlers.forEach(function (handler) {
+        deleteBtn.removeEventListener('click', handler);
+    });
+    delete_init_handlers = [];
+    var newHandler = function() {
+        enableDeleteConfirm(dataElementId, apiField, 'delete-confirm', deleteFunc);
+    }
+    deleteBtn.addEventListener('click', newHandler);
+    delete_init_handlers.push(newHandler);    
+}
+
+var enableDeleteConfirm = function(dataElementid, apiIdField, btnId, deleteFunc) {
+    var deleteBtn = document.getElementById(btnId);
+    delete_confirm_handlers.forEach(function (handler) {
+        deleteBtn.removeEventListener('click', handler);
+        
+    });
+    delete_handlers = [];
+    var newHandler = function () {
+        var dataset = document.getElementById(dataElementId);
+        deleteFunc(dataset[apiIdField]);
+    }
+    deleteBtn.addEventListener('click', newHandler);
+    delete_handlers.push(newHandler);
 }
 
 var enableSubmitButton = function(dataElementId, uiElementRootId, submitFunc, idFieldName) {
@@ -206,11 +246,14 @@ function xhrPutRequest(urlExtention) {
 	return createXhrRequestJSON('PUT', urlExtention);
 }
 
+function xhrDeleteRequest(urlExtention) {
+    return createXhrRequestJSON('DELETE', urlExtention);
+}
+
 function createXhrRequestJSON(method, urlExtention) {
 	checkUrlExtension(urlExtention);
     var fullApiUrl = BASE_API_URL + urlExtention;
 	var xhr = createCORSRequestJSON(method, fullApiUrl);
-    // alert('url: ' + fullApiUrl);
 	if (!xhr) {
 		throw new Error('CORS not supported');
 	}
