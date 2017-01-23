@@ -13,11 +13,18 @@ function setAdmin(officers) {
             xhr.onload = function() { location.reload() };
             xhr.send(JSON.stringify(body));
         });
+        var deleteBtn = document.getElementById('confirm-delete');
+        deleteBtn.addEventListener('click', function() {
+            var element = document.getElementById(selected_element_id); // global decleared in adminPermission.js ... sorry about that... :(
+            var deleteid = element.dataset.committeeid;
+            
+            var apiExtension = 'committee/' + deleteid
+            var xhr = xhrDeleteRequest(apiExtension);
+            xhr.onload = function () {alert('delete was successfully executed')}
+            xhr.send();
+            alert('deleted!');
+        });
     }
-    /*
-    var addCommitteeButton = document.getElementById("addCommittee");
-    addCommitteeButton.addEventListener("click", showEmptyModal);
-    //addCommitteeButton.style.display = "block"; //*/
     return;
 }
 
@@ -26,14 +33,17 @@ function setupAddCommitteeButton() {
     var addCommitteeBtn = document.getElementById("addCommittee");
     addCommitteeBtn.style.display = "block"; //*/
     addCommitteeBtn.addEventListener('click', function() {
+        var deleteBtn = document.getElementById('modal-delete');
+        deleteBtn.disabled = true;
+        
         var committeeName = document.getElementById('committee-modal-committeename')
         committeeName.value = '';
         var committeeDesc = document.getElementById('committee-modal-description')
         committeeDesc.value = '';
         var submitBtn = document.getElementById('modal-submit')
-        submitBtn.addEventListener('click', function() {
+        var addCommitteeSubmit = function() {
             var urlExtension = 'committee/';
-            var json_data = {"committeename": committeeName.value, "description": committeeDesc.value};
+            var json_data = {"committeeName": committeeName.value, "description": committeeDesc.value};
             var xhr = xhrPostRequest(urlExtension);
             xhr.onload = function() {
                 alert('successfully delivered!');
@@ -41,9 +51,20 @@ function setupAddCommitteeButton() {
             };
             xhr.send(JSON.stringify(json_data));            
             clearSubmitHandlers(submitBtn);
-        });
+        }
+        submitBtn.addEventListener('click', addCommitteeSubmit);
+        var addCommitteeCancel = function () {
+            clearSubmitHandlers(submitBtn);
+            cancelBtn.removeEventListener('click', addCommitteeCancel);
+        }
+        var cancelBtn = document.getElementById('modal-cancel');
+        cancelBtn.addEventListener('click', function() {
+            // nothing right now
+        });        
     });
 }
+
+
 
 /*
 var setupEditModal = function(dataElementId, taretIdRoot) {
