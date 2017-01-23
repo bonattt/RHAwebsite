@@ -55,6 +55,29 @@ CREATE TABLE Committee (
         image varchar(100)
 );
 
+CREATE TABLE Equipment (
+        equipmentID SERIAL PRIMARY KEY,
+        equipmentName varchar(30),
+        equipmentDescription varchar(500),
+        equipmentEmbed varchar(500),
+        rentalTimeInDays int DEFAULT 2
+);
+
+insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipmentEmbed, rentalTimeInDays) values (DEFAULT, 'Equipment1', 'This is equipment 1', '<iframe src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=800&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=25v1djivm37d6psb5284pojmqs%40group.calendar.google.com&amp;color=%23AB8B00&amp;ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>', 3);
+insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipmentEmbed, rentalTimeInDays) values (DEFAULT, 'Equipment2', 'This is equipment 2', '<iframe src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=s2bdbeg620ghgp9bh1e6k818uo%40group.calendar.google.com&amp;color=%238D6F47&amp;ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>', 3);
+
+
+CREATE TABLE Rentals (
+        rental_id SERIAL PRIMARY KEY,
+        member_id INT references Members (user_id),
+        equipment_id INT references Equipment (equipment_id),
+        approved_by INT references Members (user_id),
+        reason_for_rental varchar(100),
+        rented_on DATE,
+        return_on DATE,
+        due_by DATE
+);
+
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
                                         Feud, and more. We also show movies outdoors on the big screen, and sponsor an Easter egg hunt in the spring. We also
@@ -72,16 +95,6 @@ INSERT into Committee VALUES (DEFAULT, 'Publicity', 'Publicity committee is for 
                                         include making the iconic RHA light board being happily in full support of R.H.A. activities, but can vary week to week.
                                         Frequently, we combine with service to create "surblicity" to create one epic force of a committee. Come check it out!', '../images/committees/publicity.jpg');
 
-CREATE TABLE FrontPageNews (
-        newsID SERIAL PRIMARY KEY,
-        title varchar(20),
-        description varchar(500),
-        datePosted DATE
-);
-
-INSERT INTO FrontPageNews VALUES (DEFAULT, ' What''s new? ', 'Residence Hall Association is an organization for students living on campus in a residence hall. If you live in a residence
-                        hall, then you are already a member. All you have to do is come to a meeting and have fun sharing ideas! R.H.A has several
-                        responsibilities and plans events for on campus residents.', null);
 
 -- Most entries below this point are temporary. Once the database has been begun regular use, these inserts will become obselete
 -- BSB 1

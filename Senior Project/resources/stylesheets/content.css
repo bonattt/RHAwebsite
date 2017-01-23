@@ -889,6 +889,71 @@ height: 150pt;
 .carousel-inner {
 }
 
+/* Equipment Reservation */
+
+#calendar-description {
+	width: 50%;
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+#calendar-frame {
+}
+
+#calendar-wrapper {
+	position: absolute;
+  	right: 4.75%;
+  	bottom: 2%;
+  	width: 45%;
+  	height: 50%;
+}
+
+#calendar-last-updated {
+	position: absolute;
+	right: 4.75%;
+	bottom: 52%;
+	width: 45%;
+	font-size: 10pt;
+	color: black;
+	font-weight: bold;
+}
+
+#equipment-deadline {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	text-align: center;
+	font-size: 10pt;
+	font-weight: bold;
+	color: black;
+	width: 25%;
+}
+
+#reservation-info {
+	position: absolute;
+	top: 30%;
+	left: 0;
+	width: 40%;
+	font-weight: bold;
+	color: black;
+}
+
+#calendar-selector {
+	position: absolute;
+	height: 30px;
+	width: 900px;
+	max-width: 60.1%;
+	right: -8.55%;
+	top: 40%;
+	/*float: right;*/
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 0.85vw;
+	/*font-size: 1.25vw;*/
+
+}
+
 /* Bootstrap Overrides */
 
 img {
