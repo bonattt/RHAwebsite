@@ -32,6 +32,7 @@ function setup() {
                 tr.setAttribute('funds', i);
                 tr.setAttribute('data-toggle', 'modal');
                 tr.setAttribute('data-target', '#myModal');
+                doClosure(funds, i);
 
                 if (countForColoring % 2 == 0) {
                     tr.setAttribute('bgcolor', '#f0f0f0');
@@ -46,8 +47,6 @@ function setup() {
                 tr.appendChild(td);
                 tr.appendChild(td2);
                 tbdy.appendChild(tr);
-                document.getElementById('funds-modal-funds_name').innerHTML = funds[i].fund_name;
-                document.getElementById('funds-modal-funds_amount').innerHTML = funds[i].funds_amount;
             }
         }
         table.appendChild(tbdy);
@@ -57,3 +56,14 @@ function setup() {
 document.addEventListener("DOMContentLoaded", function (event) {
     setup();
 });
+
+
+
+function doClosure(funds, i) {
+    tr.addEventListener("click", function () { setUpModal(funds, i) });
+}
+
+function setUpModal(funds, i) {
+    document.getElementById('funds-modal-funds_name').innerHTML = funds[i].fund_name;
+    document.getElementById('funds-modal-funds_amount').innerHTML = funds[i].funds_amount;
+}
