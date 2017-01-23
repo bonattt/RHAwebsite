@@ -54,11 +54,7 @@ function drawAllMembersTable(members) {
         tr.setAttribute('member', i);
         tr.setAttribute('data-toggle', 'modal');
         tr.setAttribute('data-target', '#myModal');
-
-        function doClosure() {
-        tr.addEventListener("click", function () { setUpModal(members, i) });
-        }
-        doClosure();
+        doClosure(members, i);
         if (countForColoring % 2 == 0) {
             tr.setAttribute('bgcolor', '#f0f0f0');
         }
@@ -75,11 +71,38 @@ function drawAllMembersTable(members) {
     }
     table.appendChild(tbdy);
     body.appendChild(table);
+
+}
+
+function doClosure(members, i) {
+    tr.addEventListener("click", function () { setUpModal(members, i) });
 }
 
 function setUpModal(members, pos) {
-    console.log(pos);
-    document.getElementById("member-modal-name").innerHTML = members[pos].firstname;
+    document.getElementById("member-modal-name").innerHTML = members[pos].firstname + " " + members[pos].lastname;
+    if (members[pos].membertype) {
+        document.getElementById("member-modal-membertype").innerHTML = members[pos].membertype;
+    } else {
+        document.getElementById("member-modal-membertype").innerHTML = "General";
+    }
+    document.getElementById("member-modal-username").innerHTML = members[pos].username;
+    if (members[pos].phone_number) {
+        document.getElementById("member-modal-phone_number").innerHTML = members[pos].phone_number;
+    } else {
+        document.getElementById("member-modal-phone_number").innerHTML = "N/A";
+    }
+    document.getElementById("member-modal-hall").innerHTML = members[pos].hall;
+    if (members[pos].room_number) {
+        document.getElementById("member-modal-room_number").innerHTML = members[pos].room_number;
+    } else {
+        document.getElementById("member-modal-room_number").innerHTML = "N/A";
+    }
+    if (members[pos].cm) {
+        document.getElementById("member-modal-cm").innerHTML = members[pos].cm;
+    } else {
+        document.getElementById("member-modal-cm").innerHTML = "N/A";
+    }
+    document.getElementById("member-modal-active").innerHTML = members[pos].active;
 
 }
 
@@ -111,7 +134,7 @@ function drawActiveMembersTable(members) {
             tr.setAttribute('member', i);
             tr.setAttribute('data-toggle', 'modal');
             tr.setAttribute('data-target', '#myModal');
-            tr.addEventListener("click", function () { setUpModal(members, i) });
+            doClosure(members, i);
             if (countForColoring % 2 == 0) {
                 tr.setAttribute('bgcolor', '#f0f0f0');
             }
@@ -135,10 +158,8 @@ function displayOtherTable(members) {
     if (displayingAllMembers) {
         drawActiveMembersTable(members);
         displayingAllMembers = false;
-        console.log("displaying active");
     } else {
         drawAllMembersTable(members);
         displayingAllMembers = true;
-        console.log("displaying all");
     }
 }
