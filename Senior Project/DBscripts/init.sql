@@ -78,6 +78,29 @@ CREATE TABLE Rentals (
         due_by DATE
 );
 
+CREATE TABLE FloorAttendanceNumerics (
+        numerics_id SERIAL PRIMARY KEY,
+        floor_name varchar(50),
+        floor_s_value int,
+        floor_minimum_attendance int
+);
+
+CREATE TABLE FloorMoney (
+        floormoney_id SERIAL PRIMARY KEY,
+        hall_and_floor varchar(50),
+        residents INT,
+        fall_attendence INT,
+        winter_attendence INT,
+        spring_attendence INT,
+        possible_earnings Money,
+        current_earned Money,
+        awarded Money,
+        expenses Money, 
+        possible_balance Money, -- Calculated from possilbe_earnings (+), awarded (+), and expenses (-)
+        current_balance Money -- Calculated from current_earned (+), awarded (+), and expenses (-)
+
+);
+
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
                                         Feud, and more. We also show movies outdoors on the big screen, and sponsor an Easter egg hunt in the spring. We also
