@@ -3,6 +3,9 @@ function setup() {
     var xhr = xhrGetRequest(urlExtension);
     xhr.send();
     setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+    var newTransactionButton = document.getElementById("newTransactionButton");
+    newTransactionButton.setAttribute('data-toggle', 'modal');
+    newTransactionButton.setAttribute('data-target', '#transactionModal');
 
     function createHTMLFromResponseText(funds) {
         funds = JSON.parse(funds);

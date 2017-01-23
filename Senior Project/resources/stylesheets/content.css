@@ -1011,3 +1011,10 @@ td {
 #radioButtons{
 	text-align: center;
 }
+
+#newTransactionButton {
+	text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
