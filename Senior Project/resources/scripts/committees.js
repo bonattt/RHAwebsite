@@ -3,6 +3,7 @@ var committeeID;
 
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
+        setupAddCommitteeButton();
 		var editButtons = insertEditButtons('committee', 'committee-modal-', 'committeeid',
                 function(json_data, put_id) {
             // *** this is where I'm working ***
@@ -13,11 +14,37 @@ function setAdmin(officers) {
             xhr.send(JSON.stringify(body));
         });
     }
+    /*
     var addCommitteeButton = document.getElementById("addCommittee");
     addCommitteeButton.addEventListener("click", showEmptyModal);
-    //addCommitteeButton.style.display = "block";
+    //addCommitteeButton.style.display = "block"; //*/
     return;
 }
+
+function setupAddCommitteeButton() {
+
+    var addCommitteeBtn = document.getElementById("addCommittee");
+    addCommitteeBtn.style.display = "block"; //*/
+    addCommitteeBtn.addEventListener('click', function() {
+        var committeeName = document.getElementById('committee-modal-committeename')
+        committeeName.value = '';
+        var committeeDesc = document.getElementById('committee-modal-description')
+        committeeDesc.value = '';
+        var submitBtn = document.getElementById('modal-submit')
+        submitBtn.addEventListener('click', function() {
+            var urlExtension = 'committee/';
+            var json_data = {"committeename": committeeName.value, "description": committeeDesc.value};
+            var xhr = xhrPostRequest(urlExtension);
+            xhr.onload = function() {
+                alert('successfully delivered!');
+                location.reload();            
+            };
+            xhr.send(JSON.stringify(json_data));            
+            clearSubmitHandlers(submitBtn);
+        });
+    });
+}
+
 /*
 var setupEditModal = function(dataElementId, taretIdRoot) {
 	var dataset = document.getElementById(dataElementId).dataset;
@@ -100,7 +127,7 @@ function showEmptyModal() {
     var imageNode = document.getElementById("imageInput");
 
 
-    document.getElementById("committeeName").innerHTML = committee;
+    // document.getElementById("committeeName").innerHTML = committee;
     committeeNode.appendChild(committeeInput);
     document.getElementById("description").innerHTML = description;
     descNode.appendChild(descInput);
