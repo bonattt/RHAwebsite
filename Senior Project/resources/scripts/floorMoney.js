@@ -46,6 +46,8 @@ function setup() {
                 tr.appendChild(td);
                 tr.appendChild(td2);
                 tbdy.appendChild(tr);
+                document.getElementById('funds-modal-funds_name').innerHTML = funds[i].fund_name;
+                document.getElementById('funds-modal-funds_amount').innerHTML = funds[i].funds_amount;
             }
         }
         table.appendChild(tbdy);
