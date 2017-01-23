@@ -20,9 +20,8 @@ function setAdmin(officers) {
             
             var apiExtension = 'committee/' + deleteid
             var xhr = xhrDeleteRequest(apiExtension);
-            xhr.onload = function () {alert('delete was successfully executed')}
+            xhr.onload = function () {location.reload()}
             xhr.send();
-            alert('deleted!');
         });
     }
     return;
@@ -45,10 +44,7 @@ function setupAddCommitteeButton() {
             var urlExtension = 'committee/';
             var json_data = {"committeeName": committeeName.value, "description": committeeDesc.value};
             var xhr = xhrPostRequest(urlExtension);
-            xhr.onload = function() {
-                alert('successfully delivered!');
-                location.reload();            
-            };
+            xhr.onload = function() {location.reload()};
             xhr.send(JSON.stringify(json_data));            
             clearSubmitHandlers(submitBtn);
         }
