@@ -1,5 +1,6 @@
 
 var displayingAllMembers = true;
+var table = document.createElement('table');
 
 function setup() {
     var urlExtension = 'members/';
@@ -28,92 +29,137 @@ function showModal() {
 
 function drawAllMembersTable(members) {
     members = JSON.parse(members);
-    var floorMoneyTable = document.getElementById("activeMembersTable");
-    floorMoneyTable.innerHTML = "";
-    var html = "<table border='1' align='center' bordercolor='#808080' id='membersTable'><tbody><tr>";
-    html += "<td align='middle' width='200'><b>Name</b></td><td align='middle' width='200'><b>Hall</b></td><td align='middle' width='50'><b>Active</b></td>";
-    var countForColoring = 0;
-    for (var i = 0; i < members.length - 1; i += 1) {
-        if (countForColoring % 2 == 0) {
-            html += "<tr bgcolor='#f0f0f0' id='memberType" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
-        } else {
-            html += "<tr id='memberType" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
-        }
-        html += "<td>" + members[i].hall + "</td>";
-        html += "<td>" + members[i].active + "</td></tr>";
-        countForColoring++;
-        //floorMoneyTable.innerHTML += html;
-        //console.log(html);
-        //html = "";
-        //var tr = document.getElementById("memberID" + i);
-        //tr.addEventListener("click", showModal);
-    }
-    floorMoneyTable.innerHTML += html;
-    //for (var i = 0; i < funds.length - 1; i += 1) {
-    // var getBy = i;
-    // console.log(getBy);
-    // var tr = floorMoneyTable.getElementById(getBy);
-    // console.log(tr);
-    // tr.addEventListener("click", showModal);
-    var table = document.getElementById("membersTable");
-    var rows = table.getElementsByTagName("tr");
-    for (i = 0; i < rows.length; i++) {
-        row = table.rows[i];
+    var body = document.getElementsByTagName('body')[0];
+    table.innerHTML = "";
+    table.setAttribute('border', 1);
+    table.setAttribute('align', 'center');
+    table.setAttribute('bordercolor', '#808080');
+    table.setAttribute('id', 'membersTable');
 
-        //row.addEventListener("click", showModal);
+    var tbdy = document.createElement('tbody');
+    var tdName = document.createElement('td');
+    tdName.setAttribute('align', 'middle');
+    tdName.setAttribute('width', 200);
+    tdName.innerHTML = "Name";
+
+    var tdHall = document.createElement('td');
+    tdHall.setAttribute('align', 'middle');
+    tdHall.setAttribute('width', 200);
+    tdHall.innerHTML = "Hall";
+    tbdy.appendChild(tdName);
+    tbdy.appendChild(tdHall);
+    var countForColoring = 0;
+    for (var i = 0; i < members.length - 1; i++) {
+        tr = document.createElement('tr');
+        tr.setAttribute('member', i);
+        tr.setAttribute('data-toggle', 'modal');
+        tr.setAttribute('data-target', '#myModal');
+        doClosure(members, i);
+        if (countForColoring % 2 == 0) {
+            tr.setAttribute('bgcolor', '#f0f0f0');
+        }
+        countForColoring++;
+
+        var td = document.createElement('td');
+        td.innerHTML = members[i].firstname + " " + members[i].lastname;
+
+        var td2 = document.createElement('td');
+        td2.innerHTML = members[i].hall;
+        tr.appendChild(td);
+        tr.appendChild(td2);
+        tbdy.appendChild(tr);
     }
-    //}
+    table.appendChild(tbdy);
+    body.appendChild(table);
+
+}
+
+function doClosure(members, i) {
+    tr.addEventListener("click", function () { setUpModal(members, i) });
+}
+
+function setUpModal(members, pos) {
+    document.getElementById("member-modal-name").innerHTML = members[pos].firstname + " " + members[pos].lastname;
+    if (members[pos].membertype) {
+        document.getElementById("member-modal-membertype").innerHTML = members[pos].membertype;
+    } else {
+        document.getElementById("member-modal-membertype").innerHTML = "General";
+    }
+    document.getElementById("member-modal-username").innerHTML = members[pos].username;
+    if (members[pos].phone_number) {
+        document.getElementById("member-modal-phone_number").innerHTML = members[pos].phone_number;
+    } else {
+        document.getElementById("member-modal-phone_number").innerHTML = "N/A";
+    }
+    document.getElementById("member-modal-hall").innerHTML = members[pos].hall;
+    if (members[pos].room_number) {
+        document.getElementById("member-modal-room_number").innerHTML = members[pos].room_number;
+    } else {
+        document.getElementById("member-modal-room_number").innerHTML = "N/A";
+    }
+    if (members[pos].cm) {
+        document.getElementById("member-modal-cm").innerHTML = members[pos].cm;
+    } else {
+        document.getElementById("member-modal-cm").innerHTML = "N/A";
+    }
+    document.getElementById("member-modal-active").innerHTML = members[pos].active;
+
 }
 
 function drawActiveMembersTable(members) {
     members = JSON.parse(members);
-    var floorMoneyTable = document.getElementById("activeMembersTable");
-    floorMoneyTable.innerHTML = "";
-    var html = "<table border='1' align='center' bordercolor='#808080' id='membersTable'><tbody><tr>";
-    html += "<td align='middle' width='200'><b>Name</b></td><td align='middle' width='200'><b>Hall</b></td><td align='middle' width='50'><b>Active</b></td>";
-    var countForColoring = 0;
-    for (var i = 0; i < members.length - 1; i += 1) {
-        if (members[i].active) {
-            if (countForColoring % 2 == 0) {
-                html += "<tr bgcolor='#f0f0f0' id='memberType" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
-            } else {
-                html += "<tr id='memberType" + i + "' data-toggle='modal' data-target='#myModal'><td>" + members[i].firstname + " " + members[i].lastname + "</td>";
-            }
-            html += "<td>" + members[i].hall + "</td>";
-            html += "<td>" + members[i].active + "</td></tr>";
-            countForColoring++;
-        }
-        //floorMoneyTable.innerHTML += html;
-        //console.log(html);
-        //html = "";
-        //var tr = document.getElementById("memberID" + i);
-        //tr.addEventListener("click", showModal);
-    }
-    floorMoneyTable.innerHTML += html;
-    //for (var i = 0; i < funds.length - 1; i += 1) {
-    // var getBy = i;
-    // console.log(getBy);
-    // var tr = floorMoneyTable.getElementById(getBy);
-    // console.log(tr);
-    // tr.addEventListener("click", showModal);
-    var table = document.getElementById("membersTable");
-    var rows = table.getElementsByTagName("tr");
-    for (i = 0; i < rows.length; i++) {
-        row = table.rows[i];
+    table.innerHTML = "";
+    var body = document.getElementsByTagName('body')[0];
+    table.setAttribute('border', 1);
+    table.setAttribute('align', 'center');
+    table.setAttribute('bordercolor', '#808080');
+    table.setAttribute('id', 'membersTable');
 
-        //row.addEventListener("click", showModal);
+    var tbdy = document.createElement('tbody');
+    var tdName = document.createElement('td');
+    tdName.setAttribute('align', 'middle');
+    tdName.setAttribute('width', 200);
+    tdName.innerHTML = "Name";
+
+    var tdHall = document.createElement('td');
+    tdHall.setAttribute('align', 'middle');
+    tdHall.setAttribute('width', 200);
+    tdHall.innerHTML = "Hall";
+    tbdy.appendChild(tdName);
+    tbdy.appendChild(tdHall);
+    var countForColoring = 0;
+    for (var i = 0; i < members.length - 1; i++) {
+        if (members[i].active) {
+            tr = document.createElement('tr');
+            tr.setAttribute('member', i);
+            tr.setAttribute('data-toggle', 'modal');
+            tr.setAttribute('data-target', '#myModal');
+            doClosure(members, i);
+            if (countForColoring % 2 == 0) {
+                tr.setAttribute('bgcolor', '#f0f0f0');
+            }
+            countForColoring++;
+
+            var td = document.createElement('td');
+            td.innerHTML = members[i].firstname + " " + members[i].lastname;
+
+            var td2 = document.createElement('td');
+            td2.innerHTML = members[i].hall;
+            tr.appendChild(td);
+            tr.appendChild(td2);
+            tbdy.appendChild(tr);
+        }
     }
-    //}
+    table.appendChild(tbdy);
+    body.appendChild(table);
 }
 
 function displayOtherTable(members) {
-    if(displayingAllMembers){
+    if (displayingAllMembers) {
         drawActiveMembersTable(members);
         displayingAllMembers = false;
-        console.log("displaying active");
-    } else{
+    } else {
         drawAllMembersTable(members);
         displayingAllMembers = true;
-        console.log("displaying all");
     }
 }

@@ -37,24 +37,37 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Modal Header</h4>
 				</div>
-				<div class="modal-body">
+				<div id="signups-modal-body" class="modal-body">
 
 					<label>Name</label> <br/>
-					<input id="signups-modal-name" type="text" value="name"> </input><br/><br/>
+					<input id="signups-modal-proposal_name" type="text" value="name"> </input><br/><br/>
 					<label>Cost</label> <br/>
-					<input id="signups-modal-cost" type="text" value="cost"> </input><br/><br/>
+					<input id="signups-modal-cost_to_attendee" type="text" value="cost"> </input><br/><br/>
 					<label>Description</label> <br/>
 					<textarea id="signups-modal-description" type="text" value="description"> </textarea><br/><br/>
-					<label>Event Date</label> <br/>
-					<input id="signups-modal-eventdate" type="text" value="eventDate"> </input><br/><br/>
+
+                    <div id="signups-modal-event_date"> 
+                        <label>Event Date</label> <br/>
+                    </div> <br/>
+					
+                    <div id="signups-modal-event_signup_open"> 
+                        <label>Signups Open Date</label> <br/>
+                    </div> <br/>
+					
+                    <div id="signups-modal-event_signup_close"> 
+                        <label>Signups Close Date</label> <br/>
+                    </div> <br/>
+					<!--
+                    <input id="signups-modal-event_date" type="text" value="eventDate"> </input><br/><br/>
 					<label>Sign Ups Open Date</label> <br/>
-					<input id="signups-modal-signupsopendate" type="text" value="signUpsOpenDate"> </input><br/><br/>
+					<input id="signups-modal-event_signup_open" type="text" value="signUpsOpenDate"> </input><br/><br/>
 					<label>Sign Ups Close Date</label> <br/>
-					<input id="signups-modal-signupsclosedate" type="text" value="signUpsCloseDate"> </input>
+					<input id="signups-modal-event_signup_close" type="text" value="signUpsCloseDate"> </input>
+                    -->
 				</div>
 				<div class="modal-footer">
 					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>

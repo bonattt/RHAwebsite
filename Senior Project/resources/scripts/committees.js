@@ -3,6 +3,7 @@ var committeeID;
 
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
+        setupAddCommitteeButton();
 		var editButtons = insertEditButtons('committee', 'committee-modal-', 'committeeid',
                 function(json_data, put_id) {
             // *** this is where I'm working ***
@@ -12,12 +13,55 @@ function setAdmin(officers) {
             xhr.onload = function() { location.reload() };
             xhr.send(JSON.stringify(body));
         });
+        var deleteBtn = document.getElementById('confirm-delete');
+        deleteBtn.addEventListener('click', function() {
+            var element = document.getElementById(selected_element_id); // global decleared in adminPermission.js ... sorry about that... :(
+            var deleteid = element.dataset.committeeid;
+            
+            var apiExtension = 'committee/' + deleteid
+            var xhr = xhrDeleteRequest(apiExtension);
+            xhr.onload = function () {location.reload()}
+            xhr.send();
+        });
     }
-    var addCommitteeButton = document.getElementById("addCommittee");
-    addCommitteeButton.addEventListener("click", showEmptyModal);
-    //addCommitteeButton.style.display = "block";
     return;
 }
+
+function setupAddCommitteeButton() {
+
+    var addCommitteeBtn = document.getElementById("addCommittee");
+    addCommitteeBtn.style.display = "block"; //*/
+    addCommitteeBtn.addEventListener('click', function() {
+        var deleteBtn = document.getElementById('modal-delete');
+        deleteBtn.disabled = true;
+        
+        var committeeName = document.getElementById('committee-modal-committeename')
+        committeeName.value = '';
+        var committeeDesc = document.getElementById('committee-modal-description')
+        committeeDesc.value = '';
+        var submitBtn = document.getElementById('modal-submit')
+        var addCommitteeSubmit = function() {
+            var urlExtension = 'committee/';
+            var json_data = {"committeeName": committeeName.value, "description": committeeDesc.value};
+            var xhr = xhrPostRequest(urlExtension);
+            xhr.onload = function() {location.reload()};
+            xhr.send(JSON.stringify(json_data));            
+            clearSubmitHandlers(submitBtn);
+        }
+        submitBtn.addEventListener('click', addCommitteeSubmit);
+        var addCommitteeCancel = function () {
+            clearSubmitHandlers(submitBtn);
+            cancelBtn.removeEventListener('click', addCommitteeCancel);
+        }
+        var cancelBtn = document.getElementById('modal-cancel');
+        cancelBtn.addEventListener('click', function() {
+            // nothing right now
+        });        
+    });
+}
+
+
+
 /*
 var setupEditModal = function(dataElementId, taretIdRoot) {
 	var dataset = document.getElementById(dataElementId).dataset;
@@ -35,8 +79,9 @@ function setup() {
 	
 	var urlExtension = 'committees';
     var xhr = xhrGetRequest(urlExtension);
+    xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) }
     xhr.send();
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+    // setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
     function createHTMLFromResponseText(committee) {
         committee = JSON.parse(committee);
@@ -70,107 +115,6 @@ function setup() {
         officersxhr.send();
         setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
     }
-}
-
-
-function showEmptyModal() {
-    console.log("that one");
-    var modal = document.getElementById('myModal');
-    var span = document.getElementsByClassName("close")[0];
-
-    var committee = "Committee: ";
-    var description = "Description: ";
-    var image = "Image: ";
-
-    var committeeInput = document.createElement("textarea");
-    committeeInput.setAttribute("rows", "1");
-    committeeInput.setAttribute("cols", "30");
-
-    var descInput = document.createElement("textarea");
-    descInput.setAttribute("rows", "4");
-    descInput.setAttribute("cols", "30");
-
-    var imageInput = document.createElement("textarea");
-    imageInput.setAttribute("rows", "1");
-    imageInput.setAttribute("cols", "30");
-
-    var committeeNode = document.getElementById("committeeInput");
-    var descNode = document.getElementById("descInput");
-    var imageNode = document.getElementById("imageInput");
-
-
-    document.getElementById("committeeName").innerHTML = committee;
-    committeeNode.appendChild(committeeInput);
-    document.getElementById("description").innerHTML = description;
-    descNode.appendChild(descInput);
-    document.getElementById("image").innerHTML = image;
-    imageNode.appendChild(imageInput);
-
-
-    modal.style.display = "block";
-    span.onclick = function () {
-        modal.style.display = "none";
-        committeeNode.removeChild(committeeNode.firstChild);
-        descNode.removeChild(descNode.firstChild);
-        imageNode.removeChild(imageNode.firstChild);
-
-    }
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            committeeNode.removeChild(committeeNode.firstChild);
-            descNode.removeChild(descNode.firstChild);
-            imageNode.removeChild(imageNode.firstChild);
-
-        }
-    }
-}
-
-function showModal(editImage) {
-	var srcEvent = (editImage.srcElement || editImage.target);
-    var modal = document.getElementById('myModal');
-    var span = document.getElementsByClassName("close")[0];
-
-    var parent = srcEvent.parentElement.parentElement;
-    var committee = "Committee: ";
-    var description = "Description: ";
-    var image = "Image: ";
-
-    var committeeInput = document.createElement("textarea");
-    committeeInput.setAttribute("rows", "1");
-    committeeInput.setAttribute("cols", "30");
-    committeeInput.setAttribute("id", "committee-text");
-
-    var descInput = document.createElement("textarea");
-    descInput.setAttribute("rows", "4");
-    descInput.setAttribute("cols", "30");
-    descInput.setAttribute("id", "description-text");
-
-    var imageInput = document.createElement("textarea");
-    imageInput.setAttribute("rows", "1");
-    imageInput.setAttribute("cols", "30");
-    imageInput.setAttribute("id", "image-text");
-
-    var committeeNode = document.getElementById("committeeInput");
-    var descNode = document.getElementById("descInput");
-    var imageNode = document.getElementById("imageInput");
-
-    if (parent.parentElement.id == "committeeWrapperRight") {
-        committeeInput.innerHTML = parent.querySelectorAll(":nth-child(1)")[0].textContent;
-        committeeID = committeeMap[parent.querySelectorAll(":nth-child(1)")[0].textContent];
-        descInput.innerHTML = parent.querySelectorAll(":nth-child(2)")[0].textContent;
-        imageInput.innerHTML = parent.nextSibling.currentSrc.split("images/committees/")[1];
-    } else {
-        committeeInput.innerHTML = parent.querySelectorAll(":nth-child(1)")[0].textContent;
-        committeeID = committeeMap[parent.querySelectorAll(":nth-child(1)")[0].textContent];
-        descInput.innerHTML = parent.querySelectorAll(":nth-child(2)")[0].textContent;
-        imageInput.innerHTML = parent.previousSibling.currentSrc.split("images/committees/")[1];
-    }
-
-
-    var submitButton = document.getElementById("submit");
-    submitButton.addEventListener("click", submit);
-
 }
 
 function submit(){
