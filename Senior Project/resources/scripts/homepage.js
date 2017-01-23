@@ -1,14 +1,13 @@
 var officers;
 function displayUpcomingEvents() {
 
-    var xhr = getEvents();
+    var urlExtension = 'events/';
+    var xhr = xhrGetRequest(url);
+        
     xhr.send();
     setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
-    // var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
-
     function createHTMLFromResponseText(proposal) {
         proposal = JSON.parse(proposal);
-
         for (var i = 0; i < proposal.length; i++) {
             var html = "<div class='event'><a href='sign-ups'>";
             html += "<img src=" + proposal[i].image_path + " alt='Event' class='eventImage'>";
@@ -18,62 +17,7 @@ function displayUpcomingEvents() {
             var sidebar = document.getElementById("sidebarEvents");
             sidebar.innerHTML += html;
         }
-
     }
-
-    function getEvents() {
-        var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events';
-        function createCORSRequest(method, url) {
-            var xhr = new XMLHttpRequest();
-           if ("withCredentials" in xhr) {
-                xhr.open(method, url, true);
-
-            } else if (typeof XDomainRequest != "undefined") {
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-            } else {
-                xhr = null;
-            }
-            return xhr;
-        }
-        var xhr = createCORSRequest('GET', url);
-        if (!xhr) {
-            throw new Error('CORS not supported');
-        }
-        xhr.onload = function () {
-        }
-        xhr.onerror = function () {
-            console.log("There was an error");
-        }
-        return xhr;
-    }
-}
-
-function getOfficers() {
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
-    function createCORSRequest(method, url) {
-        var xhr = new XMLHttpRequest();
-        if ("withCredentials" in xhr) {
-            xhr.open(method, url, true);
-
-        } else if (typeof XDomainRequest != "undefined") {
-            xhr = new XDomainRequest();
-            xhr.open(method, url);
-        } else {
-            xhr = null;
-        }
-        return xhr;
-    }
-    var xhr = createCORSRequest('GET', url);
-    if (!xhr) {
-        throw new Error('CORS not supported');
-    }
-    xhr.onload = function () {
-    }
-    xhr.onerror = function () {
-        console.log("There was an error");
-    }
-    return xhr;
 }
 
 function setAdmin(officers) {
@@ -91,9 +35,9 @@ function setup() {
 
     var title = document.getElementById("title");
     if (JSON.parse(sessionStorage.getItem('userData'))) {
-        title.innerHTML = "Hi, " + JSON.parse(sessionStorage.getItem('userData')).name.split(" ")[0] + "!";
+        title.innerHTML = "Welcome, " + JSON.parse(sessionStorage.getItem('userData')).name.split(" ")[0] + "!";
     } else {
-        title.innerHTML = "Hi!"
+        title.innerHTML = "Welcome!"
     }
 
     function getFrontPageNews() {

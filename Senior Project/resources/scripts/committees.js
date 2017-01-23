@@ -1,98 +1,74 @@
 var committeeMap = new Object();
 var committeeID;
 
-function getOfficers() {
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
-    function createCORSRequest(method, url) {
-        var xhr = new XMLHttpRequest();
-        if ("withCredentials" in xhr) {
-            xhr.open(method, url, true);
-
-        } else if (typeof XDomainRequest != "undefined") {
-            xhr = new XDomainRequest();
-            xhr.open(method, url);
-        } else {
-            xhr = null;
-        }
-        return xhr;
-    }
-    var xhr = createCORSRequest('GET', url);
-    if (!xhr) {
-        throw new Error('CORS not supported');
-    }
-    xhr.onload = function () {
-    }
-    xhr.onerror = function () {
-        console.log("There was an error");
-    }
-    return xhr;
-}
-
 function setAdmin(officers) {    
     if (userIsOfficer(officers)) {
-		var editButtons = insertEditButtons(showModal);
+		var editButtons = insertEditButtons('committee', 'committee-modal-', 'committeeid',
+                function(json_data, put_id) {
+            // *** this is where I'm working ***
+            var apiUrl = 'committee/' + put_id
+            var xhr = xhrPutRequest(apiUrl);
+            var body = {"description": json_data.description, "committeename": json_data.committeename} // , "committeeName": "test committee"};
+            xhr.onload = function() { location.reload() };
+            xhr.send(JSON.stringify(body));
+        });
     }
     var addCommitteeButton = document.getElementById("addCommittee");
     addCommitteeButton.addEventListener("click", showEmptyModal);
     //addCommitteeButton.style.display = "block";
     return;
 }
-
+/*
+var setupEditModal = function(dataElementId, taretIdRoot) {
+	var dataset = document.getElementById(dataElementId).dataset;
+	
+	var nameField = document.getElementById("committee-modal-name");
+	nameField.value = dataset.name;
+	
+	var descriptionField = document.getElementById("committee-modal-desc");
+	descriptionField.value = dataset.desc;
+}   
+*/
 function setup() {
-    var xhr = getCommittees();
+	var apiExtension = 'committees/';
+	// enableSubmitButton("everyCommitteeEver", "committee-modal-", apiExtension);
+	
+	var urlExtension = 'committees';
+    var xhr = xhrGetRequest(urlExtension);
     xhr.send();
     setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
     function createHTMLFromResponseText(committee) {
         committee = JSON.parse(committee);
         for (var i = 0; i < committee.length; i++) {
-            committeeMap[committee[i].committeename] = committee[i].committeeid;
+            var id = committee[i].committeeid
+            committeeMap[committee[i].committeename] = id;
             if (i % 2 == 0) {
-                var html = "<div class='committeeWrapperRight' id='committeeWrapperRight'>";
-                html += "<div class='committees'><h3 class='edit'>" + committee[i].committeename + "</h3>";
+                var html = "<div class='committeeWrapperRight'>";
+                html += "<div class='committees'><h3 class='edit' id='committee" + id + "'>" + committee[i].committeename + "</h3>";
                 html += "<p>" + committee[i].description + "</p></div>";
                 html += "<image class='committeePhoto' src=" + committee[i].image + " alt=" + committee[i].committeename + "></div>";
             } else {
-                var html = "<div class='committeeWrapperLeft' id='committeeWrapperLeft'>";
+                var html = "<div class='committeeWrapperLeft'>";
                 html += "<image class='committeePhoto' src=" + committee[i].image + " alt=" + committee[i].committeename + ">";
-                html += "<div class='committees'><h3 class='edit'>" + committee[i].committeename + "</h3>";
+                html += "<div class='committees'><h3 class='edit' id='committee" + id + "'>" + committee[i].committeename + "</h3>";
                 html += "<p>" + committee[i].description + "</p></div></div>";
             }
 
             var committees = document.getElementById("committees");
             committees.innerHTML += html;
+            
+            var dataset = document.getElementById('committee' + id).dataset;
+            var fields = ["committeename", "committeeid", "description", "image"]
+            fields.forEach(function(field) {
+                // console.log("setting field " + field + " to " + committee[i][field]);
+                dataset[field] = committee[i][field];
+            });
         }
 
         var officersxhr = getOfficers();
         officersxhr.send();
         setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
-    }
-
-    function getCommittees() {
-        var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/committees';
-        function createCORSRequest(method, url) {
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-                xhr.open(method, url, true);
-            } else if (typeof XDomainRequest != "undefined") {
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-            } else {
-                xhr = null;
-            }
-            return xhr;
-        }
-        var xhr = createCORSRequest('GET', url);
-        if (!xhr) {
-            throw new Error('CORS not supported');
-        }
-        xhr.onload = function () {
-            var responseText = xhr.responseText;
-        }
-        xhr.onerror = function () {
-            console.log("There was an error");
-        }
-        return xhr;
     }
 }
 
@@ -192,71 +168,27 @@ function showModal(editImage) {
     }
 
 
-    document.getElementById("committeeName").innerHTML = committee;
-    committeeNode.appendChild(committeeInput);
-    document.getElementById("description").innerHTML = description;
-    descNode.appendChild(descInput);
-    document.getElementById("image").innerHTML = image;
-    imageNode.appendChild(imageInput);
-
     var submitButton = document.getElementById("submit");
     submitButton.addEventListener("click", submit);
 
-
-    modal.style.display = "block";
-    span.onclick = function () {
-        modal.style.display = "none";
-        committeeNode.removeChild(committeeNode.firstChild);
-        descNode.removeChild(descNode.firstChild);
-        imageNode.removeChild(imageNode.firstChild);
-
-    }
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            committeeNode.removeChild(committeeNode.firstChild);
-            descNode.removeChild(descNode.firstChild);
-            imageNode.removeChild(imageNode.firstChild);
-
-        }
-    }
 }
 
 function submit(){
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
     saveCommittee();
-    location.reload();
+    window.location.reload();
 }
 
 function saveCommittee() {
-var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/committee/' + committeeID;
-function createCORSRequest(method, url) {
-    var xhr = new XMLHttpRequest();
-    console.log("xhr is: ");
-    console.log(xhr);
-    xhr.open(method, url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    var urlExtension = 'committee/' + committeeID;
+    
+    var xhr = xhrPutRequest(urlExtension);
+    var committeeName = document.getElementById("committee-text").value;
+    var description = document.getElementById("description-text").value;
+    var image = "images/committees/" + document.getElementById("image-text").value;
+    xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
     return xhr;
-}
-var xhr = createCORSRequest('PUT', url);
-if (!xhr) {
-    throw new Error('CORS not supported');
-}
-
-xhr.onload = function () {
-    var responseText = xhr.responseText;
-    console.log("Response text: " + responseText);
-}
-
-xhr.onerror = function () {
-    console.log("There was an error");
-}
-var committeeName = document.getElementById("committee-text").value;
-var description = document.getElementById("description-text").value;
-var image = "images/committees/" + document.getElementById("image-text").value;
-xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
-return xhr;
 
 }
 
