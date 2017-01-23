@@ -13,177 +13,68 @@ function setup() {
     var officersxhr = getOfficers();
     officersxhr.send();
     setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
+    var createNewProposal = document.getElementById("addProposal");
+}
 
-    /*var createNewProposal = document.getElementById("addProposal");
-    createNewProposal.addEventListener("click", function (e) {
-        addProposal(e);
-    }, false); */
+function submit() {
+    var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/eventPhoto';
+    var photoxhr = new XMLHttpRequest();
 
-    function addProposal(event) {
-        var modal = document.getElementById('editModal');
-        var span = document.getElementsByClassName("closeEdit")[0];
-        var modalContent = document.getElementsByClassName("modal-content")[0];
-        console.log(modalContent);
+    var dbAPIURL = 'http://rha-website-1.csse.rose-hulman.edu:3000/API/v1/proposal';
 
-        var name = "Event name: ";
-        var costToAttendee = "Cost to attendee: ";
-        var image = "Image: ";
-        var description = "Description: ";
-        var signUpOpenDate = "Sign-up open date: ";
-        var eventDate = "Event date: ";
-        var signUpCloseDate = "Sign-up close date: ";
-        var proposer = "Proposer: ";
-        var weekProposed = "Week Proposed: ";
-        var quarter = "Quarter: ";
-        var moneyRequested = "Money Requested: ";
-        var approved = "Approved: ";
-        var moneyAllocated = "Money Allocated: ";
-
-        var nameInput = document.createElement("textarea");
-        nameInput.setAttribute("rows", "1");
-        nameInput.setAttribute("cols", "30");
-
-        var costToAttendeeInput = document.createElement("textarea");
-        costToAttendeeInput.setAttribute("rows", "1");
-        costToAttendeeInput.setAttribute("cols", "30");
-
-        var imageInput = document.createElement("textarea");
-        imageInput.setAttribute("rows", "1");
-        imageInput.setAttribute("cols", "30");
-
-        var descriptionInput = document.createElement("textarea");
-        descriptionInput.setAttribute("rows", "4");
-        descriptionInput.setAttribute("cols", "30");
-
-        var signUpOpenDateInput = document.createElement("textarea");
-        signUpOpenDateInput.setAttribute("rows", "1");
-        signUpOpenDateInput.setAttribute("cols", "30");
-
-        var eventDateInput = document.createElement("textarea");
-        eventDateInput.setAttribute("rows", "1");
-        eventDateInput.setAttribute("cols", "30");
-
-        var signUpCloseDateInput = document.createElement("textarea");
-        signUpCloseDateInput.setAttribute("rows", "1");
-        signUpCloseDateInput.setAttribute("cols", "30");
-
-        var proposerInput = document.createElement("textarea");
-        proposerInput.setAttribute("rows", "1");
-        proposerInput.setAttribute("cols", "30");
-
-        var weekProposedInput = document.createElement("textarea");
-        weekProposedInput.setAttribute("rows", "1");
-        weekProposedInput.setAttribute("cols", "30");
-
-        var quarterInput = document.createElement("textarea");
-        quarterInput.setAttribute("rows", "1");
-        quarterInput.setAttribute("cols", "30");
-
-        var moneyRequestedInput = document.createElement("textarea");
-        moneyRequestedInput.setAttribute("rows", "1");
-        moneyRequestedInput.setAttribute("cols", "30");
-
-        var approvedInput = document.createElement("textarea");
-        approvedInput.setAttribute("rows", "1");
-        approvedInput.setAttribute("cols", "30");
-
-        var moneyAllocatedInput = document.createElement("textarea");
-        moneyAllocatedInput.setAttribute("rows", "1");
-        moneyAllocatedInput.setAttribute("cols", "30");
-
-        var submitButton = document.createElement("button");
-        submitButton.setAttribute("id", "submit");
-        submitButton.setAttribute("class", "modalButton");
-        submitButton.innerHTML = "Submit";
-        submitButton.addEventListener("click", function () { submit() }, false);
-        modalContent.appendChild(submitButton);
-
-        var nameNode = document.getElementById("nameInput");
-        var costToAttendeeNode = document.getElementById("costToAttendeeInput");
-        var imageNode = document.getElementById("imageInput");
-        var descriptionNode = document.getElementById("descriptionInput");
-        var signUpOpenDateNode = document.getElementById("signUpOpenDateInput");
-        var eventDateNode = document.getElementById("eventDateInput");
-        var signUpCloseDateNode = document.getElementById("signUpCloseDateInput");
-        var proposerNode = document.getElementById("proposerInput");
-        var weekProposedNode = document.getElementById("weekProposedInput");
-        var quarterNode = document.getElementById("quarterInput");
-        var moneyRequestedNode = document.getElementById("moneyRequestedInput");
-        var approvedNode = document.getElementById("approvedInput");
-        var moneyAllocatedNode = document.getElementById("moneyAllocatedInput");
+    var name = document.getElementById("name").value;
+    var costToAttendee = document.getElementById("costToAttendee").value;
+    var description = document.getElementById("description").value;
+    var signUpOpenDate = document.getElementById("signUpOpenDate").value;
+    var eventDate = document.getElementById("eventDate").value;
+    var signUpCloseDate = document.getElementById("signUpCloseDate").value;
+    var proposer = document.getElementById("proposer").value;
+    var weekProposed = document.getElementById("weekProposed").value;
+    var quarter = document.getElementById("quarterProposed").value;
+    var moneyRequested = document.getElementById("moneyRequested").value;
+    var approved = document.getElementById("approved").value;
+    var moneyAllocated = document.getElementById("moneyAllocated").value;
+    var files = document.getElementById("imageFile").files;
 
 
-        document.getElementById("name").innerHTML = name;
-        nameNode.appendChild(nameInput);
-        document.getElementById("costToAttendee").innerHTML = costToAttendee;
-        costToAttendeeNode.appendChild(costToAttendeeInput);
-        document.getElementById("image").innerHTML = image;
-        imageNode.appendChild(imageInput);
-        document.getElementById("description").innerHTML = description;
-        descriptionNode.appendChild(descriptionInput);
-        document.getElementById("signUpOpenDate").innerHTML = signUpOpenDate;
-        signUpOpenDateNode.appendChild(signUpOpenDateInput);
-        document.getElementById("eventDate").innerHTML = eventDate;
-        eventDateNode.appendChild(eventDateInput);
-        document.getElementById("signUpCloseDate").innerHTML = signUpCloseDate;
-        signUpCloseDateNode.appendChild(signUpCloseDateInput);
-        document.getElementById("proposer").innerHTML = proposer;
-        proposerNode.appendChild(proposerInput);
-        document.getElementById("weekProposed").innerHTML = weekProposed;
-        weekProposedNode.appendChild(weekProposedInput);
-        document.getElementById("quarter").innerHTML = quarter;
-        quarterNode.appendChild(quarterInput);
-        document.getElementById("moneyRequested").innerHTML = moneyRequested;
-        moneyRequestedNode.appendChild(moneyRequestedInput);
-        document.getElementById("approved").innerHTML = approved;
-        approvedNode.appendChild(approvedInput);
-        document.getElementById("moneyAllocated").innerHTML = moneyAllocated;
-        moneyAllocatedNode.appendChild(moneyAllocatedInput);
+    var formData = new FormData();
+    formData.append("imageFile", files[0]);
+    photoxhr.open('POST', photoAPIURL, true);
 
+    photoxhr.onreadystatechange = function (e) {
+        console.log("I'm playing in the stateChange!");
+        if(photoxhr.readyState == 4 && photoxhr.status == 200) {
+            console.log("ReadyState was 4 and status 200!")
+            var image_path = JSON.parse(photoxhr.responseText).filepath;
+            var dbxhr = new XMLHttpRequest();
+            var dbObject = {};
+            dbObject["proposal_name"] = name;
+            dbObject["cost_to_attendee"] = costToAttendee;
+            dbObject["event_date"] = eventDate;
+            dbObject["event_signup_open"] = signUpOpenDate;
+            dbObject["event_signup_close"] = signUpCloseDate;
+            dbObject["proposer"] = proposer;
+            dbObject["week_proposed"] = weekProposed;
+            dbObject["quarter_proposed"] = quarter;
+            dbObject["money_requested"] = moneyRequested;
+            dbObject["approved"] = approved;
+            dbObject["money_allocated"] = moneyAllocated;
+            dbObject["image_path"] = image_path;
 
-        modal.style.display = "block";
-        span.onclick = function () {
-            closeModal();
-
-        }
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-
-        function closeModal() {
-            modal.style.display = "none";
-            nameNode.removeChild(nameNode.firstChild);
-            costToAttendeeNode.removeChild(costToAttendeeNode.firstChild);
-            imageNode.removeChild(imageNode.firstChild);
-            descriptionNode.removeChild(descriptionNode.firstChild);
-            signUpOpenDateNode.removeChild(signUpOpenDateNode.firstChild);
-            eventDateNode.removeChild(eventDateNode.firstChild);
-            signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
-            proposerNode.removeChild(proposerNode.firstChild);
-            weekProposedNode.removeChild(weekProposedNode.firstChild);
-            quarterNode.removeChild(quarterNode.firstChild);
-            moneyRequestedNode.removeChild(moneyRequestedNode.firstChild);
-            approvedNode.removeChild(approvedNode.firstChild);
-            moneyAllocatedNode.removeChild(moneyAllocatedNode.firstChild);
-            modalContent.removeChild(submitButton);
-        }
-
-        function submit() {
-            closeModal();
-            var urlExtension = 'proposal/';
-            var xhr = xhrPostRequest(urlExtension);
-            var approvedBool = false;
-            if (approvedInput.value === "true") {
-                approvedBool = true;
+            dbxhr.open('POST', dbAPIURL, true);
+            dbxhr.setRequestHeader('Content-Type', 'application/json');
+            dbxhr.onerror = function () {
+                console.log("There was an error");
             }
 
-            xhr.send(JSON.stringify({ name: nameInput.value, cost_to_attendee: parseInt(costToAttendeeInput.value), event_date: eventDateInput.value, event_signup_open: signUpOpenDateInput.value, event_signup_close: signUpCloseDateInput.value, image_path: imageInput.value, description: descriptionInput.value, proposer: proposerInput.value, week_proposed: parseInt(weekProposedInput.value), quarter_proposed: parseInt(quarterInput.value), money_requested: parseInt(moneyRequestedInput.value), approved: approvedBool }));
-            return xhr;
+            dbxhr.send(JSON.stringify(dbObject));
         }
+    };
 
-    }
+    photoxhr.send(formData);
+    
+    
+
 }
 
 $(document).ready(function() {
