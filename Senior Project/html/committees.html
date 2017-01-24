@@ -25,16 +25,8 @@
 
 	<div class="content">
 		<h1>Committees</h1>
-	<button id="addCommittee">Add Committee</button>
+	<button id="addCommittee" data-toggle="modal" data-target="#myModal">Add Committee</button>
 	<div id="committees"></div>
-	</div>
-	
-	<div 
-		id="everyCommitteeEver" 
-		data-id=1
-		data-name="some committee" 
-		data-desc="this committee's purpose is to train students to fight the evils of life-fibers!"
-		data-img="FAKER.png">
 	</div>
 
 	<div id="myModal" class="modal fade" role="dialog">
@@ -46,20 +38,37 @@
 					<h4 class="modal-title">Modal Header</h4>
 				</div>
 				<div class="modal-body">
-					
 						<label> name </label> <br/>
 						<input id="committee-modal-committeename" type="text" value="name"> </input>
 						<p> </p>
 						<textarea id="committee-modal-description" type="textarea" value="description of the committee" style="min-width: 200px; min-height: 100px;"> </textarea>
 				</div>
 				<div class="modal-footer">
+					<button id="modal-delete" type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#deleteConfirmationModal"> Delete </button>
 					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
 					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+    
+    <div id="deleteConfirmationModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Are you sure? </h4>
+				</div>
+				<div class="modal-footer">
+					<button id="confirm-delete" type="button" class="btn btn-danger" data-dismiss="modal"> 
+                            Delete </button>
+					<button id="cancel-delete" type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
+				</div>
+			</div>
+		</div>
+	</div>
+    
 </body>
 
 </html>
