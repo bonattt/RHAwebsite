@@ -100,7 +100,7 @@ app.get('/uploadTest', function(req, res) {
   });
 }); */
 
-app.post('/api/v1/eventPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
+app.post('/api/v1/eventPhoto', type, function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
     var tmp_path = req.file.path;
     var target_path = 'resources/images/events/' + req.file.filename + '_' + req.file.originalname;
     var pathToSend = '../images/events/' + req.file.filename + '_' + req.file.originalname;
