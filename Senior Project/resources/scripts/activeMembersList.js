@@ -49,7 +49,7 @@ function drawAllMembersTable(members) {
     tbdy.appendChild(tdName);
     tbdy.appendChild(tdHall);
     var countForColoring = 0;
-    for (var i = 0; i < members.length - 1; i++) {
+    for (var i = 0; i < members.length; i++) {
         tr = document.createElement('tr');
         tr.setAttribute('member', i);
         tr.setAttribute('data-toggle', 'modal');
@@ -128,7 +128,7 @@ function drawActiveMembersTable(members) {
     tbdy.appendChild(tdName);
     tbdy.appendChild(tdHall);
     var countForColoring = 0;
-    for (var i = 0; i < members.length - 1; i++) {
+    for (var i = 0; i < members.length; i++) {
         if (members[i].active) {
             tr = document.createElement('tr');
             tr.setAttribute('member', i);

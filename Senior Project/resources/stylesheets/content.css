@@ -1012,9 +1012,10 @@ td {
 	text-align: center;
 }
 
-#newTransactionButton {
+#addPaymentButton, #addChargeButton {
+    display: inline;
+}
+
+#buttonWrapper {
 	text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
 }

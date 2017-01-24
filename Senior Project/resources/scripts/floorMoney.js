@@ -3,9 +3,12 @@ function setup() {
     var xhr = xhrGetRequest(urlExtension);
     xhr.send();
     setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
-    var newTransactionButton = document.getElementById("newTransactionButton");
-    newTransactionButton.setAttribute('data-toggle', 'modal');
-    newTransactionButton.setAttribute('data-target', '#transactionModal');
+    var addPaymentButton = document.getElementById("addPaymentButton");
+    addPaymentButton.setAttribute('data-toggle', 'modal');
+    addPaymentButton.setAttribute('data-target', '#paymentModal');
+    var addChargeButton = document.getElementById("addChargeButton");
+    addChargeButton.setAttribute('data-toggle', 'modal');
+    addChargeButton.setAttribute('data-target', '#chargeModal');
 
     function createHTMLFromResponseText(funds) {
         funds = JSON.parse(funds);
@@ -29,7 +32,7 @@ function setup() {
         tbdy.appendChild(tdFloor);
         tbdy.appendChild(tdBalance);
         var countForColoring = 0;
-        for (var i = 0; i < funds.length - 1; i++) {
+        for (var i = 0; i < funds.length; i++) {
             if (funds[i].display_on_site) {
                 tr = document.createElement('tr');
                 tr.setAttribute('funds', i);
