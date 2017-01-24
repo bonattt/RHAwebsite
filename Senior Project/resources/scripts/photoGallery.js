@@ -30,6 +30,24 @@ function showPictureModal(source) {
     }
 }
 
+function uploadPhoto() {
+    var photoUploadApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/galleryPhoto';
+    var photoxhr = new XMLHttpRequest();
+    var files = document.getElementById("imageFile").files;
+
+    var formData = new FormData();
+    formData.append("imageFile", files[0]);
+    photoxhr.open('POST', photoUploadApi, true);
+
+    photoxhr.onreadystatechange = function (e) {
+        if(photoxhr.readyState == 4 && photoxhr.status == 200) {
+            $('#uploadModal').modal('hide');
+        }
+    };
+
+    photoxhr.send(formData);
+}
+
 $(document).ready(function () {
     setup();
 });
