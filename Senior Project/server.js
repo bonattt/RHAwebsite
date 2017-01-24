@@ -114,6 +114,20 @@ app.post('/api/v1/eventPhoto', type, function(req, res) {  //we will need to mak
     });
   });
 
+app.post('/api/v1/galleryPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
+    var tmp_path = req.file.path;
+    var target_path = 'resources/images/gallery/' + req.file.filename + '_' + req.file.originalname;
+    var pathToSend = '../images/gallery/' + req.file.filename + '_' + req.file.originalname;
+    fs.readFile(tmp_path, function(err, data) {
+      fs.writeFile(target_path, data);
+      fs.unlink(tmp_path);
+      res.filePath = target_path;
+      console.log(res);
+      res.status(200).json({filepath: pathToSend}).send();
+      return;
+    });
+  });
+
 app.post('/foobar', function (req, res) {
   var token = req.body.token;
   if (!token) {
