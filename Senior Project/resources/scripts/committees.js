@@ -15,7 +15,8 @@ function setAdmin(officers) {
         });
         var deleteBtn = document.getElementById('confirm-delete');
         deleteBtn.addEventListener('click', function() {
-            var element = document.getElementById(selected_element_id); // global decleared in adminPermission.js ... sorry about that... :(
+            // "selected_element_id" global decleared in adminPermission.js ... sorry about that... :(
+            var element = document.getElementById(selected_element_id); 
             var deleteid = element.dataset.committeeid;
             
             var apiExtension = 'committee/' + deleteid

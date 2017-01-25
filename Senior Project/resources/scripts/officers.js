@@ -1,7 +1,7 @@
 var officerMap = new Object();
 var editName;
 const API_EXTENSION = '';
-
+const MESSAGE_MODAL_ID = 'messageModal';
 
 
 function setAdmin(officers) {
@@ -13,26 +13,47 @@ function setAdmin(officers) {
                     function(json_data, put_id) {
             var apiUrl = 'member/' + put_id
             var xhr = xhrPutRequest(apiUrl);
-            alert('sending API put request...\napi url: "' + apiUrl + '"');
             delete json_data.user_id;
             delete json_data.username;
+            if (json_data.membertype == '') {
+                msg = 'Officers must have a member type.'
+                delete json_data.membertype;
+            }
             xhr.onload = function() { location.reload() };
-            xhr.send(JSON.stringify(json_data)
-            /*{
-                "membertype": json_data.membertype,
-                "firstname": json_data.firstname,
-                "lastname": json_data.lastname,
-                "phone_number": json_data.phone_number,
-                "room_number": json_data.room_number,
-                "hall": json_data.hall,
-                "cm": json_data.cm
-            }) // */
-            );
+            xhr.send(JSON.stringify(json_data));
         });
+        var deleteBtn = document.getElementById('confirm-delete');
+        deleteBtn.addEventListener('click', function() {
+            // "selected_element_id" global decleared in adminPermission.js ... sorry about that... :(
+            var element = document.getElementById(selected_element_id); 
+            var dataset = element.dataset;
+            var json_data = {"memberType": null};
+            var apiUrl = 'member/' + dataset.user_id
+            var xhr = xhrPutRequest(apiUrl);
+            xhr.onload = function () {location.reload()}
+            xhr.send(JSON.stringify(json_data));
+        });        
     }
     var addOfficeButton = document.getElementById("addOfficer");
     addOfficeButton.addEventListener("click", showEmptyModal);
     //addOfficeButton.style.display = "block";
+}
+
+function showMessageModal(message) {
+    var modalBody = document.getElementById('messageModalBody');
+    var text = document.createElement('p');
+    text.appendChild(document.createTextNode(message));
+    modalBody.appendChild(text);
+    $('#' + MESSAGE_MODAL_ID).modal('show');
+}
+
+function setupMessageModal() {
+    $('#' + MESSAGE_MODAL_ID).modal({'show': false});
+    var closeModalBtn = document.getElementById('message-okay');
+    closeModalBtn.addEventListener('click', function () {
+        var modalBody = document.getElementById('messageModalBody');
+        modalBody.innerHTML = ''
+    });
 }
 
 
@@ -58,8 +79,12 @@ function setup() {
     var officerId;
 
     var xhr = xhrGetRequest('officers');
+    xhr.onload = function () { 
+        createHTMLFromResponseText(xhr.responseText);
+    }
     xhr.send();
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+    setupMessageModal();
+    // setTimeout(}, 300);
 
     function createHTMLFromResponseText(officer) {
         officer = JSON.parse(officer);
