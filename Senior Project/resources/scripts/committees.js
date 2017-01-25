@@ -34,8 +34,7 @@ function setupAddCommitteeButton() {
     addCommitteeBtn.style.display = "block"; //*/
     addCommitteeBtn.addEventListener('click', function() {
         var deleteBtn = document.getElementById('modal-delete');
-        deleteBtn.disabled = true;
-        
+        deleteBtn.disabled = true;        
         var committeeName = document.getElementById('committee-modal-committeename')
         committeeName.value = '';
         var committeeDesc = document.getElementById('committee-modal-description')

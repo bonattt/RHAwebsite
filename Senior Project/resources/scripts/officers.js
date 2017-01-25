@@ -6,7 +6,8 @@ const MESSAGE_MODAL_ID = 'messageModal';
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-		var editbuttons = insertEditButtons(
+		setupAddOfficerButton();
+        var editbuttons = insertEditButtons(
                     'officer',
                     'officers-modal-',
                     'user_id',
@@ -37,6 +38,39 @@ function setAdmin(officers) {
     var addOfficeButton = document.getElementById("addOfficer");
     addOfficeButton.addEventListener("click", showEmptyModal);
     //addOfficeButton.style.display = "block";
+}
+
+function setupAddOfficerButton() {
+    var addOfficerBtn = document.getElementById('addOfficer');
+    addOfficerBtn.style.display = "block"; //*/
+    addOfficerBtn.addEventListener('click', function() {
+        var deleteBtn = document.getElementById('modal-delete');
+        deleteBtn.disabled = true;
+        
+        var usernameEntry = document.getElementById('new-officer-username');
+        usernameEntry.value = ''
+        var memebertypeEntry = document.getElementById('new-officer-membertype');
+        memebertypeEntry.value = ''
+        
+        var submitBtn = document.getElementById('modal-submit');
+        var addOfficerSubmit = function() {
+            var urlExtension = 'member/';
+            var json_data = {};
+            var xhr = xhrPostRequest(urlExtension);
+            xhr.onload = function() {location.reload()};
+            xhr.send(JSON.stringify(json_data));            
+            clearSubmitHandlers(submitBtn);
+        }
+        submitBtn.addEventListener('click', addOfficerSubmit);
+        var addOfficerCancel = function () {
+            clearSubmitHandlers(submitBtn);
+            cancelBtn.removeEventListener('click', addOfficerCancel);
+        }
+        var cancelBtn = document.getElementById('modal-cancel');
+        cancelBtn.addEventListener('click', function() {
+            // nothing right now
+        });        
+    });
 }
 
 function showMessageModal(message) {
