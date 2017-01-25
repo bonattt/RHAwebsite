@@ -32,13 +32,78 @@
 		events such as hallympics and Greatest Floor. You can also earn floor money by having at least 2 people from your floor
 		attend the weekly RHA meetings held at 6:15 on Wednesdays in the Faculty Dining Room.
 	</p>
-	<div id="myModal" class="modal fade" role="dialog">
+	<div id="buttonWrapper">
+		<button id="addPaymentButton">Add Payment</button>
+		<button id="addChargeButton">Add Charge</button>
+	</div>
+	<div id="paymentModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Floor Money Details</h4>
+					<h4 class="modal-title">Add Payment</h4>
+				</div>
+				<div class="modal-body">
+					<table>
+						<tbody>
+							<tr>
+								<td> <label>Amount:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="funds-modal-funds_amount" type="text" value="Amount"></input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Person:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td>
+									<input class="modal-text-entry" id="funds-modal-possible_balance" type="text" value="Person"></input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Event:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td>
+									<input class="modal-text-entry" id="funds-modal-possible_balance" type="text" value="Event"></input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>CM:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td>
+									<input class="modal-text-entry" id="funds-modal-possible_balance" type="text" value="CM"></input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Turned-in Date:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td><input type="date" id="signUpOpenDate" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Processed Date:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td><input type="date" id="signUpOpenDate" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="chargeModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add Charge</h4>
 				</div>
 				<div class="modal-body">
 					<table>
@@ -46,7 +111,60 @@
 							<tr>
 								<td> <label>Hall:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <label class="modal-text-entry" id="funds-modal-funds_name" type="text" value="name"> </label>
+								<td> <input class="modal-text-entry" id="funds-modal-funds_amount" type="text" value="Hall"></input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Amount:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="funds-modal-funds_amount" type="text" value="Amount"></input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Event:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td>
+									<input class="modal-text-entry" id="funds-modal-possible_balance" type="text" value="Event"></input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Turned-in Date:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td><input type="date" id="signUpOpenDate" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Processed Date:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td><input type="date" id="signUpOpenDate" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add a Transaction</h4>
+				</div>
+				<div class="modal-body">
+					<table>
+						<tbody>
+							<tr>
+								<td> <label>Hall:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="funds-modal-funds_name" type="text" value="Hall"> </label>
 								</td>
 							</tr>
 
@@ -102,6 +220,7 @@
 					</table>
 				</div>
 				<div class="modal-footer">
+					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
 					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
