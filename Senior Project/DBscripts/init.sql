@@ -10,15 +10,27 @@ CREATE TABLE Members (
         memberType varchar(30), 
         active boolean,
         trip_eligible boolean,
-        meet_attend jsonb,
+        meet_attend jsonb, -- {'Q1': [int], 'Q2': [int], 'Q3': [int]}
         CM int,
         phone_number int,
         room_number varchar(25)
 );
 
+-- Example query for viewing members from Mees hall who attended the first meeting in Fall quarter (0-indexed, but the first meeting is the second week in Q1):
+-- Select * from Members Where meet_attend#>'{Q1, 1}' = '1' AND hall = 'Mees';
+-- See https://www.postgresql.org/docs/9.3/static/functions-json.html for more details on jsonb querying 
+
 CREATE TABLE Expenses (
         expenses_id SERIAL PRIMARY KEY ,
-        data jsonb
+        data jsonb -- {CM: int, 
+                   -- 'Receiver': varchar, 
+                   -- 'AmountUsed': Money, 
+                   -- 'Description': varchar, 
+                   -- 'accountCode': int, 
+                   -- 'DateReceived': datetime, 
+                   -- 'DateProcessed': datetime,
+                   -- 'Reciepts': ['Amount': Money, 
+                   --              'InvoiceDate': datetime]}
 );
 
 CREATE TABLE Funds (
@@ -45,7 +57,7 @@ CREATE TABLE Proposals (
         cost_to_attendee MONEY,
         image_path varchar(100), 
         description varchar(400),
-        attendees jsonb
+        attendees jsonb -- [varchar]
 );
 
 CREATE TABLE Committee (
@@ -100,6 +112,7 @@ CREATE TABLE FloorMoney (
         current_balance Money -- Calculated from current_earned (+), awarded (+), and expenses (-)
 
 );
+
 
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
