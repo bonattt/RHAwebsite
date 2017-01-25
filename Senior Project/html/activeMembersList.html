@@ -33,9 +33,9 @@
 		<input type="radio" class="allMembers" id="allMembers" name="members" checked="checked">All Members<br>
 		<input type="radio" class="activeMembers" id="activeMembers" name="members">Active Members<br>
 	</form>
-	<span>
+	<!--<span>
 		<div id="activeMembersTable"></div>
-	</span>
+	</span>-->
 
 	<div id="myModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
@@ -48,60 +48,59 @@
 				<div class="modal-body">
 					<table>
 						<tbody>
+							<!--TODO: Add if they are trip eligible, how many meetings they have attended-->
 							<tr>
-								<td> <label> firstname </label> </td>
+								<td> <label>Name:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="member-modal-firstname" type="text" value="name"> </input>
-								</td>
-							</tr>
-
-							<tr>
-								<td> <label> lastname </label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="member-modal-lastname" type="text" value="name"> </input>
+								<td> <label class="modal-text-entry" id="member-modal-name" type="text" value="name"> </label>
 								</td>
 							</tr>
 							<tr>
-								<td> <label> member type </label> </td>
+								<td> <label>Member Type:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-membertype" type="text" value="name"> </input>
+								<td> <label class="modal-text-entry" id="member-modal-membertype" type="text" value="name"> </label>
 								</td>
 							</tr>
 							<tr>
-								<td> <label> username </label> </td>
+								<td> <label>Username:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-username" type="text" value="name"> </input>
+								<td> <label class="modal-text-entry" id="member-modal-username" type="text" value="name"> </label>
 								</td>
 							</tr>
 							<tr>
-								<td> <label> phone number </label> </td>
+								<td> <label>Phone Number:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-phone_number" type="text" value="name"> </input>
+								<td> <label class="modal-text-entry" id="member-modal-phone_number" type="text" value="name"> </label>
 								</td>
 							</tr>
 							<tr>
-								<td> <label> hall </label> </td>
+								<td> <label>Hall </label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-hall" type="text" value="name"> </input>
+								<td> <label class="modal-text-entry" id="member-modal-hall" type="text" value="name"> </label>
 								</td>
 							</tr>
 							<tr>
-								<td> <label> room </label> </td>
+								<td> <label>Room:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-room_number" type="text" value="name"> </input>
+								<td> <label class="modal-text-entry" id="member-modal-room_number" type="text" value="name"> </label>
 								</td>
 							</tr>
 							<tr>
-								<td> <label> mailbox </label> </td>
+								<td> <label>CM:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-cm" type="text" value="name"> </input>
+								<td> <label class="modal-text-entry" id="member-modal-cm" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Active:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="member-modal-active" type="text" value="name"> </label>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
 					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
