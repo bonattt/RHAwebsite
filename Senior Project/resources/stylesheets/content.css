@@ -1011,3 +1011,11 @@ td {
 #radioButtons{
 	text-align: center;
 }
+
+#addPaymentButton, #addChargeButton {
+    display: inline;
+}
+
+#buttonWrapper {
+	text-align: center;
+}

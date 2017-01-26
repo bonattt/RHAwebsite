@@ -17,6 +17,7 @@ function setup() {
 }
 
 function submit() {
+
     var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/eventPhoto';
     var photoxhr = new XMLHttpRequest();
 
@@ -63,18 +64,21 @@ function submit() {
 
             dbxhr.open('POST', dbAPIURL, true);
             dbxhr.setRequestHeader('Content-Type', 'application/json');
+            dbxhr.onreadystatechange = function (e) {
+                if(dbxhr.readyState == 4 && dbxhr.status == 200) {
+                    $('#myModal').modal('hide');
+                }
+            }
             dbxhr.onerror = function () {
                 console.log("There was an error");
             }
 
             dbxhr.send(JSON.stringify(dbObject));
+
         }
     };
 
     photoxhr.send(formData);
-    
-    
-
 }
 
 $(document).ready(function() {
