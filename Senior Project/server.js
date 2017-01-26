@@ -24,7 +24,7 @@ var carouselPhotoStorage = multer.diskStorage({
   }
 }); */
 
-var upload = multer({dest: 'resources/images/'});
+var upload = multer({dest: 'resources/images/events/'});
 var type = upload.single('imageFile');
 
 app.use(express.static('resources'));
@@ -88,10 +88,22 @@ app.get('/uploadTest', function(req, res) {
   res.sendFile(__dirname + '/html/uploadTest.html')
 });
 
+/*app.post('/api/v1/carouselPhoto', function(req, res) { //we will need to make this more secure (only let those that have admin permissions make this call)
+  console.log("before calling upload:" + req.files);
+  uploadCarouselPhoto(req, res, function(err) {
+    if(err) {
+      console.log("inside upload:" + req.files);
+      console.log(err);
+      return res.end("Error uploading file.");
+    }
+    res.end("File is uploaded");
+  });
+}); */
+
 app.post('/api/v1/eventPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
     var tmp_path = req.file.path;
-    var target_path = 'resources/images/events/' + req.file.filename + '.' + fileType;
-    var pathToSend = '../images/events/' + req.file.filename + '.' + fileType;
+    var target_path = 'resources/images/events/' + req.file.filename + '_' + req.file.originalname;
+    var pathToSend = '../images/events/' + req.file.filename + '_' + req.file.originalname;
     fs.readFile(tmp_path, function(err, data) {
       fs.writeFile(target_path, data);
       fs.unlink(tmp_path);
@@ -104,8 +116,8 @@ app.post('/api/v1/eventPhoto', type, function(req, res) {  //we will need to mak
 
 app.post('/api/v1/galleryPhoto', type, function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
     var tmp_path = req.file.path;
-    var target_path = 'resources/images/gallery/' + req.file.filename + '.' + fileType;
-    var pathToSend = '../images/gallery/' + req.file.filename + '.' + fileType;
+    var target_path = 'resources/images/gallery/' + req.file.filename + '_' + req.file.originalname;
+    var pathToSend = '../images/gallery/' + req.file.filename + '_' + req.file.originalname;
     fs.readFile(tmp_path, function(err, data) {
       fs.writeFile(target_path, data);
       fs.unlink(tmp_path);
@@ -117,29 +129,14 @@ app.post('/api/v1/galleryPhoto', type, function(req, res) {  //we will need to m
   });
 
 app.post('/api/v1/carouselPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
-  fileType = req.file.mimetype.split('/')[1];
     var tmp_path = req.file.path;
-    var target_path = 'resources/images/carousel/' + req.file.filename + '.' + fileType;
-    var pathToSend = '../images/carousel/' + req.file.filename + '.' + fileType;
+    var target_path = 'resources/images/carousel/' + req.file.filename + '_' + req.file.originalname;
+    var pathToSend = '../images/carousel/' + req.file.filename + '_' + req.file.originalname;
     fs.readFile(tmp_path, function(err, data) {
       fs.writeFile(target_path, data);
       fs.unlink(tmp_path);
       res.filePath = target_path;
       console.log(res);
-      res.status(200).json({filepath: pathToSend}).send();
-      return;
-    });
-  });
-
-app.post('/api/v1/committeePhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
-    fileType = req.file.mimetype.split('/')[1];
-    var tmp_path = req.file.path;
-    var target_path = 'resources/images/committees/' + req.file.filename + '.' + fileType;
-    var pathToSend = '../images/committees/' + req.file.filename + '.' + fileType;
-    fs.readFile(tmp_path, function(err, data) {
-      fs.writeFile(target_path, data);
-      fs.unlink(tmp_path);
-      res.filePath = target_path;
       res.status(200).json({filepath: pathToSend}).send();
       return;
     });
