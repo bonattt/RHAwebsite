@@ -35,42 +35,38 @@ function setAdmin(officers) {
             xhr.send(JSON.stringify(json_data));
         });        
     }
-    var addOfficeButton = document.getElementById("addOfficer");
-    addOfficeButton.addEventListener("click", showEmptyModal);
+    //var addOfficeButton = document.getElementById("addOfficer");
+    //addOfficeButton.addEventListener("click", showEmptyModal);
     //addOfficeButton.style.display = "block";
 }
 
 function setupAddOfficerButton() {
     var addOfficerBtn = document.getElementById('addOfficer');
     addOfficerBtn.style.display = "block"; //*/
-    addOfficerBtn.addEventListener('click', function() {
-        var deleteBtn = document.getElementById('modal-delete');
-        deleteBtn.disabled = true;
-        
+    addOfficerBtn.addEventListener('click', function() {        
         var usernameEntry = document.getElementById('new-officer-username');
         usernameEntry.value = ''
         var memebertypeEntry = document.getElementById('new-officer-membertype');
         memebertypeEntry.value = ''
-        
-        var submitBtn = document.getElementById('modal-submit');
-        var addOfficerSubmit = function() {
-            var urlExtension = 'member/';
-            var json_data = {};
-            var xhr = xhrPostRequest(urlExtension);
-            xhr.onload = function() {location.reload()};
-            xhr.send(JSON.stringify(json_data));            
-            clearSubmitHandlers(submitBtn);
-        }
-        submitBtn.addEventListener('click', addOfficerSubmit);
-        var addOfficerCancel = function () {
-            clearSubmitHandlers(submitBtn);
-            cancelBtn.removeEventListener('click', addOfficerCancel);
-        }
-        var cancelBtn = document.getElementById('modal-cancel');
-        cancelBtn.addEventListener('click', function() {
-            // nothing right now
-        });        
     });
+    var submitBtn = document.getElementById('modal-new-officer-submit');
+    submitBtn.addEventListener('click', function() {
+        var usernameEntry = document.getElementById('new-officer-username');
+        var username = usernameEntry.value;
+        var membertypeEntry = document.getElementById('new-officer-membertype');
+        var memberType = membertypeEntry.value;
+        
+        var urlExtension = 'newOfficer/' + username;
+        var json_data = {"memberType": memberType};
+        var xhr = xhrPutRequest(urlExtension);
+        xhr.onload = function() {location.reload()};
+        // xhr.send(JSON.stringify(json_data));            
+        alert('set new officer!\nusername: ' + username + '\nmemberType: ' + memberType);
+    });
+    var cancelBtn = document.getElementById('modal-cancel');
+    cancelBtn.addEventListener('click', function() {
+        // nothing right now
+    }); 
 }
 
 function showMessageModal(message) {
@@ -163,7 +159,7 @@ function setup() {
 function addDataset(fields, officer) {
 	
 }
-
+/* 
 function showEmptyModal() {
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
@@ -241,7 +237,8 @@ function showEmptyModal() {
             }
         }
     }
-}
+} // */
+/*
 function saveOfficer() {
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
@@ -264,7 +261,7 @@ function saveOfficer() {
     xhr.send(JSON.stringify({ membertype: titleText, firstname: firstName, lastname: lastName, username: username, phone_number: phoneText, cm: cmText, room_number: roomText, hall: hallText }));
     location.reload();
     return xhr;
-}
+}//*/
 function showModal(editImage) {
 	var eventSrc = (editImage.target || editImage.srcElement);
     var modal = document.getElementById('myModal');
