@@ -13,20 +13,19 @@ function setup() {
     fileExt[0] = ".png";
     fileExt[1] = ".jpg";
     fileExt[2] = ".gif";
+    var dir = '/api/v1/galleryPhoto';
+    var fileextension = ".png";
     $.ajax({
         //This will retrieve the contents of the folder if the folder is configured as 'browsable'
-        url: 'resources/images/gallery',
+        url: dir,
         success: function (data) {
-            console.log("data is: ");
-            // $("#fileNames").html('<ul>');
-            // //List all png or jpg or gif file names in the page
-            // // console.log(data);
-            // $(data).find("a:contains(" + fileExt[0] + "),a:contains(" + fileExt[1] + "),a:contains(" + fileExt[2] + ")").each(function () {
-            //     console.log("found an image");
-            //     var filename = this.href.replace(window.location.host, "").replace("http:///", "");
-            //     $("#fileNames").append("<li>" + filename + "</li>");
-            // });
-            // $("#fileNames").append('</ul>');
+            console.log("inside success :)");
+            //List all .png file names in the page
+            $(data).find("a:contains(" + fileextension + ")").each(function () {
+                console.log("found an image!!! :D");
+                var filename = this.href.replace(window.location.host, "").replace("http://", "");
+                $("body").append("<img src='" + dir + filename + "'>");
+            });
         }
     });
     // document.getElementById("fileNames").innerHTML = "<img class='photoGalleryImage' src='../images/gallery/31da25d45be0dbb169ee52557995c2e6_PRAISE-HELIX.png'>";
