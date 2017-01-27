@@ -3,31 +3,19 @@
 //Have a modal pop up that has that image on it
 
 function setup() {
-    // var images = document.getElementsByClassName("photoGalleryImage");
-    // console.log("in setup");
-    // for (var i = 0; i < images.length; i++) {
-    //     images[i].addEventListener('click', function () { showPictureModal("../images/events/tri-hop.png"); });
-    //     console.log("in for loop");
-    // }
-    var fileExt = {};
-    fileExt[0] = ".png";
-    fileExt[1] = ".jpg";
-    fileExt[2] = ".gif";
-    var dir = '/api/v1/galleryPhoto';
-    var fileextension = ".png";
-    $.ajax({
-        //This will retrieve the contents of the folder if the folder is configured as 'browsable'
-        url: dir,
-        success: function (data) {
-            console.log("inside success :)");
-            //List all .png file names in the page
-            $(data).find("a:contains(" + fileextension + ")").each(function () {
-                console.log("found an image!!! :D");
-                var filename = this.href.replace(window.location.host, "").replace("http://", "");
-                $("body").append("<img src='" + dir + filename + "'>");
-            });
-        }
-    });
+	var apiExtension = 'galleryPhoto';
+	var urlExtension = 'galleryPhoto';
+    var xhr = xhrGetRequest(urlExtension);
+    xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) }
+    xhr.send();
+    // setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+
+    function createHTMLFromResponseText(photo) {
+        var photo = JSON.parse(photo);
+        console.log(photo);
+        officersxhr.send();
+        setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
+    }
     // document.getElementById("fileNames").innerHTML = "<img class='photoGalleryImage' src='../images/gallery/31da25d45be0dbb169ee52557995c2e6_PRAISE-HELIX.png'>";
 }
 
