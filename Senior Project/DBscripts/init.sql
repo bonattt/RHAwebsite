@@ -1,18 +1,19 @@
 CREATE DATABASE RHA;
 
 CREATE TABLE Members (
-        user_id SERIAL PRIMARY KEY,
-        username varchar(20),
-        firstname varchar(20),
-        lastname varchar(20),
-        hall varchar(20),
-        image varchar(100),
-        memberType varchar(30), 
-        active boolean,
-        trip_eligible boolean,
-        meet_attend jsonb, -- {'Q1': [int], 'Q2': [int], 'Q3': [int]}
-        CM int,
-        phone_number int,
+    user_id SERIAL PRIMARY KEY,
+    username varchar(20),
+    firstname varchar(20),
+    lastname varchar(20),
+    hall varchar(20),
+    image varchar(100),
+    memberType varchar(30), 
+    active boolean,
+    trip_eligible boolean,
+    meet_attend jsonb, -- {'Q1': [int], 'Q2': [int], 'Q3': [int]}
+    CM int,
+    phone_number int,
+    room_number varchar(25)
 );
 
 -- Example query for viewing members from Mees hall who attended the first meeting in Fall quarter (0-indexed, but the first meeting is the second week in Q1):
@@ -113,36 +114,82 @@ CREATE TABLE FloorMoney (
 
 );
 
-CREATE FUNCTION count_attendance(week int)
- RETURNS int AS $count$
- DECLARE 
-    count int;
- BEGIN 
+-------------------------------------------------------------------
+--                 WORKING EXAMPLE OF A FUNCTION                 --
+--       CALL BY TYPING "Select test();" INTO PSQL TERMINAL      --
 
-   END;
- $count$ LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION test() 
+  RETURNS int AS $test$
+  DECLARE
+    test int;
+  BEGIN 
+    SELECT INTO test count(*) FROM Members;
+  RETURN test;
+  END 
+$test$ LANGUAGE plpgsql;
+
+-------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION count_attendance(week int, quarter varchar, floor varchar)
+  RETURNS int AS $attended$
+  DECLARE 
+    count int;
+    attended int;
+  BEGIN 
+    SELECT INTO count count(*) FROM Members WHERE Members.hall = floor AND Members.meet_attend->quarter->week = '1'; -- Return needs to be compared to a string because it's a JSON datatype
+    RETURN count;
+  END;
+$count$ LANGUAGE plpgsql;
 
 CREATE FUNCTION get_floor_money(size int, attendence int, rate int)
   RETURNS int AS $floor_money$
   DECLARE
     floor_money int;
   BEGIN
-  
+
 
 
   END;
 $floor_money$ LANGUAGE plpgsql;
 
-CREATE FUNCTION calc_earned_money(size int, fall int, winter int, spring int, moneyRate int) 
-  RETURNS int AS $earned$
+-- MODIFY THIS FUNCTION SO THAT IS ADDS ONE ATTENDED MEETING TO FALL, AND ADDS MULTIPLIER TO TOTAL IF QUARTER HAS NOT STARTED YET
+
+CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate int) 
+  RETURNS double precision AS $earned$
   DECLARE
-    earned int;
+    earned double precision;
+    meet_attended double precision := 0;
+    counter int;
+    multiplier double precision;
+    weeks int[] := ARRAY[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    quarters varchar[] := ARRAY['Q1', 'Q2', 'Q3'];
+    x int;
+    y varchar;
   BEGIN
-
-
+    RAISE NOTICE 'MoneyRate = %, size = %', moneyRate, size;
+    multiplier := (1.0 / 1.5) ^ (9.0) * (1.0 / 3.0) * moneyRate * size;
+    RAISE NOTICE 'Value of multiplier: %', multiplier;
+    FOREACH y IN ARRAY quarters
+    LOOP
+      FOREACH x IN ARRAY weeks
+      LOOP
+        RAISE NOTICE 'looping over rows %, %', y, x;
+        SELECT INTO counter 
+        CASE 
+          WHEN (SELECT count_attendance(x, y, floor)) > 0 THEN 1
+          ELSE 0
+        END;
+        RAISE NOTICE 'Attended is %: (1 or 0)', counter;
+        meet_attended := meet_attended + counter;
+      END LOOP;
+    END LOOP;
+  RAISE NOTICE 'Meetings Attended by %: %', floor, meet_attended;
+  earned := multiplier * ((1.5) ^ meet_attended);
+  RAISE NOTICE 'Earned is now: %', earned;
+  RETURN earned;
   END;
 $earned$ LANGUAGE plpgsql;
-
+    
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
                                         Feud, and more. We also show movies outdoors on the big screen, and sponsor an Easter egg hunt in the spring. We also
