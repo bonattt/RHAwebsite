@@ -1,6 +1,7 @@
 *.jar
 
 node_modules/
+.idea/
 
 #################
 ## Eclipse
