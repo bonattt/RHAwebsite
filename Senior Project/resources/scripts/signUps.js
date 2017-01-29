@@ -137,8 +137,9 @@ function saveEvent() {
 
 function displaySignUps() {
     var xhr = getEvents();
+    xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
     xhr.send();
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+//    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
     function createHTMLFromResponseText(proposal) {
         proposal = JSON.parse(proposal);
@@ -161,6 +162,7 @@ function displaySignUps() {
     }
     
     var officersxhr = getOfficers();
+
     officersxhr.send();
 
     function getEvents() {
