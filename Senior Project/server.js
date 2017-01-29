@@ -24,6 +24,7 @@ var carouselPhotoStorage = multer.diskStorage({
   }
 }); */
 
+
 var upload = multer({dest: 'resources/images/'});
 var type = upload.single('imageFile');
 
@@ -88,7 +89,9 @@ app.get('/uploadTest', function (req, res) {
   res.sendFile(__dirname + '/html/uploadTest.html')
 });
 
+
 app.post('/api/v1/eventPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
+  var fileType = req.file.mimetype.split('/')[1];
   var tmp_path = req.file.path;
   var target_path = 'resources/images/events/' + req.file.filename + '.' + fileType;
   var pathToSend = '../images/events/' + req.file.filename + '.' + fileType;
@@ -103,6 +106,7 @@ app.post('/api/v1/eventPhoto', type, function(req, res) {  //we will need to mak
 });
 
 app.post('/api/v1/galleryPhoto', type, function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
+  var fileType = req.file.mimetype.split('/')[1];
   var tmp_path = req.file.path;
   var target_path = 'resources/images/gallery/' + req.file.filename + '.' + fileType;
   var pathToSend = '../images/gallery/' + req.file.filename + '.' + fileType;
@@ -122,12 +126,14 @@ app.get('/api/v1/galleryPhoto', type, function (req, res) {
   fs.readdir(target_path, (err, files) => {
     files.forEach(file => {
       fileList.push(file);
-    });
+      });
+    res.status(200).send(fileList);
+    return;
   });
 });
 
 app.post('/api/v1/carouselPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
-  fileType = req.file.mimetype.split('/')[1];
+  var fileType = req.file.mimetype.split('/')[1];
   var tmp_path = req.file.path;
   var target_path = 'resources/images/carousel/' + req.file.filename + '.' + fileType;
   var pathToSend = '../images/carousel/' + req.file.filename + '.' + fileType;
@@ -142,7 +148,7 @@ app.post('/api/v1/carouselPhoto', type, function(req, res) {  //we will need to 
 });
 
 app.post('/api/v1/committeePhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
-    fileType = req.file.mimetype.split('/')[1];
+    var fileType = req.file.mimetype.split('/')[1];
     var tmp_path = req.file.path;
     var target_path = 'resources/images/committees/' + req.file.filename + '.' + fileType;
     var pathToSend = '../images/committees/' + req.file.filename + '.' + fileType;

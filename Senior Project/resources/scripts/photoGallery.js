@@ -11,7 +11,11 @@ function setup() {
             JSON.parse(xhr.responseText).forEach(fileName => {
                 console.log(fileName);
                 var photosDiv = document.getElementById("photos");
-                photosDiv.innerHTML += "<img class='photoGalleryImage' src=../images/gallery/" + fileName + " data-toggle='modal' data-target='#photoModal'>";
+                var image = document.createElement('image');
+                var filePath = "./images/gallery/" + fileName;
+                image.innerHTML = "<img class='photoGalleryImage' src=" + filePath + " data-toggle='modal' data-target='#photoModal'>";
+                image.addEventListener("click", function () { setUpModal(filePath) });
+                photosDiv.appendChild(image);
             });
         }
     };
@@ -22,6 +26,13 @@ function setup() {
     xhr.send();
     // setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
     // document.getElementById("fileNames").innerHTML = "<img class='photoGalleryImage' src='../images/gallery/31da25d45be0dbb169ee52557995c2e6_PRAISE-HELIX.png'>";
+}
+
+function setUpModal(filePath){
+    console.log("setting up modal");
+    var modalImage = document.getElementById('modalPhoto');
+    modalImage.setAttribute('class', 'modalPhoto');
+    modalImage.setAttribute('src', filePath);
 }
 
 function showPictureModal(source) {
