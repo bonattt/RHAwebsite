@@ -208,7 +208,7 @@ INSERT into Committee VALUES (DEFAULT, 'Publicity', 'Publicity committee is for 
                                         Frequently, we combine with service to create "surblicity" to create one epic force of a committee. Come check it out!', '../images/committees/publicity.jpg');
 
 
--- Most entries below this point are temporary. Once the database has been begun regular use, these inserts will become obselete
+-- Most entries below this point are temporary. Once the database has begun regular use, these inserts will become obselete
 -- BSB 1
 INSERT INTO Members VALUES (DEFAULT, 'duncanj', 'Jason', 'Duncan', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'wilkinsj', 'Joe', 'Wilkins', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
