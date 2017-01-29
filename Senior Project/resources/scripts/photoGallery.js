@@ -3,19 +3,24 @@
 //Have a modal pop up that has that image on it
 
 function setup() {
-	var apiExtension = 'galleryPhoto';
-	var urlExtension = 'galleryPhoto';
-    var xhr = xhrGetRequest(urlExtension);
-    xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) }
+    var galleryURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', galleryURL, true);
+    xhr.onreadystatechange = function (e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            JSON.parse(xhr.responseText).forEach(fileName => {
+                console.log(fileName);
+                var photosDiv = document.getElementById("photos");
+                photosDiv.innerHTML += "<img class='photoGalleryImage' src=../images/gallery/" + fileName + " data-toggle='modal' data-target='#photoModal'>";
+            });
+        }
+    };
+    xhr.onerror = function (err) {
+        console.log('there was en error');
+        console.log(err);
+    }
     xhr.send();
     // setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
-
-    function createHTMLFromResponseText(photo) {
-        var photo = JSON.parse(photo);
-        console.log(photo);
-        officersxhr.send();
-        setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
-    }
     // document.getElementById("fileNames").innerHTML = "<img class='photoGalleryImage' src='../images/gallery/31da25d45be0dbb169ee52557995c2e6_PRAISE-HELIX.png'>";
 }
 

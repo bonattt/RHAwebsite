@@ -135,7 +135,7 @@ app.get('/api/v1/galleryPhoto', type, function (req, res) {
     files.forEach(file => {
       fileList.push(file);
     });
-    res.status(200).json(fileList).send();
+    res.status(200).send(fileList);
     return;
   });
 });
