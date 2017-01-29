@@ -150,8 +150,8 @@ function setup() {
         var officersxhr = getOfficers();
         officersxhr.onload = function () {
             setAdmin(officersxhr.responseText);
-        } 
-        officersxhr.send(); 
+        }
+        officersxhr.send();
         // setTimeout(function () { setAdmin(officersxhr.responseText) }, 300); // */
     }
 }

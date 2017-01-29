@@ -138,8 +138,9 @@ function saveEvent() {
 }
 function setupAdmin(officers) {
     isAdmin = true;
+    enableDeleteButton();
     var hiddenFeatures = document.getElementsByClassName('adminOnly')
-    hiddenFeatures.forEach(function(element) {
+    hiddenFeatures.forEach( function(element) {
         element.style.display = "block";
     });
 }
@@ -148,7 +149,8 @@ function displaySignUps() {
     var officersxhr = getOfficers(); // from adminPErmission.js
     officersxhr.onload = function() {
         if (userIsOfficer(officersxhr.responseText)) {
-            setupAdmin()
+            setupAdmin();
+            enableDeleteButton();
         }
     }
     officersxhr.send();
@@ -174,7 +176,6 @@ function displaySignUps() {
         
         editButtons.forEach(function(element) {
             console.log(element)
-            element.click();
         });
     }
 
@@ -285,7 +286,6 @@ function getEventTextSignupsHtml (proposal, cost, eventDate, signUpOpenDate) {
     fields.forEach(function(field){
             eventTextSignUps.dataset[field] = proposal[field];
         });
-        
     
     var eventName = document.createElement('h1');
     eventName.setAttribute('class', 'eventTitle');
@@ -371,12 +371,27 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     return eventActionDiv;
 }
 
+function enableDeleteButton() {
+    var delBtn = document.getElementById('confirm-delete');
+    delBtn.addEventListener('click', function() {
+        var id = delBtn.dataset.lastclicked;
+        var apiUrl = '???/' + id;
+        var xhr = xhrDeleteRequest(apiUrl);
+        xhr.onload = function() {location.reload()}
+        alert('delete reqest to ' + apiUrl);// xhr.send();
+    });
+}
+
 function createEditButton(proposal_id) {
     var editButton = document.createElement('a');
     editButton.addEventListener('click', getSetupModalDates(dataElementId(proposal_id)));
     editButton.addEventListener('click', generateEditButtonListener(
             dataElementId(proposal_id), MODAL_FIELD_ROOT_ID, submitFunc, "proposal_id"
     ));
+    editButton.addEventListener('click', function() {
+        var delBtn = document.getElementById('confirm-delete');
+        delBtn.dataset.lastclicked = proposal_id
+    });
     editButton.dataset.toggle = 'modal';
     editButton.dataset.target = '#myModal';
     var innerParagraph3 = document.createElement('p');
