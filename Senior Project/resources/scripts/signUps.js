@@ -20,6 +20,8 @@ var signUpCloseDateNode = document.getElementById("signUpCloseDateInput");
 var editValue;
 var listLinks;
 
+var isAdmin = false;
+
 const EVENT_DATE = 'signups-modal-event_date';
 const SIGNUPS_CLOSE = 'signups-modal-event_signup_close';
 const SIGNUPS_OPEN = 'signups-modal-event_signup_open';
@@ -134,8 +136,23 @@ function saveEvent() {
 
     return xhr;
 }
+function setupAdmin(officers) {
+    isAdmin = true;
+    var hiddenFeatures = document.getElementsByClassName('adminOnly')
+    hiddenFeatures.forEach(function(element) {
+        element.style.display = "block";
+    });
+}
 
 function displaySignUps() {
+    var officersxhr = getOfficers(); // from adminPErmission.js
+    officersxhr.onload = function() {
+        if (userIsOfficer(officersxhr.responseText)) {
+            setupAdmin()
+        }
+    }
+    officersxhr.send();
+
     var xhr = getEvents();
     xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
     xhr.send();
@@ -160,10 +177,6 @@ function displaySignUps() {
             element.click();
         });
     }
-    
-    var officersxhr = getOfficers();
-
-    officersxhr.send();
 
     function getEvents() {
         var url = apiURL + 'api/v1/events';
@@ -351,7 +364,14 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     innerParagraph2.appendChild(document.createTextNode('View List'));
     showListLink.appendChild(innerParagraph2);
     eventActionDiv.appendChild(showListLink);
-    
+    if (isAdmin) {
+        var editButton = createEditButton(proposal_id)
+        eventActionDiv.appendChild(editButton);
+    }
+    return eventActionDiv;
+}
+
+function createEditButton(proposal_id) {
     var editButton = document.createElement('a');
     editButton.addEventListener('click', getSetupModalDates(dataElementId(proposal_id)));
     editButton.addEventListener('click', generateEditButtonListener(
@@ -364,8 +384,7 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     innerParagraph3.setAttribute('id', 'editEvent' + proposal_id);
     innerParagraph3.appendChild(document.createTextNode('Edit Event'));
     editButton.appendChild(innerParagraph3);
-    eventActionDiv.appendChild(editButton);
-    return eventActionDiv;
+    return editButton;
 }
 
 function getSetupModalDates(dataElementId) {
@@ -529,6 +548,7 @@ function moreInformationFunction(triggeringElement) {
 
 }
 
+/*
 function getOfficers() {
     var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
     function createCORSRequest(method, url) {
@@ -554,7 +574,7 @@ function getOfficers() {
         console.log("There was an error");
     }
     return xhr;
-}
+}*/
 
 function getAttendees(id) {
     var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/' + id;
