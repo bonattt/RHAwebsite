@@ -134,12 +134,14 @@ $test$ LANGUAGE plpgsql;
 -------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION count_attendance(week int, quarter varchar, floor varchar)
-  RETURNS int AS $attended$
+  RETURNS int AS $count$
   DECLARE 
     count int;
-    attended int;
   BEGIN 
-    SELECT INTO count count(*) FROM Members WHERE Members.hall = floor AND Members.meet_attend->quarter->week = '1'; -- Return needs to be compared to a string because it's a JSON datatype
+    SELECT INTO count count(*) FROM Members WHERE Members.hall = floor AND Members.meet_attend->quarter->week = '1';
+     -- Return needs to be compared to a string because it's a JSON datatype
+    -- RAISE NOTICE 'In count_attendance(): Week = %, quarter = %, return var = %', week, quarter, count;
+
     RETURN count;
   END;
 $count$ LANGUAGE plpgsql;
@@ -149,7 +151,7 @@ $count$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate int) 
   RETURNS double precision AS $earned$
   DECLARE
-    earned double precision;
+    earned double precision := 0;
     meet_attended double precision := 0;
     counter int;
     multiplier double precision;
@@ -163,21 +165,25 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
     RAISE NOTICE 'Value of multiplier: %', multiplier;
     FOREACH y IN ARRAY quarters
     LOOP
+      meet_attended := 0;
       FOREACH x IN ARRAY weeks
       LOOP
         RAISE NOTICE 'looping over rows %, %', y, x;
         SELECT INTO counter 
         CASE 
-          WHEN (SELECT count_attendance(x, y, floor)) > 0 THEN 1
+          WHEN (SELECT count_attendance(x, y, floor)) > 1 THEN 1
           ELSE 0
         END;
         RAISE NOTICE 'Attended is %: (1 or 0)', counter;
         meet_attended := meet_attended + counter;
       END LOOP;
+      IF y = 'Q1' THEN
+        meet_attended = meet_attended + 1; 
+      END IF;
+      RAISE NOTICE 'Meetings Attended by %: %', floor, meet_attended;
+      earned := earned + (multiplier * ((1.5) ^ meet_attended));
+      RAISE NOTICE 'Earned is now: %', earned;
     END LOOP;
-  RAISE NOTICE 'Meetings Attended by %: %', floor, meet_attended;
-  earned := multiplier * ((1.5) ^ meet_attended);
-  RAISE NOTICE 'Earned is now: %', earned;
   RETURN earned;
   END;
 $earned$ LANGUAGE plpgsql;
