@@ -999,6 +999,12 @@ img {
 	font-size: 3vw;
 }
 
+.modalPhoto {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
 #membersTable {
 	border-collapse: collapse;
 	margin-top: 25px;
