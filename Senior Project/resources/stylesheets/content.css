@@ -1012,7 +1012,7 @@ td {
 	text-align: center;
 }
 
-#addPaymentButton, #addChargeButton {
+#addPaymentButton, #addChargeButton, #addAwardButton {
     display: inline;
 }
 
