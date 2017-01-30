@@ -154,11 +154,22 @@ function saveCommittee() {
 
     
     if(files[0] !== null) {
-        var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/eventPhoto';
+        var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/committeePhoto';
         var photoXhr = new XMLHttpRequest();
         var formData = new FormData();
         formData.append("imageFile", files[0]);
-        photoxhr.open('POST', photoAPIURL, true);
+        photoXhr.open('POST', photoAPIURL, true);
+        photoXhr.onreadystatechange = function (e) {
+            var delPhotoXhr = new XMLHttpRequest();
+            delPhotoXhr.open('DELETE', photoAPIURL, true);
+            var oldPhotoName = document.getElementById("")//Put the old photo id here
+            //Will have to get the reference for it from adding ids to buttons and stuff
+            if(photoXhr.readyState == 4 && photoXhr.status == 200) {     
+                var image_path = JSON.parse(photoXhr.responseText).filepath;
+                xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image_path }));
+
+            }
+        }
     } else {
         xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
     }

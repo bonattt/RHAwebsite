@@ -117,7 +117,7 @@ app.post('/api/v1/galleryPhoto', type, function(req, res) {  //we will need to m
   });
 
 app.delete('/api/v1/galleryPhoto', function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
-  var toDeleteAbsolute = 'resources/' + req.body.path.substring(2);
+  var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
   fs.unlink(toDeleteAbsolute);
   console.log(res);
   res.status(200).json({status: 'The file ' + toDeleteAbsolute + ' was deleted.'}).send();
@@ -154,7 +154,7 @@ app.post('/api/v1/committeePhoto', type, function(req, res) {  //we will need to
   });
 
 app.delete('/api/v1/committeePhoto', function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
-  var toDeleteAbsolute = 'resources/' + req.body.path.substring(2);
+  var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
   fs.unlink(toDeleteAbsolute);
   console.log(res);
   res.status(200).json({status: 'The file ' + toDeleteAbsolute + ' was deleted.'}).send();
