@@ -466,7 +466,6 @@ function signUp(eventID) {
     }
 
     xhr.send();
-    console.log("there's an xhr above me");
 
     var signUpSnackbar = document.getElementById("snackbar");
     signUpSnackbar.className = "show";

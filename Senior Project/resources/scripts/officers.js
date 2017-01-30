@@ -56,11 +56,11 @@ function setupAddOfficerButton() {
         var membertypeEntry = document.getElementById('new-officer-membertype');
         var memberType = membertypeEntry.value;
         
-        var urlExtension = 'newOfficer/' + username;
+        var urlExtension = 'members/' + username;
         var json_data = {"memberType": memberType};
         var xhr = xhrPutRequest(urlExtension);
-        xhr.onload = function() {location.reload()};
-        // xhr.send(JSON.stringify(json_data));            
+        xhr.onload = function() {alert('success!')};
+        xhr.send(JSON.stringify(json_data));
         alert('set new officer!\nusername: ' + username + '\nmemberType: ' + memberType);
     });
     var cancelBtn = document.getElementById('modal-cancel');
@@ -77,14 +77,14 @@ function showMessageModal(message) {
     $('#' + MESSAGE_MODAL_ID).modal('show');
 }
 
-function setupMessageModal() {
-    $('#' + MESSAGE_MODAL_ID).modal({'show': false});
-    var closeModalBtn = document.getElementById('message-okay');
-    closeModalBtn.addEventListener('click', function () {
-        var modalBody = document.getElementById('messageModalBody');
-        modalBody.innerHTML = ''
-    });
-}
+//function setupMessageModal() {
+//    $('#' + MESSAGE_MODAL_ID).modal({'show': false});
+//    var closeModalBtn = document.getElementById('message-okay');
+//    closeModalBtn.addEventListener('click', function () {
+//        var modalBody = document.getElementById('messageModalBody');
+//        modalBody.innerHTML = ''
+//    });
+//}
 
 
 function setup() {
@@ -113,7 +113,6 @@ function setup() {
         createHTMLFromResponseText(xhr.responseText);
     }
     xhr.send();
-    setupMessageModal();
     // setTimeout(}, 300);
 
     function createHTMLFromResponseText(officer) {
