@@ -83,7 +83,7 @@ insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipme
 CREATE TABLE Rentals (
     rental_id SERIAL PRIMARY KEY,
     member_id INT references Members (user_id),
-    equipment_id INT references Equipment (equipment_id),
+    equipment_id INT references Equipment (equipmentID),
     approved_by INT references Members (user_id),
     reason_for_rental varchar(100),
     rented_on DATE,
@@ -93,8 +93,7 @@ CREATE TABLE Rentals (
 
 CREATE TABLE FloorAttendanceNumerics (
     numerics_id SERIAL PRIMARY KEY,
-    floor_name varchar(50),
-    floor_s_value int,
+    floor_name varchar(30),
     floor_minimum_attendance int
 );
 
@@ -102,16 +101,20 @@ CREATE TABLE FloorMoney (
     floormoney_id SERIAL PRIMARY KEY,
     hall_and_floor varchar(50),
     residents INT,
-    fall_attendence INT,
-    winter_attendence INT,
-    spring_attendence INT,
     possible_earnings Money,
     current_earned Money,
-    awarded Money,
-    expenses Money, 
     possible_balance Money, -- Calculated from possilbe_earnings (+), awarded (+), and expenses (-)
     current_balance Money -- Calculated from current_earned (+), awarded (+), and expenses (-)
 
+);
+
+CREATE TABLE FloorExpenses (
+    floor_expense_id SERIAL PRIMARY KEY,
+    floor_id INT references FloorMoney (floormoney_id),
+    event_description varchar(100),
+    amount INT,
+    turned_in_date DATE,
+    processed_date DATE  
 );
 
 -------------------------------------------------------------------
@@ -140,17 +143,6 @@ CREATE OR REPLACE FUNCTION count_attendance(week int, quarter varchar, floor var
     RETURN count;
   END;
 $count$ LANGUAGE plpgsql;
-
-CREATE FUNCTION get_floor_money(size int, attendence int, rate int)
-  RETURNS int AS $floor_money$
-  DECLARE
-    floor_money int;
-  BEGIN
-
-
-
-  END;
-$floor_money$ LANGUAGE plpgsql;
 
 -- MODIFY THIS FUNCTION SO THAT IS ADDS ONE ATTENDED MEETING TO FALL, AND ADDS MULTIPLIER TO TOTAL IF QUARTER HAS NOT STARTED YET
 
