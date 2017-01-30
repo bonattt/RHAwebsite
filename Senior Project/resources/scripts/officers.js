@@ -59,9 +59,8 @@ function setupAddOfficerButton() {
         var urlExtension = 'members/' + username;
         var json_data = {"memberType": memberType};
         var xhr = xhrPutRequest(urlExtension);
-        xhr.onload = function() {alert('success!')};
+        xhr.onload = function() {location.reload()};
         xhr.send(JSON.stringify(json_data));
-        alert('set new officer!\nusername: ' + username + '\nmemberType: ' + memberType);
     });
     var cancelBtn = document.getElementById('modal-cancel');
     cancelBtn.addEventListener('click', function() {
