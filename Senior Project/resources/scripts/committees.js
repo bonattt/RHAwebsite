@@ -113,10 +113,10 @@ function setup() {
                 var html = "<div class='committeeWrapperRight'>";
                 html += "<div class='committees'><h3 class='edit' id='committee" + id + "'>" + committee[i].committeename + "</h3>";
                 html += "<p>" + committee[i].description + "</p></div>";
-                html += "<image class='committeePhoto' src=" + committee[i].image + " alt=" + committee[i].committeename + "></div>";
+                html += "<image class='committeePhoto' id=image" + i + " src=" + committee[i].image + " alt=" + committee[i].committeename + "></div>";
             } else {
                 var html = "<div class='committeeWrapperLeft'>";
-                html += "<image class='committeePhoto' src=" + committee[i].image + " alt=" + committee[i].committeename + ">";
+                html += "<image class='committeePhoto' id=image" + i + " src=" + committee[i].image + " alt=" + committee[i].committeename + ">";
                 html += "<div class='committees'><h3 class='edit' id='committee" + id + "'>" + committee[i].committeename + "</h3>";
                 html += "<p>" + committee[i].description + "</p></div></div>";
             }
@@ -147,12 +147,23 @@ function submit(){
 
 function saveCommittee() {
     var urlExtension = 'committee/' + committeeID;
-    
     var xhr = xhrPutRequest(urlExtension);
     var committeeName = document.getElementById("committee-text").value;
     var description = document.getElementById("description-text").value;
-    var image = "images/committees/" + document.getElementById("image-text").value;
-    xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
+    var files = document.getElementById("imageFile").files;
+
+    
+    if(files[0] !== null) {
+        var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/eventPhoto';
+        var photoXhr = new XMLHttpRequest();
+        var formData = new FormData();
+        formData.append("imageFile", files[0]);
+        photoxhr.open('POST', photoAPIURL, true);
+    } else {
+        xhr.send(JSON.stringify({ committeename: committeeName, description: description, image: image }));
+    }
+
+
     return xhr;
 
 }
