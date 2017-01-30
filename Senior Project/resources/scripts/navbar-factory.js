@@ -10,6 +10,7 @@ window.onload = function () {
 		'				<a href="sign-ups">Sign-Ups</a>' +
 		'				<a href="pastEvents">Past Events</a>' +
 		'				<a href="proposals">Submit a Proposal</a>' +
+		'				<a href="listAllProposals">List Proposals</a>' +
 		'			</div>' +
 		'		</div>' +
 		'		<div class="dropdown">' +
