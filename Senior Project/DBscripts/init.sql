@@ -187,7 +187,30 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
   RETURN earned;
   END;
 $earned$ LANGUAGE plpgsql;
-    
+
+CREATE OR REPLACE FUNCTION calc_possible_money(floor varchar, size int, moneyRate int) 
+  RETURNS double precision AS $possible$
+  DECLARE
+    attendance json;
+    possible double precision := 0;
+    current_max_meetings int := 1;
+    counter int;
+    multiplier double precision;
+    quarters varchar[] := ARRAY['Q1', 'Q2', 'Q3'];
+    x varchar;
+  BEGIN
+    FOREACH x IN ARRAY quarters
+    LOOP
+      SELECT INTO attendance Members.meet_attend->x FROM Members WHERE Members.user_id = 1;
+      SELECT INTO counter (SELECT json_array_length(attendance));
+      RAISE NOTICE 'Quarter: %, counter: %', x, counter;
+      current_max_meetings := current_max_meetings + counter;
+    END LOOP;
+    RAISE NOTICE 'Max meetings: %', current_max_meetings;
+  END;
+$possible$ LANGUAGE plpgsql;
+
+
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
                                         Feud, and more. We also show movies outdoors on the big screen, and sponsor an Easter egg hunt in the spring. We also
