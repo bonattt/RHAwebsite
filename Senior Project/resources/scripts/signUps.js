@@ -375,10 +375,10 @@ function enableDeleteButton() {
     var delBtn = document.getElementById('confirm-delete');
     delBtn.addEventListener('click', function() {
         var id = delBtn.dataset.lastclicked;
-        var apiUrl = '???/' + id;
+        var apiUrl = 'event/' + id;
         var xhr = xhrDeleteRequest(apiUrl);
-        xhr.onload = function() {location.reload()}
-        alert('delete reqest to ' + apiUrl);// xhr.send();
+        xhr.onload = function() {location.reload()};
+        xhr.send();
     });
 }
 
