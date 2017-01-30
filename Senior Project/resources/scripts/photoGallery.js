@@ -3,12 +3,36 @@
 //Have a modal pop up that has that image on it
 
 function setup() {
-    var images = document.getElementsByClassName("photoGalleryImage");
-    console.log("in setup");
-    for (var i = 0; i < images.length; i++) {
-        images[i].addEventListener('click', function () { showPictureModal("../images/events/tri-hop.png"); });
-        console.log("in for loop");
+    var galleryURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', galleryURL, true);
+    xhr.onreadystatechange = function (e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            JSON.parse(xhr.responseText).forEach(fileName => {
+                console.log(fileName);
+                var photosDiv = document.getElementById("photos");
+                var image = document.createElement('image');
+                var filePath = "./images/gallery/" + fileName;
+                image.innerHTML = "<img class='photoGalleryImage' src=" + filePath + " data-toggle='modal' data-target='#photoModal'>";
+                image.addEventListener("click", function () { setUpModal(filePath) });
+                photosDiv.appendChild(image);
+            });
+        }
+    };
+    xhr.onerror = function (err) {
+        console.log('there was en error');
+        console.log(err);
     }
+    xhr.send();
+    // setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+    // document.getElementById("fileNames").innerHTML = "<img class='photoGalleryImage' src='../images/gallery/31da25d45be0dbb169ee52557995c2e6_PRAISE-HELIX.png'>";
+}
+
+function setUpModal(filePath){
+    console.log("setting up modal");
+    var modalImage = document.getElementById('modalPhoto');
+    modalImage.setAttribute('class', 'modalPhoto');
+    modalImage.setAttribute('src', filePath);
 }
 
 function showPictureModal(source) {
@@ -31,7 +55,7 @@ function showPictureModal(source) {
 }
 
 function uploadPhoto() {
-    var photoUploadApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/galleryPhoto';
+    var photoUploadApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
     var photoxhr = new XMLHttpRequest();
     var files = document.getElementById("imageFile").files;
 
@@ -40,7 +64,7 @@ function uploadPhoto() {
     photoxhr.open('POST', photoUploadApi, true);
 
     photoxhr.onreadystatechange = function (e) {
-        if(photoxhr.readyState == 4 && photoxhr.status == 200) {
+        if (photoxhr.readyState == 4 && photoxhr.status == 200) {
             $('#uploadModal').modal('hide');
         }
     };
