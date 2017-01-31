@@ -9,6 +9,7 @@ var tdreserve = document.createElement('td');
 var tdused = document.createElement('td');
 var tdIsOpen = document.createElement('td');
 var tdQuarter = document.createElement('td');
+var tdWeek = document.createElement('td');
 var tdDate = document.createElement('td');
 var countForColoring = 0;
 
@@ -22,6 +23,10 @@ function displayProposals() {
 
     function createHTMLFromResponseText(proposal) {
         proposal = JSON.parse(proposal);
+        drawTable(proposal);
+    }
+
+    function drawTable(proposal) {
         for (var i = proposal.length - 1; i >= 0; i--) {
             tr = document.createElement('tr');
             tr.setAttribute('proposal', i);
@@ -37,11 +42,16 @@ function displayProposals() {
             tdname.innerHTML = proposal[i].proposal_name;
 
             var tddate = document.createElement('td');
-            tddate.innerHTML = proposal[i].event_date;
+            var eventDate = new Date(proposal[i].event_date);
+            eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
+            tddate.innerHTML = eventDate;
+
+            tdweek = document.createElement('td');
+            tdweek.innerHTML = proposal[i].week_proposed;
 
             var tdquarter = document.createElement('td');
             tdquarter.innerHTML = proposal[i].quarter_proposed;
-            
+
             var tdrequested = document.createElement('td');
             tdrequested.innerHTML = proposal[i].money_requested;
 
@@ -65,6 +75,7 @@ function displayProposals() {
             tr.appendChild(tdpaid);
             tr.appendChild(tddate);
             tr.appendChild(tdquarter);
+            tr.appendChild(tdweek);
             tbdy.appendChild(tr);
         }
         table.appendChild(tbdy);
@@ -103,50 +114,55 @@ function displayProposals() {
 
 $(document).ready(function () {
     displayProposals();
-table.innerHTML = "";
-table.setAttribute('border', 1);
-table.setAttribute('align', 'center');
-table.setAttribute('bordercolor', '#808080');
-table.setAttribute('id', 'proposalsTable');
+    table.innerHTML = "";
+    table.setAttribute('border', 1);
+    table.setAttribute('align', 'center');
+    table.setAttribute('bordercolor', '#808080');
+    table.setAttribute('id', 'proposalsTable');
 
-tdName.setAttribute('align', 'middle');
-tdName.setAttribute('width', 200);
-tdName.innerHTML = "Name";
+    tdName.setAttribute('align', 'middle');
+    tdName.setAttribute('width', 200);
+    tdName.innerHTML = "Name";
 
-tdRequested.setAttribute('align', 'middle');
-tdRequested.setAttribute('width', 200);
-tdRequested.innerHTML = "Amount Requested";
+    tdRequested.setAttribute('align', 'middle');
+    tdRequested.setAttribute('width', 200);
+    tdRequested.innerHTML = "Amount Requested";
 
-tdBudgeted.setAttribute('align', 'middle');
-tdBudgeted.setAttribute('width', 200);
-tdBudgeted.innerHTML = "Amount Budgeted";
+    tdBudgeted.setAttribute('align', 'middle');
+    tdBudgeted.setAttribute('width', 200);
+    tdBudgeted.innerHTML = "Amount Budgeted";
 
-tdreserve.setAttribute('align', 'middle');
-tdreserve.setAttribute('width', 200);
-tdreserve.innerHTML = "Reserve";
+    tdreserve.setAttribute('align', 'middle');
+    tdreserve.setAttribute('width', 200);
+    tdreserve.innerHTML = "Reserve";
 
-tdused.setAttribute('align', 'middle');
-tdused.setAttribute('width', 200);
-tdused.innerHTML = "Used";
+    tdused.setAttribute('align', 'middle');
+    tdused.setAttribute('width', 200);
+    tdused.innerHTML = "Used";
 
-tdIsOpen.setAttribute('align', 'middle');
-tdIsOpen.setAttribute('width', 200);
-tdIsOpen.innerHTML = "Is Open";
+    tdIsOpen.setAttribute('align', 'middle');
+    tdIsOpen.setAttribute('width', 200);
+    tdIsOpen.innerHTML = "Is Open";
 
-tdDate.setAttribute('align', 'middle');
-tdDate.setAttribute('width', 200);
-tdDate.innerHTML = "Date";
+    tdDate.setAttribute('align', 'middle');
+    tdDate.setAttribute('width', 200);
+    tdDate.innerHTML = "Date";
 
-tdQuarter.setAttribute('align', 'middle');
-tdQuarter.setAttribute('width', 200);
-tdQuarter.innerHTML = "Quarter";
+    tdQuarter.setAttribute('align', 'middle');
+    tdQuarter.setAttribute('width', 200);
+    tdQuarter.innerHTML = "Quarter";
 
-tbdy.appendChild(tdName);
-tbdy.appendChild(tdRequested);
-tbdy.appendChild(tdBudgeted);
-tbdy.appendChild(tdreserve);
-tbdy.appendChild(tdused);
-tbdy.appendChild(tdIsOpen);
-tbdy.appendChild(tdDate);
-tbdy.appendChild(tdQuarter);
+    tdWeek.setAttribute('align', 'middle');
+    tdWeek.setAttribute('width', 200);
+    tdWeek.innerHTML = "Week";
+
+    tbdy.appendChild(tdName);
+    tbdy.appendChild(tdRequested);
+    tbdy.appendChild(tdBudgeted);
+    tbdy.appendChild(tdreserve);
+    tbdy.appendChild(tdused);
+    tbdy.appendChild(tdIsOpen);
+    tbdy.appendChild(tdDate);
+    tbdy.appendChild(tdQuarter);
+    tbdy.appendChild(tdWeek);
 });
