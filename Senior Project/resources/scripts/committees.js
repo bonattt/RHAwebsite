@@ -6,12 +6,6 @@ function setAdmin(officers) {
         setupAddCommitteeButton();
 		var editButtons = insertEditButtons('committee', 'committee-modal-', 'committeeid',
                 function(json_data, put_id) {
-            /* // *** this is where I'm working ***
-            var apiUrl = 'committee/' + put_id
-            var xhr = xhrPutRequest(apiUrl);
-            var body = {"description": json_data.description, "committeename": json_data.committeename} // , "committeeName": "test committee"};
-            xhr.onload = function() { location.reload() };
-            xhr.send(JSON.stringify(body)); */
             saveCommittee(json_data);
         }); 
         var deleteBtn = document.getElementById('confirm-delete');
@@ -82,19 +76,6 @@ function setupAddCommitteeButton() {
     });
 }
 
-
-
-/*
-var setupEditModal = function(dataElementId, taretIdRoot) {
-	var dataset = document.getElementById(dataElementId).dataset;
-	
-	var nameField = document.getElementById("committee-modal-name");
-	nameField.value = dataset.name;
-	
-	var descriptionField = document.getElementById("committee-modal-desc");
-	descriptionField.value = dataset.desc;
-}   
-*/
 function setup() {
 	var apiExtension = 'committees/';
 	// enableSubmitButton("everyCommitteeEver", "committee-modal-", apiExtension);
@@ -138,13 +119,6 @@ function setup() {
         setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
     }
 }
-
-/*function submit(){
-    var modal = document.getElementById("myModal");
-    modal.style.display = "none";
-    saveCommittee();
-    window.location.reload();
-} */
 
 function saveCommittee(data) {
     var urlExtension = 'committee/' + data.committeeid;
