@@ -20,6 +20,8 @@ var signUpCloseDateNode = document.getElementById("signUpCloseDateInput");
 var editValue;
 var listLinks;
 
+var isAdmin = false;
+
 const EVENT_DATE = 'signups-modal-event_date';
 const SIGNUPS_CLOSE = 'signups-modal-event_signup_close';
 const SIGNUPS_OPEN = 'signups-modal-event_signup_open';
@@ -134,11 +136,29 @@ function saveEvent() {
 
     return xhr;
 }
+function setupAdmin(officers) {
+    isAdmin = true;
+    enableDeleteButton();
+    var hiddenFeatures = document.getElementsByClassName('adminOnly')
+    hiddenFeatures.forEach( function(element) {
+        element.style.display = "block";
+    });
+}
 
 function displaySignUps() {
+    var officersxhr = getOfficers(); // from adminPErmission.js
+    officersxhr.onload = function() {
+        if (userIsOfficer(officersxhr.responseText)) {
+            setupAdmin();
+            enableDeleteButton();
+        }
+    }
+    officersxhr.send();
+
     var xhr = getEvents();
+    xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
     xhr.send();
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+//    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
     function createHTMLFromResponseText(proposal) {
         proposal = JSON.parse(proposal);
@@ -156,12 +176,8 @@ function displaySignUps() {
         
         editButtons.forEach(function(element) {
             console.log(element)
-            element.click();
         });
     }
-    
-    var officersxhr = getOfficers();
-    officersxhr.send();
 
     function getEvents() {
         var url = apiURL + 'api/v1/events';
@@ -270,7 +286,6 @@ function getEventTextSignupsHtml (proposal, cost, eventDate, signUpOpenDate) {
     fields.forEach(function(field){
             eventTextSignUps.dataset[field] = proposal[field];
         });
-        
     
     var eventName = document.createElement('h1');
     eventName.setAttribute('class', 'eventTitle');
@@ -349,12 +364,34 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     innerParagraph2.appendChild(document.createTextNode('View List'));
     showListLink.appendChild(innerParagraph2);
     eventActionDiv.appendChild(showListLink);
-    
+    if (isAdmin) {
+        var editButton = createEditButton(proposal_id)
+        eventActionDiv.appendChild(editButton);
+    }
+    return eventActionDiv;
+}
+
+function enableDeleteButton() {
+    var delBtn = document.getElementById('confirm-delete');
+    delBtn.addEventListener('click', function() {
+        var id = delBtn.dataset.lastclicked;
+        var apiUrl = 'event/' + id;
+        var xhr = xhrDeleteRequest(apiUrl);
+        xhr.onload = function() {location.reload()};
+        xhr.send();
+    });
+}
+
+function createEditButton(proposal_id) {
     var editButton = document.createElement('a');
     editButton.addEventListener('click', getSetupModalDates(dataElementId(proposal_id)));
     editButton.addEventListener('click', generateEditButtonListener(
             dataElementId(proposal_id), MODAL_FIELD_ROOT_ID, submitFunc, "proposal_id"
     ));
+    editButton.addEventListener('click', function() {
+        var delBtn = document.getElementById('confirm-delete');
+        delBtn.dataset.lastclicked = proposal_id
+    });
     editButton.dataset.toggle = 'modal';
     editButton.dataset.target = '#myModal';
     var innerParagraph3 = document.createElement('p');
@@ -362,8 +399,7 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     innerParagraph3.setAttribute('id', 'editEvent' + proposal_id);
     innerParagraph3.appendChild(document.createTextNode('Edit Event'));
     editButton.appendChild(innerParagraph3);
-    eventActionDiv.appendChild(editButton);
-    return eventActionDiv;
+    return editButton;
 }
 
 function getSetupModalDates(dataElementId) {
@@ -527,6 +563,7 @@ function moreInformationFunction(triggeringElement) {
 
 }
 
+/*
 function getOfficers() {
     var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
     function createCORSRequest(method, url) {
@@ -552,7 +589,7 @@ function getOfficers() {
         console.log("There was an error");
     }
     return xhr;
-}
+}*/
 
 function getAttendees(id) {
     var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/' + id;

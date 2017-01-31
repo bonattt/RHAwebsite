@@ -15,7 +15,8 @@ function setAdmin(officers) {
         });
         var deleteBtn = document.getElementById('confirm-delete');
         deleteBtn.addEventListener('click', function() {
-            var element = document.getElementById(selected_element_id); // global decleared in adminPermission.js ... sorry about that... :(
+            // "selected_element_id" global decleared in adminPermission.js ... sorry about that... :(
+            var element = document.getElementById(selected_element_id); 
             var deleteid = element.dataset.committeeid;
             
             var apiExtension = 'committee/' + deleteid
@@ -33,8 +34,7 @@ function setupAddCommitteeButton() {
     addCommitteeBtn.style.display = "block"; //*/
     addCommitteeBtn.addEventListener('click', function() {
         var deleteBtn = document.getElementById('modal-delete');
-        deleteBtn.disabled = true;
-        
+        deleteBtn.disabled = true;        
         var committeeName = document.getElementById('committee-modal-committeename')
         committeeName.value = '';
         var committeeDesc = document.getElementById('committee-modal-description')

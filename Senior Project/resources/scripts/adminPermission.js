@@ -66,7 +66,6 @@ var generateEditButtonListener = function(dataElementId, uiElementRootId, submit
                 deleteBtn.disabled = false;
             } else {
                 console.log(deleteBtn);
-                alert('no delete button');
             }
             setupEditModal(dataElementId, uiElementRootId, submitFunc, idFieldName);
      };
