@@ -13,7 +13,7 @@ var tdDate = document.createElement('td');
 var countForColoring = 0;
 
 
-function displayPastProposals() {
+function displayProposals() {
     var xhr = getEvents();
     xhr.onload = function () {
         createHTMLFromResponseText(xhr.responseText)
@@ -33,13 +33,38 @@ function displayPastProposals() {
             }
             countForColoring++;
 
-            var td = document.createElement('td');
-            td.innerHTML = proposal[i].proposal_name;
+            var tdname = document.createElement('td');
+            tdname.innerHTML = proposal[i].proposal_name;
 
-            var td2 = document.createElement('td');
-            td2.innerHTML = proposal[i].event_date;
-            tr.appendChild(td);
-            tr.appendChild(td2);
+            var tddate = document.createElement('td');
+            tddate.innerHTML = proposal[i].event_date;
+
+            var tdquarter = document.createElement('td');
+            tdquarter.innerHTML = proposal[i].quarter_proposed;
+            
+            var tdrequested = document.createElement('td');
+            tdrequested.innerHTML = proposal[i].money_requested;
+
+            var tdallocated = document.createElement('td');
+            tdallocated.innerHTML = proposal[i].money_allocated;
+
+            var tdpaid = document.createElement('td');
+            tdpaid.innerHTML = proposal[i].paid;
+
+            var tdreserve = document.createElement('td');
+            tdreserve.innerHTML = "reserve tbd";
+
+            var tdused = document.createElement('td');
+            tdused.innerHTML = "used tbd";
+
+            tr.appendChild(tdname);
+            tr.appendChild(tdrequested);
+            tr.appendChild(tdallocated);
+            tr.appendChild(tdreserve);
+            tr.appendChild(tdused);
+            tr.appendChild(tdpaid);
+            tr.appendChild(tddate);
+            tr.appendChild(tdquarter);
             tbdy.appendChild(tr);
         }
         table.appendChild(tbdy);
@@ -47,7 +72,7 @@ function displayPastProposals() {
     }
 
     function getEvents() {
-        var url = apiURL + 'api/v1/pastevents';
+        var url = apiURL + 'api/v1/allEvents';
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
             if ("withCredentials" in xhr) {
@@ -60,96 +85,6 @@ function displayPastProposals() {
             }
             return xhr;
         }
-        var xhr = createCORSRequest('GET', url);
-        if (!xhr) {
-            throw new Error('CORS not supported');
-        }
-
-        xhr.onload = function () {
-            var responseText = xhr.responseText;
-        }
-
-        xhr.onerror = function () {
-            console.log("There was an error");
-        }
-        return xhr;
-    }
-}
-
-function displayUpcomingProposals() {
-    var xhr = getEvents();
-    xhr.send();
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
-
-    function createHTMLFromResponseText(proposal) {
-        proposal = JSON.parse(proposal);
-        var editButtons = [];
-
-        for (var i = 0; i < proposal.length; i++) {
-            console.log(proposal[i]);
-            tr = document.createElement('tr');
-            tr.setAttribute('proposal', i);
-            tr.setAttribute('data-toggle', 'modal');
-            tr.setAttribute('data-target', '#myModal');
-            //doClosure(members, i);
-            if (countForColoring % 2 == 0) {
-                tr.setAttribute('bgcolor', '#f0f0f0');
-            }
-            countForColoring++;
-
-            var td = document.createElement('td');
-            td.innerHTML = proposal[i].proposal_name;
-
-            var td2 = document.createElement('td');
-            td2.innerHTML = proposal[i].event_date;
-
-            var td3 = document.createElement('td');
-            td3.innerHTML = proposal[i].money_requested;
-
-            var td4 = document.createElement('td');
-            td4.innerHTML = proposal[i].money_allocated;
-
-            var td5 = document.createElement('td');
-            td5.innerHTML = proposal[i].event_date;
-
-            var td6 = document.createElement('td');
-            td6.innerHTML = proposal[i].event_date;
-
-            var td7 = document.createElement('td');
-            td7.innerHTML = proposal[i].event_date;
-
-            var td8 = document.createElement('td');
-            td8.innerHTML = proposal[i].event_date;
-
-            var td9 = document.createElement('td');
-            td9.innerHTML = proposal[i].quarter_proposed;
-            tr.appendChild(td);
-            tr.appendChild(td2);
-            tr.appendChild(td9);
-            tbdy.appendChild(tr);
-        }
-        table.appendChild(tbdy);
-        body.appendChild(table);
-    }
-
-    var officersxhr = getOfficers();
-    officersxhr.send();
-
-    function getEvents() {
-        var url = apiURL + 'api/v1/events';
-        function createCORSRequest(method, url) {
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-                xhr.open(method, url, true);
-            } else if (typeof XDomainRequest != "undefined") {
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-            } else {
-                xhr = null;
-            }
-            return xhr;
-        }
-
         var xhr = createCORSRequest('GET', url);
         if (!xhr) {
             throw new Error('CORS not supported');
@@ -167,8 +102,7 @@ function displayUpcomingProposals() {
 }
 
 $(document).ready(function () {
-    displayPastProposals();
-    displayUpcomingProposals();
+    displayProposals();
 table.innerHTML = "";
 table.setAttribute('border', 1);
 table.setAttribute('align', 'center');
