@@ -24,12 +24,13 @@ var carouselPhotoStorage = multer.diskStorage({
   }
 }); */
 
+
 var upload = multer({dest: 'resources/images/'});
 var type = upload.single('imageFile');
 
 app.use(express.static('resources'));
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
@@ -41,11 +42,11 @@ var rosefire = new RosefireTokenVerifier(SECRET);
 console.log("hey there");
 
 app.get('/', function (req, res) {
-	res.sendFile(__dirname + '/html/RHAhome.html');
+  res.sendFile(__dirname + '/html/RHAhome.html');
 });
 
 app.get('/proposals', function (req, res) {
-	res.sendFile(__dirname + '/html/proposals.html');
+  res.sendFile(__dirname + '/html/proposals.html');
 });
 
 app.get('/listAllProposals', function (req, res) {
@@ -53,90 +54,105 @@ app.get('/listAllProposals', function (req, res) {
 });
 
 app.get('/sign-ups', function (req, res) {
-	res.sendFile(__dirname + '/html/sign-ups.html');
+  res.sendFile(__dirname + '/html/sign-ups.html');
 });
 
 app.get('/pastEvents', function (req, res) {
-	res.sendFile(__dirname + '/html/pastEvents.html');
+  res.sendFile(__dirname + '/html/pastEvents.html');
 });
 
 app.get('/subwayCam', function (req, res) {
-	res.sendFile(__dirname + '/html/subwayCam.html');
+  res.sendFile(__dirname + '/html/subwayCam.html');
 });
 
 app.get('/photoGallery', function (req, res) {
-	res.sendFile(__dirname + '/html/photoGallery.html');
+  res.sendFile(__dirname + '/html/photoGallery.html');
 });
 
 app.get('/reserveEquipment', function (req, res) {
-	res.sendFile(__dirname + '/html/reserveEquipment.html');
+  res.sendFile(__dirname + '/html/reserveEquipment.html');
 });
 
 app.get('/activeMembersList', function (req, res) {
-	res.sendFile(__dirname + '/html/activeMembersList.html');
+  res.sendFile(__dirname + '/html/activeMembersList.html');
 });
 
 app.get('/floorMoney', function (req, res) {
-	res.sendFile(__dirname + '/html/floorMoney.html');
+  res.sendFile(__dirname + '/html/floorMoney.html');
 });
 
 app.get('/officers', function (req, res) {
-	res.sendFile(__dirname + '/html/officers.html');
+  res.sendFile(__dirname + '/html/officers.html');
 });
 
 app.get('/committees', function (req, res) {
-	res.sendFile(__dirname + '/html/committees.html');
+  res.sendFile(__dirname + '/html/committees.html');
 });
 
-app.get('/uploadTest', function(req, res) {
+app.get('/uploadTest', function (req, res) {
   res.sendFile(__dirname + '/html/uploadTest.html')
 });
 
+
 app.post('/api/v1/eventPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
-    var tmp_path = req.file.path;
-    var target_path = 'resources/images/events/' + req.file.filename + '.' + fileType;
-    var pathToSend = '../images/events/' + req.file.filename + '.' + fileType;
-    fs.readFile(tmp_path, function(err, data) {
-      fs.writeFile(target_path, data);
-      fs.unlink(tmp_path);
-      res.filePath = target_path;
-      console.log(res);
-      res.status(200).json({filepath: pathToSend}).send();
-      return;
-    });
+  var fileType = req.file.mimetype.split('/')[1];
+  var tmp_path = req.file.path;
+  var target_path = 'resources/images/events/' + req.file.filename + '.' + fileType;
+  var pathToSend = '../images/events/' + req.file.filename + '.' + fileType;
+  fs.readFile(tmp_path, function(err, data) {
+    fs.writeFile(target_path, data);
+    fs.unlink(tmp_path);
+    res.filePath = target_path;
+    console.log(res);
+    res.status(200).json({filepath: pathToSend}).send();
+    return;
   });
+});
 
 app.post('/api/v1/galleryPhoto', type, function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
-    var tmp_path = req.file.path;
-    var target_path = 'resources/images/gallery/' + req.file.filename + '.' + fileType;
-    var pathToSend = '../images/gallery/' + req.file.filename + '.' + fileType;
-    fs.readFile(tmp_path, function(err, data) {
-      fs.writeFile(target_path, data);
-      fs.unlink(tmp_path);
-      res.filePath = target_path;
-      console.log(res);
-      res.status(200).json({filepath: pathToSend}).send();
-      return;
-    });
+  var fileType = req.file.mimetype.split('/')[1];
+  var tmp_path = req.file.path;
+  var target_path = 'resources/images/gallery/' + req.file.filename + '.' + fileType;
+  var pathToSend = '../images/gallery/' + req.file.filename + '.' + fileType;
+  fs.readFile(tmp_path, function(err, data) {
+    fs.writeFile(target_path, data);
+    fs.unlink(tmp_path);
+    res.filePath = target_path;
+    console.log(res);
+    res.status(200).json({filepath: pathToSend}).send();
+    return;
   });
+});
+
+app.get('/api/v1/galleryPhoto', type, function (req, res) {
+  var target_path = 'resources/images/gallery/';
+  var fileList = new Array();
+  fs.readdir(target_path, (err, files) => {
+    files.forEach(file => {
+      fileList.push(file);
+      });
+    res.status(200).send(fileList);
+    return;
+  });
+});
 
 app.post('/api/v1/carouselPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
-  fileType = req.file.mimetype.split('/')[1];
-    var tmp_path = req.file.path;
-    var target_path = 'resources/images/carousel/' + req.file.filename + '.' + fileType;
-    var pathToSend = '../images/carousel/' + req.file.filename + '.' + fileType;
-    fs.readFile(tmp_path, function(err, data) {
-      fs.writeFile(target_path, data);
-      fs.unlink(tmp_path);
-      res.filePath = target_path;
-      console.log(res);
-      res.status(200).json({filepath: pathToSend}).send();
-      return;
-    });
+  var fileType = req.file.mimetype.split('/')[1];
+  var tmp_path = req.file.path;
+  var target_path = 'resources/images/carousel/' + req.file.filename + '.' + fileType;
+  var pathToSend = '../images/carousel/' + req.file.filename + '.' + fileType;
+  fs.readFile(tmp_path, function(err, data) {
+    fs.writeFile(target_path, data);
+    fs.unlink(tmp_path);
+    res.filePath = target_path;
+    console.log(res);
+    res.status(200).json({filepath: pathToSend}).send();
+    return;
   });
+});
 
 app.post('/api/v1/committeePhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
-    fileType = req.file.mimetype.split('/')[1];
+    var fileType = req.file.mimetype.split('/')[1];
     var tmp_path = req.file.path;
     var target_path = 'resources/images/committees/' + req.file.filename + '.' + fileType;
     var pathToSend = '../images/committees/' + req.file.filename + '.' + fileType;
@@ -158,7 +174,7 @@ app.post('/foobar', function (req, res) {
     return;
   }
   // token = token.split(' ')[1];
-  rosefire.verify(token, function(err, authData) {
+  rosefire.verify(token, function (err, authData) {
     if (err) {
       res.status(401).json({
         error: 'Not authorized!2'
@@ -174,10 +190,10 @@ app.post('/foobar', function (req, res) {
   });
 });
 
-var server = app.listen(port, function() {
-	var host = server.address().address;
-	var port = server.address().port;
-	console.log("Example app listening at http://%s:%s", host, port)
+var server = app.listen(port, function () {
+  var host = server.address().address;
+  var port = server.address().port;
+  console.log("Example app listening at http://%s:%s", host, port)
 });
 
 
