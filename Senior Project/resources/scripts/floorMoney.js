@@ -9,6 +9,9 @@ function setup() {
     var addChargeButton = document.getElementById("addChargeButton");
     addChargeButton.setAttribute('data-toggle', 'modal');
     addChargeButton.setAttribute('data-target', '#chargeModal');
+    var addAwardButton = document.getElementById("addAwardButton");
+    addAwardButton.setAttribute('data-toggle', 'modal');
+    addAwardButton.setAttribute('data-target', '#awardModal');
 
     function createHTMLFromResponseText(funds) {
         funds = JSON.parse(funds);

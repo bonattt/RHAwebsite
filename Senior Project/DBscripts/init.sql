@@ -1,66 +1,79 @@
 CREATE DATABASE RHA;
 
 CREATE TABLE Members (
-        user_id SERIAL PRIMARY KEY,
-        username varchar(20),
-        firstname varchar(20),
-        lastname varchar(20),
-        hall varchar(20),
-        image varchar(100),
-        memberType varchar(30), 
-        active boolean,
-        trip_eligible boolean,
-        meet_attend jsonb,
-        CM int,
-        phone_number int,
-        room_number varchar(25)
+    user_id SERIAL PRIMARY KEY,
+    username varchar(20),
+    firstname varchar(20),
+    lastname varchar(20),
+    hall varchar(20),
+    image varchar(100),
+    memberType varchar(30), 
+    active boolean,
+    trip_eligible boolean,
+    meet_attend jsonb, -- {'Q1': [int], 'Q2': [int], 'Q3': [int]}
+    CM int,
+    phone_number int,
+    room_number varchar(25)
 );
 
+-- Example query for viewing members from Mees hall who attended the first meeting in Fall quarter (0-indexed, but the first meeting is the second week in Q1):
+-- Select * from Members Where meet_attend#>'{Q1, 1}' = '1' AND hall = 'Mees';
+-- See https://www.postgresql.org/docs/9.3/static/functions-json.html for more details on jsonb querying 
+
 CREATE TABLE Expenses (
-        expenses_id SERIAL PRIMARY KEY ,
-        data jsonb
+    expenses_id SERIAL PRIMARY KEY ,
+    data jsonb 
+        -- {CM: int, 
+        -- 'Receiver': varchar, 
+        -- 'AmountUsed': Money, 
+        -- 'Description': varchar, 
+        -- 'accountCode': int, 
+        -- 'DateReceived': datetime, 
+        -- 'DateProcessed': datetime,
+        -- 'Reciepts': ['Amount': Money, 
+        --              'InvoiceDate': datetime]}
 );
 
 CREATE TABLE Funds (
-        funds_id SERIAL PRIMARY KEY,
-        fund_name varchar(50),
-        funds_amount Money,
-        display_on_site boolean
+    funds_id SERIAL PRIMARY KEY,
+    fund_name varchar(50),
+    funds_amount Money,
+    display_on_site boolean
 );
 
 CREATE TABLE Proposals (
-        proposal_id SERIAL PRIMARY KEY,
-        proposer varchar(50),
-        expenses_id INT references Expenses (expenses_id),
-        proposal_name varchar(50),
-        week_proposed INT,
-        quarter_proposed INT,
-        money_requested Money,
-        approved boolean,
-        money_allocated Money,
-        paid boolean,
-        event_date DATE,
-        event_signup_open DATE,
-        event_signup_close DATE,
-        cost_to_attendee MONEY,
-        image_path varchar(100), 
-        description varchar(400),
-        attendees jsonb
+    proposal_id SERIAL PRIMARY KEY,
+    proposer varchar(50),
+    expenses_id INT references Expenses (expenses_id),
+    proposal_name varchar(50),
+    week_proposed INT,
+    quarter_proposed INT,
+    money_requested Money,
+    approved boolean,
+    money_allocated Money,
+    paid boolean,
+    event_date DATE,
+    event_signup_open DATE,
+    event_signup_close DATE,
+    cost_to_attendee MONEY,
+    image_path varchar(100), 
+    description varchar(400),
+    attendees jsonb -- [varchar]
 );
 
 CREATE TABLE Committee (
-        committeeID SERIAL PRIMARY KEY,
-        committeeName varchar(30),
-        description varchar(1000),
-        image varchar(100)
+    committeeID SERIAL PRIMARY KEY,
+    committeeName varchar(30),
+    description varchar(1000),
+    image varchar(100)
 );
 
 CREATE TABLE Equipment (
-        equipmentID SERIAL PRIMARY KEY,
-        equipmentName varchar(30),
-        equipmentDescription varchar(500),
-        equipmentEmbed varchar(500),
-        rentalTimeInDays int DEFAULT 2
+    equipmentID SERIAL PRIMARY KEY,
+    equipmentName varchar(30),
+    equipmentDescription varchar(500),
+    equipmentEmbed varchar(500),
+    rentalTimeInDays int DEFAULT 2
 );
 
 insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipmentEmbed, rentalTimeInDays) values (DEFAULT, 'Equipment1', 'This is equipment 1', '<iframe src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=800&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=25v1djivm37d6psb5284pojmqs%40group.calendar.google.com&amp;color=%23AB8B00&amp;ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>', 3);
@@ -68,16 +81,113 @@ insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipme
 
 
 CREATE TABLE Rentals (
-        rental_id SERIAL PRIMARY KEY,
-        member_id INT references Members (user_id),
-        equipment_id INT references Equipment (equipment_id),
-        approved_by INT references Members (user_id),
-        reason_for_rental varchar(100),
-        rented_on DATE,
-        return_on DATE,
-        due_by DATE
+    rental_id SERIAL PRIMARY KEY,
+    member_id INT references Members (user_id),
+    equipment_id INT references Equipment (equipmentID),
+    approved_by INT references Members (user_id),
+    reason_for_rental varchar(100),
+    rented_on DATE,
+    return_on DATE,
+    due_by DATE
 );
 
+CREATE TABLE FloorAttendanceNumerics (
+    numerics_id SERIAL PRIMARY KEY,
+    floor_name varchar(30),
+    floor_minimum_attendance int
+);
+
+CREATE TABLE FloorMoney (
+    floormoney_id SERIAL PRIMARY KEY,
+    hall_and_floor varchar(50),
+    residents INT,
+    possible_earnings Money,
+    current_earned Money,
+    possible_balance Money, -- Calculated from possilbe_earnings (+), awarded (+), and expenses (-)
+    current_balance Money -- Calculated from current_earned (+), awarded (+), and expenses (-)
+
+);
+
+CREATE TABLE FloorExpenses (
+    floor_expense_id SERIAL PRIMARY KEY,
+    floor_id INT references FloorMoney (floormoney_id),
+    event_description varchar(100),
+    amount INT,
+    turned_in_date DATE,
+    processed_date DATE  
+);
+
+-------------------------------------------------------------------
+--                 WORKING EXAMPLE OF A FUNCTION                 --
+--       CALL BY TYPING "Select test();" INTO PSQL TERMINAL      --
+
+CREATE OR REPLACE FUNCTION test() 
+  RETURNS int AS $test$
+  DECLARE
+    test int;
+  BEGIN 
+    SELECT INTO test count(*) FROM Members;
+  RETURN test;
+  END 
+$test$ LANGUAGE plpgsql;
+
+-------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION count_attendance(week int, quarter varchar, floor varchar)
+  RETURNS int AS $count$
+  DECLARE 
+    count int;
+  BEGIN 
+    SELECT INTO count count(*) FROM Members WHERE Members.hall = floor AND Members.meet_attend->quarter->week = '1';
+     -- Return needs to be compared to a string because it's a JSON datatype
+    -- RAISE NOTICE 'In count_attendance(): Week = %, quarter = %, return var = %', week, quarter, count;
+
+    RETURN count;
+  END;
+$count$ LANGUAGE plpgsql;
+
+-- MODIFY THIS FUNCTION SO THAT IS ADDS ONE ATTENDED MEETING TO FALL, AND ADDS MULTIPLIER TO TOTAL IF QUARTER HAS NOT STARTED YET
+
+CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate int) 
+  RETURNS double precision AS $earned$
+  DECLARE
+    earned double precision := 0;
+    meet_attended double precision := 0;
+    counter int;
+    multiplier double precision;
+    weeks int[] := ARRAY[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    quarters varchar[] := ARRAY['Q1', 'Q2', 'Q3'];
+    x int;
+    y varchar;
+  BEGIN
+    RAISE NOTICE 'MoneyRate = %, size = %', moneyRate, size;
+    multiplier := (1.0 / 1.5) ^ (9.0) * (1.0 / 3.0) * moneyRate * size;
+    RAISE NOTICE 'Value of multiplier: %', multiplier;
+    FOREACH y IN ARRAY quarters
+    LOOP
+      meet_attended := 0;
+      FOREACH x IN ARRAY weeks
+      LOOP
+        RAISE NOTICE 'looping over rows %, %', y, x;
+        SELECT INTO counter 
+        CASE 
+          WHEN (SELECT count_attendance(x, y, floor)) > 1 THEN 1
+          ELSE 0
+        END;
+        RAISE NOTICE 'Attended is %: (1 or 0)', counter;
+        meet_attended := meet_attended + counter;
+      END LOOP;
+      IF y = 'Q1' THEN
+        meet_attended = meet_attended + 1; 
+      END IF;
+      RAISE NOTICE 'Meetings Attended by %: %', floor, meet_attended;
+      earned := earned + (multiplier * ((1.5) ^ meet_attended));
+      RAISE NOTICE 'Earned is now: %', earned;
+    END LOOP;
+  RETURN earned;
+  END;
+$earned$ LANGUAGE plpgsql;
+    
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
                                         Feud, and more. We also show movies outdoors on the big screen, and sponsor an Easter egg hunt in the spring. We also
@@ -96,7 +206,7 @@ INSERT into Committee VALUES (DEFAULT, 'Publicity', 'Publicity committee is for 
                                         Frequently, we combine with service to create "surblicity" to create one epic force of a committee. Come check it out!', '../images/committees/publicity.jpg');
 
 
--- Most entries below this point are temporary. Once the database has been begun regular use, these inserts will become obselete
+-- Most entries below this point are temporary. Once the database has begun regular use, these inserts will become obselete
 -- BSB 1
 INSERT INTO Members VALUES (DEFAULT, 'duncanj', 'Jason', 'Duncan', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'wilkinsj', 'Joe', 'Wilkins', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');

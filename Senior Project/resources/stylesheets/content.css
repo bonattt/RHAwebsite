@@ -793,7 +793,7 @@ height: 150pt;
 	display: none;
 }
 
-#addOfficer, #addCommittee{
+#addOfficer, #addCommittee, #addOfficer, #addEventLink{
 	text-align: center;
 	font-size: 200%;
 	margin-left: auto;
@@ -999,6 +999,12 @@ img {
 	font-size: 3vw;
 }
 
+.modalPhoto {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
 #membersTable {
 	border-collapse: collapse;
 	margin-top: 25px;
@@ -1012,7 +1018,7 @@ td {
 	text-align: center;
 }
 
-#addPaymentButton, #addChargeButton {
+#addPaymentButton, #addChargeButton, #addAwardButton {
     display: inline;
 }
 
