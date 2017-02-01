@@ -146,8 +146,6 @@ CREATE OR REPLACE FUNCTION count_attendance(week int, quarter varchar, floor var
   END;
 $count$ LANGUAGE plpgsql;
 
--- MODIFY THIS FUNCTION SO THAT IS ADDS ONE ATTENDED MEETING TO FALL, AND ADDS MULTIPLIER TO TOTAL IF QUARTER HAS NOT STARTED YET
-
 CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate int) 
   RETURNS double precision AS $earned$
   DECLARE
@@ -165,7 +163,11 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
     RAISE NOTICE 'Value of multiplier: %', multiplier;
     FOREACH y IN ARRAY quarters
     LOOP
-      meet_attended := 0;
+      meet_attended :=
+      CASE 
+        WHEN y = 'Q1' THEN 1
+        ELSE 0
+      END;
       FOREACH x IN ARRAY weeks
       LOOP
         RAISE NOTICE 'looping over rows %, %', y, x;
@@ -188,25 +190,40 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
   END;
 $earned$ LANGUAGE plpgsql;
 
+
+--Almost...
 CREATE OR REPLACE FUNCTION calc_possible_money(floor varchar, size int, moneyRate int) 
   RETURNS double precision AS $possible$
   DECLARE
-    attendance json;
+    meetings json;
+    attended int := 0;
     possible double precision := 0;
-    current_max_meetings int := 1;
+    current_max_meetings int;
     counter int;
-    multiplier double precision;
+    multiplier double precision := (1.0 / 1.5) ^ (9.0) * (1.0 / 3.0) * moneyRate * size;
     quarters varchar[] := ARRAY['Q1', 'Q2', 'Q3'];
-    x varchar;
+    weeks int[] := ARRAY[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    x int;
+    y varchar;
   BEGIN
-    FOREACH x IN ARRAY quarters
+    FOREACH y IN ARRAY quarters
     LOOP
-      SELECT INTO attendance Members.meet_attend->x FROM Members WHERE Members.user_id = 1;
-      SELECT INTO counter (SELECT json_array_length(attendance));
-      RAISE NOTICE 'Quarter: %, counter: %', x, counter;
-      current_max_meetings := current_max_meetings + counter;
+      SELECT INTO meetings Members.meet_attend->y FROM Members WHERE Members.hall = floor LIMIT 1;
+      current_max_meetings := json_array_length(meetings);
+      FOREACH x IN ARRAY weeks
+      LOOP
+        attended := 
+        CASE 
+          WHEN (SELECT count_attendance(x, y, floor)) > 1 THEN attended + 1
+          ELSE attended + 0
+        END;
+        RAISE NOTICE 'Current max meetings before addition: %', current_max_meetings;
+      END LOOP;
+      current_max_meetings := attended + (9 - current_max_meetings);
+      RAISE NOTICE 'Quarter: %, max meetings: %', y, current_max_meetings;
+      possible := possible + multiplier * (1.5 ^ current_max_meetings);
     END LOOP;
-    RAISE NOTICE 'Max meetings: %', current_max_meetings;
+    return possible;
   END;
 $possible$ LANGUAGE plpgsql;
 
