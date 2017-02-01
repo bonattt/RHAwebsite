@@ -8,19 +8,24 @@ function setAdmin(officers) {
                 function(json_data, put_id) {
             saveCommittee(json_data);
         }); 
-        var deleteBtn = document.getElementById('confirm-delete');
-        deleteBtn.addEventListener('click', function() {
+        var deleteConfirm = document.getElementById('confirm-delete');
+        deleteConfirm.addEventListener('click', function() {
             // "selected_element_id" global decleared in adminPermission.js ... sorry about that... :(
             var element = document.getElementById(selected_element_id); 
             var deleteid = element.dataset.committeeid;
             
             var apiExtension = 'committee/' + deleteid
             var xhr = xhrDeleteRequest(apiExtension);
-            xhr.onload = function () {console.log("reload...")} //location.reload()}
+            xhr.onload = function () {location.reload()}
             xhr.send();
+            document.getElementById("imageFile").value = '';
         });
         var cancelBtn = document.getElementById('modal-cancel');
         cancelBtn.addEventListener('click', function() {
+            document.getElementById("imageFile").value = '';
+        });
+        var deleteBtn = document.getElementById('modal-delete');
+        deleteBtn.addEventListener('click', function() {
             document.getElementById("imageFile").value = '';
         });
     }
@@ -56,7 +61,7 @@ function setupAddCommitteeButton() {
 
                     xhr.onreadystatechange = function (e) {
                         if(xhr.readyState == 4 && xhr.status == 200) {
-                            console.log("reload"); // location.reload();
+                            location.reload();
                         }
                     };
                     xhr.send(JSON.stringify({ committeeName: committeeName.value, description: committeeDesc.value, image: image_path }));
@@ -65,6 +70,7 @@ function setupAddCommitteeButton() {
                 }
             };
             photoXhr.send(formData);
+            document.getElementById("imageFile").value = '';
         }
         submitBtn.addEventListener('click', addCommitteeSubmit);
         var addCommitteeCancel = function () {
@@ -122,8 +128,8 @@ function setup() {
         }
 
         var officersxhr = getOfficers();
+        officersxhr.onload = () => { setAdmin(officersxhr.responseText) }
         officersxhr.send();
-        setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
     }
 }
 
@@ -132,7 +138,7 @@ function saveCommittee(data) {
     var xhr = xhrPutRequest(urlExtension);
     var files = document.getElementById("imageFile").files;
     console.log(files);
-    xhr.onload = function () { console.log("reload"); } //location.reload() };
+    xhr.onload = function () { location.reload() };
 
     if(files.length > 0) {
         var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/committeePhoto';
