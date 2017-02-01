@@ -15,8 +15,12 @@ function setAdmin(officers) {
             
             var apiExtension = 'committee/' + deleteid
             var xhr = xhrDeleteRequest(apiExtension);
-            xhr.onload = function () {location.reload()}
+            xhr.onload = function () {console.log("reload...")} //location.reload()}
             xhr.send();
+        });
+        var cancelBtn = document.getElementById('modal-cancel');
+        cancelBtn.addEventListener('click', function() {
+            document.getElementById("imageFile").value = '';
         });
     }
     return;
@@ -42,7 +46,7 @@ function setupAddCommitteeButton() {
             var files = document.getElementById("imageFile").files;
 
             var formData = new FormData();
-            formData.append("imageFile", files[0]);  
+            formData.append("imageFile", files[0]);
             photoXhr.open('POST', photoAPIURL, true);
 
             photoXhr.onreadystatechange = function (e) {
@@ -52,11 +56,9 @@ function setupAddCommitteeButton() {
 
                     xhr.onreadystatechange = function (e) {
                         if(xhr.readyState == 4 && xhr.status == 200) {
-                            location.reload();
+                            console.log("reload"); // location.reload();
                         }
                     };
-
-
                     xhr.send(JSON.stringify({ committeeName: committeeName.value, description: committeeDesc.value, image: image_path }));
                     clearSubmitHandlers(submitBtn);
                     return xhr;
@@ -71,9 +73,14 @@ function setupAddCommitteeButton() {
         }
         var cancelBtn = document.getElementById('modal-cancel');
         cancelBtn.addEventListener('click', function() {
-            // nothing right now
+            // do nothing.
         });        
     });
+}
+
+function clearImageForm() {
+    var formData = new FormData();
+
 }
 
 function setup() {
@@ -124,8 +131,8 @@ function saveCommittee(data) {
     var urlExtension = 'committee/' + data.committeeid;
     var xhr = xhrPutRequest(urlExtension);
     var files = document.getElementById("imageFile").files;
-
-    xhr.onload = function () {location.reload() };
+    console.log(files);
+    xhr.onload = function () { console.log("reload"); } //location.reload() };
 
     if(files.length > 0) {
         var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/committeePhoto';
@@ -144,6 +151,7 @@ function saveCommittee(data) {
             }
         }
         photoXhr.send(formData);
+        var files = document.getElementById("imageFile").value = '';
     } else {
         xhr.send(JSON.stringify({ committeename: data.committeename, description: data.description}));
     }
