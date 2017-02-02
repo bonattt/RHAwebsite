@@ -368,6 +368,16 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
         var editButton = createEditButton(proposal_id)
         eventActionDiv.appendChild(editButton);
     }
+    var cancelBtn = document.getElementById('modal-cancel');
+    cancelBtn.addEventListener('click', function () {
+        document.getElementById("imageFile").value = '';
+    });
+
+    var deleteBtn = document.getElementById('modal-delete');
+    deleteBtn.addEventListener('click', function() {
+        document.getElementById("imageFile").value = '';
+    });
+
     return eventActionDiv;
 }
 
@@ -452,13 +462,20 @@ function submitFunc(json_data, put_id) {
     json_data.event_signup_open = composeDate(SIGNUPS_OPEN);
     json_data.event_signup_close = composeDate(SIGNUPS_CLOSE);
     console.log(json_data);
+
+    var photoXhr = new PhotoXhr("eventPhoto");
     var apiExtension = "events/" + put_id;
 	var xhr = xhrPutRequest(apiExtension);
     xhr.onload = function() {
         console.log('successfully delivered API call!');
         location.reload();
     }
-    xhr.send(JSON.stringify(json_data));
+    photoXhr.xhrCallback(xhr, json_data, 'image_path');
+    var files = document.getElementById("imageFile").files;
+    var formData = new FormData();
+    formData.append("imageFile", files[0]);
+    photoXhr.send(formData);
+    document.getElementById("imageFile").value = '';
 }
 
 function composeDate(modalId) {
