@@ -97,16 +97,19 @@ CREATE TABLE FloorAttendanceNumerics (
     floor_minimum_attendance int
 );
 
+
+--Populated via populate_floor_money()
 CREATE TABLE FloorMoney (
     floormoney_id SERIAL PRIMARY KEY,
-    hall_and_floor varchar(50),
-    residents INT,
+    hall_and_floor varchar(50), -- Still working this one out.
+    residents INT, -- Calculated via count_residents([floor name]);
     possible_earnings Money, -- Calculated via calc_possible_earnings([floorname], [floor_resident_count], [money_per_person_per_year])
     current_earned Money, -- Calculated via calc_earned_money([floorname], [floor_resident_count], [money_per_person_per_year])
-    possible_balance Money, -- Calculated from possilbe_earnings (+), awarded (+), and expenses (-)
-    current_balance Money -- Calculated from current_earned (+), awarded (+), and expenses (-)
-
+    possible_balance Money, -- Calculated via calc_possible_balance([floorname], [floor_resident_count], [money_per_person_per_year])
+    current_balance Money -- Calculated via calc_current_balance([floorname], [floor_resident_count], [money_per_person_per_year]);
 );
+
+INSERT INTO FloorMoney (hall_and_floor, residents) VALUES ('Mees', 15);
 
 CREATE TABLE FloorExpenses (
     floor_expense_id SERIAL PRIMARY KEY,
@@ -117,22 +120,36 @@ CREATE TABLE FloorExpenses (
     processed_date DATE  
 );
 
--------------------------------------------------------------------
---                 WORKING EXAMPLE OF A FUNCTION                 --
---       CALL BY TYPING "Select test();" INTO PSQL TERMINAL      --
+INSERT INTO FloorExpenses (floor_id, event_description, amount) VALUES (1, 'Test 1: positive value', 30);
+INSERT INTO FloorExpenses (floor_id, event_description, amount) VALUES (1, 'Test 2: negative value', -10);
+    
 
-CREATE OR REPLACE FUNCTION test() 
-  RETURNS int AS $test$
+
+-- When writing this function, make sure to populate the names and resident numbers of the floor
+-- BEFORE calculating any of the monetary values. This is because in order to calcuate expenses
+-- you need to query FloorExpenses, which has a foriegn key contstraint on FloorMoney (the table
+-- this function populates), and you need the name of the floor to make sure you are getting only
+-- expenses which are for that specific hall. 
+
+-- TL;DR: Go through table once to add first five (including ID) entries, then populate expenses (if
+-- there are any, otherwise dont), then go through again to calculate last two entries.
+
+CREATE OR REPLACE FUNCTION populate_floor_money()
+  RETURNS &&
   DECLARE
-    test int;
-  BEGIN 
-    SELECT INTO test count(*) FROM Members;
-  RETURN test;
-  END 
-$test$ LANGUAGE plpgsql;
+    -- declare fields to be used to insert into rows
+    floorname varchar;
+    floor_resident_count int;
+    possible_earnings double precision;
+    current_earned double precision;
+  BEGIN
+    -- call other functions 
+  END;
+$$ LANGUAGE plpgsql;
 
--------------------------------------------------------------------
-
+/* Counts the attendance of the specified floor during the given week and quarter
+   Returns: INT
+*/
 CREATE OR REPLACE FUNCTION count_attendance(week int, quarter varchar, floor varchar)
   RETURNS int AS $count$
   DECLARE 
@@ -146,6 +163,10 @@ CREATE OR REPLACE FUNCTION count_attendance(week int, quarter varchar, floor var
   END;
 $count$ LANGUAGE plpgsql;
 
+
+/* Calculates a given floor's earned money thus far given floor name, size of the floor, and money rate
+   Returns: DOUBLE PRECISION
+*/
 CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate int) 
   RETURNS double precision AS $earned$
   DECLARE
@@ -191,6 +212,10 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
 $earned$ LANGUAGE plpgsql;
 
 
+/* Calculates a given floor's possible earnings given floor name, size of the floor, and money rate
+   based on the number of meetings attended so far, and the number of meetings remaining in the year
+   Returns: DOUBLE PRECISION
+*/
 -- Update to include functions 
 CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, moneyRate int) 
   RETURNS double precision AS $possible$
@@ -232,6 +257,77 @@ CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, money
   END;
 $possible$ LANGUAGE plpgsql;
 
+
+
+
+/* Counts the number of residents on a given floor from the Members table 
+   Returns: INT
+*/
+CREATE OR REPLACE FUNCTION count_residents(floor varchar)
+  RETURNS int AS $residents$
+  DECLARE
+    residents int;
+    -- any other vars needed (shouldnt be any)
+  BEGIN
+    SELECT INTO residents count(*) FROM Members WHERE Members.hall = floor;
+    RETURN residents;
+  END;
+$residents$ LANGUAGE plpgsql;
+
+
+/* Sums the expenses and rewards from FloorExpenses given the floor name
+   Returns: INT
+*/
+CREATE OR REPLACE FUNCTION sum_expenses(floor varchar)
+  RETURNS double precision AS $expenses$
+  DECLARE
+    expenses double precision;
+    count int;
+  BEGIN
+    SELECT INTO expenses SUM(FloorExpenses.amount) FROM FloorMoney, FloorExpenses WHERE FloorMoney.hall_and_floor = floor AND FloorMoney.floormoney_id = FloorExpenses.floor_id;
+    return expenses;
+  END;
+$expenses$ LANGUAGE plpgsql;
+
+
+/* Calculates the given floor's current balance based on earned money totaled with their expenses
+   Returns: DOUBLE PRECISION
+*/
+CREATE OR REPLACE FUNCTION calc_current_balance(floor varchar, size int, moneyRate int) 
+  RETURNS double precision AS $balance$
+  DECLARE
+    balance double precision;
+    earned double precision;
+    expenses double precision;
+  BEGIN
+    SELECT INTO expenses sum_expenses(floor);
+    SELECT INTO earned calc_earned_money(floor, size, moneyRate);
+    RAISE NOTICE 'Expenses: %', expenses;
+    RAISE NOTICE  'Earned: %', earned;
+    balance := expenses + earned;
+    RETURN balance;
+  END;
+$balance$ LANGUAGE plpgsql;
+
+
+/* Calculates the given floor's possible balance based on possible money totaled with their expenses
+   Returns: DOUBLE PRECISION
+*/
+CREATE OR REPLACE FUNCTION calc_possible_balance(floor varchar, size int, moneyRate int) 
+  RETURNS double precision AS $balance$
+  DECLARE
+    balance double precision;
+    possible double precision;
+    expenses double precision;
+  BEGIN
+    SELECT INTO expenses sum_expenses(floor);
+    SELECT INTO possible calc_possible_earnings(floor, size, moneyRate);
+    RAISE NOTICE 'Expenses: %', expenses;
+    RAISE NOTICE  'Possible: %', possible;
+    balance := expenses + possible;
+    RETURN balance;
+  END;
+$balance$ LANGUAGE plpgsql;
 
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
