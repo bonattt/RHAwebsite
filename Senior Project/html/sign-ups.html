@@ -57,6 +57,7 @@
                     <div id="signups-modal-event_signup_close"> 
                         <label>Signups Close Date</label> <br/>
                     </div> <br/>
+                    <label for="imageFile">Image<input type="file" name="imageFile" id="imageFile"></label>
 					<!--
                     <input id="signups-modal-event_date" type="text" value="eventDate"> </input><br/><br/>
 					<label>Sign Ups Open Date</label> <br/>
@@ -66,8 +67,26 @@
                     -->
 				</div>
 				<div class="modal-footer">
+                    <button id="modal-delete" type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#deleteConfirmationModal"> Delete </button>
 					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
 					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div id="deleteConfirmationModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Are you sure? </h4>
+				</div>
+				<div class="modal-footer">
+					<button id="confirm-delete" data-lastclicked="ERROR" type="button" class="btn btn-danger"
+							data-dismiss="modal">Delete </button>
+					<button id="cancel-delete" type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
 				</div>
 			</div>
 		</div>
