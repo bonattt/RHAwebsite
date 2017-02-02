@@ -15,11 +15,23 @@ PhotoPostXhr.prototype.xhrCallback = function(xhr, json_data, field_name) {
         if (typeof field_name == 'undefined') {
             field_name = 'image';
         }
+        alert(typeof theXhr.responseText);
         var image_path = JSON.parse(theXhr.responseText).filepath;
         json_data[field_name] = image_path;
         xhr.send(JSON.stringify(json_data));
     }
 }
+
+PhotoPostXhr.prototype.callback = function(callback) {
+    this.xhr.onload = callback;
+}
+
+function PhotoDeleteXhr(apiCall) {
+    this.xhr = new XMLHttpRequest();
+    this.xhr.open('DELETE', getPhotoApiUrl(apiCall));
+}
+
+PhotoDeleteXhr.prototype = PhotoPostXhr.prototype
 
 function getPhotoApiUrl(backendFilepath) {
     return location.protocol + '//' + location.hostname +

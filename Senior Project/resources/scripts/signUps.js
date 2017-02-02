@@ -477,7 +477,7 @@ function submitFunc(json_data, put_id) {
         var formData = new FormData();
         formData.append("imageFile", files[0]);
         photoXhr.send(formData);
-        document.getElementById("imageFile").value = '';
+        imageInput.value = '';
     } else {
         xhr.send(JSON.stringify(json_data));
     }

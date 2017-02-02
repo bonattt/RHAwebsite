@@ -163,14 +163,12 @@ var enableSubmitButton = function(dataElementId, uiElementRootId, submitFunc, id
 		var dataset = document.getElementById(dataElementId).dataset;
 		var json_data = {}
 		for (attr in dataset) {
-		    if (attr == 'image' || attr == 'image_path') {
-                continue;
-                // this is a hacksy fix to a big caused by my REALLY dumb code.
-		    }
 			var textField = document.getElementById(uiElementRootId + attr);
 			if (textField != undefined) { //Check if textfield is actually a file Uploader
-				dataset[attr] = textField.value;
 				json_data[attr] = textField.value;
+                if (attr == 'image' || attr == 'image_path') {
+    				dataset[attr] = textField.value; // hacky fix for my bad code.
+    			}
 			} else {
 				json_data[attr] = dataset[attr];
 			}
