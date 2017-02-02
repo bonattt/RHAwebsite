@@ -101,8 +101,8 @@ CREATE TABLE FloorMoney (
     floormoney_id SERIAL PRIMARY KEY,
     hall_and_floor varchar(50),
     residents INT,
-    possible_earnings Money,
-    current_earned Money,
+    possible_earnings Money, -- Calculated via calc_possible_earnings([floorname], [floor_resident_count], [money_per_person_per_year])
+    current_earned Money, -- Calculated via calc_earned_money([floorname], [floor_resident_count], [money_per_person_per_year])
     possible_balance Money, -- Calculated from possilbe_earnings (+), awarded (+), and expenses (-)
     current_balance Money -- Calculated from current_earned (+), awarded (+), and expenses (-)
 
@@ -191,12 +191,12 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
 $earned$ LANGUAGE plpgsql;
 
 
---Almost...
-CREATE OR REPLACE FUNCTION calc_possible_money(floor varchar, size int, moneyRate int) 
+-- Update to include functions 
+CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, moneyRate int) 
   RETURNS double precision AS $possible$
   DECLARE
     meetings json;
-    attended int := 0;
+    attended int;
     possible double precision := 0;
     current_max_meetings int;
     counter int;
@@ -210,6 +210,11 @@ CREATE OR REPLACE FUNCTION calc_possible_money(floor varchar, size int, moneyRat
     LOOP
       SELECT INTO meetings Members.meet_attend->y FROM Members WHERE Members.hall = floor LIMIT 1;
       current_max_meetings := json_array_length(meetings);
+      attended := 
+      CASE
+        WHEN y = 'Q1' THEN 1
+        ELSE 0
+      END;
       FOREACH x IN ARRAY weeks
       LOOP
         attended := 
@@ -217,8 +222,8 @@ CREATE OR REPLACE FUNCTION calc_possible_money(floor varchar, size int, moneyRat
           WHEN (SELECT count_attendance(x, y, floor)) > 1 THEN attended + 1
           ELSE attended + 0
         END;
-        RAISE NOTICE 'Current max meetings before addition: %', current_max_meetings;
       END LOOP;
+      RAISE NOTICE 'Current max meetings before addition: %, attended: %', current_max_meetings, attended;
       current_max_meetings := attended + (9 - current_max_meetings);
       RAISE NOTICE 'Quarter: %, max meetings: %', y, current_max_meetings;
       possible := possible + multiplier * (1.5 ^ current_max_meetings);
