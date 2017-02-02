@@ -136,6 +136,7 @@ function setup() {
 }
 
 function saveCommittee(data) {
+    alert('this is the code we use!');
     var urlExtension = 'committee/' + data.committeeid;
     var xhr = xhrPutRequest(urlExtension);
     var files = document.getElementById("imageFile").files;
