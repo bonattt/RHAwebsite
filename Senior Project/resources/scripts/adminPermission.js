@@ -66,7 +66,6 @@ var generateEditButtonListener = function(dataElementId, uiElementRootId, submit
                 deleteBtn.disabled = false;
             } else {
                 console.log(deleteBtn);
-                alert('no delete button');
             }
             setupEditModal(dataElementId, uiElementRootId, submitFunc, idFieldName);
      };
@@ -165,7 +164,7 @@ var enableSubmitButton = function(dataElementId, uiElementRootId, submitFunc, id
 		var json_data = {}
 		for (attr in dataset) {
 			var textField = document.getElementById(uiElementRootId + attr);
-			if (textField != undefined) {
+			if (textField != undefined) { //Check if textfield is actually a file Uploader
 				dataset[attr] = textField.value;
 				json_data[attr] = textField.value;
 			} else {

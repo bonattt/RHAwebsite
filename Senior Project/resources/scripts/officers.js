@@ -1,39 +1,89 @@
 var officerMap = new Object();
 var editName;
 const API_EXTENSION = '';
-
+const MESSAGE_MODAL_ID = 'messageModal';
 
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-		var editbuttons = insertEditButtons(
+		setupAddOfficerButton();
+        var editbuttons = insertEditButtons(
                     'officer',
                     'officers-modal-',
                     'user_id',
                     function(json_data, put_id) {
             var apiUrl = 'member/' + put_id
             var xhr = xhrPutRequest(apiUrl);
-            alert('sending API put request...\napi url: "' + apiUrl + '"');
             delete json_data.user_id;
             delete json_data.username;
+            if (json_data.membertype == '') {
+                msg = 'Officers must have a member type.'
+                delete json_data.membertype;
+            }
             xhr.onload = function() { location.reload() };
-            xhr.send(JSON.stringify(json_data)
-            /*{
-                "membertype": json_data.membertype,
-                "firstname": json_data.firstname,
-                "lastname": json_data.lastname,
-                "phone_number": json_data.phone_number,
-                "room_number": json_data.room_number,
-                "hall": json_data.hall,
-                "cm": json_data.cm
-            }) // */
-            );
+            xhr.send(JSON.stringify(json_data));
         });
+        var deleteBtn = document.getElementById('confirm-delete');
+        deleteBtn.addEventListener('click', function() {
+            // "selected_element_id" global decleared in adminPermission.js ... sorry about that... :(
+            var element = document.getElementById(selected_element_id); 
+            var dataset = element.dataset;
+            var json_data = {"memberType": null};
+            var apiUrl = 'member/' + dataset.user_id
+            var xhr = xhrPutRequest(apiUrl);
+            xhr.onload = function () {location.reload()}
+            xhr.send(JSON.stringify(json_data));
+        });        
     }
-    var addOfficeButton = document.getElementById("addOfficer");
-    addOfficeButton.addEventListener("click", showEmptyModal);
+    //var addOfficeButton = document.getElementById("addOfficer");
+    //addOfficeButton.addEventListener("click", showEmptyModal);
     //addOfficeButton.style.display = "block";
 }
+
+function setupAddOfficerButton() {
+    var addOfficerBtn = document.getElementById('addOfficer');
+    addOfficerBtn.style.display = "block"; //*/
+    addOfficerBtn.addEventListener('click', function() {        
+        var usernameEntry = document.getElementById('new-officer-username');
+        usernameEntry.value = ''
+        var memebertypeEntry = document.getElementById('new-officer-membertype');
+        memebertypeEntry.value = ''
+    });
+    var submitBtn = document.getElementById('modal-new-officer-submit');
+    submitBtn.addEventListener('click', function() {
+        var usernameEntry = document.getElementById('new-officer-username');
+        var username = usernameEntry.value;
+        var membertypeEntry = document.getElementById('new-officer-membertype');
+        var memberType = membertypeEntry.value;
+        
+        var urlExtension = 'members/' + username;
+        var json_data = {"memberType": memberType};
+        var xhr = xhrPutRequest(urlExtension);
+        xhr.onload = function() {location.reload()};
+        xhr.send(JSON.stringify(json_data));
+    });
+    var cancelBtn = document.getElementById('modal-cancel');
+    cancelBtn.addEventListener('click', function() {
+        // nothing right now
+    }); 
+}
+
+function showMessageModal(message) {
+    var modalBody = document.getElementById('messageModalBody');
+    var text = document.createElement('p');
+    text.appendChild(document.createTextNode(message));
+    modalBody.appendChild(text);
+    $('#' + MESSAGE_MODAL_ID).modal('show');
+}
+
+//function setupMessageModal() {
+//    $('#' + MESSAGE_MODAL_ID).modal({'show': false});
+//    var closeModalBtn = document.getElementById('message-okay');
+//    closeModalBtn.addEventListener('click', function () {
+//        var modalBody = document.getElementById('messageModalBody');
+//        modalBody.innerHTML = ''
+//    });
+//}
 
 
 function setup() {
@@ -58,8 +108,11 @@ function setup() {
     var officerId;
 
     var xhr = xhrGetRequest('officers');
+    xhr.onload = function () { 
+        createHTMLFromResponseText(xhr.responseText);
+    }
     xhr.send();
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+    // setTimeout(}, 300);
 
     function createHTMLFromResponseText(officer) {
         officer = JSON.parse(officer);
@@ -95,8 +148,8 @@ function setup() {
         var officersxhr = getOfficers();
         officersxhr.onload = function () {
             setAdmin(officersxhr.responseText);
-        } 
-        officersxhr.send(); 
+        }
+        officersxhr.send();
         // setTimeout(function () { setAdmin(officersxhr.responseText) }, 300); // */
     }
 }
@@ -104,7 +157,7 @@ function setup() {
 function addDataset(fields, officer) {
 	
 }
-
+/* 
 function showEmptyModal() {
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
@@ -182,7 +235,8 @@ function showEmptyModal() {
             }
         }
     }
-}
+} // */
+/*
 function saveOfficer() {
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
@@ -205,7 +259,7 @@ function saveOfficer() {
     xhr.send(JSON.stringify({ membertype: titleText, firstname: firstName, lastname: lastName, username: username, phone_number: phoneText, cm: cmText, room_number: roomText, hall: hallText }));
     location.reload();
     return xhr;
-}
+}//*/
 function showModal(editImage) {
 	var eventSrc = (editImage.target || editImage.srcElement);
     var modal = document.getElementById('myModal');
