@@ -471,7 +471,7 @@ function submitFunc(json_data, put_id) {
     }
     var imageInput = document.getElementById('imageFile');
     if (imageInput.value != '') {
-        var photoXhr = new PhotoXhr("eventPhoto");
+        var photoXhr = new PhotoPostXhr("eventPhoto");
         photoXhr.xhrCallback(xhr, json_data, 'image_path');
         var files = document.getElementById("imageFile").files;
         var formData = new FormData();

@@ -45,7 +45,7 @@ function setupAddCommitteeButton() {
         committeeDesc.value = '';
         var submitBtn = document.getElementById('modal-submit')
         var addCommitteeSubmit = function (e) {
-            var photoXhr = new PhotoXhr('committeePhoto');
+            var photoXhr = new PhotoPostXhr('committeePhoto');
             var urlExtension = 'committee/';
             var postXhr = xhrPostRequest(urlExtension);
             postXhr.onload = function() { location.reload(); }

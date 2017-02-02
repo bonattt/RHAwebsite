@@ -1,15 +1,15 @@
 
 
-function PhotoXhr(apiCall) {
+function PhotoPostXhr(apiCall) {
     this.xhr = new XMLHttpRequest();
     this.xhr.open('POST', getPhotoApiUrl(apiCall));
 }
 
-PhotoXhr.prototype.send = function(formData) {
+PhotoPostXhr.prototype.send = function(formData) {
     this.xhr.send(formData);
 }
 
-PhotoXhr.prototype.xhrCallback = function(xhr, json_data, field_name) {
+PhotoPostXhr.prototype.xhrCallback = function(xhr, json_data, field_name) {
     var theXhr = this.xhr;
     theXhr.onload = function (e) {
         if (typeof field_name == 'undefined') {
