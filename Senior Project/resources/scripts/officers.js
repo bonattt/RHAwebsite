@@ -23,6 +23,10 @@ function setAdmin(officers) {
             xhr.onload = function() { location.reload() };
             var imageEntry = document.getElementById("imageFilePut");
             if (imageEntry.value != '') {
+                var image_to_delete = json_data.image;
+                var photoDelete = new PhotoDeleteXhr('officerPhoto');
+                photoDelete.send(JSON.stringify({'todelete': image_to_delete}));
+
                 var photoPost = new PhotoPostXhr("officerPhoto");
                 photoPost.xhrCallback(xhr, json_data, 'image');
                 var files = imageEntry.files;
@@ -46,7 +50,7 @@ function setAdmin(officers) {
             var imageEntry = document.getElementById("imageFilePut");
             imageEntry.value = '';
         });
-        
+
         var deleteConfirm = document.getElementById('confirm-delete');
         deleteConfirm.addEventListener('click', function() {
             // "selected_element_id" global decleared in adminPermission.js ... sorry about that... :(

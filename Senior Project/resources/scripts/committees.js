@@ -143,7 +143,7 @@ function saveCommittee(data) {
     var imageInput = document.getElementById("imageFile");
 
     if(imageInput.value != '') {
-        var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/committeePhoto';
+//        var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/committeePhoto';
         var image_to_delete = data.image;
         delete data.image; // so this is not sent in the regular update
         var photoDelete = new PhotoDeleteXhr('eventPhoto');
