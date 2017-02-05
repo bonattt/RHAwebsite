@@ -103,13 +103,11 @@ CREATE TABLE FloorMoney (
     floormoney_id SERIAL PRIMARY KEY,
     hall_and_floor varchar(50), -- Still working this one out.
     residents INT, -- Calculated via count_residents([floor name]);
-    possible_earnings Money, -- Calculated via calc_possible_earnings([floorname], [floor_resident_count], [money_per_person_per_year])
-    current_earned Money, -- Calculated via calc_earned_money([floorname], [floor_resident_count], [money_per_person_per_year])
-    possible_balance Money, -- Calculated via calc_possible_balance([floorname], [floor_resident_count], [money_per_person_per_year])
-    current_balance Money -- Calculated via calc_current_balance([floorname], [floor_resident_count], [money_per_person_per_year]);
+    possible_earnings double precision, -- Calculated via calc_possible_earnings([floorname], [floor_resident_count], [money_per_person_per_year])
+    current_earned double precision, -- Calculated via calc_earned_money([floorname], [floor_resident_count], [money_per_person_per_year])
+    possible_balance double precision, -- Calculated via calc_possible_balance([floorname], [floor_resident_count], [money_per_person_per_year])
+    current_balance double precision -- Calculated via calc_current_balance([floorname], [floor_resident_count], [money_per_person_per_year]);
 );
-
-INSERT INTO FloorMoney (hall_and_floor, residents) VALUES ('Mees', 15);
 
 CREATE TABLE FloorExpenses (
     floor_expense_id SERIAL PRIMARY KEY,
@@ -121,7 +119,7 @@ CREATE TABLE FloorExpenses (
 );
 
 INSERT INTO FloorExpenses (floor_id, event_description, amount) VALUES (1, 'Test 1: positive value', 30);
-INSERT INTO FloorExpenses (floor_id, event_description, amount) VALUES (1, 'Test 2: negative value', -10);
+-- INSERT INTO FloorExpenses (floor_id, event_description, amount) VALUES (1, 'Test 2: negative value', -10);
     
 
 
@@ -135,15 +133,36 @@ INSERT INTO FloorExpenses (floor_id, event_description, amount) VALUES (1, 'Test
 -- there are any, otherwise dont), then go through again to calculate last two entries.
 
 CREATE OR REPLACE FUNCTION populate_floor_money()
-  RETURNS &&
+  RETURNS void AS $$
   DECLARE
     -- declare fields to be used to insert into rows
-    floorname varchar;
-    floor_resident_count int;
-    possible_earnings double precision;
-    current_earned double precision;
+    p_earnings double precision;
+    c_earned double precision;
+    p_balance double precision;
+    c_balance double precision;
+    moneyRate int := 15;
+    t_row FloorMoney%rowtype;
   BEGIN
     -- call other functions 
+    CREATE TEMPORARY TABLE floor_resident_count AS 
+    SELECT Members.hall, count(*) FROM Members GROUP BY Members.hall;
+    INSERT INTO FloorMoney (hall_and_floor, residents) 
+      SELECT hall, count FROM floor_resident_count;
+    DROP TABLE floor_resident_count;
+    RAISE NOTICE 'Populated FloorMoney with initial values. Now calculating dollar amounts.';
+
+    FOR t_row IN SELECT * FROM FloorMoney LOOP
+      p_earnings := calc_possible_earnings(t_row.hall_and_floor, t_row.residents, moneyRate);
+      c_earned := calc_earned_money(t_row.hall_and_floor, t_row.residents, moneyRate);
+      p_balance := calc_possible_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
+      c_balance := calc_current_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
+      UPDATE FloorMoney
+        SET possible_earnings = p_earnings,
+            current_earned = c_earned,
+            possible_balance = p_balance,
+            current_balance = c_balance
+      WHERE floormoney_id = t_row.floormoney_id;
+    END LOOP;
   END;
 $$ LANGUAGE plpgsql;
 
@@ -157,8 +176,6 @@ CREATE OR REPLACE FUNCTION count_attendance(week int, quarter varchar, floor var
   BEGIN 
     SELECT INTO count count(*) FROM Members WHERE Members.hall = floor AND Members.meet_attend->quarter->week = '1';
      -- Return needs to be compared to a string because it's a JSON datatype
-    -- RAISE NOTICE 'In count_attendance(): Week = %, quarter = %, return var = %', week, quarter, count;
-
     RETURN count;
   END;
 $count$ LANGUAGE plpgsql;
@@ -179,9 +196,9 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
     x int;
     y varchar;
   BEGIN
-    RAISE NOTICE 'MoneyRate = %, size = %', moneyRate, size;
+    -- RAISE NOTICE 'MoneyRate = %, size = %', moneyRate, size;
     multiplier := (1.0 / 1.5) ^ (9.0) * (1.0 / 3.0) * moneyRate * size;
-    RAISE NOTICE 'Value of multiplier: %', multiplier;
+    -- RAISE NOTICE 'Value of multiplier: %', multiplier;
     FOREACH y IN ARRAY quarters
     LOOP
       meet_attended :=
@@ -191,21 +208,21 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
       END;
       FOREACH x IN ARRAY weeks
       LOOP
-        RAISE NOTICE 'looping over rows %, %', y, x;
+        -- RAISE NOTICE 'looping over rows %, %', y, x;
         SELECT INTO counter 
         CASE 
           WHEN (SELECT count_attendance(x, y, floor)) > 1 THEN 1
           ELSE 0
         END;
-        RAISE NOTICE 'Attended is %: (1 or 0)', counter;
+        -- RAISE NOTICE 'Attended is %: (1 or 0)', counter;
         meet_attended := meet_attended + counter;
       END LOOP;
       IF y = 'Q1' THEN
         meet_attended = meet_attended + 1; 
       END IF;
-      RAISE NOTICE 'Meetings Attended by %: %', floor, meet_attended;
+      -- RAISE NOTICE 'Meetings Attended by %: %', floor, meet_attended;
       earned := earned + (multiplier * ((1.5) ^ meet_attended));
-      RAISE NOTICE 'Earned is now: %', earned;
+      -- RAISE NOTICE 'Earned is now: %', earned;
     END LOOP;
   RETURN earned;
   END;
@@ -248,9 +265,9 @@ CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, money
           ELSE attended + 0
         END;
       END LOOP;
-      RAISE NOTICE 'Current max meetings before addition: %, attended: %', current_max_meetings, attended;
+      -- RAISE NOTICE 'Current max meetings before addition: %, attended: %', current_max_meetings, attended;
       current_max_meetings := attended + (9 - current_max_meetings);
-      RAISE NOTICE 'Quarter: %, max meetings: %', y, current_max_meetings;
+      -- RAISE NOTICE 'Quarter: %, max meetings: %', y, current_max_meetings;
       possible := possible + multiplier * (1.5 ^ current_max_meetings);
     END LOOP;
     return possible;
@@ -304,6 +321,8 @@ CREATE OR REPLACE FUNCTION calc_current_balance(floor varchar, size int, moneyRa
     SELECT INTO earned calc_earned_money(floor, size, moneyRate);
     RAISE NOTICE 'Expenses: %', expenses;
     RAISE NOTICE  'Earned: %', earned;
+    IF expenses = NULL THEN RETURN balance;
+    END IF;
     balance := expenses + earned;
     RETURN balance;
   END;
@@ -324,6 +343,8 @@ CREATE OR REPLACE FUNCTION calc_possible_balance(floor varchar, size int, moneyR
     SELECT INTO possible calc_possible_earnings(floor, size, moneyRate);
     RAISE NOTICE 'Expenses: %', expenses;
     RAISE NOTICE  'Possible: %', possible;
+    IF expenses = NULL THEN RETURN balance;
+    END IF;
     balance := expenses + possible;
     RETURN balance;
   END;
