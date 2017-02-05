@@ -35,6 +35,7 @@ function setAdmin(officers) {
                 imageEntry.value = ''
                 photoPost.send(formData);
             } else {
+                alert(JSON.stringify(json_data));
                 xhr.send(JSON.stringify(json_data));
             }
         });
