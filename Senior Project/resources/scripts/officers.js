@@ -21,10 +21,34 @@ function setAdmin(officers) {
                 delete json_data.membertype;
             }
             xhr.onload = function() { location.reload() };
-            xhr.send(JSON.stringify(json_data));
+            var imageEntry = document.getElementById("imageFilePut");
+            if (imageEntry.value != '') {
+                var photoPost = new PhotoPostXhr("officerPhoto");
+                photoPost.xhrCallback(xhr, json_data, 'image');
+                var files = imageEntry.files;
+                var formData = new FormData();
+                formData.append("imageFile", files[0]);
+                imageEntry.value = ''
+                photoPost.send(formData);
+            } else {
+                xhr.send(JSON.stringify(json_data));
+            }
         });
-        var deleteBtn = document.getElementById('confirm-delete');
+
+        var deleteBtn = document.getElementById('modal-delete');
         deleteBtn.addEventListener('click', function() {
+            var imageEntry = document.getElementById("imageFilePut");
+            imageEntry.value = '';
+        });
+
+        var cancelBtn = document.getElementById('modal-cancel');
+        cancelBtn.addEventListener('click', function() {
+            var imageEntry = document.getElementById("imageFilePut");
+            imageEntry.value = '';
+        });
+        
+        var deleteConfirm = document.getElementById('confirm-delete');
+        deleteConfirm.addEventListener('click', function() {
             // "selected_element_id" global decleared in adminPermission.js ... sorry about that... :(
             var element = document.getElementById(selected_element_id); 
             var dataset = element.dataset;
@@ -60,11 +84,24 @@ function setupAddOfficerButton() {
         var json_data = {"memberType": memberType};
         var xhr = xhrPutRequest(urlExtension);
         xhr.onload = function() {location.reload()};
-        xhr.send(JSON.stringify(json_data));
+        var imageEntry = document.getElementById("imageFilePost");
+        if (imageEntry.value != '') {
+            var photoPost = new PhotoPostXhr("officerPhoto");
+            photoPost.xhrCallback(xhr, json_data, 'image');
+            var files = imageEntry.files;
+            var formData = new FormData();
+            formData.append("imageFile", files[0]);
+            imageEntry.value = ''
+            photoPost.send(formData);
+        } else {
+            xhr.send(JSON.stringify(json_data));
+        }
     });
-    var cancelBtn = document.getElementById('modal-cancel');
+    var cancelBtn = document.getElementById('modal-new-officer-cancel');
     cancelBtn.addEventListener('click', function() {
-        // nothing right now
+        console.log("cancel!")
+        var imageEntry = document.getElementById("imageFilePost");
+        imageEntry.value = '';
     }); 
 }
 
