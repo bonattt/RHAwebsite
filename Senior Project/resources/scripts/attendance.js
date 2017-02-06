@@ -23,7 +23,7 @@ function setupSubmitAttendanceButton() {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                var result = reader.result().split("\n").sort();
+                var result = reader.result.split("\n").sort();
 
                 var xhr = xhrPostRequest(urlExtension);
 
