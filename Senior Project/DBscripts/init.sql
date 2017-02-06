@@ -42,24 +42,26 @@ CREATE TABLE Funds (
 );
 
 CREATE TABLE Proposals (
-    proposal_id SERIAL PRIMARY KEY,
-    proposer varchar(50),
-    expenses_id INT references Expenses (expenses_id),
-    proposal_name varchar(50),
-    week_proposed INT,
-    quarter_proposed INT,
-    money_requested Money,
-    approved boolean,
-    money_allocated Money,
-    paid boolean,
-    event_date DATE,
-    event_signup_open DATE,
-    event_signup_close DATE,
-    cost_to_attendee MONEY,
-    image_path varchar(100), 
-    description varchar(400),
-    attendees jsonb -- [varchar]
+        proposal_id SERIAL PRIMARY KEY,
+        proposer varchar(50),
+        expenses_id INT references Expenses (expenses_id),
+        proposal_name varchar(50),
+        week_proposed INT,
+        quarter_proposed INT,
+        money_requested Money,
+        approved boolean,
+        money_allocated Money,
+        paid boolean,
+        proposed_date DATE,
+        event_date DATE,
+        event_signup_open DATE,
+        event_signup_close DATE,
+        cost_to_attendee MONEY,
+        image_path varchar(100), 
+        description varchar(400),
+        attendees jsonb
 );
+
 
 CREATE TABLE Committee (
     committeeID SERIAL PRIMARY KEY,
@@ -97,15 +99,16 @@ CREATE TABLE FloorAttendanceNumerics (
     floor_minimum_attendance int
 );
 
+
+--Populated via populate_floor_money()
 CREATE TABLE FloorMoney (
     floormoney_id SERIAL PRIMARY KEY,
-    hall_and_floor varchar(50),
-    residents INT,
-    possible_earnings Money,
-    current_earned Money,
-    possible_balance Money, -- Calculated from possilbe_earnings (+), awarded (+), and expenses (-)
-    current_balance Money -- Calculated from current_earned (+), awarded (+), and expenses (-)
-
+    hall_and_floor varchar(50), -- Still working this one out.
+    residents INT, -- Calculated via count_residents([floor name]);
+    possible_earnings double precision, -- Calculated via calc_possible_earnings([floorname], [floor_resident_count], [money_per_person_per_year])
+    current_earned double precision, -- Calculated via calc_earned_money([floorname], [floor_resident_count], [money_per_person_per_year])
+    possible_balance double precision, -- Calculated via calc_possible_balance([floorname], [floor_resident_count], [money_per_person_per_year])
+    current_balance double precision -- Calculated via calc_current_balance([floorname], [floor_resident_count], [money_per_person_per_year]);
 );
 
 CREATE TABLE FloorExpenses (
@@ -117,22 +120,57 @@ CREATE TABLE FloorExpenses (
     processed_date DATE  
 );
 
--------------------------------------------------------------------
---                 WORKING EXAMPLE OF A FUNCTION                 --
---       CALL BY TYPING "Select test();" INTO PSQL TERMINAL      --
+INSERT INTO FloorExpenses (floor_id, event_description, amount) VALUES (1, 'Test 1: positive value', 30);
+-- INSERT INTO FloorExpenses (floor_id, event_description, amount) VALUES (1, 'Test 2: negative value', -10);
+    
 
-CREATE OR REPLACE FUNCTION test() 
-  RETURNS int AS $test$
+
+-- When writing this function, make sure to populate the names and resident numbers of the floor
+-- BEFORE calculating any of the monetary values. This is because in order to calcuate expenses
+-- you need to query FloorExpenses, which has a foriegn key contstraint on FloorMoney (the table
+-- this function populates), and you need the name of the floor to make sure you are getting only
+-- expenses which are for that specific hall. 
+
+-- TL;DR: Go through table once to add first five (including ID) entries, then populate expenses (if
+-- there are any, otherwise dont), then go through again to calculate last two entries.
+
+CREATE OR REPLACE FUNCTION populate_floor_money()
+  RETURNS void AS $$
   DECLARE
-    test int;
-  BEGIN 
-    SELECT INTO test count(*) FROM Members;
-  RETURN test;
-  END 
-$test$ LANGUAGE plpgsql;
+    -- declare fields to be used to insert into rows
+    p_earnings double precision;
+    c_earned double precision;
+    p_balance double precision;
+    c_balance double precision;
+    moneyRate int := 15;
+    t_row FloorMoney%rowtype;
+  BEGIN
+    -- call other functions 
+    CREATE TEMPORARY TABLE floor_resident_count AS 
+    SELECT Members.hall, count(*) FROM Members GROUP BY Members.hall;
+    INSERT INTO FloorMoney (hall_and_floor, residents) 
+      SELECT hall, count FROM floor_resident_count;
+    DROP TABLE floor_resident_count;
+    RAISE NOTICE 'Populated FloorMoney with initial values. Now calculating dollar amounts.';
 
--------------------------------------------------------------------
+    FOR t_row IN SELECT * FROM FloorMoney LOOP
+      p_earnings := calc_possible_earnings(t_row.hall_and_floor, t_row.residents, moneyRate);
+      c_earned := calc_earned_money(t_row.hall_and_floor, t_row.residents, moneyRate);
+      p_balance := calc_possible_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
+      c_balance := calc_current_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
+      UPDATE FloorMoney
+        SET possible_earnings = p_earnings,
+            current_earned = c_earned,
+            possible_balance = p_balance,
+            current_balance = c_balance
+      WHERE floormoney_id = t_row.floormoney_id;
+    END LOOP;
+  END;
+$$ LANGUAGE plpgsql;
 
+/* Counts the attendance of the specified floor during the given week and quarter
+   Returns: INT
+*/
 CREATE OR REPLACE FUNCTION count_attendance(week int, quarter varchar, floor varchar)
   RETURNS int AS $count$
   DECLARE 
@@ -140,14 +178,14 @@ CREATE OR REPLACE FUNCTION count_attendance(week int, quarter varchar, floor var
   BEGIN 
     SELECT INTO count count(*) FROM Members WHERE Members.hall = floor AND Members.meet_attend->quarter->week = '1';
      -- Return needs to be compared to a string because it's a JSON datatype
-    -- RAISE NOTICE 'In count_attendance(): Week = %, quarter = %, return var = %', week, quarter, count;
-
     RETURN count;
   END;
 $count$ LANGUAGE plpgsql;
 
--- MODIFY THIS FUNCTION SO THAT IS ADDS ONE ATTENDED MEETING TO FALL, AND ADDS MULTIPLIER TO TOTAL IF QUARTER HAS NOT STARTED YET
 
+/* Calculates a given floor's earned money thus far given floor name, size of the floor, and money rate
+   Returns: DOUBLE PRECISION
+*/
 CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate int) 
   RETURNS double precision AS $earned$
   DECLARE
@@ -160,34 +198,156 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
     x int;
     y varchar;
   BEGIN
-    RAISE NOTICE 'MoneyRate = %, size = %', moneyRate, size;
+    -- RAISE NOTICE 'MoneyRate = %, size = %', moneyRate, size;
     multiplier := (1.0 / 1.5) ^ (9.0) * (1.0 / 3.0) * moneyRate * size;
-    RAISE NOTICE 'Value of multiplier: %', multiplier;
+    -- RAISE NOTICE 'Value of multiplier: %', multiplier;
     FOREACH y IN ARRAY quarters
     LOOP
-      meet_attended := 0;
+      meet_attended :=
+      CASE 
+        WHEN y = 'Q1' THEN 1
+        ELSE 0
+      END;
       FOREACH x IN ARRAY weeks
       LOOP
-        RAISE NOTICE 'looping over rows %, %', y, x;
+        -- RAISE NOTICE 'looping over rows %, %', y, x;
         SELECT INTO counter 
         CASE 
           WHEN (SELECT count_attendance(x, y, floor)) > 1 THEN 1
           ELSE 0
         END;
-        RAISE NOTICE 'Attended is %: (1 or 0)', counter;
+        -- RAISE NOTICE 'Attended is %: (1 or 0)', counter;
         meet_attended := meet_attended + counter;
       END LOOP;
       IF y = 'Q1' THEN
         meet_attended = meet_attended + 1; 
       END IF;
-      RAISE NOTICE 'Meetings Attended by %: %', floor, meet_attended;
+      -- RAISE NOTICE 'Meetings Attended by %: %', floor, meet_attended;
       earned := earned + (multiplier * ((1.5) ^ meet_attended));
-      RAISE NOTICE 'Earned is now: %', earned;
+      -- RAISE NOTICE 'Earned is now: %', earned;
     END LOOP;
   RETURN earned;
   END;
 $earned$ LANGUAGE plpgsql;
-    
+
+
+/* Calculates a given floor's possible earnings given floor name, size of the floor, and money rate
+   based on the number of meetings attended so far, and the number of meetings remaining in the year
+   Returns: DOUBLE PRECISION
+*/
+-- Update to include functions 
+CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, moneyRate int) 
+  RETURNS double precision AS $possible$
+  DECLARE
+    meetings json;
+    attended int;
+    possible double precision := 0;
+    current_max_meetings int;
+    counter int;
+    multiplier double precision := (1.0 / 1.5) ^ (9.0) * (1.0 / 3.0) * moneyRate * size;
+    quarters varchar[] := ARRAY['Q1', 'Q2', 'Q3'];
+    weeks int[] := ARRAY[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    x int;
+    y varchar;
+  BEGIN
+    FOREACH y IN ARRAY quarters
+    LOOP
+      SELECT INTO meetings Members.meet_attend->y FROM Members WHERE Members.hall = floor LIMIT 1;
+      current_max_meetings := json_array_length(meetings);
+      attended := 
+      CASE
+        WHEN y = 'Q1' THEN 1
+        ELSE 0
+      END;
+      FOREACH x IN ARRAY weeks
+      LOOP
+        attended := 
+        CASE 
+          WHEN (SELECT count_attendance(x, y, floor)) > 1 THEN attended + 1
+          ELSE attended + 0
+        END;
+      END LOOP;
+      -- RAISE NOTICE 'Current max meetings before addition: %, attended: %', current_max_meetings, attended;
+      current_max_meetings := attended + (9 - current_max_meetings);
+      -- RAISE NOTICE 'Quarter: %, max meetings: %', y, current_max_meetings;
+      possible := possible + multiplier * (1.5 ^ current_max_meetings);
+    END LOOP;
+    return possible;
+  END;
+$possible$ LANGUAGE plpgsql;
+
+
+
+
+/* Counts the number of residents on a given floor from the Members table 
+   Returns: INT
+*/
+CREATE OR REPLACE FUNCTION count_residents(floor varchar)
+  RETURNS int AS $residents$
+  DECLARE
+    residents int;
+    -- any other vars needed (shouldnt be any)
+  BEGIN
+    SELECT INTO residents count(*) FROM Members WHERE Members.hall = floor;
+    RETURN residents;
+  END;
+$residents$ LANGUAGE plpgsql;
+
+
+/* Sums the expenses and rewards from FloorExpenses given the floor name
+   Returns: INT
+*/
+CREATE OR REPLACE FUNCTION sum_expenses(floor varchar)
+  RETURNS double precision AS $expenses$
+  DECLARE
+    expenses double precision;
+    count int;
+  BEGIN
+    SELECT INTO expenses SUM(FloorExpenses.amount) FROM FloorMoney, FloorExpenses WHERE FloorMoney.hall_and_floor = floor AND FloorMoney.floormoney_id = FloorExpenses.floor_id;
+    return expenses;
+  END;
+$expenses$ LANGUAGE plpgsql;
+
+
+/* Calculates the given floor's current balance based on earned money totaled with their expenses
+   Returns: DOUBLE PRECISION
+*/
+CREATE OR REPLACE FUNCTION calc_current_balance(floor varchar, size int, moneyRate int) 
+  RETURNS double precision AS $balance$
+  DECLARE
+    balance double precision;
+    earned double precision;
+    expenses double precision;
+  BEGIN
+    SELECT INTO expenses sum_expenses(floor);
+    SELECT INTO earned calc_earned_money(floor, size, moneyRate);
+    IF expenses IS NULL THEN RETURN earned;
+    END IF;
+    balance := expenses + earned;
+    RETURN balance;
+  END;
+$balance$ LANGUAGE plpgsql;
+
+
+/* Calculates the given floor's possible balance based on possible money totaled with their expenses
+   Returns: DOUBLE PRECISION
+*/
+CREATE OR REPLACE FUNCTION calc_possible_balance(floor varchar, size int, moneyRate int) 
+  RETURNS double precision AS $balance$
+  DECLARE
+    balance double precision;
+    possible double precision;
+    expenses double precision;
+  BEGIN
+    SELECT INTO expenses sum_expenses(floor);
+    SELECT INTO possible calc_possible_earnings(floor, size, moneyRate);
+    IF expenses IS NULL THEN RETURN possible;
+    END IF;
+    balance := expenses + possible;
+    RETURN balance;
+  END;
+$balance$ LANGUAGE plpgsql;
+
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
                                         Feud, and more. We also show movies outdoors on the big screen, and sponsor an Easter egg hunt in the spring. We also
@@ -546,103 +706,104 @@ INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'test', -1, -1, 7000.00, true, 7000
 --08 approved
 --09 money_allocated
 --10 paid
---11 event_date
---12 event_signup_open
---13 event_signup_close
---14 cost_to_attendee
---15 image_path
---16 description
---17 attendees
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', -1, -1, 7000.00, true, 7000.00, true, '2016-11-11', '2016-11-01', '2016-11-9', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', -1, -1, 700.00, true, 700.00, false, '2016-10-11', '2016-10-1', '2016-10-9', 0, '../images/events/blood-drive.jpg'); -- May break because of date
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', -1, -1, 1200.00, true, 1200.00, true, '2016-8-30', '2016-8-1', '2016-8-28', 0, '../images/events/speedlawn.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Exec Fund', -1, -1, 1500.00, true, 1500.00, false, '2016-11-1', '2016-10-1', '2016-10-30', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie Server', -1, -1, 2000.00, true, 2000.00, true, '2016-11-29', '2016-11-1', '2016-11-27', 0, '../images/events/movie.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'RHA Swag', -1, -1, 2500.00, true, 2500.00, false, '2016-11-21', '2016-11-1', '2016-11-19', 0, '../images/events/fear-engineer-shirt.jpg');
+--11 proposed_date
+--12 event_date
+--13 event_signup_open
+--14 event_signup_close
+--15 cost_to_attendee
+--16 image_path
+--17 description
+--18 attendees
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', 9, 2, 7000.00, true, 7000.00, true, '2016-5-2', '2016-11-11', '2016-11-01', '2016-11-9', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', 9, 2, 700.00, true, 700.00, false, '2016-5-2', '2016-10-11', '2016-10-1', '2016-10-9', 0, '../images/events/blood-drive.jpg'); -- May break because of date
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', 9, 2, 1200.00, true, 1200.00, true, '2016-5-2', '2016-8-30', '2016-8-1', '2016-8-28', 0, '../images/events/speedlawn.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Exec Fund', 10, 2, 1500.00, true, 1500.00, false, '2016-5-9', '2016-10-1', '2016-10-30', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie Server', 10, 2, 2000.00, true, 2000.00, true, '2016-5-9', '2016-11-1', '2016-11-27', 0, '../images/events/movie.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'RHA Swag', 10, 2, 2500.00, true, 2500.00, false, '2016-5-9', '2016-11-1', '2016-11-19', 0, '../images/events/fear-engineer-shirt.jpg');
 
 -- Fall = 0, Winter = 1, Spring = 2
 -- week: 1--11, 1 = first week, 11 = finals week
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Cheap Food Day', 1, 1, 1.00, true, 200.00, false, '2016-9-5', '2016-9-5', '2016-9-5', 10, '../images/events/foods.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lambda Chi Watermelon Bash', 1, 1, 100.00, true, 100.00, false, '2016-9-8', '2016-9-8', '2016-9-8', 10, '../images/events/watermellon-bust.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Cheap Food Day', 1, 1, 1.00, true, 200.00, false, '2016-9-5', '2016-9-5', '2016-9-5', '2016-9-5', 10, '../images/events/foods.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lambda Chi Watermelon Bash', 1, 1, 100.00, true, 100.00, false, '2016-9-8', '2016-9-8', '2016-9-8', '2016-9-8', 10, '../images/events/watermellon-bust.jpg');
 
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Chi Omega Run for Wishes', 2, 0, 100.00, false, 150.00, true, '2016-9-11', '2016-9-11', '2016-9-11', 5, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Conferences', 2, 0, 50.00, false, 5000.00, false, '2016-9-12', '2016-9-12', '2016-9-12', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Beach Volleyball and Cookout', 2, 0, 400.00, true, 400.00, true, '2016-9-13', '2016-9-13', '2016-9-13', 5, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Grillin and Chillin', 2, 0, 500.00, true, 500.00, false, '2016-9-14', '2016-9-14', '2016-9-14', 8, '../images/events/foods.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Pop Rocks', 2, 0, 100.00, true, 100.00, true, '2016-9-15', '2016-9-15', '2016-9-15', 5, '../images/events/pop-rocks.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Bonfire Guarding', 2, 0, 800.00, true, 800.00, false, '2016-9-16', '2016-9-16', '2016-9-16', 0, '../images/events/bonfire-guarding.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Percopo Hall Ed', 2, 0, 300.00, true, 300.00, true, '2016-9-17', '2016-9-17', '2016-9-17', 0, '../images/events/percopo.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Chi Omega Run for Wishes', 2, 0, 100.00, false, 150.00, true, '2016-9-11', '2016-9-11', '2016-9-11', '2016-9-11', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Conferences', 2, 0, 50.00, false, 5000.00, false, '2016-9-12', '2016-9-12', '2016-9-12', '2016-9-12', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Beach Volleyball and Cookout', 2, 0, 400.00, true, 400.00, true, '2016-9-13', '2016-9-13', '2016-9-13', '2016-9-13', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Grillin and Chillin', 2, 0, 500.00, true, 500.00, false, '2016-9-14', '2016-9-14', '2016-9-14', '2016-9-14', 8, '../images/events/foods.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Pop Rocks', 2, 0, 100.00, true, 100.00, true, '2016-9-15', '2016-9-15', '2016-9-15', '2016-9-15', 5, '../images/events/pop-rocks.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Bonfire Guarding', 2, 0, 800.00, true, 800.00, false, '2016-9-16', '2016-9-16', '2016-9-16', '2016-9-16', 0, '../images/events/bonfire-guarding.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Percopo Hall Ed', 2, 0, 300.00, true, 300.00, true, '2016-9-17', '2016-9-17', '2016-9-17', '2016-9-17', 0, '../images/events/percopo.jpg');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Cooking Competition', 3, 0, 12.34, true, 400.00, false, '2016-9-20', '2016-9-20', '2016-9-20', 5, '../images/events/foods.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Kings Island', 3, 0, 6000.00, true, 6000.00, false, '2016-9-23', '2016-9-23', '2016-9-23', 15, '../images/events/kingsIsland.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Cooking Competition', 3, 0, 12.34, true, 400.00, false, '2016-9-20', '2016-9-20', '2016-9-20', '2016-9-20', 5, '../images/events/foods.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Kings Island', 3, 0, 6000.00, true, 6000.00, false, '2016-9-23', '2016-9-23', '2016-9-23', '2016-9-23', 15, '../images/events/kingsIsland.jpg');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Haunted House', 4, 0, 250.00, true, 375.00, false, '2016-9-26', '2016-9-26', '2016-9-26', 10, '../images/events/haunted-house.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Haunted Trail', 4, 0, 150.00, false, 1000.00, true, '2016-9-30', '2016-9-30', '2016-9-30', 0, '../images/events/haunted-house.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Haunted House', 4, 0, 250.00, true, 375.00, false, '2016-9-26', '2016-9-26', '2016-9-26', '2016-9-26', 10, '../images/events/haunted-house.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Haunted Trail', 4, 0, 150.00, false, 1000.00, true, '2016-9-30', '2016-9-30', '2016-9-30', '2016-9-30', 0, '../images/events/haunted-house.jpg');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'BSB 3 Cookout', 6, 0, 100.00, true, 1000.00, false, '2016-10-10', '2016-10-10', '2016-10-10', 0, '../images/events/foods.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tri-Hop', 6, 0, 150.00, false, 248.00, true, '2016-10-14', '2016-10-14', '2016-10-14', 7, '../images/events/tri-hop.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'BSB 3 Cookout', 6, 0, 100.00, true, 1000.00, false, '2016-10-10', '2016-10-10', '2016-10-10', '2016-10-10', 0, '../images/events/foods.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tri-Hop', 6, 0, 150.00, false, 248.00, true, '2016-10-14', '2016-10-14', '2016-10-14', '2016-10-14', 7, '../images/events/tri-hop.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Random Acts of Kindness', 7, 0, 0.00, false, 275.00, false, '2016-10-16', '2016-10-16', '2016-10-16', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'BSB 3 Trick-or-Treat', 7, 0, 25.00, true, 200.00, true, '2016-10-17', '2016-10-17', '2016-10-17', 0, '../images/events/trick-or-treat.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'GUAM Cookie Cart', 7, 0, 20.00, false, 300.00, false, '2016-10-18', '2016-10-18', '2016-10-18', 5, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Reverse Trick-or-Treating', 7, 0, 23.00, false, 20.00, true, '2016-10-19', '2016-10-19', '2016-10-19', 3, '../images/events/trick-or-treat.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Paws on the Patio', 7, 0, 50.00, false, 200.00, false, '2016-10-20', '2016-10-20', '2016-10-20', 0, '../images/events/paws-on-patio.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Trunk R Treat', 7, 0, 50.00, true, 50.00, true, '2016-10-21', '2016-10-21', '2016-10-21', 0, '../images/events/trick-or-treat.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Random Acts of Kindness', 7, 0, 0.00, false, 275.00, false, '2016-10-16', '2016-10-16', '2016-10-16', '2016-10-16', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'BSB 3 Trick-or-Treat', 7, 0, 25.00, true, 200.00, true, '2016-10-17', '2016-10-17', '2016-10-17', '2016-10-17', 0, '../images/events/trick-or-treat.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'GUAM Cookie Cart', 7, 0, 20.00, false, 300.00, false, '2016-10-18', '2016-10-18', '2016-10-18', '2016-10-18', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Reverse Trick-or-Treating', 7, 0, 23.00, false, 20.00, true, '2016-10-19', '2016-10-19', '2016-10-19', '2016-10-19', 3, '../images/events/trick-or-treat.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Paws on the Patio', 7, 0, 50.00, false, 200.00, false, '2016-10-20', '2016-10-20', '2016-10-20', '2016-10-20', 0, '../images/events/paws-on-patio.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Trunk R Treat', 7, 0, 50.00, true, 50.00, true, '2016-10-21', '2016-10-21', '2016-10-21', '2016-10-21', 0, '../images/events/trick-or-treat.jpg');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'No Shave Novemeber', 8, 0, 0.00, true, 200.00, false, '2016-10-24', '2016-10-24', '2016-10-24', 5, '../images/events/no-shave-november.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lazer Tag-Pokemon Tourney', 8, 0, 100.00, false, 150.00, true, '2016-10-28', '2016-10-28', '2016-10-28', 10, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'No Shave Novemeber', 8, 0, 0.00, true, 200.00, false, '2016-10-24', '2016-10-24', '2016-10-24', '2016-10-24', 5, '../images/events/no-shave-november.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lazer Tag-Pokemon Tourney', 8, 0, 100.00, false, 150.00, true, '2016-10-28', '2016-10-28', '2016-10-28', '2016-10-28', 10, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lazer Tag Off-campus', 9, 0, 2500.00, true, 500.00, false, '2016-10-31', '2016-10-31', '2016-10-31', 12, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 9, 0, 0.00, true, 800.00, true, '2016-11-1', '2016-11-1', '2016-11-1', 5, '../images/events/blood-drive.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'ISA Diwali', 9, 0, 150.00, false, 125.00, false, '2016-11-3', '2016-11-3', '2016-11-3', 8, '../images/events/diwali.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lazer Tag Off-campus', 9, 0, 2500.00, true, 500.00, false, '2016-10-31', '2016-10-31', '2016-10-31', '2016-10-31', 12, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 9, 0, 0.00, true, 800.00, true, '2016-11-1', '2016-11-1', '2016-11-1', '2016-11-1', 5, '../images/events/blood-drive.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'ISA Diwali', 9, 0, 150.00, false, 125.00, false, '2016-11-3', '2016-11-3', '2016-11-3', '2016-11-3', 8, '../images/events/diwali.jpg');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Ski Trip', 1, 1, 3000.00, true, 3375.00, true, '2016-11-28', '2016-11-28', '2016-11-28', 15, '../images/events/ski-trip.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Room Christmas Decoration Contest', 1, 1, 100.00, true, 225.00, false, '2016-11-30', '2016-11-30', '2016-11-30', 0, '../images/events/holiday-decorating-contest.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Floor Christmas Decoration Contest', 1, 1, 100.00, true, 450.00, true, '2016-12-2', '2016-12-2', '2016-12-2', 0, '../images/events/holiday-decorating-contest.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Mug Decoration', 1, 1, 75.00, false, 300.00, false, '2016-12-2', '2016-12-2', '2016-12-2', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Salvation Army Tree', 1, 1, 100.00, true, 150.00, true, '2016-12-3', '2016-12-3', '2016-12-3', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Ski Trip', 1, 1, 3000.00, true, 3375.00, true, '2016-11-28', '2016-11-28', '2016-11-28', '2016-11-28', 15, '../images/events/ski-trip.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Room Christmas Decoration Contest', 1, 1, 100.00, true, 225.00, false, '2016-11-30', '2016-11-30', '2016-11-30', '2016-11-30', 0, '../images/events/holiday-decorating-contest.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Floor Christmas Decoration Contest', 1, 1, 100.00, true, 450.00, true, '2016-12-2', '2016-12-2', '2016-12-2', '2016-12-2', 0, '../images/events/holiday-decorating-contest.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Mug Decoration', 1, 1, 75.00, false, 300.00, false, '2016-12-2', '2016-12-2', '2016-12-2', '2016-12-2', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Salvation Army Tree', 1, 1, 100.00, true, 150.00, true, '2016-12-3', '2016-12-3', '2016-12-3', '2016-12-3', 5, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Assassins', 3, 1, 0.00, true, 100.00, false, '2016-12-12', '2016-12-12', '2016-12-12', 0, '../images/events/assassins2.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Assassins', 3, 1, 0.00, true, 100.00, false, '2016-12-12', '2016-12-12', '2016-12-12', '2016-12-12', 0, '../images/events/assassins2.jpg');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'EWB Wallyball Tourney', 4, 1, 75.50, false, 80.00, true, '2016-12-15', '2016-12-1', '2016-12-4', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Greatest Floor', 4, 1, 125.00, false, 2750.00, false, '2016-11-22', '2016-11-2', '2016-11-20', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'EWB Wallyball Tourney', 4, 1, 75.50, false, 80.00, true, '2016-12-15', '2016-12-1', '2016-12-4', '2016-12-4', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Greatest Floor', 4, 1, 125.00, false, 2750.00, false, '2016-11-22', '2016-11-2', '2016-11-20', '2016-11-20', 0, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Mr. Rose', 5, 1, 100.00, false, 150.00, true, '2016-11-27', '2016-11-1', '2016-11-20', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Mr. Rose', 5, 1, 100.00, false, 150.00, true, '2016-11-27', '2016-11-1', '2016-11-20', '2016-11-20', 0, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lunar New Years Celebration', 7, 1, 75.31, true, 125.00, false, '2016-2-8', '2016-1-20', '2016-2-6', 5, '../images/events/lunar-new-year.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 7, 1, 0.00, true, 800.00, false, '2016-12-26', '2016-12-5', '2016-12-24', 0, '../images/events/blood-drive.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Super Smash Bros Tournament', 7, 1, 25.00, false, 200.00, true, '2016-11-29', '2016-11-1', '2016-1-27', 5, '../images/events/smash-bros-toury.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Lunar New Years Celebration', 7, 1, 75.31, true, 125.00, false, '2016-2-8', '2016-1-20', '2016-1-20', '2016-2-6', 5, '../images/events/lunar-new-year.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 7, 1, 0.00, true, 800.00, false, '2016-12-26', '2016-12-5', '2016-12-24', '2016-12-24', 0, '../images/events/blood-drive.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Super Smash Bros Tournament', 7, 1, 25.00, false, 200.00, true, '2016-11-29', '2016-11-1', '2016-11-1', '2016-1-27', 5, '../images/events/smash-bros-toury.jpg');
 
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Random Acts of Kindness', 8, 1, 0.00, false, 200.00, false, '2016-10-27', '2016-10-5', '2016-10-25', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Nerds that Cook', 8, 1, 100.00, false, 150.00, true, '2016-12-22', '2016-12-1', '2016-12-20', 5, '../images/events/foods.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Random Acts of Kindness', 8, 1, 0.00, false, 200.00, false, '2016-10-27', '2016-10-5', '2016-10-25', '2016-10-25', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Nerds that Cook', 8, 1, 100.00, false, 150.00, true, '2016-12-22', '2016-12-1', '2016-12-20', '2016-12-20', 5, '../images/events/foods.jpg');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland', 3, 2, 151.23, true, 1000.00, false, '2016-11-7', '2016-10-20', '2016-11-5', 5 , '../images/events/rockout-for-ryland.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Easter Egg Hunt', 3, 2, 67.54, false, 300.00, true, '2016-11-8', '2016-10-10', '2016-11-6', 0, '../images/events/easter-eggs.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SAA Color Smash', 3, 2, 32.10, false, 120.00, false, '2016-11-23', '2016-11-1', '2016-11-20', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland', 3, 2, 151.23, true, 1000.00, false, '2016-11-7', '2016-10-20', '2016-11-5', '2016-11-5', 5 , '../images/events/rockout-for-ryland.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Easter Egg Hunt', 3, 2, 67.54, false, 300.00, true, '2016-11-8', '2016-10-10', '2016-11-6', '2016-11-6', 0, '../images/events/easter-eggs.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SAA Color Smash', 3, 2, 32.10, false, 120.00, false, '2016-11-23', '2016-11-1', '2016-11-20', '2016-11-20', 0, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Dishes for Wishes', 4, 2, 45.67, true, 250.00, true, '2016-10-25', '2016-10-1', '2016-10-23', 5, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Deming Park Cookout', 4, 2, 123.45, false, 1200.00, false, '2016-11-2', '2016-10-11', '2016-11-1', 0, '../images/events/foods.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Dishes for Wishes', 4, 2, 45.67, true, 250.00, true, '2016-10-25', '2016-10-1', '2016-10-23', '2016-10-23', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Deming Park Cookout', 4, 2, 123.45, false, 1200.00, false, '2016-11-2', '2016-10-11', '2016-11-1', '2016-11-1', 0, '../images/events/foods.jpg');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie on the Lawn', 5, 2, 20.00, true, 1200.00, true, '2016-11-30', '2016-11-10', '2016-11-28', 0, '../images/events/movie.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Movie on the Lawn', 5, 2, 20.00, true, 1200.00, true, '2016-11-30', '2016-11-10', '2016-11-28', '2016-11-28', 0, '../images/events/movie.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Campus Beautification', 6, 2, 345.00, true, 500.00, false, '2016-10-27', '2016-10-5', '2016-10-25', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SHPE Cinco de Mayo', 6, 2, 50.00, false, 200.00, true, '2016-5-5', '2016-4-15', '2016-5-3', 5, '../images/events/cinco-de-mayo.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'House Keepers Appreciation', 6, 2, 100.00, false, 500.00, true, '2017-1-15', '2017-1-1', '2017-1-14', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Paws on the Patio', 6, 2, 200.00, true, 200.00, false, '2017-2-7', '2017-1-20', '2017-2-6', 5, '../images/events/paws-on-patio.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 6, 2, 0.00, false, 799.99, true, '2017-4-4', '2017-3-20', '2017-4-3', 0, '../images/events/blood-drive.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tri Delta Teeter Totter-a-thon', 6, 2, 0.00, true, 300.00, false, '2017-5-20', '2017-5-1', '2017-5-19', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Campus Beautification', 6, 2, 345.00, true, 500.00, false, '2016-10-27', '2016-10-5', '2016-10-25', '2016-10-25', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'SHPE Cinco de Mayo', 6, 2, 50.00, false, 200.00, true, '2016-5-5', '2016-4-15', '2016-5-3', '2016-5-3', 5, '../images/events/cinco-de-mayo.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'House Keepers Appreciation', 6, 2, 100.00, false, 500.00, true, '2017-1-15', '2017-1-1', '2017-1-1', '2017-1-14', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Paws on the Patio', 6, 2, 200.00, true, 200.00, false, '2017-2-7', '2017-1-20', '2017-2-6', '2017-2-6', 5, '../images/events/paws-on-patio.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Blood Drive', 6, 2, 0.00, false, 799.99, true, '2017-4-4', '2017-3-20', '2017-4-3', '2017-4-3', 0, '../images/events/blood-drive.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tri Delta Teeter Totter-a-thon', 6, 2, 0.00, true, 300.00, false, '2017-5-20', '2017-5-1', '2017-5-1', '2017-5-19', 0, '../images/events/rose-seal.png');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rose Riot', 7, 2, 250.00, true, 7500.00, true, '2017-3-7', '2017-2-24', '2017-3-6', 0, '../images/events/rose-riot.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'ISA Global Cuisine Night', 7, 2, 250.00, true, 100.00, false, '2017-4-15', '2017-4-1', '2017-4-14', 5, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Student Involvement Award Dinner', 7, 2, 250.00, false, 1000.00, true, '2017-6-1', '2017-5-10', '2017-5-30', 5, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', 7, 2, 200.00, false, 7000.00, false, '2017-3-27', '2017-3-4', '2017-3-27', 0, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', 7, 2, 0.00, false, 800.00, true, '2016-10-1', '2016-9-2', '2016-9-30', 0, '../images/events/blood-drive.jpg');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', 7, 2, 20.00, false, 1200.00, false, '2017-10-2', '2017-9-2', '2017-10-1', 0, '../images/events/speedlawn.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rose Riot', 7, 2, 250.00, true, 7500.00, true, '2017-3-7', '2017-2-24', '2017-3-6', '2017-3-6', 0, '../images/events/rose-riot.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'ISA Global Cuisine Night', 7, 2, 250.00, true, 100.00, false, '2017-4-15', '2017-4-1', '2017-4-1', '2017-4-14', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Student Involvement Award Dinner', 7, 2, 250.00, false, 1000.00, true, '2017-6-1', '2017-5-10', '2017-5-10', '2017-5-30', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', 7, 2, 200.00, false, 7000.00, false, '2017-3-27', '2017-3-4', '2017-3-27', '2017-3-27', 0, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', 7, 2, 0.00, false, 800.00, true, '2016-10-1', '2016-9-2', '2016-9-30', '2016-9-30', 0, '../images/events/blood-drive.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', 7, 2, 20.00, false, 1200.00, false, '2017-10-2', '2017-9-2', '2017-10-1', '2017-10-1', 0, '../images/events/speedlawn.jpg');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tropical Sno', 8, 2, 34.21, true, 300.00, true, '2017-12-17', '2017-11-26', '2017-12-17', 5, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland Tickets', 8, 2, 1000.01, false, 375.00, false, '2017-4-20', '2017-4-1', '2017-4-19', 10,'../images/events/rockout-for-ryland.jpg');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Tropical Sno', 8, 2, 34.21, true, 300.00, true, '2017-12-17', '2017-11-26', '2017-12-17', '2017-12-17', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland Tickets', 8, 2, 1000.01, false, 375.00, false, '2017-4-20', '2017-4-1', '2017-4-1', '2017-4-19', 10,'../images/events/rockout-for-ryland.jpg');
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Hall Improvement Funds', 9, 2, 10000.00, true, 10000.00, true, '2017-3-24', '2017-3-1', '2017-3-23', 5, '../images/events/rose-seal.png');
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Thomas 22nd Birthday', 9, 2, 10000.00, true, 10000.00, false, '2017-2-6', '2017-1-1', '2017-2-1', 9.99, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Hall Improvement Funds', 9, 2, 10000.00, true, 10000.00, true, '2017-3-24', '2017-3-1', '2017-3-23', '2017-3-23', 5, '../images/events/rose-seal.png');
+INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Thomas 22nd Birthday', 9, 2, 10000.00, true, 10000.00, false, '2017-2-6', '2017-1-1', '2017-2-1', '2017-2-1', 9.99, '../images/events/rose-seal.png');
