@@ -49,6 +49,10 @@ app.get('/proposals', function (req, res) {
   res.sendFile(__dirname + '/html/proposals.html');
 });
 
+app.get('/listAllProposals', function (req, res) {
+	res.sendFile(__dirname + '/html/listAllProposals.html');
+});
+
 app.get('/sign-ups', function (req, res) {
   res.sendFile(__dirname + '/html/sign-ups.html');
 });
