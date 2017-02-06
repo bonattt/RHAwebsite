@@ -16,6 +16,12 @@ function setAdmin(officers) {
             var xhr = xhrPutRequest(apiUrl);
             delete json_data.user_id;
             delete json_data.username;
+            for (attr in json_data) {
+                if (json_data[attr] == null) {
+                    delete json_data[attr]
+                }
+            }
+
             if (json_data.membertype == '') {
                 msg = 'Officers must have a member type.'
                 delete json_data.membertype;
@@ -28,14 +34,13 @@ function setAdmin(officers) {
                 photoDelete.send(JSON.stringify({'todelete': image_to_delete}));
 
                 var photoPost = new PhotoPostXhr("officerPhoto");
-                photoPost.xhrCallback(xhr, json_data, 'image');
+                photoPost.imageCallback(xhr, json_data, 'image');
                 var files = imageEntry.files;
                 var formData = new FormData();
                 formData.append("imageFile", files[0]);
                 imageEntry.value = ''
                 photoPost.send(formData);
             } else {
-                alert(JSON.stringify(json_data));
                 xhr.send(JSON.stringify(json_data));
             }
         });
@@ -92,7 +97,7 @@ function setupAddOfficerButton() {
         var imageEntry = document.getElementById("imageFilePost");
         if (imageEntry.value != '') {
             var photoPost = new PhotoPostXhr("officerPhoto");
-            photoPost.xhrCallback(xhr, json_data, 'image');
+            photoPost.imageCallback(xhr, json_data, 'image');
             var files = imageEntry.files;
             var formData = new FormData();
             formData.append("imageFile", files[0]);
@@ -166,7 +171,7 @@ function setup() {
 				
 				html += officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].membertype
 				html += "</h3>";
-                html += "<img src='../images/officers/" + officer[i].membertype.toLowerCase().replace(" ", "") + ".jpg' alt='" + officer[i].membertype + "'height='294' width='195'>";
+                html += "<img src='" + officer[i].image + "' alt='" + officer[i].membertype + "'height='294' width='195'>";
                 html += "<p>Email: <a href='mailto:" + officer[i].username + "@rose-hulman.edu'>" + officer[i].username + "@rose-hulman.edu</a></p>";
                 html += "<p> Phone Number: " + officer[i].phone_number + "</p>";
                 html += "<p> Room: " + officer[i].hall + " " + officer[i].room_number + "</p>";

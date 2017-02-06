@@ -9,7 +9,7 @@ PhotoPostXhr.prototype.send = function(formData) {
     this.xhr.send(formData);
 }
 
-PhotoPostXhr.prototype.xhrCallback = function(xhr, json_data, field_name) {
+PhotoPostXhr.prototype.imageCallback = function(xhr, json_data, field_name) {
     var theXhr = this.xhr;
     theXhr.onload = function (e) {
         if (typeof field_name == 'undefined') {
@@ -18,6 +18,7 @@ PhotoPostXhr.prototype.xhrCallback = function(xhr, json_data, field_name) {
         console.log(theXhr.responseText);
         var image_path = JSON.parse(theXhr.responseText).filepath;
         json_data[field_name] = image_path;
+        alert(JSON.stringify(json_data));
         xhr.send(JSON.stringify(json_data));
     }
 }

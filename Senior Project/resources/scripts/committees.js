@@ -50,7 +50,7 @@ function setupAddCommitteeButton() {
             var postXhr = xhrPostRequest(urlExtension);
             postXhr.onload = function() { location.reload(); }
             var json_data = { 'committeeName': committeeName.value, 'description': committeeDesc.value};
-            photoXhr.xhrCallback(postXhr, json_data, 'image');
+            photoXhr.imageCallback(postXhr, json_data, 'image');
             var files = document.getElementById("imageFile").files;
             var formData = new FormData();
             formData.append("imageFile", files[0]);
@@ -150,7 +150,7 @@ function saveCommittee(data) {
         photoDelete.send(JSON.stringify({'todelete': image_to_delete}));
 
         var photoPost = new PhotoPostXhr("eventPhoto");
-        photoPost.xhrCallback(xhr, data, 'image');
+        photoPost.imageCallback(xhr, data, 'image');
         var files = imageInput.files;
         var formData = new FormData();
         formData.append("imageFile", files[0]);
