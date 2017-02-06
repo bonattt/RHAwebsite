@@ -28,6 +28,12 @@ function setAdmin(officers) {
             }
             xhr.onload = function() { location.reload() };
             var imageEntry = document.getElementById("imageFilePut");
+            var global_id = selected_element_id.replace('officer', '');
+            global_id = parseInt(global_id);
+//            alert(selected_element_id + ' ?= ' + put_id + ' = ' + (selected_element_id == put_id));
+            if(global_id != put_id) {
+                alert('WARNING WARNING:\nselected_element_id: ' + global_id + '\nput_id: ' + put_id);
+            }
             if (imageEntry.value != '') {
                 var image_to_delete = json_data.image;
                 var photoDelete = new PhotoDeleteXhr('officerPhoto');
