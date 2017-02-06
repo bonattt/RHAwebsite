@@ -319,9 +319,7 @@ CREATE OR REPLACE FUNCTION calc_current_balance(floor varchar, size int, moneyRa
   BEGIN
     SELECT INTO expenses sum_expenses(floor);
     SELECT INTO earned calc_earned_money(floor, size, moneyRate);
-    RAISE NOTICE 'Expenses: %', expenses;
-    RAISE NOTICE  'Earned: %', earned;
-    IF expenses = NULL THEN RETURN balance;
+    IF expenses IS NULL THEN RETURN earned;
     END IF;
     balance := expenses + earned;
     RETURN balance;
@@ -341,9 +339,7 @@ CREATE OR REPLACE FUNCTION calc_possible_balance(floor varchar, size int, moneyR
   BEGIN
     SELECT INTO expenses sum_expenses(floor);
     SELECT INTO possible calc_possible_earnings(floor, size, moneyRate);
-    RAISE NOTICE 'Expenses: %', expenses;
-    RAISE NOTICE  'Possible: %', possible;
-    IF expenses = NULL THEN RETURN balance;
+    IF expenses IS NULL THEN RETURN possible;
     END IF;
     balance := expenses + possible;
     RETURN balance;
