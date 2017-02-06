@@ -69,8 +69,8 @@ app.get('/committees', function (req, res) {
   res.sendFile(__dirname + '/html/committees.html');
 });
 
-app.get('/uploadTest', function (req, res) {
-  res.sendFile(__dirname + '/html/uploadTest.html')
+app.get('/attendance', function (req, res) {
+  res.sendFile(__dirname + '/html/attendance.html')
 });
 
 
