@@ -49,6 +49,10 @@ app.get('/proposals', function (req, res) {
   res.sendFile(__dirname + '/html/proposals.html');
 });
 
+app.get('/listAllProposals', function (req, res) {
+	res.sendFile(__dirname + '/html/listAllProposals.html');
+});
+
 app.get('/sign-ups', function (req, res) {
   res.sendFile(__dirname + '/html/sign-ups.html');
 });
@@ -136,6 +140,14 @@ app.get('/api/v1/galleryPhoto', type, function (req, res) {
   });
 });
 
+app.delete('/api/v1/galleryPhoto', function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
+  var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
+  fs.unlink(toDeleteAbsolute);
+  console.log(res);
+  res.status(200).json({status: 'The file ' + toDeleteAbsolute + ' was deleted.'}).send();
+  return;
+});
+
 app.post('/api/v1/carouselPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
   var fileType = req.file.mimetype.split('/')[1];
   var tmp_path = req.file.path;
@@ -164,6 +176,14 @@ app.post('/api/v1/committeePhoto', type, function(req, res) {  //we will need to
       return;
     });
   });
+
+app.delete('/api/v1/committeePhoto', function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
+  var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
+  fs.unlink(toDeleteAbsolute);
+  console.log(res);
+  res.status(200).json({status: 'The file ' + toDeleteAbsolute + ' was deleted.'}).send();
+  return;
+});
 
 app.post('/foobar', function (req, res) {
   var token = req.body.token;
