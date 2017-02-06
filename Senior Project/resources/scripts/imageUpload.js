@@ -18,7 +18,7 @@ PhotoPostXhr.prototype.imageCallback = function(xhr, json_data, field_name) {
         console.log(theXhr.responseText);
         var image_path = JSON.parse(theXhr.responseText).filepath;
         json_data[field_name] = image_path;
-        alert(JSON.stringify(json_data));
+//        alert(JSON.stringify(json_data));
         xhr.send(JSON.stringify(json_data));
     }
 }
