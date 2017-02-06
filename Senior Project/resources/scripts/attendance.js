@@ -16,34 +16,32 @@ function setupSubmitAttendanceButton() {
         
         var submitBtn = document.getElementById('modal-submit')
         var submitAttendanceSubmit = function (e) {
-            var urlExtension = 'committee/';
-            var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/committeePhoto';
-            var photoXhr = new XMLHttpRequest();
-            var files = document.getElementById("imageFile").files;
+            var urlExtension = 'attendance/';
+            
+            var files = document.getElementById("csvFile").files;
 
-            var formData = new FormData();
-            formData.append("imageFile", files[0]);
-            photoXhr.open('POST', photoAPIURL, true);
+            var reader = new FileReader();
 
-            photoXhr.onreadystatechange = function (e) {
-                if(photoXhr.readyState == 4 && photoXhr.status == 200) {
-                    var image_path = JSON.parse(photoXhr.responseText).filepath;
-                    var xhr = xhrPostRequest(urlExtension);
+            reader.onload = function (e) {
+                var result = reader.result().split("\n").sort();
 
-                    xhr.onreadystatechange = function (e) {
-                        if(xhr.readyState == 4 && xhr.status == 200) {
-                            location.reload();
-                        }
-                    };
-                    xhr.send(JSON.stringify({ committeeName: committeeName.value, description: committeeDesc.value, image: image_path }));
-                    clearSubmitHandlers(submitBtn);
-                    return xhr;
-                }
+                var xhr = xhrPostRequest(urlExtension);
+
+                xhr.onreadystatechange = function (e) {
+                    if(xhr.readyState == 4 && xhr.status == 200) {
+                        location.reload();
+                    }
+                };
+                xhr.send(JSON.stringify({ membersToUpdate: result }));
+            clearSubmitHandlers(submitBtn);
+            return xhr;
             };
-            photoXhr.send(formData);
-            document.getElementById("imageFile").value = '';
+
+            reader.readAsText(files[0]);
+
+            document.getElementById("csvFile").value = '';
         }
-        submitBtn.addEventListener('click', addCommitteeSubmit);
+        submitBtn.addEventListener('click', submitAttendanceSubmit);
         var addCommitteeCancel = function () {
             clearSubmitHandlers(submitBtn);
             cancelBtn.removeEventListener('click', addCommitteeCancel);
