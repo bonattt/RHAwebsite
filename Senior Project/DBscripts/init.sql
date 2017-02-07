@@ -22,16 +22,17 @@ CREATE TABLE Members (
 
 CREATE TABLE Expenses (
     expenses_id SERIAL PRIMARY KEY ,
-    data jsonb 
-        -- {CM: int, 
-        -- 'Receiver': varchar, 
-        -- 'AmountUsed': Money, 
-        -- 'Description': varchar, 
-        -- 'accountCode': int, 
-        -- 'DateReceived': datetime, 
-        -- 'DateProcessed': datetime,
-        -- 'Reciepts': ['Amount': Money, 
-        --              'InvoiceDate': datetime]}
+    proposal_id int references Proposals (proposal_id),
+    CM int, 
+    receiver varchar(50), 
+    amountUsed Money, 
+    description varchar(50), 
+    accountCode int, 
+    dateReceived date, 
+    dateProcessed date,
+    reciepts jsonb
+          -- ['Amount': Money, 
+          --  'InvoiceDate': datetime]
 );
 
 CREATE TABLE Funds (
@@ -44,7 +45,6 @@ CREATE TABLE Funds (
 CREATE TABLE Proposals (
         proposal_id SERIAL PRIMARY KEY,
         proposer varchar(50),
-        expenses_id INT references Expenses (expenses_id),
         proposal_name varchar(50),
         week_proposed INT,
         quarter_proposed INT,
@@ -807,3 +807,4 @@ INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland Tickets', 8, 2
 
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Hall Improvement Funds', 9, 2, 10000.00, true, 10000.00, true, '2017-3-24', '2017-3-1', '2017-3-23', '2017-3-23', 5, '../images/events/rose-seal.png');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Thomas 22nd Birthday', 9, 2, 10000.00, true, 10000.00, false, '2017-2-6', '2017-1-1', '2017-2-1', '2017-2-1', 9.99, '../images/events/rose-seal.png');
+ '2017-2-6', '2017-1-1', '2017-2-1', '2017-2-1', 9.99, '../images/events/rose-seal.png');
