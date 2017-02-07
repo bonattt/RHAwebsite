@@ -1,7 +1,4 @@
 
-$(document).ready(function () {
-    setup();
-});
 
 function parseModalEntries(idHeader, ids) {
     var json_obj = {};
@@ -76,8 +73,15 @@ function setAdmin() {
 function setup() {
     var officersxhr = getOfficers();
     officersxhr.onload = function () {
-        setAdmin(officersxhr.responseText)
+        if (userIsOfficer(officersxhr.responseText)) {
+            setAdmin(officersxhr.responseText);
+        } else {
+            alert('you should need to login...');
+        }
     };
     officersxhr.send();
 }
 
+$(document).ready(function () {
+    setup();
+});

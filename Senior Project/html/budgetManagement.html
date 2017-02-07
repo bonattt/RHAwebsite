@@ -31,8 +31,21 @@
 
 	<div id="buttonWrapper">
 		<button id="addPaymentButton" data-toggle="modal" data-target="#paymentModal">Add Payment</button>
-		<button id="addChargeButton" data-toggle="modal" data-target="#chargeModal">Add Charge</button>
-		<button id="addAwardButton" data-toggle="modal" data-target="#awardModal">Add Award</button>
+		<button id="addFundButton" data-toggle="modal" data-target="#fundModal">Add Fund</button>
+		<!--
+		<table>
+			<tbody>
+				<tr>
+					<td> <label> <b> Budget Item </b> </label> </td>
+					<td> <label> <b> Amount </b> </label> </td>
+				</tr>
+				<tr>
+					<td> <label> <b> Budget Item </b> </label> </td>
+					<td> <label> <b> Amount </b> </label> </td>
+				</tr>
+			</tbody>
+		</table>
+		-->
 	</div>
 
 	<div id="paymentModal" class="modal fade" role="dialog">
@@ -41,7 +54,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Add Payment</h4>
+					<h4 class="modal-title">Add New Payment</h4>
 				</div>
 				<div class="modal-body">
 					<table>
@@ -49,40 +62,54 @@
 							<tr>
 								<td> <label>Amount:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="paymentModal-funds_amount" type="number" value="Amount"></input>
+								<td>
+									<input class="modal-text-entry" id="paymentModal-funds_amount" type="number"
+											value="Amount"></input>
 								</td>
 							</tr>
 							<tr>
-								<td> <label>Person:</label> </td>
+								<td> <label>Receiver:</label> </td>
+								<!-- this person physically received the check for this money -->
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input class="modal-text-entry" id="paymentModal-username" type="text" value="Person"></input>
+									<input class="modal-text-entry" id="paymentModal-username" type="text"
+										   value="Person"></input>
 								</td>
 							</tr>
 							<tr>
 								<td> <label>Event:</label> </td>
+								<!-- the event which this payment was for -->
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input class="modal-text-entry" id="paymentModal-event" type="text" value="Event"></input>
-								</td>
-							</tr>
-							<tr>
-								<td> <label>CM:</label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td>
-									<input class="modal-text-entry" id="paymentModal-cm" type="number" value="CM"></input>
+									<select>
+										<option> </option>
+										<option> Event 1 </option>
+										<option> Event 2 </option>
+									</select>
 								</td>
 							</tr>
 							<tr>
 								<td> <label>Turned-in Date:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td><input type="date" id="paymentModal-turnin_date" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+								<td>
+									<input type="date" id="paymentModal-turnin_date" name="signUpOpenDate"
+										   data-date-inline-picker="false" data-date-open-on-focus="true"></input>
 								</td>
 							</tr>
 							<tr>
 								<td> <label>Processed Date:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td><input type="date" id="paymentModal-processed_date" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+								<td>
+									<input type="date" id="paymentModal-processed_date" name="signUpOpenDate"
+										   data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Description:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td>
+									<textarea type="date" id="paymentModal-description" name="signUpOpenDate"
+											  data-date-inline-picker="false" data-date-open-on-focus="true"></textarea>
 								</td>
 							</tr>
 						</tbody>
@@ -96,107 +123,39 @@
 		</div>
 	</div>
 
-	<div id="chargeModal" class="modal fade" role="dialog">
+	<div id="fundModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Add Charge</h4>
+					<h4 class="modal-title">Add New Fund</h4>
 				</div>
 				<div class="modal-body">
 					<table>
 						<tbody>
 							<tr>
-								<td> <label>Hall:</label> </td>
+								<td> <label>Fund Name:</label> </td>
+								<!-- this person physically received the check for this money -->
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="chargeModal-funds_hall" type="text" value="Hall"></input>
+								<td>
+									<input class="modal-text-entry" id="fundModal-name" type="text"
+										   value="Person"></input>
 								</td>
 							</tr>
 							<tr>
 								<td> <label>Amount:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="chargeModal-funds_amount" type="number" value="Amount"></input>
-								</td>
-							</tr>
-							<tr>
-								<td> <label>Event:</label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td>
-									<input class="modal-text-entry" id="chargeModal-event" type="text" value="Event"></input>
-								</td>
-							</tr>
-							<tr>
-								<td> <label>Turned-in Date:</label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td><input type="date" id="chargeModal-turnin_date" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
-								</td>
-							</tr>
-							<tr>
-								<td> <label>Processed Date:</label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td><input type="date" id="chargeModal-processed_date" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+								<td> <input class="modal-text-entry" id="fundModal-funds_amount" type="number"
+											value="Amount"></input>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button id="chargeModal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
-					<button id="chargeModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div id="awardModal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Add Award</h4>
-				</div>
-				<div class="modal-body">
-					<table>
-						<tbody>
-							<tr>
-								<td> <label>Hall:</label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="awardModal-funds_hall" type="text" value="Hall"></input>
-								</td>
-							</tr>
-							<tr>
-								<td> <label>Amount:</label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="awardModal-funds_amount" type="number" value="Amount"></input>
-								</td>
-							</tr>
-							<tr>
-								<td> <label>Event:</label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td>
-									<input class="modal-text-entry" id="awardModal-event" type="text" value="Event"></input>
-								</td>
-							</tr>
-							<tr>
-								<td> <label>Turned-in Date:</label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td><input type="date" id="awardModal-turnin_date" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true" value=""></input>
-								</td>
-							</tr>
-							<tr>
-								<td> <label>Processed Date:</label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td><input type="date" id="awardModal-processed_date" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true" value=""></input>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="modal-footer">
-					<button id="awardModal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
-					<button id="awardModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button id="fundModal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="fundModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
