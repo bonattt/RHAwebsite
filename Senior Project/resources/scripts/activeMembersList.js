@@ -30,9 +30,6 @@ function setup() {
         });
     }
 }
-document.addEventListener("DOMContentLoaded", function (event) {
-    setup();
-});
 
 function showModal() {
     alert("showing modal, in theory.");
@@ -170,7 +167,7 @@ function setupSubmitAttendanceButton() {
     addCommitteeBtn.style.display = "block"; //*/
     addCommitteeBtn.addEventListener('click', function() {       
         
-        var submitBtn = document.getElementById('update-modal-submit')
+        var submitBtn = document.getElementById('update-modal-submit');
         var submitAttendanceSubmit = function (e) {
             var urlExtension = 'attendance/';
             
@@ -218,3 +215,10 @@ function displayOtherTable(members) {
         displayingAllMembers = true;
     }
 }
+
+$(document).ready(function() {
+    setup();
+    var officersxhr = getOfficers();
+    officersxhr.onload = () => { setAdmin(officersxhr.responseText) }
+    officersxhr.send();
+});
