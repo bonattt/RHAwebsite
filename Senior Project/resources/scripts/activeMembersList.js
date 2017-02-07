@@ -2,6 +2,17 @@
 var displayingAllMembers = true;
 var table = document.createElement('table');
 
+function setAdmin(officers) {    
+    if (userIsOfficer(officers)) {
+        setupSubmitAttendanceButton();
+        var cancelBtn = document.getElementById('update-modal-cancel');
+        cancelBtn.addEventListener('click', function() {
+            document.getElementById("csvFile").value = '';
+        });
+    }
+    return;
+}
+
 function setup() {
     var urlExtension = 'members/';
     var xhr = xhrGetRequest(urlExtension);
@@ -152,6 +163,50 @@ function drawActiveMembersTable(members) {
     }
     table.appendChild(tbdy);
     body.appendChild(table);
+}
+
+function setupSubmitAttendanceButton() {
+    var addCommitteeBtn = document.getElementById("submitAttendance");
+    addCommitteeBtn.style.display = "block"; //*/
+    addCommitteeBtn.addEventListener('click', function() {       
+        
+        var submitBtn = document.getElementById('update-modal-submit')
+        var submitAttendanceSubmit = function (e) {
+            var urlExtension = 'attendance/';
+            
+            var files = document.getElementById("csvFile").files;
+
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var result = reader.result.split("\n").sort();
+
+                var xhr = xhrPutRequest(urlExtension);
+
+                xhr.onreadystatechange = function (e) {
+                    if(xhr.readyState == 4 && xhr.status == 200) {
+                        location.reload();
+                    }
+                };
+                xhr.send(JSON.stringify({ membersToUpdate: result }));
+            clearSubmitHandlers(submitBtn);
+            return xhr;
+            };
+
+            reader.readAsText(files[0]);
+
+            document.getElementById("csvFile").value = '';
+        }
+        submitBtn.addEventListener('click', submitAttendanceSubmit);
+        var addCommitteeCancel = function () {
+            clearSubmitHandlers(submitBtn);
+            cancelBtn.removeEventListener('click', addCommitteeCancel);
+        }
+        var cancelBtn = document.getElementById('update-modal-cancel');
+        cancelBtn.addEventListener('click', function() {
+            // do nothing.
+        });        
+    });
 }
 
 function displayOtherTable(members) {

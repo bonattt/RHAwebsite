@@ -25,7 +25,7 @@ function setupSubmitAttendanceButton() {
             reader.onload = function (e) {
                 var result = reader.result.split("\n").sort();
 
-                var xhr = xhrPostRequest(urlExtension);
+                var xhr = xhrPutRequest(urlExtension);
 
                 xhr.onreadystatechange = function (e) {
                     if(xhr.readyState == 4 && xhr.status == 200) {
