@@ -10,6 +10,7 @@
 
 	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
 	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheets/budget.css">
 
 	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
 	<script language="Javascript" src="../scripts/navbar-factory.js">  </script>
@@ -48,6 +49,33 @@
 		-->
 	</div>
 
+	<div id="paymentsDiv">
+		<table>
+			<tbody class="moneyTable" id="paymentsTable">
+				<td>
+					<!-- <th> expenses_id &nbsp;&nbsp; </th> -->
+					<th> proposal_id &nbsp;&nbsp; </th>
+					<th> cm &nbsp;&nbsp; </th>
+					<th> receiver &nbsp;&nbsp;  </th>
+					<th> amountused &nbsp;&nbsp; </th>
+					<!-- <th> description &nbsp;&nbsp;  </th> -->
+					<!-- <th> accountcode &nbsp;&nbsp;  </th> -->
+					<th> datereceived &nbsp;&nbsp; </th>
+					<th> dateprocessed &nbsp;&nbsp; </th>
+					<th> reciepts &nbsp;&nbsp; </th>
+				</td>
+			</tbody>
+		</table>
+	</div>
+
+	<div id="fundsDiv">
+		<table>
+			<tbody class="moneyTable" id="fundsTable">
+
+			</tbody>
+		</table>
+	</div>
+
 	<div id="paymentModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<!-- Modal content-->
@@ -63,8 +91,16 @@
 								<td> <label>Amount:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input class="modal-text-entry" id="paymentModal-funds_amount" type="number"
-											value="Amount"></input>
+									<input class="modal-text-entry" id="paymentModal-amountUsed" type="number"
+											value="123"></input>
+								</td>
+							</tr>
+							<tr>
+								<td> <label> Account Code:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td>
+									<input class="modal-text-entry" id="paymentModal-accountCode" type="number"
+											value=""></input>
 								</td>
 							</tr>
 							<tr>
@@ -72,7 +108,7 @@
 								<!-- this person physically received the check for this money -->
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input class="modal-text-entry" id="paymentModal-username" type="text"
+									<input class="modal-text-entry" id="paymentModal-receiver" type="text"
 										   value="Person"></input>
 								</td>
 							</tr>
@@ -81,10 +117,10 @@
 								<!-- the event which this payment was for -->
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<select>
-										<option> </option>
-										<option> Event 1 </option>
-										<option> Event 2 </option>
+									<select id="paymentModal-event" data-event1="58" data-event2="69" data-event3="80">
+										<option> Event1 </option data-id="58">
+										<option> Event2 </option data-id="69">
+										<option> Event3 </option data-id="80">
 									</select>
 								</td>
 							</tr>
@@ -92,7 +128,7 @@
 								<td> <label>Turned-in Date:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input type="date" id="paymentModal-turnin_date" name="signUpOpenDate"
+									<input type="date" id="paymentModal-dateReceived" name="signUpOpenDate"
 										   data-date-inline-picker="false" data-date-open-on-focus="true"></input>
 								</td>
 							</tr>
@@ -100,7 +136,7 @@
 								<td> <label>Processed Date:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input type="date" id="paymentModal-processed_date" name="signUpOpenDate"
+									<input type="date" id="paymentModal-dateProcessed" name="signUpOpenDate"
 										   data-date-inline-picker="false" data-date-open-on-focus="true"></input>
 								</td>
 							</tr>
@@ -111,6 +147,12 @@
 									<textarea type="date" id="paymentModal-description" name="signUpOpenDate"
 											  data-date-inline-picker="false" data-date-open-on-focus="true"></textarea>
 								</td>
+							</tr>
+							<tr>
+								<td> <label for="imageFile"> Recipts:
+									<input type="file" name="imageFile" id="imageFile">
+								</label> </td>
+								<td> &nbsp;&nbsp; </td>
 							</tr>
 						</tbody>
 					</table>
