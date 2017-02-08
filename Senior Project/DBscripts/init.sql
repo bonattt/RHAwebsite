@@ -38,7 +38,7 @@ CREATE TABLE Expenses (
 CREATE TABLE Funds (
     funds_id SERIAL PRIMARY KEY,
     fund_name varchar(50),
-    funds_amount Money,
+    funds_amount double precision,
     display_on_site boolean
 );
 
@@ -348,6 +348,24 @@ CREATE OR REPLACE FUNCTION calc_possible_balance(floor varchar, size int, moneyR
   END;
 $balance$ LANGUAGE plpgsql;
 
+
+/* Adds given value to "Additions" row in Funds table
+*/
+
+CREATE OR REPLACE FUNCTION add_additions(amount double precision) 
+  RETURNS void AS $$
+  DECLARE
+    previous_value double precision;
+    new_amount double precision;
+  BEGIN
+    SELECT INTO previous_value funds_amount FROM Funds WHERE Funds.fund_name = 'Additions';
+    new_amount := amount + previous_value;
+    UPDATE Funds SET funds_amount = new_amount WHERE fund_name = 'Additions';
+    RETURN;
+  END;
+$$ LANGUAGE plpgsql;
+
+
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
                                         Feud, and more. We also show movies outdoors on the big screen, and sponsor an Easter egg hunt in the spring. We also
@@ -648,32 +666,32 @@ INSERT INTO Funds VALUES (DEFAULT, 'Total Budget', 89771.31, false);
 
 
 -- Floor Money tab
-INSERT INTO Funds VALUES (DEFAULT, 'BSB 0-1', 41.34, true);
-INSERT INTO Funds VALUES (DEFAULT, 'BSB 2', 43.17, true);
-INSERT INTO Funds VALUES (DEFAULT, 'BSB 3', 41.34, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Speed 1', 30.31, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Speed 2', 43.17, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Speed 3', 43.17, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Demind 0', 27.56, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Deming 1', 20.21, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Deming 2', 38.58, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Deming Attic', 26.64, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Blum', 62.46, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Mees', 68.89, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Scharp', 64.30, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Percopo 0-1', 76.24, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Percopo 2', 60.62, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Percopo 3', 46.14, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 1', 32.15, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 2', 35.82, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 3', 37.66, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 1', 26.57, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 2', 35.82, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 3', 34.91, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 1', 41.25, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 2', 53.28, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 3', 33.17, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 4', 33.72, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'BSB 0-1', 41.34, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'BSB 2', 43.17, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'BSB 3', 41.34, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Speed 1', 30.31, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Speed 2', 43.17, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Speed 3', 43.17, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Demind 0', 27.56, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Deming 1', 20.21, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Deming 2', 38.58, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Deming Attic', 26.64, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Blum', 62.46, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Mees', 68.89, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Scharp', 64.30, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Percopo 0-1', 76.24, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Percopo 2', 60.62, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Percopo 3', 46.14, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 1', 32.15, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 2', 35.82, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 3', 37.66, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 1', 26.57, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 2', 35.82, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 3', 34.91, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 1', 41.25, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 2', 53.28, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 3', 33.17, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 4', 33.72, true);
 
 -- If both week and qtr proposed are -1, the event was last year 
 -- proposal_id SERIAL PRIMARY KEY ,
