@@ -348,10 +348,8 @@ CREATE OR REPLACE FUNCTION calc_possible_balance(floor varchar, size int, moneyR
   END;
 $balance$ LANGUAGE plpgsql;
 
-
 /* Adds given value to "Additions" row in Funds table
 */
-
 CREATE OR REPLACE FUNCTION add_additions(amount double precision) 
   RETURNS void AS $$
   DECLARE
@@ -365,6 +363,57 @@ CREATE OR REPLACE FUNCTION add_additions(amount double precision)
   END;
 $$ LANGUAGE plpgsql;
 
+/* Counts the attendence records for a given floor during a given quarter
+  RETURNS: int
+*/
+CREATE OR REPLACE FUNCTION count_attendance_for_floor(floor varchar, quarter varchar)
+  RETURNS int AS $attendance$
+  DECLARE
+    attendance int;
+    weeks int[] := ARRAY[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    x int;
+  BEGIN
+    IF quarter = 'Q1' THEN attendance := 1;
+      ELSE attendance := 0;
+    END IF;
+    FOREACH x IN ARRAY weeks LOOP
+      attendance := 
+        CASE 
+          WHEN (SELECT count_attendance(x, quarter, floor)) > 1 THEN attendance + 1
+          ELSE attendance + 0
+        END;
+    END LOOP;
+    RETURN attendance;
+  END;
+$attendance$ LANGUAGE plpgsql;
+
+/* Sums the expenses from FloorExpenses given the floor name
+   Returns: INT
+*/
+CREATE OR REPLACE FUNCTION sum_only_expenses(floor varchar)
+  RETURNS double precision AS $expenses$
+  DECLARE
+    expenses double precision;
+    count int;
+  BEGIN
+    SELECT INTO expenses SUM(FloorExpenses.amount) FROM FloorMoney, FloorExpenses WHERE FloorMoney.hall_and_floor = floor AND FloorMoney.floormoney_id = FloorExpenses.floor_id AND FloorExpenses.amount < 0;
+    return expenses;
+  END;
+$expenses$ LANGUAGE plpgsql;
+
+/* Sums the rewards from FloorExpenses given the floor name
+   Returns: INT
+*/
+CREATE OR REPLACE FUNCTION sum_only_rewards(floor varchar)
+  RETURNS double precision AS $expenses$
+  DECLARE
+    expenses double precision;
+    count int;
+  BEGIN
+    SELECT INTO expenses SUM(FloorExpenses.amount) FROM FloorMoney, FloorExpenses WHERE FloorMoney.hall_and_floor = floor AND FloorMoney.floormoney_id = FloorExpenses.floor_id AND FloorExpenses.amount > 0;
+    return expenses;
+  END;
+$expenses$ LANGUAGE plpgsql;
 
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
