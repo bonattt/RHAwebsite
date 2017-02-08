@@ -1025,3 +1025,13 @@ td {
 #buttonWrapper {
 	text-align: center;
 }
+
+.yearTextListProposals{
+	text-align: center;
+    font-size: 250%;
+    font-weight: bold;
+}
+
+.proposalsTable{
+	margin-bottom: 5%;
+}
