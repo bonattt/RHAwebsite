@@ -25,7 +25,7 @@ CREATE TABLE Expenses (
     proposal_id int references Proposals (proposal_id),
     CM int, 
     receiver varchar(50), 
-    amountUsed Money, 
+    amountUsed double precision, 
     description varchar(50), 
     accountCode int, 
     dateReceived date, 
@@ -48,9 +48,9 @@ CREATE TABLE Proposals (
         proposal_name varchar(50),
         week_proposed INT,
         quarter_proposed INT,
-        money_requested Money,
+        money_requested double precision,
         approved boolean,
-        money_allocated Money,
+        money_allocated double precision,
         paid boolean,
         proposed_date DATE,
         event_date DATE,
@@ -327,7 +327,7 @@ CREATE OR REPLACE FUNCTION calc_current_balance(floor varchar, size int, moneyRa
     RETURN balance;
   END;
 $balance$ LANGUAGE plpgsql;
-
+  
 
 /* Calculates the given floor's possible balance based on possible money totaled with their expenses
    Returns: DOUBLE PRECISION
@@ -401,10 +401,10 @@ CREATE OR REPLACE FUNCTION sum_only_expenses(floor varchar)
   END;
 $expenses$ LANGUAGE plpgsql;
 
-/* Sums the rewards from FloorExpenses given the floor name
+/* Sums the awards from FloorExpenses given the floor name
    Returns: INT
 */
-CREATE OR REPLACE FUNCTION sum_only_rewards(floor varchar)
+CREATE OR REPLACE FUNCTION sum_only_awards(floor varchar)
   RETURNS double precision AS $expenses$
   DECLARE
     expenses double precision;
@@ -414,6 +414,11 @@ CREATE OR REPLACE FUNCTION sum_only_rewards(floor varchar)
     return expenses;
   END;
 $expenses$ LANGUAGE plpgsql;
+
+
+/* Determines the amount of money used for a given proposal
+  RETURNS: Double precision
+*/
 
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
@@ -761,26 +766,27 @@ INSERT INTO Funds VALUES (DEFAULT, 'Total Budget', 89771.31, false);
 --        description varchar(400),
 --        attendees jsonb
 
-INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'test', -1, -1, 7000.00, true, 7000.00, true, '2016-12-12', '2016-12-13', '2016-12-30', 30, '../images/events/rose-seal.png', 'This is a random description about an event that doesnt exist!');
+INSERT INTO Proposals VALUES (DEFAULT, 'Morgan', 'test', 4, 1, 7000.00, true, 7000.00, true, '2016-12-12', '2016-12-13', '2016-12-01', '2016-12-04', 30, '../images/events/rose-seal.png', 'This is a random description about an event that doesnt exist!');
+INSERT INTO Proposals VALUES (DEFAULT, 'Morgan', 'Tropical Sno', 3, 2, 70.00, true, 70.00, true, '2017-04-24', '2017-05-08', '2017-05-01', '2017-05-04', 5, '../images/events/rose-seal.png', 'Come get snowcones and enjoy the company!');
+INSERT INTO Proposals VALUES (DEFAULT, 'Bart', 'Hall Money Mania', 10, 1, 100.00, true, 100.00, true, '2017-01-02', '2017-02-10', '2017-02-01', '2017-02-04', 0, '../images/events/rose-seal.png', 'Stressed about finals? Watch movies with your hallmates!');
 
---01 proposal_id
---02 proposer_id
---03 expenses_id
---04 proposal_name
---05 week_proposed
---06 quarter_proposed
---07 money_requested
---08 approved
---09 money_allocated
---10 paid
---11 proposed_date
---12 event_date
---13 event_signup_open
---14 event_signup_close
---15 cost_to_attendee
---16 image_path
---17 description
---18 attendees
+--        proposal_id SERIAL PRIMARY KEY,
+--        proposer varchar(50),
+--        proposal_name varchar(50),
+--        week_proposed INT,
+--        quarter_proposed INT,
+--        money_requested double precision,
+--        approved boolean,
+--        money_allocated double precision,
+--        paid boolean,
+--        proposed_date DATE,
+--        event_date DATE,
+--        event_signup_open DATE,
+--        event_signup_close DATE,
+--        cost_to_attendee MONEY,
+--        image_path varchar(100), 
+--        description varchar(400),
+--        attendees jsonb
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Planners', 9, 2, 7000.00, true, 7000.00, true, '2016-5-2', '2016-11-11', '2016-11-01', '2016-11-9', 0, '../images/events/rose-seal.png');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Blood Drive', 9, 2, 700.00, true, 700.00, false, '2016-5-2', '2016-10-11', '2016-10-1', '2016-10-9', 0, '../images/events/blood-drive.jpg'); -- May break because of date
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Fall Speed Lawn Movie', 9, 2, 1200.00, true, 1200.00, true, '2016-5-2', '2016-8-30', '2016-8-1', '2016-8-28', 0, '../images/events/speedlawn.jpg');
