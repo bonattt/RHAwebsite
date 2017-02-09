@@ -1,20 +1,26 @@
-function setup() {
+var awardsValue;
+var expensesValue;
+
+function setup() {    
     var urlExtension = 'floorMoney/';
     var xhr = xhrGetRequest(urlExtension);
     xhr.send();
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
-    var addPaymentButton = document.getElementById("addPaymentButton");
-    addPaymentButton.setAttribute('data-toggle', 'modal');
-    addPaymentButton.setAttribute('data-target', '#paymentModal');
-    var addChargeButton = document.getElementById("addChargeButton");
-    addChargeButton.setAttribute('data-toggle', 'modal');
-    addChargeButton.setAttribute('data-target', '#chargeModal');
-    var addAwardButton = document.getElementById("addAwardButton");
-    addAwardButton.setAttribute('data-toggle', 'modal');
-    addAwardButton.setAttribute('data-target', '#awardModal');
 
-    function createHTMLFromResponseText(floorMoney) {
+    var urlExtensionAwards = 'awardsOnly';
+    var xhrAwards = createXhrRequestJSON('POST', urlExtensionAwards);
+    xhrAwards.send(JSON.stringify({ floorName: "Mees" }));
+
+    var urlExtensionExpenses = 'expensesOnly';
+    var xhrExpenses = createXhrRequestJSON('POST', urlExtensionExpenses);
+    xhrExpenses.send(JSON.stringify({ floorName: "Mees"}));
+    setTimeout(function () { createHTMLFromResponseText(xhr.responseText, xhrAwards.responseText, xhrExpenses.responseText) }, 300);
+
+    function createHTMLFromResponseText(floorMoney, awards, expenses) {
         floorMoney = JSON.parse(floorMoney);
+        awards = JSON.parse(awards);
+        awardsValue = awards[0].sum_only_awards;
+        expenses = JSON.parse(expenses);
+        expensesValue = expenses[0].sum_only_expenses * -1;
         var body = document.getElementsByTagName('body')[0];
         var table = document.createElement('table');
         table.setAttribute('border', 1);
@@ -35,7 +41,6 @@ function setup() {
         tbdy.appendChild(tdFloor);
         tbdy.appendChild(tdBalance);
         var countForColoring = 0;
-        console.log(floorMoney);
         for (var i = 0; i < floorMoney.length; i++) {
             tr = document.createElement('tr');
             tr.setAttribute('floorMoney', i);
@@ -68,7 +73,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 
 function doClosure(floorMoney, i) {
-    console.log("doing closure");
     tr.addEventListener("click", function () { setUpModal(floorMoney, i) });
 }
 
@@ -77,4 +81,6 @@ function setUpModal(floorMoney, i) {
     document.getElementById('funds-modal-current_earned').innerHTML = floorMoney[i].current_balance;
     document.getElementById('funds-modal-possible_earned').innerHTML = floorMoney[i].possible_balance;
     document.getElementById('funds-modal-residents').innerHTML = floorMoney[i].residents;
+    document.getElementById('funds-modal-expenses').innerHTML = expensesValue;
+    document.getElementById('funds-modal-awards').innerHTML = awardsValue;
 }
