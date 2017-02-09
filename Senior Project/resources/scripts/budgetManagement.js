@@ -4,6 +4,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
 function parseModalEntries(idHeader, ids) {
     var json_obj = {};
     ids.forEach(function(id) {
+        console.log("id: " + id + "\nidHeader: " + idHeader);
         var entry = document.getElementById(idHeader + id);
         json_obj[id] = entry.value;
     });
@@ -30,7 +31,7 @@ function setupButtons() {
     var addPaymentSubmit = document.getElementById('paymentModal-submit');
     addPaymentSubmit.addEventListener('click', function() {
         var entryIds = [
-                'amountUsed', 'accountCode', 'receiver', 'description',
+                'amountUsed','cm', 'accountCode', 'receiver', 'description',
                 'dateProcessed', 'dateReceived'
         ];
         var modalId = 'paymentModal-';
@@ -39,14 +40,19 @@ function setupButtons() {
         json_obj.dateProcessed = new Date(json_obj.dateProcessed);
         json_obj.dateReceived = new Date(json_obj.dateReceived);
         var select = document.getElementById('paymentModal-event');
-        console.log(select.value);
-        console.log(select.dataset);
         json_obj.proposal_id = select.dataset[prepEventName(select.value)]
         json_obj.reciepts = {"test1": "hello", "test2": "world!"};
 
+        json_obj.amountUsed = parseFloat(json_obj.amountUsed);
+
         var apiUrl = 'payment/';
         var xhr = xhrPostRequest(apiUrl);
-        xhr.onload = function() {alert('successfully sent!');}
+        xhr.onload = function() {
+            alert('successfully sent!');
+        }
+        xhr.onerror = function() {
+            alert('error sending request!');
+        }
         xhr.send(JSON.stringify(json_obj));
         alert(JSON.stringify(json_obj));
         //clearModalEntries(modalId, entryIds);
@@ -129,37 +135,16 @@ function buildFundsRow(fund) {
 }
 
 function buildPaymentRow(payment) {
-//    var row = document.createElement('tr');
     var col;
-    var keys = ['expenses_id', 'proposal_id', 'cm', 'receiver', 'amountused'] // , 'expenses_id', 'description', 'accountcode')
+    var keys = ['expenses_id', 'proposal_id', 'cm', 'receiver']
     var row = buildRow(payment, keys);
-////    col = document.createElement('td');
-////    col.appendChild(document.createTextNode(payment.expenses_id));
-////    row.appendChild(col);
-//
-//    col = document.createElement('td');
-//    col.appendChild(document.createTextNode(payment.proposal_id));
-//    row.appendChild(col);
-//
-//    col = document.createElement('td');
-//    col.appendChild(document.createTextNode(payment.cm));
-//    row.appendChild(col);
-//
-//    col = document.createElement('td');
-//    col.appendChild(document.createTextNode(payment.receiver));
-//    row.appendChild(col);
-//
-//    col = document.createElement('td');
-//    col.appendChild(document.createTextNode(payment.amountused));
-//    row.appendChild(col);
-//
-////    col = document.createElement('td');
-////    col.appendChild(document.createTextNode(payment.description));
-////    row.appendChild(col);
-////
-////    col = document.createElement('td');
-////    col.appendChild(document.createTextNode(payment.accountcode));
-////    row.appendChild(col);
+
+    // special cases:
+    col = document.createElement('td');
+    var amount = parseFloat(Math.round(payment.amountused * 100) / 100).toFixed(2);
+    col.appendChild(document.createTextNode("$" + amount));
+    col.setAttribute('class', 'tableEntry');
+    row.appendChild(col);
 
     col = document.createElement('td');
     col.appendChild(document.createTextNode(composeDateStr(payment.datereceived)));
@@ -171,22 +156,52 @@ function buildPaymentRow(payment) {
     col.setAttribute('class', 'tableEntry');
     row.appendChild(col);
 
-    col = document.createElement('td');
-    col.appendChild(document.createTextNode(payment.reciepts));
-    col.setAttribute('class', 'tableEntry');
-    row.appendChild(col);
+//    col = document.createElement('td');
+//    col.appendChild(document.createTextNode(payment.reciepts));
+//    col.setAttribute('class', 'tableEntry');
+//    row.appendChild(col);
+    row.appendChild(getDisplayDetailsLink(payment));
 
     return row;
 }
 
-function buildRow(data, keys) {
+function getDisplayDetailsLink(json_obj, rowNumber) {
+    var link = document.createElement('a');
+    link.appendChild(document.createTextNode('[details]'));
+    link.setAttribute('id', 'row' + rowNumber + 'details');
+    link.setAttribute('class', 'expenseDetails');
+
+    var data = link.dataset;
+    data.toggle = "modal"
+    data.target = "#detailsModal"
+
+    link.addEventListener('click', function() {
+        console.log('click');
+        var description = document.getElementById('detailsModal-description');
+        description.innerHTML = json_obj.description;
+
+        var accountCode = document.getElementById('detailsModal-accountcode');
+        accountCode.innerHTML = json_obj.accountcode;
+
+        var reciepts = document.getElementById('detailsModal-reciepts');
+        reciepts.innerHTML = JSON.stringify(json_obj.reciepts)
+    });
+
+    return link;
+}
+
+function buildRow(data, keys, rowNumber) {
     var row = document.createElement('tr');
     var col;
+
+    row.setAttribute('id', 'row' + rowNumber);
+    var colNumber = 0;
 
     keys.forEach(function(key) {
         col = document.createElement('td');
         col.appendChild(document.createTextNode(data[key]));
         col.setAttribute('class', 'tableEntry');
+        col.setAttribute('id', 'row' + rowNumber + 'col' + colNumber);
         row.appendChild(col);
     });
     return row;

@@ -93,7 +93,7 @@
 								<td> &nbsp;&nbsp; </td>
 								<td>
 									<input class="modal-text-entry" id="paymentModal-amountUsed" type="number"
-											value="123"></input>
+											step="0.00" value='0.01'></input>
 								</td>
 							</tr>
 							<tr>
@@ -114,13 +114,23 @@
 								</td>
 							</tr>
 							<tr>
+								<td> <label>CM:</label> </td>
+								<!-- this person physically received the check for this money -->
+								<td> &nbsp;&nbsp; </td>
+								<td>
+									<input class="modal-text-entry" id="paymentModal-cm" type="number"
+										   value="Person"></input>
+								</td>
+							</tr>
+							<tr>
 								<td> <label>Event:</label> </td>
 								<!-- the event which this payment was for -->
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<select id="paymentModal-event" data-event1="58" data-event2="69" data-event3="80">
-										<option> Event1 </option data-id="55">
-										<option> Event3 </option data-id="57">
+									<select id="paymentModal-event" data-event1="1" data-event2="2" data-event3="3">
+										<option> Event1 </option>
+										<option> Event2 </option>
+										<option> Event3 </option>
 									</select>
 								</td>
 							</tr>
@@ -198,6 +208,40 @@
 				<div class="modal-footer">
 					<button id="fundModal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
 					<button id="fundModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="detailsModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Details</h4>
+				</div>
+				<div class="modal-body">
+					<table>
+						<tbody>
+							<tr>
+								<td> <label> Description: </label> </td>
+								<td> <p id="detailsModal-description"> </p> </td>
+							</tr>
+							<tr>
+								<td> <label> account ID: </label> </td>
+								<td> <p id="detailsModal-accountcode"> </p> </td>
+							</tr>
+							<tr>
+								<td> <label> reciepts: </label> </td>
+								<td> <p id="detailsModal-reciepts"> </p> </td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button id="detailsModal-close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
