@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
 	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
 	<script type="text/javascript" src="../scripts/officers.js"> </script>
+	<script type="text/javascript" src="../scripts/imageUpload.js"> </script>
 
 	<title>
 		RHA | Officers
@@ -81,6 +82,7 @@
 								<td> &nbsp;&nbsp; </td>
 								<td> <input class="modal-text-entry" id="officers-modal-cm" type="text" value="name"> </input> </td>
 							</tr>
+							<label for="imageFile">Image:<input type="file" name="imageFile" id="imageFilePut"></label>
 						</tbody>
 					</table>
 				</div>
@@ -130,7 +132,12 @@
 								<td> <label> member type </label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td> <input class="modal-text-entry" id="new-officer-membertype" type="text" value=""> </input> </td>
-							</tr1>
+							</tr>
+							<tr>
+								<td>
+									<label for="imageFile">Image:<input type="file" name="imageFile" id="imageFilePost"> </label>
+								</td>
+							</tr>
                         </tbody>
                     </table>
                 </div>
