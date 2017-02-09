@@ -212,7 +212,7 @@ function displaySignUps() {
 }
 
 var getSignupDateHtml = function(proposal, signUpCloseDate, signUpOpenDate, signUpOpenDateFormatted) {
-    
+
     var signUpHtml = document.createElement('p');
     signUpHtml.setAttribute('class', 'eventSignUpDate');
     if (signUpOpenDate > new Date()) {

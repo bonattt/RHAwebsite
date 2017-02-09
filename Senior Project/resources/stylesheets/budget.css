@@ -1,5 +1,28 @@
 
-.moneyTable {
-    border: 1px solid black;
-    padding: 5px;
+.moneyTable, .tableEntry {
+   border: 1;
+   padding: 5px;
+   bordercolor: #808080
+}
+
+#paymentsDiv, #fundsDiv {
+
+}
+
+#tables table {
+    padding: 2%;
+    display: inline-block;
+    float: left;
+}
+
+table {
+
+}
+
+.colLight {
+    background: #ffffff;
+}
+
+.colDark {
+    background: #f0f0f0;
 }

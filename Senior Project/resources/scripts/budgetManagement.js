@@ -44,7 +44,7 @@ function setupButtons() {
         json_obj.proposal_id = select.dataset[prepEventName(select.value)]
         json_obj.reciepts = {"test1": "hello", "test2": "world!"};
 
-        var apiUrl = '???';
+        var apiUrl = 'payment/';
         var xhr = xhrPostRequest(apiUrl);
         xhr.onload = function() {alert('successfully sent!');}
         xhr.send(JSON.stringify(json_obj));
@@ -52,97 +52,143 @@ function setupButtons() {
         //clearModalEntries(modalId, entryIds);
     });
 
-    return;
-
-    var addChargeButton = document.getElementById("addChargeButton");
+    var addChargeButton = document.getElementById("addFundButton");
     addChargeButton.setAttribute('data-toggle', 'modal');
-    addChargeButton.setAttribute('data-target', '#chargeModal');
+    addChargeButton.setAttribute('data-target', '#fundModal');
 
-    var addChargeSubmit = document.getElementById('chargeModal-submit');
+    var addChargeSubmit = document.getElementById('fundModal-submit');
     addChargeSubmit.addEventListener('click', function() {
-        var entryIds = ['funds_hall', 'funds_amount', 'event', 'turnin_date', 'processed_date'];
-        var modalId = 'chargeModal-'
-        var json_obj = parseModalEntries(modalId, entryIds);
-        var apiUrl = '???';
-        var xhr = xhrPostRequest(apiUrl);
-        xhr.onload = function() {alert('success!')}
-        // xhr.send(JSON.stringify(json_obj));
-        clearModalEntries(modalId, entryIds);
-    });
-
-    var addAwardButton = document.getElementById("addAwardButton");
-    addAwardButton.setAttribute('data-toggle', 'modal');
-    addAwardButton.setAttribute('data-target', '#awardModal');
-
-    var addAwardSubmit = document.getElementById('awardModal-submit');
-    addAwardSubmit.addEventListener('click', function() {
-        var entryIds = ['funds_hall','funds_amount','event','turnin_date','processed_date'];
-        var modalId = 'awardModal-';
-        var json_obj = parseModalEntries(modalId, entryIds);
-        var apiUrl = '???';
-        var xhr = xhrPostRequest(apiUrl);
-        xhr.onload = function() {alert('success!')}
-        // xhr.send(JSON.stringify(json_obj));
-        clearModalEntries(modalId, entryIds);
+        alert('click!');
+//        var entryIds = ['funds_hall', 'funds_amount', 'event', 'turnin_date', 'processed_date'];
+//        var modalId = 'chargeModal-'
+//        var json_obj = parseModalEntries(modalId, entryIds);
+//        var apiUrl = '???';
+//        var xhr = xhrPostRequest(apiUrl);
+//        xhr.onload = function() {alert('success!')}
+//        // xhr.send(JSON.stringify(json_obj));
+//        clearModalEntries(modalId, entryIds);
     });
 }
 
-function populatePaymentsTable() {
-    var xhr = xhrGetRequest('payments/');
-    var tbody = document.getElementById('paymentsTable');
+function populateFundsTable() {
+    var xhr = xhrGetRequest('funds/');
+    var tbody = document.getElementById('FundsTable');
     xhr.onload = function() {
         var payments = JSON.parse(xhr.responseText);
         payments.forEach(function(entry) {
-            var row = buildPaymentColumn(entry);
+            console.log(display_on_site);
+            console.log(typeof display_on_site);
+            if (! entry.display_on_site) {
+                return;
+            }
+            var row = buildFundsRow(entry);
             tbody.appendChild(row);
         });
     }
     xhr.send();
 }
 
-function buildPaymentColumn(payment) {
+function populatePaymentsTable() {
+    var xhr = xhrGetRequest('payments/');
+    var tbody = document.getElementById('paymentsTable');
+    var count = 0;
+
+    xhr.onload = function() {
+        var payments = JSON.parse(xhr.responseText);
+        payments.forEach(function(entry) {
+            var row = buildPaymentRow(entry);
+            if (count % 2 == 1) {
+                row.setAttribute('class', 'colLight');
+            } else {
+                row.setAttribute('class', 'colDark');
+            }
+            count++;
+            tbody.appendChild(row);
+        });
+    }
+    xhr.send();
+}
+
+function buildFundsRow(fund) {
     var row = document.createElement('tr');
-
-//    var col = document.createElement('td');
-//    col.appendChild(document.createTextNode(payment.expenses_id));
-//    row.appendChild(col);
+    var col;
 
     col = document.createElement('td');
-    col.appendChild(document.createTextNode(payment.proposal_id));
+    col.appendChild(document.createTextNode(fund.fund_id));
     row.appendChild(col);
 
     col = document.createElement('td');
-    col.appendChild(document.createTextNode(payment.cm));
+    col.appendChild(document.createTextNode(fund.fund_name));
     row.appendChild(col);
 
     col = document.createElement('td');
-    col.appendChild(document.createTextNode(payment.receiver));
+    col.appendChild(document.createTextNode(fund.funds_amount));
     row.appendChild(col);
 
-    col = document.createElement('td');
-    col.appendChild(document.createTextNode(payment.amountused));
-    row.appendChild(col);
+    return row;
+}
 
+function buildPaymentRow(payment) {
+//    var row = document.createElement('tr');
+    var col;
+    var keys = ['expenses_id', 'proposal_id', 'cm', 'receiver', 'amountused'] // , 'expenses_id', 'description', 'accountcode')
+    var row = buildRow(payment, keys);
+////    col = document.createElement('td');
+////    col.appendChild(document.createTextNode(payment.expenses_id));
+////    row.appendChild(col);
+//
 //    col = document.createElement('td');
-//    col.appendChild(document.createTextNode(payment.description));
+//    col.appendChild(document.createTextNode(payment.proposal_id));
 //    row.appendChild(col);
 //
 //    col = document.createElement('td');
-//    col.appendChild(document.createTextNode(payment.accountcode));
+//    col.appendChild(document.createTextNode(payment.cm));
 //    row.appendChild(col);
+//
+//    col = document.createElement('td');
+//    col.appendChild(document.createTextNode(payment.receiver));
+//    row.appendChild(col);
+//
+//    col = document.createElement('td');
+//    col.appendChild(document.createTextNode(payment.amountused));
+//    row.appendChild(col);
+//
+////    col = document.createElement('td');
+////    col.appendChild(document.createTextNode(payment.description));
+////    row.appendChild(col);
+////
+////    col = document.createElement('td');
+////    col.appendChild(document.createTextNode(payment.accountcode));
+////    row.appendChild(col);
 
     col = document.createElement('td');
     col.appendChild(document.createTextNode(composeDateStr(payment.datereceived)));
+    col.setAttribute('class', 'tableEntry');
     row.appendChild(col);
 
     col = document.createElement('td');
     col.appendChild(document.createTextNode(composeDateStr(payment.dateprocessed)));
+    col.setAttribute('class', 'tableEntry');
     row.appendChild(col);
 
     col = document.createElement('td');
     col.appendChild(document.createTextNode(payment.reciepts));
+    col.setAttribute('class', 'tableEntry');
     row.appendChild(col);
 
+    return row;
+}
+
+function buildRow(data, keys) {
+    var row = document.createElement('tr');
+    var col;
+
+    keys.forEach(function(key) {
+        col = document.createElement('td');
+        col.appendChild(document.createTextNode(data[key]));
+        col.setAttribute('class', 'tableEntry');
+        row.appendChild(col);
+    });
     return row;
 }
 
