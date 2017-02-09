@@ -1,26 +1,16 @@
 var awardsValue;
 var expensesValue;
 
-function setup() {    
+function setup() {
     var urlExtension = 'floorMoney/';
     var xhr = xhrGetRequest(urlExtension);
     xhr.send();
 
-    var urlExtensionAwards = 'awardsOnly';
-    var xhrAwards = createXhrRequestJSON('POST', urlExtensionAwards);
-    xhrAwards.send(JSON.stringify({ floorName: "Mees" }));
 
-    var urlExtensionExpenses = 'expensesOnly';
-    var xhrExpenses = createXhrRequestJSON('POST', urlExtensionExpenses);
-    xhrExpenses.send(JSON.stringify({ floorName: "Mees"}));
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText, xhrAwards.responseText, xhrExpenses.responseText) }, 300);
+    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
-    function createHTMLFromResponseText(floorMoney, awards, expenses) {
+    function createHTMLFromResponseText(floorMoney) {
         floorMoney = JSON.parse(floorMoney);
-        awards = JSON.parse(awards);
-        awardsValue = awards[0].sum_only_awards;
-        expenses = JSON.parse(expenses);
-        expensesValue = expenses[0].sum_only_expenses * -1;
         var body = document.getElementsByTagName('body')[0];
         var table = document.createElement('table');
         table.setAttribute('border', 1);
@@ -57,7 +47,7 @@ function setup() {
             td.innerHTML = floorMoney[i].hall_and_floor;
 
             var td2 = document.createElement('td');
-            td2.innerHTML = floorMoney[i].current_earned;
+            td2.innerHTML = floorMoney[i].current_earned.toFixed(2);
             tr.appendChild(td);
             tr.appendChild(td2);
             tbdy.appendChild(tr);
@@ -77,10 +67,26 @@ function doClosure(floorMoney, i) {
 }
 
 function setUpModal(floorMoney, i) {
+    var urlExtensionAwards = 'awardsOnly';
+    var xhrAwards = createXhrRequestJSON('POST', urlExtensionAwards);
+    xhrAwards.send(JSON.stringify({ floorName: floorMoney[i].hall_and_floor }));
+
+    var urlExtensionExpenses = 'expensesOnly';
+    var xhrExpenses = createXhrRequestJSON('POST', urlExtensionExpenses);
+    xhrExpenses.send(JSON.stringify({ floorName: floorMoney[i].hall_and_floor }));
+    
+    setTimeout(function () { setValues(xhrAwards.responseText, xhrExpenses.responseText) }, 300);
     document.getElementById('funds-modal-funds_name').innerHTML = floorMoney[i].hall_and_floor;
-    document.getElementById('funds-modal-current_earned').innerHTML = floorMoney[i].current_balance;
+    document.getElementById('funds-modal-current_earned').innerHTML = floorMoney[i].current_balance.toFixed(2);
     document.getElementById('funds-modal-possible_earned').innerHTML = floorMoney[i].possible_balance;
     document.getElementById('funds-modal-residents').innerHTML = floorMoney[i].residents;
+}
+
+function setValues(awards, expenses) {
+    awards = JSON.parse(awards);
+    awardsValue = awards[0].sum_only_awards;
+    expenses = JSON.parse(expenses);
+    expensesValue = expenses[0].sum_only_expenses * -1;
     document.getElementById('funds-modal-expenses').innerHTML = expensesValue;
     document.getElementById('funds-modal-awards').innerHTML = awardsValue;
 }
