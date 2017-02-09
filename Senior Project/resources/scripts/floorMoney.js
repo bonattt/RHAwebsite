@@ -1,6 +1,3 @@
-var awardsValue;
-var expensesValue;
-
 function setup() {
     var urlExtension = 'floorMoney/';
     var xhr = xhrGetRequest(urlExtension);
@@ -74,19 +71,33 @@ function setUpModal(floorMoney, i) {
     var urlExtensionExpenses = 'expensesOnly';
     var xhrExpenses = createXhrRequestJSON('POST', urlExtensionExpenses);
     xhrExpenses.send(JSON.stringify({ floorName: floorMoney[i].hall_and_floor }));
+
+    var urlExtensionAttendance = 'floorAttendance';
+    var xhrAttendanceQ1 = createXhrRequestJSON('POST', urlExtensionAttendance);
+    xhrAttendanceQ1.send(JSON.stringify({ floorName: floorMoney[i].hall_and_floor, quarter: "Q1" }));
+
+    var xhrAttendanceQ2 = createXhrRequestJSON('POST', urlExtensionAttendance);
+    xhrAttendanceQ2.send(JSON.stringify({ floorName: floorMoney[i].hall_and_floor, quarter: "Q2" }));
+
+    var xhrAttendanceQ3 = createXhrRequestJSON('POST', urlExtensionAttendance);
+    xhrAttendanceQ3.send(JSON.stringify({ floorName: floorMoney[i].hall_and_floor, quarter: "Q3" }));
     
-    setTimeout(function () { setValues(xhrAwards.responseText, xhrExpenses.responseText) }, 300);
+    setTimeout(function () { setValues(xhrAwards.responseText, xhrExpenses.responseText, xhrAttendanceQ1.responseText, xhrAttendanceQ2.responseText, xhrAttendanceQ3.responseText) }, 300);
     document.getElementById('funds-modal-funds_name').innerHTML = floorMoney[i].hall_and_floor;
     document.getElementById('funds-modal-current_earned').innerHTML = floorMoney[i].current_balance.toFixed(2);
     document.getElementById('funds-modal-possible_earned').innerHTML = floorMoney[i].possible_balance;
     document.getElementById('funds-modal-residents').innerHTML = floorMoney[i].residents;
 }
 
-function setValues(awards, expenses) {
+function setValues(awards, expenses, attendanceQ1, attendanceQ2, attendanceQ3) {
     awards = JSON.parse(awards);
-    awardsValue = awards[0].sum_only_awards;
     expenses = JSON.parse(expenses);
-    expensesValue = expenses[0].sum_only_expenses * -1;
-    document.getElementById('funds-modal-expenses').innerHTML = expensesValue;
-    document.getElementById('funds-modal-awards').innerHTML = awardsValue;
+    attendanceQ1 = JSON.parse(attendanceQ1);
+    attendanceQ2 = JSON.parse(attendanceQ2);
+    attendanceQ3 = JSON.parse(attendanceQ3);
+    document.getElementById('funds-modal-expenses').innerHTML = expenses[0].sum_only_expenses * -1;
+    document.getElementById('funds-modal-awards').innerHTML = awards[0].sum_only_awards;
+    document.getElementById('funds-modal-attendance_fall').innerHTML = attendanceQ1[0].count_attendance_for_floor;
+    document.getElementById('funds-modal-attendance_winter').innerHTML = attendanceQ2[0].count_attendance_for_floor;
+    document.getElementById('funds-modal-attendance_spring').innerHTML = attendanceQ3[0].count_attendance_for_floor;
 }
