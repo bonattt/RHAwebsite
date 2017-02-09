@@ -1,7 +1,7 @@
 const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"]
 
-var current_fund_id = -1;
+var current_id = -1;
 
 function parseModalEntries(idHeader, ids) {
     var json_obj = {};
@@ -52,25 +52,17 @@ function setupButtons() {
         alert(JSON.stringify(json_obj));
     });
 
-//    var addFundButton = document.getElementById("addFundButton");
-//    addFundButton.setAttribute('data-toggle', 'modal');
-//    addFundButton.setAttribute('data-target', '#fundModal');
-//
-//    var addFundSubmit = document.getElementById('fundModal-submit');
-//    addFundSubmit.addEventListener('click', function() {
-//        var entryIds = ['fund_name', 'funds_amount'];
-//        var modalId = 'fundModal-'
-//        var json_obj = parseModalEntries(modalId, entryIds);
-//        var apiUrl = 'fund/';
-//        var xhr = xhrPostRequest(apiUrl);
-//        xhr.onload = function() { alert('success!'); }
-//        xhr.onerror = function() { alert('failure!'); }
-//        xhr.send(JSON.stringify(json_obj));
-//    });
+    var deletePaymentButton = document.getElementById('detailsModal-delete');
+    deletePaymentButton.addEventListener('click', function() {
+        var apiUri = 'payment/'  + current_id;
+        var xhr = xhrDeleteRequest(apiUri);
+        xhr.onload = function() { alert('success!'); }
+        xhr.send();
+    });
 
     var editSubmit = document.getElementById('editFundModal-submit');
     editSubmit.addEventListener('click', function() {
-        var apiUri = 'fund/' + current_fund_id
+        var apiUri = 'fund/' + current_id
         var xhr = xhrPutRequest(apiUri);
         xhr.onload = function() { alert('success!'); }
 
@@ -78,6 +70,15 @@ function setupButtons() {
 
         var json_obj = {"funds_amount": parseFloat(funds_amount.value)}
         xhr.send(JSON.stringify(json_obj));
+    });
+
+    var editSubmit = document.getElementById('editFundModal-delete');
+    editSubmit.disabled = true;
+    editSubmit.addEventListener('click', function() {
+        var apiUri = 'fund/' + current_id
+        var xhr = xhrDeleteRequest(apiUri);
+        xhr.onload = function() { alert('success!'); }
+        xhr.send(JSON.stringify());
     });
 }
 
@@ -145,7 +146,7 @@ function buildFundsRow(fund, rowNumber) {
         var funds_amount = document.getElementById('editFundModal-funds_amount');
         funds_amount.value = parseFloat(fund.funds_amount);
 
-        current_fund_id = fund.funds_id;
+        current_id = fund.funds_id;
     });
 
     col.appendChild(editButton);
@@ -194,6 +195,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
     data.target = "#detailsModal"
 
     link.addEventListener('click', function() {
+        current_id = json_obj.expenses_id;
         console.log('click');
         var description = document.getElementById('detailsModal-description');
         description.innerHTML = json_obj.description;
