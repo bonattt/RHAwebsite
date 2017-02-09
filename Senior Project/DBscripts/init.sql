@@ -56,7 +56,7 @@ CREATE TABLE Proposals (
         event_date DATE,
         event_signup_open DATE,
         event_signup_close DATE,
-        cost_to_attendee MONEY,
+        cost_to_attendee double precision,
         image_path varchar(100), 
         description varchar(400),
         attendees jsonb
