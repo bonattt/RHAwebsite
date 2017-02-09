@@ -22,29 +22,29 @@ CREATE TABLE Members (
 
 CREATE TABLE Expenses (
     expenses_id SERIAL PRIMARY KEY ,
-    data jsonb 
-        -- {CM: int, 
-        -- 'Receiver': varchar, 
-        -- 'AmountUsed': Money, 
-        -- 'Description': varchar, 
-        -- 'accountCode': int, 
-        -- 'DateReceived': datetime, 
-        -- 'DateProcessed': datetime,
-        -- 'Reciepts': ['Amount': Money, 
-        --              'InvoiceDate': datetime]}
+    proposal_id int references Proposals (proposal_id),
+    CM int, 
+    receiver varchar(50), 
+    amountUsed Money, 
+    description varchar(50), 
+    accountCode int, 
+    dateReceived date, 
+    dateProcessed date,
+    reciepts jsonb
+          -- ['Amount': Money, 
+          --  'InvoiceDate': datetime]
 );
 
 CREATE TABLE Funds (
     funds_id SERIAL PRIMARY KEY,
     fund_name varchar(50),
-    funds_amount Money,
+    funds_amount double precision,
     display_on_site boolean
 );
 
 CREATE TABLE Proposals (
         proposal_id SERIAL PRIMARY KEY,
         proposer varchar(50),
-        expenses_id INT references Expenses (expenses_id),
         proposal_name varchar(50),
         week_proposed INT,
         quarter_proposed INT,
@@ -348,6 +348,24 @@ CREATE OR REPLACE FUNCTION calc_possible_balance(floor varchar, size int, moneyR
   END;
 $balance$ LANGUAGE plpgsql;
 
+
+/* Adds given value to "Additions" row in Funds table
+*/
+
+CREATE OR REPLACE FUNCTION add_additions(amount double precision) 
+  RETURNS void AS $$
+  DECLARE
+    previous_value double precision;
+    new_amount double precision;
+  BEGIN
+    SELECT INTO previous_value funds_amount FROM Funds WHERE Funds.fund_name = 'Additions';
+    new_amount := amount + previous_value;
+    UPDATE Funds SET funds_amount = new_amount WHERE fund_name = 'Additions';
+    RETURN;
+  END;
+$$ LANGUAGE plpgsql;
+
+
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
                                         Feud, and more. We also show movies outdoors on the big screen, and sponsor an Easter egg hunt in the spring. We also
@@ -648,32 +666,32 @@ INSERT INTO Funds VALUES (DEFAULT, 'Total Budget', 89771.31, false);
 
 
 -- Floor Money tab
-INSERT INTO Funds VALUES (DEFAULT, 'BSB 0-1', 41.34, true);
-INSERT INTO Funds VALUES (DEFAULT, 'BSB 2', 43.17, true);
-INSERT INTO Funds VALUES (DEFAULT, 'BSB 3', 41.34, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Speed 1', 30.31, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Speed 2', 43.17, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Speed 3', 43.17, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Demind 0', 27.56, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Deming 1', 20.21, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Deming 2', 38.58, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Deming Attic', 26.64, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Blum', 62.46, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Mees', 68.89, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Scharp', 64.30, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Percopo 0-1', 76.24, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Percopo 2', 60.62, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Percopo 3', 46.14, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 1', 32.15, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 2', 35.82, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 3', 37.66, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 1', 26.57, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 2', 35.82, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 3', 34.91, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 1', 41.25, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 2', 53.28, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 3', 33.17, true);
-INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 4', 33.72, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'BSB 0-1', 41.34, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'BSB 2', 43.17, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'BSB 3', 41.34, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Speed 1', 30.31, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Speed 2', 43.17, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Speed 3', 43.17, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Demind 0', 27.56, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Deming 1', 20.21, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Deming 2', 38.58, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Deming Attic', 26.64, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Blum', 62.46, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Mees', 68.89, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Scharp', 64.30, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Percopo 0-1', 76.24, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Percopo 2', 60.62, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Percopo 3', 46.14, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 1', 32.15, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 2', 35.82, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments E 3', 37.66, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 1', 26.57, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 2', 35.82, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Apartments W 3', 34.91, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 1', 41.25, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 2', 53.28, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 3', 33.17, true);
+-- INSERT INTO Funds VALUES (DEFAULT, 'Lakeside 4', 33.72, true);
 
 -- If both week and qtr proposed are -1, the event was last year 
 -- proposal_id SERIAL PRIMARY KEY ,
@@ -807,3 +825,4 @@ INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland Tickets', 8, 2
 
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Hall Improvement Funds', 9, 2, 10000.00, true, 10000.00, true, '2017-3-24', '2017-3-1', '2017-3-23', '2017-3-23', 5, '../images/events/rose-seal.png');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Thomas 22nd Birthday', 9, 2, 10000.00, true, 10000.00, false, '2017-2-6', '2017-1-1', '2017-2-1', '2017-2-1', 9.99, '../images/events/rose-seal.png');
+ '2017-2-6', '2017-1-1', '2017-2-1', '2017-2-1', 9.99, '../images/events/rose-seal.png');
