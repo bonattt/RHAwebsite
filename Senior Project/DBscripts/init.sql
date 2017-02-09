@@ -397,6 +397,8 @@ CREATE OR REPLACE FUNCTION sum_only_expenses(floor varchar)
     count int;
   BEGIN
     SELECT INTO expenses SUM(FloorExpenses.amount) FROM FloorMoney, FloorExpenses WHERE FloorMoney.hall_and_floor = floor AND FloorMoney.floormoney_id = FloorExpenses.floor_id AND FloorExpenses.amount < 0;
+    IF expenses IS NULL THEN return 0;
+    END IF;
     return expenses;
   END;
 $expenses$ LANGUAGE plpgsql;
@@ -411,6 +413,8 @@ CREATE OR REPLACE FUNCTION sum_only_awards(floor varchar)
     count int;
   BEGIN
     SELECT INTO expenses SUM(FloorExpenses.amount) FROM FloorMoney, FloorExpenses WHERE FloorMoney.hall_and_floor = floor AND FloorMoney.floormoney_id = FloorExpenses.floor_id AND FloorExpenses.amount > 0;
+    IF expenses IS NULL THEN return 0;
+    END IF;
     return expenses;
   END;
 $expenses$ LANGUAGE plpgsql;
