@@ -419,6 +419,16 @@ $expenses$ LANGUAGE plpgsql;
 /* Determines the amount of money used for a given proposal
   RETURNS: Double precision
 */
+CREATE OR REPLACE FUNCTION get_money_used(prop_id int)
+  RETURNS double precision AS $used$
+  DECLARE
+    used double precision;
+  BEGIN
+    SELECT INTO used SUM(Expenses.amountUsed) FROM Expenses WHERE Expenses.proposal_id = prop_id;
+    RETURN used;
+  END;
+$used$ LANGUAGE plpgsql;
+
 
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
                                         newest DVDs. We plan and run competitive tournaments like Smash Brothers, Texas Hold''em, Holiday Decorating, Res Hall
