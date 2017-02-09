@@ -169,15 +169,23 @@ function setupSubmitAttendanceButton() {
         
         var submitBtn = document.getElementById('update-modal-submit');
         var submitAttendanceSubmit = function (e) {
-            var urlExtension = 'attendance/';
-            
+
+            var quarterToUpdate = 'Q1';
+            if($(".Quarter1").checked) {
+
+            } else if($(".Quarter2").checked) {
+                quarterToUpdate = 'Q2';
+            } else {
+                quarterToUpdate = 'Q3';
+            }
+
             var files = document.getElementById("csvFile").files;
 
             var reader = new FileReader();
 
-            reader.onload = function (e) {
+            var readerOnload = function (e) {
                 var result = reader.result.split("\n").sort();
-
+                var urlExtension = 'attendance/' + quarterToUpdate;
                 var xhr = xhrPutRequest(urlExtension);
 
                 xhr.onreadystatechange = function (e) {
@@ -186,9 +194,12 @@ function setupSubmitAttendanceButton() {
                     }
                 };
                 xhr.send(JSON.stringify({ membersToUpdate: result }));
-            clearSubmitHandlers(submitBtn);
-            return xhr;
-            };
+                clearSubmitHandlers(submitBtn);
+                reader = new FileReader();
+                reader.onload = readerOnload;
+                return xhr;
+            }
+            reader.onload = readerOnload;
 
             reader.readAsText(files[0]);
 
