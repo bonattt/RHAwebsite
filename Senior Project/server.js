@@ -7,22 +7,6 @@ url = require('url');
 express = require('express');
 multer = require('multer');
 app = express();
-/*var eventPhotoStorage =  multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, './resources/images/events');
-  },
-  filename: function (req, file, callback) {
-    callback(null, file.fieldname + '-' + Date.now());
-  }
-});
-var carouselPhotoStorage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, './resources/images/carousel');
-  },
-  filename: function (req, file, callback) {
-    callback(null, file.fieldname + '-' + Date.now());
-  }
-}); */
 
 
 var upload = multer({dest: 'resources/images/'});
@@ -184,6 +168,29 @@ app.delete('/api/v1/committeePhoto', function(req, res) {  //we will need to mak
   res.status(200).json({status: 'The file ' + toDeleteAbsolute + ' was deleted.'}).send();
   return;
 });
+
+app.post('/api/v1/officerPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
+    var fileType = req.file.mimetype.split('/')[1];
+    var tmp_path = req.file.path;
+    var target_path = 'resources/images/officers/' + req.file.filename + '.' + fileType;
+    var pathToSend = '../images/officers/' + req.file.filename + '.' + fileType;
+    fs.readFile(tmp_path, function(err, data) {
+      fs.writeFile(target_path, data);
+      fs.unlink(tmp_path);
+      res.filePath = target_path;
+      res.status(200).json({filepath: pathToSend}).send();
+      return;
+    });
+  });
+
+app.delete('/api/v1/officerPhoto', function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
+  var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
+  fs.unlink(toDeleteAbsolute);
+  console.log(res);
+  res.status(200).json({status: 'The file ' + toDeleteAbsolute + ' was deleted.'}).send();
+  return;
+});
+
 
 app.post('/foobar', function (req, res) {
   var token = req.body.token;
