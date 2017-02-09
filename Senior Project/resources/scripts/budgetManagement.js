@@ -1,6 +1,8 @@
 const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"]
 
+var current_fund_id = -1;
+
 function parseModalEntries(idHeader, ids) {
     var json_obj = {};
     ids.forEach(function(id) {
@@ -9,13 +11,6 @@ function parseModalEntries(idHeader, ids) {
         json_obj[id] = entry.value;
     });
     return json_obj;
-}
-
-function clearModalEntries(idHeader, ids) {
-    ids.forEach(function(id) {
-        var entry = document.getElementById(idHeader + id);
-        entry.value = '';
-    });
 }
 
 function prepEventName(str) {
@@ -55,40 +50,52 @@ function setupButtons() {
         }
         xhr.send(JSON.stringify(json_obj));
         alert(JSON.stringify(json_obj));
-        //clearModalEntries(modalId, entryIds);
     });
 
-    var addChargeButton = document.getElementById("addFundButton");
-    addChargeButton.setAttribute('data-toggle', 'modal');
-    addChargeButton.setAttribute('data-target', '#fundModal');
-
-    var addChargeSubmit = document.getElementById('fundModal-submit');
-    addChargeSubmit.addEventListener('click', function() {
-        alert('click!');
-//        var entryIds = ['funds_hall', 'funds_amount', 'event', 'turnin_date', 'processed_date'];
-//        var modalId = 'chargeModal-'
+//    var addFundButton = document.getElementById("addFundButton");
+//    addFundButton.setAttribute('data-toggle', 'modal');
+//    addFundButton.setAttribute('data-target', '#fundModal');
+//
+//    var addFundSubmit = document.getElementById('fundModal-submit');
+//    addFundSubmit.addEventListener('click', function() {
+//        var entryIds = ['fund_name', 'funds_amount'];
+//        var modalId = 'fundModal-'
 //        var json_obj = parseModalEntries(modalId, entryIds);
-//        var apiUrl = '???';
+//        var apiUrl = 'fund/';
 //        var xhr = xhrPostRequest(apiUrl);
-//        xhr.onload = function() {alert('success!')}
-//        // xhr.send(JSON.stringify(json_obj));
-//        clearModalEntries(modalId, entryIds);
+//        xhr.onload = function() { alert('success!'); }
+//        xhr.onerror = function() { alert('failure!'); }
+//        xhr.send(JSON.stringify(json_obj));
+//    });
+
+    var editSubmit = document.getElementById('editFundModal-submit');
+    editSubmit.addEventListener('click', function() {
+        var apiUri = 'fund/' + current_fund_id
+        var xhr = xhrPutRequest(apiUri);
+        xhr.onload = function() { alert('success!'); }
+
+        var funds_amount = document.getElementById('editFundModal-funds_amount');
+
+        var json_obj = {"funds_amount": parseFloat(funds_amount.value)}
+        xhr.send(JSON.stringify(json_obj));
     });
 }
 
 function populateFundsTable() {
     var xhr = xhrGetRequest('funds/');
-    var tbody = document.getElementById('FundsTable');
+    var tbody = document.getElementById('fundsTable');
+    var rowNumber = 0;
     xhr.onload = function() {
         var payments = JSON.parse(xhr.responseText);
         payments.forEach(function(entry) {
-            console.log(display_on_site);
-            console.log(typeof display_on_site);
-            if (! entry.display_on_site) {
-                return;
+            var row = buildFundsRow(entry, rowNumber);
+            if (rowNumber % 2 == 1) {
+                row.setAttribute('class', 'colLight');
+            } else {
+                row.setAttribute('class', 'colDark');
             }
-            var row = buildFundsRow(entry);
             tbody.appendChild(row);
+            rowNumber++;
         });
     }
     xhr.send();
@@ -97,47 +104,59 @@ function populateFundsTable() {
 function populatePaymentsTable() {
     var xhr = xhrGetRequest('payments/');
     var tbody = document.getElementById('paymentsTable');
-    var count = 0;
+    var rowNumber = 0;
 
     xhr.onload = function() {
         var payments = JSON.parse(xhr.responseText);
         payments.forEach(function(entry) {
-            var row = buildPaymentRow(entry);
-            if (count % 2 == 1) {
+            var row = buildPaymentRow(entry, rowNumber);
+            if (rowNumber % 2 == 1) {
                 row.setAttribute('class', 'colLight');
             } else {
                 row.setAttribute('class', 'colDark');
             }
-            count++;
+            rowNumber++;
             tbody.appendChild(row);
         });
     }
     xhr.send();
 }
 
-function buildFundsRow(fund) {
-    var row = document.createElement('tr');
+function buildFundsRow(fund, rowNumber) {
     var col;
+    var keys = ['fund_name', 'funds_amount']
+    var row = buildRow(fund, keys, rowNumber)
 
+    // add edit button
     col = document.createElement('td');
-    col.appendChild(document.createTextNode(fund.fund_id));
-    row.appendChild(col);
+    var editButton = document.createElement('a');
+    editButton.appendChild(document.createTextNode('[edit]'));
+    editButton.setAttribute('class', 'tableEntry');
+    editButton.setAttribute('id', 'row' + rowNumber + 'edit');
 
-    col = document.createElement('td');
-    col.appendChild(document.createTextNode(fund.fund_name));
-    row.appendChild(col);
+    var data = editButton.dataset;
+    data.toggle = "modal";
+    data.target = "#editFundModal";
 
-    col = document.createElement('td');
-    col.appendChild(document.createTextNode(fund.funds_amount));
-    row.appendChild(col);
+    editButton.addEventListener('click', function() {
+        var header = document.getElementById('editFundModal-header');
+        header.innerHTML = "Edit " + fund.fund_name + " Fund";
 
+        var funds_amount = document.getElementById('editFundModal-funds_amount');
+        funds_amount.value = parseFloat(fund.funds_amount);
+
+        current_fund_id = fund.funds_id;
+    });
+
+    col.appendChild(editButton);
+    row.appendChild(col);
     return row;
 }
 
-function buildPaymentRow(payment) {
+function buildPaymentRow(payment, rowNumber) {
     var col;
-    var keys = ['expenses_id', 'proposal_id', 'cm', 'receiver']
-    var row = buildRow(payment, keys);
+    var keys = ['proposal_id', 'cm', 'receiver']
+    var row = buildRow(payment, keys, rowNumber);
 
     // special cases:
     col = document.createElement('td');
@@ -160,16 +179,15 @@ function buildPaymentRow(payment) {
 //    col.appendChild(document.createTextNode(payment.reciepts));
 //    col.setAttribute('class', 'tableEntry');
 //    row.appendChild(col);
-    row.appendChild(getDisplayDetailsLink(payment));
-
+    row.appendChild(getDisplayExpenseDetailsLink(payment));
     return row;
 }
 
-function getDisplayDetailsLink(json_obj, rowNumber) {
+function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
     var link = document.createElement('a');
     link.appendChild(document.createTextNode('[details]'));
     link.setAttribute('id', 'row' + rowNumber + 'details');
-    link.setAttribute('class', 'expenseDetails');
+    link.setAttribute('class', 'expenseDetails tableEntry');
 
     var data = link.dataset;
     data.toggle = "modal"
@@ -192,7 +210,8 @@ function getDisplayDetailsLink(json_obj, rowNumber) {
 
 function buildRow(data, keys, rowNumber) {
     var row = document.createElement('tr');
-    var col;
+    var col = document.createElement('td');
+    row.appendChild(col);
 
     row.setAttribute('id', 'row' + rowNumber);
     var colNumber = 0;
@@ -221,6 +240,7 @@ function composeDateStr(dateStr) {
 function setAdmin() {
     setupButtons();
     populatePaymentsTable();
+    populateFundsTable();
 }
 
 function setup() {

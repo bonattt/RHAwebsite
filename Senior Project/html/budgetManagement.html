@@ -32,21 +32,6 @@
 
 	<div id="buttonWrapper">
 		<button id="addPaymentButton" data-toggle="modal" data-target="#paymentModal">Add Payment</button>
-		<button id="addFundButton" data-toggle="modal" data-target="#fundModal">Add Fund</button>
-		<!--
-		<table>
-			<tbody>
-				<tr>
-					<td> <label> <b> Budget Item </b> </label> </td>
-					<td> <label> <b> Amount </b> </label> </td>
-				</tr>
-				<tr>
-					<td> <label> <b> Budget Item </b> </label> </td>
-					<td> <label> <b> Amount </b> </label> </td>
-				</tr>
-			</tbody>
-		</table>
-		-->
 	</div>
 
 	<div id="tables">
@@ -62,16 +47,16 @@
 					<!-- <th class="tableEntry"> accountcode &nbsp;&nbsp;  </th> -->
 					<th class="tableEntry"> datereceived &nbsp;&nbsp; </th>
 					<th class="tableEntry"> dateprocessed &nbsp;&nbsp; </th>
-					<th class="tableEntry"> reciepts &nbsp;&nbsp; </th>
+					<th class="tableEntry">  &nbsp;&nbsp; </th>
 				</td>
 			</tbody>
 		</table>
 		<table>
 			<tbody class="moneyTable" id="fundsTable">
 				<td>
-					<th> Fund # &nbsp;&nbsp; </th>
-					<th> Name &nbsp;&nbsp; </th>
-					<th> Amount &nbsp;&nbsp; </th>
+					<th class="tableEntry"> Name &nbsp;&nbsp; </th>
+					<th class="tableEntry"> Amount &nbsp;&nbsp; </th>
+					<th class="tableEntry"> Edit &nbsp;&nbsp; </th>
 				</td>
 			</tbody>
 		</table>
@@ -199,7 +184,7 @@
 								<td> <label>Amount:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td> <input class="modal-text-entry" id="fundModal-funds_amount" type="number"
-											value="Amount"></input>
+											value="0.00" step="1.00"></input>
 								</td>
 							</tr>
 						</tbody>
@@ -208,6 +193,38 @@
 				<div class="modal-footer">
 					<button id="fundModal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
 					<button id="fundModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="editFundModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 id="editFundModal-header" class="modal-title">Edit a Fund</h4>
+				</div>
+				<div class="modal-body">
+					<table>
+						<tbody>
+							<tr>
+								<td> <label>Fund Amount:</label> </td>
+								<!-- this person physically received the check for this money -->
+								<td> &nbsp;&nbsp; </td>
+								<td>
+									<input class="modal-text-entry" id="editFundModal-funds_amount" type="number"
+										   value="0.00" step="1.01"></input>
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button id="editFundModal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="editFundModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
