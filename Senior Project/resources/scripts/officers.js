@@ -16,15 +16,55 @@ function setAdmin(officers) {
             var xhr = xhrPutRequest(apiUrl);
             delete json_data.user_id;
             delete json_data.username;
+            for (attr in json_data) {
+                if (json_data[attr] == null) {
+                    delete json_data[attr]
+                }
+            }
+
             if (json_data.membertype == '') {
                 msg = 'Officers must have a member type.'
                 delete json_data.membertype;
             }
             xhr.onload = function() { location.reload() };
-            xhr.send(JSON.stringify(json_data));
+            var imageEntry = document.getElementById("imageFilePut");
+            var global_id = selected_element_id.replace('officer', '');
+            global_id = parseInt(global_id);
+//            alert(selected_element_id + ' ?= ' + put_id + ' = ' + (selected_element_id == put_id));
+            if(global_id != put_id) {
+                alert('WARNING WARNING:\nselected_element_id: ' + global_id + '\nput_id: ' + put_id);
+            }
+            if (imageEntry.value != '') {
+                var image_to_delete = json_data.image;
+                var photoDelete = new PhotoDeleteXhr('officerPhoto');
+                photoDelete.send(JSON.stringify({'todelete': image_to_delete}));
+
+                var photoPost = new PhotoPostXhr("officerPhoto");
+                photoPost.imageCallback(xhr, json_data, 'image');
+                var files = imageEntry.files;
+                var formData = new FormData();
+                formData.append("imageFile", files[0]);
+                imageEntry.value = ''
+                photoPost.send(formData);
+            } else {
+                xhr.send(JSON.stringify(json_data));
+            }
         });
-        var deleteBtn = document.getElementById('confirm-delete');
+
+        var deleteBtn = document.getElementById('modal-delete');
         deleteBtn.addEventListener('click', function() {
+            var imageEntry = document.getElementById("imageFilePut");
+            imageEntry.value = '';
+        });
+
+        var cancelBtn = document.getElementById('modal-cancel');
+        cancelBtn.addEventListener('click', function() {
+            var imageEntry = document.getElementById("imageFilePut");
+            imageEntry.value = '';
+        });
+
+        var deleteConfirm = document.getElementById('confirm-delete');
+        deleteConfirm.addEventListener('click', function() {
             // "selected_element_id" global decleared in adminPermission.js ... sorry about that... :(
             var element = document.getElementById(selected_element_id); 
             var dataset = element.dataset;
@@ -60,11 +100,24 @@ function setupAddOfficerButton() {
         var json_data = {"memberType": memberType};
         var xhr = xhrPutRequest(urlExtension);
         xhr.onload = function() {location.reload()};
-        xhr.send(JSON.stringify(json_data));
+        var imageEntry = document.getElementById("imageFilePost");
+        if (imageEntry.value != '') {
+            var photoPost = new PhotoPostXhr("officerPhoto");
+            photoPost.imageCallback(xhr, json_data, 'image');
+            var files = imageEntry.files;
+            var formData = new FormData();
+            formData.append("imageFile", files[0]);
+            imageEntry.value = ''
+            photoPost.send(formData);
+        } else {
+            xhr.send(JSON.stringify(json_data));
+        }
     });
-    var cancelBtn = document.getElementById('modal-cancel');
+    var cancelBtn = document.getElementById('modal-new-officer-cancel');
     cancelBtn.addEventListener('click', function() {
-        // nothing right now
+        console.log("cancel!")
+        var imageEntry = document.getElementById("imageFilePost");
+        imageEntry.value = '';
     }); 
 }
 
@@ -124,7 +177,7 @@ function setup() {
 				
 				html += officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].membertype
 				html += "</h3>";
-                html += "<img src='../images/officers/" + officer[i].membertype.toLowerCase().replace(" ", "") + ".jpg' alt='" + officer[i].membertype + "'height='294' width='195'>";
+                html += "<img src='" + officer[i].image + "' alt='" + officer[i].membertype + "'height='294' width='195'>";
                 html += "<p>Email: <a href='mailto:" + officer[i].username + "@rose-hulman.edu'>" + officer[i].username + "@rose-hulman.edu</a></p>";
                 html += "<p> Phone Number: " + officer[i].phone_number + "</p>";
                 html += "<p> Room: " + officer[i].hall + " " + officer[i].room_number + "</p>";
