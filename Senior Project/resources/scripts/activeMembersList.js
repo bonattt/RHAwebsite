@@ -54,8 +54,27 @@ function drawAllMembersTable(members) {
     tdHall.setAttribute('align', 'middle');
     tdHall.setAttribute('width', 200);
     tdHall.innerHTML = "Hall";
+
+    var tdAttendance = document.createElement('td');
+    tdAttendance.setAttribute('align', 'middle');
+    tdAttendance.setAttribute('width', 200);
+    tdAttendance.innerHTML = "Fall Attendance";
+
+    var tdAttendance0 = document.createElement('td');
+    tdAttendance0.setAttribute('align', 'middle');
+    tdAttendance0.setAttribute('width', 200);
+    tdAttendance0.innerHTML = "Winter Attendance";
+
+    var tdAttendance1 = document.createElement('td');
+    tdAttendance1.setAttribute('align', 'middle');
+    tdAttendance1.setAttribute('width', 200);
+    tdAttendance1.innerHTML = "Spring Attendance";
+
     tbdy.appendChild(tdName);
     tbdy.appendChild(tdHall);
+    tbdy.appendChild(tdAttendance);
+    tbdy.appendChild(tdAttendance0);
+    tbdy.appendChild(tdAttendance1);
     var countForColoring = 0;
     for (var i = 0; i < members.length; i++) {
         tr = document.createElement('tr');
@@ -73,8 +92,20 @@ function drawAllMembersTable(members) {
 
         var td2 = document.createElement('td');
         td2.innerHTML = members[i].hall;
+
+        var td3 = document.createElement('td');
+        td3.innerHTML = members[i].meet_attend.Q1;
+
+        var td4 = document.createElement('td');
+        td4.innerHTML = members[i].meet_attend.Q2;
+
+        var td5 = document.createElement('td');
+        td5.innerHTML = members[i].meet_attend.Q3;
         tr.appendChild(td);
         tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
         tbdy.appendChild(tr);
     }
     table.appendChild(tbdy);
@@ -184,7 +215,7 @@ function setupSubmitAttendanceButton() {
             var reader = new FileReader();
 
             var readerOnload = function (e) {
-                var result = reader.result.split("\n").sort();
+                var result = reader.result.split("\r\n").sort();
                 var urlExtension = 'attendance/' + quarterToUpdate;
                 var xhr = xhrPutRequest(urlExtension);
 
