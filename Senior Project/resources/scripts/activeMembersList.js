@@ -171,9 +171,9 @@ function setupSubmitAttendanceButton() {
         var submitAttendanceSubmit = function (e) {
 
             var quarterToUpdate = 'Q1';
-            if($(".Quarter1").checked) {
+            if(document.getElementById('Quarter1').checked) {
 
-            } else if($(".Quarter2").checked) {
+            } else if(document.getElementById('Quarter2').checked) {
                 quarterToUpdate = 'Q2';
             } else {
                 quarterToUpdate = 'Q3';
