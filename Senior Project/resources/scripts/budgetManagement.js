@@ -230,7 +230,21 @@ function composeDateStr(dateStr) {
     return msg;
 }
 
+function unHideAminStuff() {
+    var el = document.getElementById("tables");
+    el.style.display = "block";
+
+    el = document.getElementById("buttonWrapper");
+    el.style.display = "block";
+}
+
+function setNotAdmin() {
+    var el = document.getElementById("notAdminMsg");
+    el.style.display = "block";
+}
+
 function setAdmin() {
+    unHideAminStuff();
     setupButtons();
     populatePaymentsTable();
     populateFundsTable();
@@ -240,9 +254,9 @@ function setup() {
     var officersxhr = getOfficers();
     officersxhr.onload = function () {
         if (userIsOfficer(officersxhr.responseText)) {
-            setAdmin(officersxhr.responseText);
+            setAdmin();
         } else {
-            alert('you should need to login...');
+            setNotAdmin();
         }
     };
     officersxhr.send();

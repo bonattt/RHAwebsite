@@ -15,6 +15,11 @@
     float: left;
 }
 
+#notAdminMsg {
+    display: none;
+    text-align: center;
+}
+
 table {
 
 }
