@@ -17,6 +17,28 @@ function setup() {
     };
     xhr.send();
 
+    var galleryURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/carouselPhoto';
+    var xhr2 = new XMLHttpRequest();
+    xhr2.open('GET', galleryURL, true);
+    xhr2.onreadystatechange = function (e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var indicatorOl = document.getElementById("carousel-indicators");
+            var carouselInnerDiv = document.getElementById("carousel-inner");
+            var firstImage = xhr.responseText.shift();
+            JSON.parse(xhr.responseText).forEach(fileName => {
+                console.log(fileName);
+                var image = document.createElement('image');
+                var filePath = "./images/carousel/" + fileName;
+                image.innerHTML = "<img class='photoGalleryImage' src=" + filePath + " data-toggle='modal' data-target='#photoModal'>";
+            });
+        }
+    };
+    xhr2.onerror = function (err) {
+        console.log('there was en error');
+        console.log(err);
+    }
+    xhr2.send();
+
     var title = document.getElementById("title");
     if (JSON.parse(sessionStorage.getItem('userData'))) {
         title.innerHTML = "Welcome, " + JSON.parse(sessionStorage.getItem('userData')).name.split(" ")[0] + "!";
