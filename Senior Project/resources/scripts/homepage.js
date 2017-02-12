@@ -1,54 +1,27 @@
 var officers;
-function displayUpcomingEvents() {
-
-    var urlExtension = 'events/';
-    var xhr = xhrGetRequest(url);
-        
-    xhr.send();
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
-    function createHTMLFromResponseText(proposal) {
-        proposal = JSON.parse(proposal);
-        for (var i = 0; i < proposal.length; i++) {
-            var html = "<div class='event'><a href='sign-ups'>";
-            html += "<img src=" + proposal[i].image_path + " alt='Event' class='eventImage'>";
-            html += "<div class='eventText'><h2>" + proposal[i].proposal_name + "</h2>";
-            html += "<p>" + proposal[i].event_date + "</p></div></a></div>";
-
-            var sidebar = document.getElementById("sidebarEvents");
-            sidebar.innerHTML += html;
-        }
-    }
-}
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-        var editButtons = insertEditButtonsBefore(showModal, {"style": "float: right;"});
+        var uploadButton = document.getElementById("addPhoto");
+        uploadButton.setAttribute("class", "");
+
+//        var editButtons = insertEditButtonsBefore(showModal, {"style": "float: right;"});
+//        alert(editButtons.length)
     }
 }
 
 function setup() {
     var xhr = getOfficers();
+    xhr.onload = function () {
+        setAdmin(xhr.responseText);
+    };
     xhr.send();
-    setTimeout(function () { setAdmin(xhr.responseText) }, 300);
-    var hasListener = false;
-    var whatsnew = {};
 
     var title = document.getElementById("title");
     if (JSON.parse(sessionStorage.getItem('userData'))) {
         title.innerHTML = "Welcome, " + JSON.parse(sessionStorage.getItem('userData')).name.split(" ")[0] + "!";
     } else {
         title.innerHTML = "Welcome!"
-    }
-
-    function getFrontPageNews() {
-
-    }
-
-    function inputHandler(property, value) {
-        console.log(value);
-        whatsnew[property] = value;
-        $('#title').text(whatsnew.title);
-        $('#shownDescription').text(whatsnew.shownDescription);
     }
 }
 
@@ -140,5 +113,4 @@ function uploadCarouselPhoto() {
 
 $(document).ready(function () {
     setup();
-    displayUpcomingEvents();
 });
