@@ -16,7 +16,6 @@ window.onload = function () {
 		'		<div class="dropdown">' +
 		'			<button class="dropbtn">Services</button>' +
 		'			<div class="dropdown-content">' +
-		'               <a href="budgetManagement"> Budget Management </a>' +
 		'				<a href="subwayCam">Subway Cam</a>' +
 		'				<a href="http://movies.rose-hulman.edu">Movie Server</a>' +
 		'				<a href="photoGallery">Photo Gallery</a>' +
@@ -36,6 +35,7 @@ window.onload = function () {
 		'		<div class="dropdown">' +
 		'			<button class="dropbtn">Budget</button>' +
 		'			<div class="dropdown-content">' +
+		'               <a href="budgetManagement"> Budget Management </a>' +
 		'				<a href="floorMoney">Floor Money</a>' +
 		'			</div>' +
 		'		</div>' +
