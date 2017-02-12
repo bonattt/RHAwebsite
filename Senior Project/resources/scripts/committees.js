@@ -45,30 +45,32 @@ function setupAddCommitteeButton() {
         committeeDesc.value = '';
         var submitBtn = document.getElementById('modal-submit')
         var addCommitteeSubmit = function (e) {
+            var photoXhr = new PhotoPostXhr('committeePhoto');
             var urlExtension = 'committee/';
-            var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/committeePhoto';
-            var photoXhr = new XMLHttpRequest();
+            var postXhr = xhrPostRequest(urlExtension);
+            postXhr.onload = function() { location.reload(); }
+            var json_data = { 'committeeName': committeeName.value, 'description': committeeDesc.value};
+            photoXhr.imageCallback(postXhr, json_data, 'image');
             var files = document.getElementById("imageFile").files;
-
             var formData = new FormData();
             formData.append("imageFile", files[0]);
-            photoXhr.open('POST', photoAPIURL, true);
-
-            photoXhr.onreadystatechange = function (e) {
-                if(photoXhr.readyState == 4 && photoXhr.status == 200) {
-                    var image_path = JSON.parse(photoXhr.responseText).filepath;
-                    var xhr = xhrPostRequest(urlExtension);
-
-                    xhr.onreadystatechange = function (e) {
-                        if(xhr.readyState == 4 && xhr.status == 200) {
-                            location.reload();
-                        }
-                    };
-                    xhr.send(JSON.stringify({ committeeName: committeeName.value, description: committeeDesc.value, image: image_path }));
-                    clearSubmitHandlers(submitBtn);
-                    return xhr;
-                }
-            };
+//            photoXhr.open('POST', photoAPIURL, true);
+//
+//            photoXhr.onreadystatechange = function (e) {
+//                if(photoXhr.readyState == 4 && photoXhr.status == 200) {
+//                    var image_path = JSON.parse(photoXhr.responseText).filepath;
+//                    var xhr = xhrPostRequest(urlExtension);
+//
+//                    xhr.onreadystatechange = function (e) {
+//                        if(xhr.readyState == 4 && xhr.status == 200) {
+//                            location.reload();
+//                        }
+//                    };
+//                    xhr.send(JSON.stringify({ committeeName: committeeName.value, description: committeeDesc.value, image: image_path }));
+//                    clearSubmitHandlers(submitBtn);
+//                    return xhr;
+//                }
+//            };
             photoXhr.send(formData);
             document.getElementById("imageFile").value = '';
         }
@@ -136,37 +138,39 @@ function setup() {
 function saveCommittee(data) {
     var urlExtension = 'committee/' + data.committeeid;
     var xhr = xhrPutRequest(urlExtension);
-    var files = document.getElementById("imageFile").files;
-    console.log(files);
     xhr.onload = function () { location.reload() };
+    var json_data = { committeename: data.committeename, description: data.description};
+    var imageInput = document.getElementById("imageFile");
 
-    if(files.length > 0) {
-        var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/committeePhoto';
-        var photoXhr = new XMLHttpRequest();
+    if(imageInput.value != '') {
+//        var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/committeePhoto';
+        var image_to_delete = data.image;
+        delete data.image; // so this is not sent in the regular update
+        var photoDelete = new PhotoDeleteXhr('eventPhoto');
+        photoDelete.send(JSON.stringify({'todelete': image_to_delete}));
+
+        var photoPost = new PhotoPostXhr("eventPhoto");
+        photoPost.imageCallback(xhr, data, 'image');
+        var files = imageInput.files;
         var formData = new FormData();
         formData.append("imageFile", files[0]);
-        photoXhr.open('POST', photoAPIURL, true);
-        photoXhr.onreadystatechange = function (e) {
-            var delPhotoXhr = new XMLHttpRequest();
-            delPhotoXhr.open('DELETE', photoAPIURL, true);
-            if(photoXhr.readyState == 4 && photoXhr.status == 200) {     
-                var image_path = JSON.parse(photoXhr.responseText).filepath;
-                delPhotoXhr.send(JSON.stringify({ tobaleet: data.image}));
-                xhr.send(JSON.stringify({ committeename: data.committeename, description: data.description, image: image_path }));
-
-            }
-        }
-        photoXhr.send(formData);
-        var files = document.getElementById("imageFile").value = '';
+        photoPost.send(formData);
+//        photoXhr.onreadystatechange = function (e) {
+//            var delPhotoXhr = new XMLHttpRequest();
+//            delPhotoXhr.open('DELETE', photoAPIURL, true);
+//            if(photoXhr.readyState == 4 && photoXhr.status == 200) {
+//                var image_path = JSON.parse(photoXhr.responseText).filepath;
+//                delPhotoXhr.send(JSON.stringify({ tobaleet: data.image}));
+//                xhr.send(JSON.stringify({ committeename: data.committeename, description: data.description, image: image_path }));
+//
+//            }
+//        }
     } else {
-        xhr.send(JSON.stringify({ committeename: data.committeename, description: data.description}));
+        xhr.send(JSON.stringify(json_data));
     }
-
-
+    imageInput.value = ''; // clear the image entry
     return xhr;
-
-} 
-
+}
 
 $(document).ready(function() {
     setup();
