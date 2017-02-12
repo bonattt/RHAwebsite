@@ -71,15 +71,6 @@ function setupButtons() {
         var json_obj = {"funds_amount": parseFloat(funds_amount.value)}
         xhr.send(JSON.stringify(json_obj));
     });
-
-    var editSubmit = document.getElementById('editFundModal-delete');
-    editSubmit.disabled = true;
-    editSubmit.addEventListener('click', function() {
-        var apiUri = 'fund/' + current_id
-        var xhr = xhrDeleteRequest(apiUri);
-        xhr.onload = function() { alert('success!'); }
-        xhr.send(JSON.stringify());
-    });
 }
 
 function populateFundsTable() {
