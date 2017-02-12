@@ -45,49 +45,41 @@ function createColumnHead(name) {
     return newTd;
 }
 
+function createTableRow(index) {
+    var tr = document.createElement('tr');
+    tr.setAttribute('proposal', index);
+    tr.setAttribute('data-toggle', 'modal');
+    tr.setAttribute('data-target', '#myModal');
+    //doClosure(members, index);
+    if (index % 2 == 0) {
+        tr.setAttribute('bgcolor', '#f0f0f0');
+    }
+    return tr
+}
+
 function drawTable(proposal) {
     var table = document.createElement('table');
-    var tbdy = document.createElement('tbody');
-    var tdName = createColumnHead("Name");
-    var tdRequested = createColumnHead("Amount Requested");
-    var tdBudgeted = createColumnHead("Amout Budgeted");
-    var tdreserve = createColumnHead("Reserve");
-    var tdused = createColumnHead("Used");
-    var tdIsOpen = createColumnHead("Is Open");
-    var tdProposedDate = createColumnHead("Event Date");
-    var tdQuarter = createColumnHead("Proposed Date");
-    var tdWeek = createColumnHead("Proposed Quarter");
-    var tdDate = createColumnHead("Proposed Week");
-    var countForColoring = 0;
     table.innerHTML = "";
     table.setAttribute('border', 1);
     table.setAttribute('align', 'center');
     table.setAttribute('bordercolor', '#808080');
     table.setAttribute('class', 'proposalsTable');
+    var tbdy = document.createElement('tbody');
 
+    tbdy.appendChild(createColumnHead("Name"));
+    tbdy.appendChild(createColumnHead("Amount Requested"));
+    tbdy.appendChild(createColumnHead("Amout Budgeted"));
+    tbdy.appendChild(createColumnHead("Reserve"));
+    tbdy.appendChild(createColumnHead("Used"));
+    tbdy.appendChild(createColumnHead("Is Open"));
+    tbdy.appendChild(createColumnHead("Event Date"));
+    tbdy.appendChild(createColumnHead("Proposed Date"));
+    tbdy.appendChild(createColumnHead("Proposed Quarter"));
+    tbdy.appendChild(createColumnHead("Proposed Week"));
 
-
-    tbdy.appendChild(tdName);
-    tbdy.appendChild(tdRequested);
-    tbdy.appendChild(tdBudgeted);
-    tbdy.appendChild(tdreserve);
-    tbdy.appendChild(tdused);
-    tbdy.appendChild(tdIsOpen);
-    tbdy.appendChild(tdDate);
-    tbdy.appendChild(tdQuarter);
-    tbdy.appendChild(tdWeek);
-    tbdy.appendChild(tdProposedDate);
-
+    var countForColoring = 0;
     for (var i = proposal.length - 1; i >= 0; i--) {
-        tr = document.createElement('tr');
-        tr.setAttribute('proposal', i);
-        tr.setAttribute('data-toggle', 'modal');
-        tr.setAttribute('data-target', '#myModal');
-        //doClosure(members, i);
-        if (countForColoring % 2 == 0) {
-            tr.setAttribute('bgcolor', '#f0f0f0');
-        }
-        countForColoring++;
+        var tr = createTableRow(i);
 
         var tdname = document.createElement('td');
         tdname.innerHTML = proposal[i].proposal_name;
@@ -116,7 +108,6 @@ function drawTable(proposal) {
 
         var tdpaid = document.createElement('td');
         tdpaid.innerHTML = proposal[i].paid;
-
 
         var tdreserve = document.createElement('td');
         var tdused = document.createElement('td');
