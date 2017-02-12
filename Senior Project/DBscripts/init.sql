@@ -125,25 +125,15 @@ INSERT INTO FloorExpenses (floor_id, event_description, amount) VALUES (1, 'Test
     
 
 
--- When writing this function, make sure to populate the names and resident numbers of the floor
--- BEFORE calculating any of the monetary values. This is because in order to calcuate expenses
--- you need to query FloorExpenses, which has a foriegn key contstraint on FloorMoney (the table
--- this function populates), and you need the name of the floor to make sure you are getting only
--- expenses which are for that specific hall. 
 
--- TL;DR: Go through table once to add first five (including ID) entries, then populate expenses (if
--- there are any, otherwise dont), then go through again to calculate last two entries.
+/* Pre-populates the FloorMoney table with barebones entries for update_floor_money() to be
+  useable both on the initial creation of the database as well as whenever attendance is
+  updated each week.
 
+  RETURNS: void
+*/
 CREATE OR REPLACE FUNCTION populate_floor_money()
   RETURNS void AS $$
-  DECLARE
-    -- declare fields to be used to insert into rows
-    p_earnings double precision;
-    c_earned double precision;
-    p_balance double precision;
-    c_balance double precision;
-    moneyRate int := 15;
-    t_row FloorMoney%rowtype;
   BEGIN
     -- call other functions 
     CREATE TEMPORARY TABLE floor_resident_count AS 
@@ -153,11 +143,35 @@ CREATE OR REPLACE FUNCTION populate_floor_money()
     DROP TABLE floor_resident_count;
     RAISE NOTICE 'Populated FloorMoney with initial values. Now calculating dollar amounts.';
 
+    -- Change below to a call to update_floor_money() instead
+
+    SELECT * FROM update_floor_money();
+  END;
+$$ LANGUAGE plpgsql;
+
+
+/* Updates floor money table using function suite below. Assuming floor money table is not empty and that
+   the number of residents is accurate and does not need to be changed.
+
+   RETURNS: void
+*/
+CREATE OR REPLACE FUNCTION update_floor_money()
+  RETURNS void AS $$
+  DECLARE
+    p_earnings double precision;
+    c_earned double precision;
+    p_balance double precision;
+    c_balance double precision;
+    moneyRate int := 15; 
+    t_row FloorMoney%rowtype;
+  BEGIN
+
     FOR t_row IN SELECT * FROM FloorMoney LOOP
       p_earnings := calc_possible_earnings(t_row.hall_and_floor, t_row.residents, moneyRate);
       c_earned := calc_earned_money(t_row.hall_and_floor, t_row.residents, moneyRate);
       p_balance := calc_possible_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
       c_balance := calc_current_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
+      -- RAISE NOTICE 'Wtf. p_earn = %, c_earn = %, p_bal = %, c_bal = %', p_earnings, c_earned, p_balance, c_balance;
       UPDATE FloorMoney
         SET possible_earnings = p_earnings,
             current_earned = c_earned,
@@ -168,7 +182,9 @@ CREATE OR REPLACE FUNCTION populate_floor_money()
   END;
 $$ LANGUAGE plpgsql;
 
+
 /* Counts the attendance of the specified floor during the given week and quarter
+
    Returns: INT
 */
 CREATE OR REPLACE FUNCTION count_attendance(week int, quarter varchar, floor varchar)
@@ -184,6 +200,7 @@ $count$ LANGUAGE plpgsql;
 
 
 /* Calculates a given floor's earned money thus far given floor name, size of the floor, and money rate
+
    Returns: DOUBLE PRECISION
 */
 CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate int) 
@@ -198,9 +215,7 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
     x int;
     y varchar;
   BEGIN
-    -- RAISE NOTICE 'MoneyRate = %, size = %', moneyRate, size;
     multiplier := (1.0 / 1.5) ^ (9.0) * (1.0 / 3.0) * moneyRate * size;
-    -- RAISE NOTICE 'Value of multiplier: %', multiplier;
     FOREACH y IN ARRAY quarters
     LOOP
       meet_attended :=
@@ -210,21 +225,17 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
       END;
       FOREACH x IN ARRAY weeks
       LOOP
-        -- RAISE NOTICE 'looping over rows %, %', y, x;
         SELECT INTO counter 
         CASE 
           WHEN (SELECT count_attendance(x, y, floor)) > 1 THEN 1
           ELSE 0
         END;
-        -- RAISE NOTICE 'Attended is %: (1 or 0)', counter;
         meet_attended := meet_attended + counter;
       END LOOP;
       IF y = 'Q1' THEN
         meet_attended = meet_attended + 1; 
       END IF;
-      -- RAISE NOTICE 'Meetings Attended by %: %', floor, meet_attended;
       earned := earned + (multiplier * ((1.5) ^ meet_attended));
-      -- RAISE NOTICE 'Earned is now: %', earned;
     END LOOP;
   RETURN earned;
   END;
@@ -233,9 +244,9 @@ $earned$ LANGUAGE plpgsql;
 
 /* Calculates a given floor's possible earnings given floor name, size of the floor, and money rate
    based on the number of meetings attended so far, and the number of meetings remaining in the year
+
    Returns: DOUBLE PRECISION
 */
--- Update to include functions 
 CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, moneyRate int) 
   RETURNS double precision AS $possible$
   DECLARE
@@ -254,6 +265,7 @@ CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, money
     LOOP
       SELECT INTO meetings Members.meet_attend->y FROM Members WHERE Members.hall = floor LIMIT 1;
       current_max_meetings := json_array_length(meetings);
+      RAISE NOTICE 'max meetings for quarter %: %', y, current_max_meetings;
       attended := 
       CASE
         WHEN y = 'Q1' THEN 1
@@ -267,9 +279,8 @@ CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, money
           ELSE attended + 0
         END;
       END LOOP;
-      -- RAISE NOTICE 'Current max meetings before addition: %, attended: %', current_max_meetings, attended;
       current_max_meetings := attended + (9 - current_max_meetings);
-      -- RAISE NOTICE 'Quarter: %, max meetings: %', y, current_max_meetings;
+      RAISE NOTICE 'max meetings: %', current_max_meetings;
       possible := possible + multiplier * (1.5 ^ current_max_meetings);
     END LOOP;
     return possible;
@@ -280,13 +291,13 @@ $possible$ LANGUAGE plpgsql;
 
 
 /* Counts the number of residents on a given floor from the Members table 
+
    Returns: INT
 */
 CREATE OR REPLACE FUNCTION count_residents(floor varchar)
   RETURNS int AS $residents$
   DECLARE
     residents int;
-    -- any other vars needed (shouldnt be any)
   BEGIN
     SELECT INTO residents count(*) FROM Members WHERE Members.hall = floor;
     RETURN residents;
@@ -295,6 +306,7 @@ $residents$ LANGUAGE plpgsql;
 
 
 /* Sums the expenses and rewards from FloorExpenses given the floor name
+
    Returns: INT
 */
 CREATE OR REPLACE FUNCTION sum_expenses(floor varchar)
@@ -310,6 +322,7 @@ $expenses$ LANGUAGE plpgsql;
 
 
 /* Calculates the given floor's current balance based on earned money totaled with their expenses
+
    Returns: DOUBLE PRECISION
 */
 CREATE OR REPLACE FUNCTION calc_current_balance(floor varchar, size int, moneyRate int) 
@@ -330,6 +343,7 @@ $balance$ LANGUAGE plpgsql;
   
 
 /* Calculates the given floor's possible balance based on possible money totaled with their expenses
+
    Returns: DOUBLE PRECISION
 */
 CREATE OR REPLACE FUNCTION calc_possible_balance(floor varchar, size int, moneyRate int) 
@@ -349,6 +363,8 @@ CREATE OR REPLACE FUNCTION calc_possible_balance(floor varchar, size int, moneyR
 $balance$ LANGUAGE plpgsql;
 
 /* Adds given value to "Additions" row in Funds table
+
+   RETURNS: void
 */
 CREATE OR REPLACE FUNCTION add_additions(amount double precision) 
   RETURNS void AS $$
@@ -364,6 +380,7 @@ CREATE OR REPLACE FUNCTION add_additions(amount double precision)
 $$ LANGUAGE plpgsql;
 
 /* Counts the attendence records for a given floor during a given quarter
+
   RETURNS: int
 */
 CREATE OR REPLACE FUNCTION count_attendance_for_floor(floor varchar, quarter varchar)
@@ -388,6 +405,7 @@ CREATE OR REPLACE FUNCTION count_attendance_for_floor(floor varchar, quarter var
 $attendance$ LANGUAGE plpgsql;
 
 /* Sums the expenses from FloorExpenses given the floor name
+
    Returns: INT
 */
 CREATE OR REPLACE FUNCTION sum_only_expenses(floor varchar)
@@ -404,6 +422,7 @@ CREATE OR REPLACE FUNCTION sum_only_expenses(floor varchar)
 $expenses$ LANGUAGE plpgsql;
 
 /* Sums the awards from FloorExpenses given the floor name
+
    Returns: INT
 */
 CREATE OR REPLACE FUNCTION sum_only_awards(floor varchar)
@@ -421,6 +440,7 @@ $expenses$ LANGUAGE plpgsql;
 
 
 /* Determines the amount of money used for a given proposal
+
   RETURNS: Double precision
 */
 CREATE OR REPLACE FUNCTION get_money_used(prop_id int)
@@ -429,6 +449,8 @@ CREATE OR REPLACE FUNCTION get_money_used(prop_id int)
     used double precision;
   BEGIN
     SELECT INTO used SUM(Expenses.amountUsed) FROM Expenses WHERE Expenses.proposal_id = prop_id;
+    IF used IS NULL THEN RETURN 0;
+    END IF;
     RETURN used;
   END;
 $used$ LANGUAGE plpgsql;
