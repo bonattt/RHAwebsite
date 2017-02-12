@@ -16,7 +16,6 @@ window.onload = function () {
 		'		<div class="dropdown">' +
 		'			<button class="dropbtn">Services</button>' +
 		'			<div class="dropdown-content">' +
-		'               <a href="budgetManagement"> Budget Management </a>' +
 		'				<a href="subwayCam">Subway Cam</a>' +
 		'				<a href="http://movies.rose-hulman.edu">Movie Server</a>' +
 		'				<a href="photoGallery">Photo Gallery</a>' +
@@ -29,22 +28,23 @@ window.onload = function () {
 		'			<div class="dropdown-content">' +
 		'				<a href="http://www.rose-hulman.edu/rha/downloads/RHA_Reimbursement_Form.xlsm">Reimbursement Form</a>' +
 		'				<a href="http://www.rose-hulman.edu/rha/downloads/RHA_Payment_Form.xls">Payment Form</a>' +
+		'				<a href="http://www.rose-hulman.edu/rha/constitution.pdf">Constitution</a>' +
+		'				<a href="http://www.rose-hulman.edu/rha/procedural.pdf">Procedural Document</a>' +
 		'			</div>' +
 		'		</div>' +
 		'		<div class="dropdown">' +
-		'			<button class="dropbtn">Halls</button>' +
+		'			<button class="dropbtn">Budget</button>' +
 		'			<div class="dropdown-content">' +
-		'				<a href="http://www.rose-hulman.edu/offices-and-services/student-life/campus-life/housing-and-residence-life.aspx">About Our Residence Halls</a>' +
+		'               <a href="budgetManagement"> Budget Management </a>' +
 		'				<a href="floorMoney">Floor Money</a>' +
 		'			</div>' +
 		'		</div>' +
 		'		<div class="dropdown">' +
 		'			<button class="dropbtn">About Us</button>' +
 		'			<div class="dropdown-content">' +
-		'				<a href="http://www.rose-hulman.edu/rha/constitution.pdf">Constitution</a>' +
-		'				<a href="http://www.rose-hulman.edu/rha/procedural.pdf">Procedural Document</a>' +
 		'				<a href="officers">Officers</a>' +
 		'				<a href="committees">Committees</a>' +
+		'				<a href="http://www.rose-hulman.edu/offices-and-services/student-life/campus-life/housing-and-residence-life.aspx">About Our Residence Halls</a>' +
 		'				<a href="mailto:rhitrha@gmail.com">Contact Us</a>' +
 		'			</div>' +
 		'		</div>' +
