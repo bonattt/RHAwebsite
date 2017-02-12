@@ -353,7 +353,7 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     } else {
         var signupLink = document.createElement('p');
         signupLink.setAttribute('class', 'signUpLink');
-        signupLink.appendChild(document.createTextNode('signups closed'));    
+        signupLink.appendChild(document.createTextNode('Signups Closed'));    
     }
     eventActionDiv.appendChild(signupLink);
     
