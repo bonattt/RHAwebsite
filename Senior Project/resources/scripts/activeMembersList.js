@@ -2,6 +2,17 @@
 var displayingAllMembers = true;
 var table = document.createElement('table');
 
+function setAdmin(officers) {    
+    if (userIsOfficer(officers)) {
+        setupSubmitAttendanceButton();
+        var cancelBtn = document.getElementById('update-modal-cancel');
+        cancelBtn.addEventListener('click', function() {
+            document.getElementById("csvFile").value = '';
+        });
+    }
+    return;
+}
+
 function setup() {
     var urlExtension = 'members/';
     var xhr = xhrGetRequest(urlExtension);
@@ -19,9 +30,6 @@ function setup() {
         });
     }
 }
-document.addEventListener("DOMContentLoaded", function (event) {
-    setup();
-});
 
 function showModal() {
     alert("showing modal, in theory.");
@@ -46,8 +54,27 @@ function drawAllMembersTable(members) {
     tdHall.setAttribute('align', 'middle');
     tdHall.setAttribute('width', 200);
     tdHall.innerHTML = "Hall";
+
+    var tdAttendance = document.createElement('td');
+    tdAttendance.setAttribute('align', 'middle');
+    tdAttendance.setAttribute('width', 200);
+    tdAttendance.innerHTML = "Fall Attendance";
+
+    var tdAttendance0 = document.createElement('td');
+    tdAttendance0.setAttribute('align', 'middle');
+    tdAttendance0.setAttribute('width', 200);
+    tdAttendance0.innerHTML = "Winter Attendance";
+
+    var tdAttendance1 = document.createElement('td');
+    tdAttendance1.setAttribute('align', 'middle');
+    tdAttendance1.setAttribute('width', 200);
+    tdAttendance1.innerHTML = "Spring Attendance";
+
     tbdy.appendChild(tdName);
     tbdy.appendChild(tdHall);
+    tbdy.appendChild(tdAttendance);
+    tbdy.appendChild(tdAttendance0);
+    tbdy.appendChild(tdAttendance1);
     var countForColoring = 0;
     for (var i = 0; i < members.length; i++) {
         tr = document.createElement('tr');
@@ -65,8 +92,20 @@ function drawAllMembersTable(members) {
 
         var td2 = document.createElement('td');
         td2.innerHTML = members[i].hall;
+
+        var td3 = document.createElement('td');
+        td3.innerHTML = members[i].meet_attend.Q1;
+
+        var td4 = document.createElement('td');
+        td4.innerHTML = members[i].meet_attend.Q2;
+
+        var td5 = document.createElement('td');
+        td5.innerHTML = members[i].meet_attend.Q3;
         tr.appendChild(td);
         tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
         tbdy.appendChild(tr);
     }
     table.appendChild(tbdy);
@@ -154,6 +193,61 @@ function drawActiveMembersTable(members) {
     body.appendChild(table);
 }
 
+function setupSubmitAttendanceButton() {
+    var addCommitteeBtn = document.getElementById("submitAttendance");
+    addCommitteeBtn.style.display = "block"; //*/
+    addCommitteeBtn.addEventListener('click', function() {       
+        
+        var submitBtn = document.getElementById('update-modal-submit');
+        var submitAttendanceSubmit = function (e) {
+
+            var quarterToUpdate = 'Q1';
+            if(document.getElementById('Quarter1').checked) {
+
+            } else if(document.getElementById('Quarter2').checked) {
+                quarterToUpdate = 'Q2';
+            } else {
+                quarterToUpdate = 'Q3';
+            }
+
+            var files = document.getElementById("csvFile").files;
+
+            var reader = new FileReader();
+
+            var readerOnload = function (e) {
+                var result = reader.result.split("\r\n").sort();
+                var urlExtension = 'attendance/' + quarterToUpdate;
+                var xhr = xhrPutRequest(urlExtension);
+
+                xhr.onreadystatechange = function (e) {
+                    if(xhr.readyState == 4 && xhr.status == 200) {
+                        location.reload();
+                    }
+                };
+                xhr.send(JSON.stringify({ membersToUpdate: result }));
+                clearSubmitHandlers(submitBtn);
+                reader = new FileReader();
+                reader.onload = readerOnload;
+                return xhr;
+            }
+            reader.onload = readerOnload;
+
+            reader.readAsText(files[0]);
+
+            document.getElementById("csvFile").value = '';
+        }
+        submitBtn.addEventListener('click', submitAttendanceSubmit);
+        var addCommitteeCancel = function () {
+            clearSubmitHandlers(submitBtn);
+            cancelBtn.removeEventListener('click', addCommitteeCancel);
+        }
+        var cancelBtn = document.getElementById('update-modal-cancel');
+        cancelBtn.addEventListener('click', function() {
+            // do nothing.
+        });        
+    });
+}
+
 function displayOtherTable(members) {
     if (displayingAllMembers) {
         drawActiveMembersTable(members);
@@ -163,3 +257,10 @@ function displayOtherTable(members) {
         displayingAllMembers = true;
     }
 }
+
+$(document).ready(function() {
+    setup();
+    var officersxhr = getOfficers();
+    officersxhr.onload = () => { setAdmin(officersxhr.responseText) }
+    officersxhr.send();
+});
