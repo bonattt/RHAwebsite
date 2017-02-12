@@ -2,6 +2,7 @@ var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 var body = document.getElementsByTagName('body')[0];
 var tables = new Array();
 
+var last_proposal_clicked = -1;
 
 function displayProposals() {
     var xhr = getEvents();
@@ -49,7 +50,7 @@ function createTableRow(index) {
     var tr = document.createElement('tr');
     tr.setAttribute('proposal', index);
     tr.setAttribute('data-toggle', 'modal');
-    tr.setAttribute('data-target', '#myModal');
+    tr.setAttribute('data-target', '#proposalModal');
     //doClosure(members, index);
     if (index % 2 == 0) {
         tr.setAttribute('bgcolor', '#f0f0f0');
@@ -77,9 +78,9 @@ function drawTable(proposal) {
     tbdy.appendChild(createColumnHead("Proposed Quarter"));
     tbdy.appendChild(createColumnHead("Proposed Week"));
 
-    var countForColoring = 0;
     for (var i = proposal.length - 1; i >= 0; i--) {
         var tr = createTableRow(i);
+        addModalPopulateListener(tr, proposal[i].proposal_id);
 
         var tdname = document.createElement('td');
         tdname.innerHTML = proposal[i].proposal_name;
@@ -129,11 +130,19 @@ function drawTable(proposal) {
     body.appendChild(table);
 }
 
+function addModalPopulateListener(tr, proposal_id) {
+    tr.addEventListener('click', function() {
+        last_proposal_clicked = proposal_id;
+
+
+    })
+}
+
 function doClosure(proposal, i, tdused, tdreserve) {
     var urlExtensionUsed = 'getMoneyUsed';
     var xhrUsed = createXhrRequestJSON('POST', urlExtensionUsed);
+    xhrUsed.onload = function () { setValues(xhrUsed.responseText, tdused, tdreserve, proposal, i) };
     xhrUsed.send(JSON.stringify({ proposal_id: proposal[i].proposal_id }));
-    setTimeout(function () { setValues(xhrUsed.responseText, tdused, tdreserve, proposal, i) }, 300);
 }
 
 function setValues(used, tdused, tdreserve, proposal, i) {
@@ -171,7 +180,20 @@ function getEvents() {
     return xhr;
 }
 
+function setupModalButtons() {
+    var submitBtn = document.getElementById("proposalModal-submit");
+    submitBtn.addEventListener('click', function() {
+        alert("submit " + last_proposal_clicked);
+    });
+
+    var deleteBtn = document.getElementById("deleteConfirmModal-delete");
+    deleteBtn.addEventListener('click', function() {
+        alert("delete " + last_proposal_clicked);
+    });
+}
+
 
 $(document).ready(function () {
     displayProposals();
+    setupModalButtons();
 });
