@@ -1041,3 +1041,8 @@ td {
 .proposalsTable{
 	margin-bottom: 5%;
 }
+
+#submitAttendance {
+	margin: auto;
+    width: auto;
+}
