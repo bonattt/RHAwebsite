@@ -21,15 +21,27 @@ function setup() {
     var xhr2 = new XMLHttpRequest();
     xhr2.open('GET', galleryURL, true);
     xhr2.onreadystatechange = function (e) {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr2.readyState == 4 && xhr2.status == 200) {
             var indicatorOl = document.getElementById("carousel-indicators");
             var carouselInnerDiv = document.getElementById("carousel-inner");
-            var firstImage = xhr.responseText.shift();
-            JSON.parse(xhr.responseText).forEach(fileName => {
+            console.log(xhr2.responseText);
+            var firstImage = JSON.parse(xhr2.responseText).shift();
+            var div = document.createElement('div');
+            div.setAttribute('class', 'item active');
+            div.innerHTML = "<img class='carousel-img' src='./images/carousel/" + firstImage + "' alt='rha-image'>";
+            carouselInnerDiv.appendChild(div);
+            indicatorOl.appendChild("<li data-target='#myCarousel' data-slide-to='0' class='active'></li>");
+            var counter = 1;
+            JSON.parse(xhr2.responseText).forEach(fileName => {
                 console.log(fileName);
-                var image = document.createElement('image');
+                var otherDivs = document.createElement('div');
+                otherDivs.setAttribute('class', 'item');
                 var filePath = "./images/carousel/" + fileName;
-                image.innerHTML = "<img class='photoGalleryImage' src=" + filePath + " data-toggle='modal' data-target='#photoModal'>";
+
+                otherDivs.innerHTML = "<img class='carousel-img' src=" + filePath + ">";
+                carouselInnerDiv.appendChild(otherDivs);
+                indicatorOl.appendChild("<li data-target='#myCarousel' data-slide-to='" + counter + "' class='active'></li>");
+                counter++;
             });
         }
     };
