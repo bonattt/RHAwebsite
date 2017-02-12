@@ -30,6 +30,7 @@ function submit() {
     var eventDate = document.getElementById("eventDate").value;
     var signUpCloseDate = document.getElementById("signUpCloseDate").value;
     var proposer = document.getElementById("proposer").value;
+    var dateProposed = document.getElementById("proposedDate")
     var weekProposed = document.getElementById("weekProposed").value;
     var quarter = document.getElementById("quarterProposed").value;
     var moneyRequested = document.getElementById("moneyRequested").value;
@@ -55,6 +56,7 @@ function submit() {
             dbObject["event_signup_open"] = signUpOpenDate;
             dbObject["event_signup_close"] = signUpCloseDate;
             dbObject["proposer"] = proposer;
+            dbObject["proposed_date"] = dateProposed;
             dbObject["week_proposed"] = weekProposed;
             dbObject["quarter_proposed"] = quarter;
             dbObject["money_requested"] = moneyRequested;
