@@ -148,12 +148,11 @@ function displayProposals() {
             var tdpaid = document.createElement('td');
             tdpaid.innerHTML = proposal[i].paid;
 
+
             var tdreserve = document.createElement('td');
-            tdreserve.innerHTML = "reserve tbd";
-
             var tdused = document.createElement('td');
-            tdused.innerHTML = "used tbd";
 
+            doClosure(proposal, i, tdused, tdreserve);
             tr.appendChild(tdname);
             tr.appendChild(tdrequested);
             tr.appendChild(tdallocated);
@@ -168,6 +167,19 @@ function displayProposals() {
         }
         table.appendChild(tbdy);
         body.appendChild(table);
+    }
+
+    function doClosure(proposal, i, tdused, tdreserve) {
+        var urlExtensionUsed = 'getMoneyUsed';
+        var xhrUsed = createXhrRequestJSON('POST', urlExtensionUsed);
+        xhrUsed.send(JSON.stringify({ proposal_id: proposal[i].proposal_id }));
+        setTimeout(function () { setValues(xhrUsed.responseText, tdused, tdreserve, proposal, i) }, 300);
+    }
+
+    function setValues(used, tdused, tdreserve, proposal, i) {
+        used = JSON.parse(used);
+        tdused.innerHTML = used[0].get_money_used;
+        tdreserve.innerHTML = proposal[i].money_allocated - used[0].get_money_used;
     }
 
     function getEvents() {
