@@ -141,9 +141,6 @@ CREATE OR REPLACE FUNCTION populate_floor_money()
     INSERT INTO FloorMoney (hall_and_floor, residents) 
       SELECT hall, count FROM floor_resident_count;
     DROP TABLE floor_resident_count;
-    RAISE NOTICE 'Populated FloorMoney with initial values. Now calculating dollar amounts.';
-
-    -- Change below to a call to update_floor_money() instead
 
     SELECT * FROM update_floor_money();
   END;
@@ -171,7 +168,6 @@ CREATE OR REPLACE FUNCTION update_floor_money()
       c_earned := calc_earned_money(t_row.hall_and_floor, t_row.residents, moneyRate);
       p_balance := calc_possible_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
       c_balance := calc_current_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
-      -- RAISE NOTICE 'Wtf. p_earn = %, c_earn = %, p_bal = %, c_bal = %', p_earnings, c_earned, p_balance, c_balance;
       UPDATE FloorMoney
         SET possible_earnings = p_earnings,
             current_earned = c_earned,
@@ -265,7 +261,6 @@ CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, money
     LOOP
       SELECT INTO meetings Members.meet_attend->y FROM Members WHERE Members.hall = floor LIMIT 1;
       current_max_meetings := json_array_length(meetings);
-      RAISE NOTICE 'max meetings for quarter %: %', y, current_max_meetings;
       attended := 
       CASE
         WHEN y = 'Q1' THEN 1
@@ -280,7 +275,6 @@ CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, money
         END;
       END LOOP;
       current_max_meetings := attended + (9 - current_max_meetings);
-      RAISE NOTICE 'max meetings: %', current_max_meetings;
       possible := possible + multiplier * (1.5 ^ current_max_meetings);
     END LOOP;
     return possible;
