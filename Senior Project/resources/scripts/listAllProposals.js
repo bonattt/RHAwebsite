@@ -219,7 +219,7 @@ function setupModalButtons() {
             json_data[attr] = entry.value;
         });
 
-        var apiUri = 'events/' + id;
+        var apiUri = 'event/' + id;
         var xhr = xhrPutRequest(apiUri);
         xhr.onload = function() {
             location.reload();
@@ -229,7 +229,14 @@ function setupModalButtons() {
 
     var deleteBtn = document.getElementById("deleteConfirmModal-delete");
     deleteBtn.addEventListener('click', function() {
-        alert("delete " + last_proposal_clicked);
+        var apiUri = 'events/' + last_proposal_clicked;
+        var xhr = xhrDeleteRequest(apiUri);
+        xhr.onload = function() {
+            alert('delete request successful');
+            //location.reload();
+        }
+        xhr.send();
+        alert("delete request sent")
     });
 }
 
