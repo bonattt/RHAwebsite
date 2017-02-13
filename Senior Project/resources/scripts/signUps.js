@@ -58,7 +58,7 @@ function displayPastEvents() {
 
             var html = "<div class='row edit'><div class='col-sm-12'><img class='eventImageSignUps' src='" + proposal[i].image_path + "' alt='Event Image'>";
             html += "<div class='eventTextSignUps'><h1 class='eventTitle'>" + proposal[i].proposal_name + "</h1>";
-            html += "<div class='costEventDateWrapper'> <h3 class='cost'>" + cost + "</h3>";
+            html += "<div class='costEventDateWrapper'> <h3 class='cost'>$" + cost + "</h3>";
             html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
             html += "</div>";
             html += "<div class='eventActions'><a onclick='showListModal(" + proposal[i].proposal_id + ")'><p class='viewListLink'>View List</p></a></div></div></div>";
@@ -298,7 +298,7 @@ function getEventTextSignupsHtml (proposal, cost, eventDate, signUpOpenDate) {
     
     var costText = document.createElement('h3');
     costText.setAttribute('class', 'cost');
-    costText.appendChild(document.createTextNode(cost));
+    costText.appendChild(document.createTextNode('$' + cost));
     costDateWrapper.appendChild(costText);
     
     var dateText = document.createElement('h3');

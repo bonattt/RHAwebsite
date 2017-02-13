@@ -28,7 +28,7 @@ var insertEditButtons = function(dataElementRoot, uiElementRootId, idFieldName, 
 		var elementId = adminValues[i].id;
         var editButton = document.createElement("img");
         editButton.setAttribute("src", "../images/edit.png");
-		editButton.setAttribute("class", "admin-edit-button btn btn-info btn-lg");
+		editButton.setAttribute("class", "admin-edit-button btn btn-lg");
 		editButton.setAttribute("data-toggle", "modal");
 		editButton.setAttribute("data-target", "#myModal");
         editButton.addEventListener("click", 
