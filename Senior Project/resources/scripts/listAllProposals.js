@@ -121,11 +121,11 @@ function drawTable(proposals) {
         tdquarter.setAttribute("id", "quarter_proposed" + id);
 
         var tdrequested = document.createElement('td');
-        tdrequested.innerHTML = proposals[i].money_requested;
+        tdrequested.innerHTML = "$" + proposals[i].money_requested;
         tdrequested.setAttribute("id", "money_requested" + id);
 
         var tdallocated = document.createElement('td');
-        tdallocated.innerHTML = proposals[i].money_allocated;
+        tdallocated.innerHTML = "$" + proposals[i].money_allocated;
         tdallocated.setAttribute("id", "money_allocated" + id);
 
         var tdpaid = document.createElement('td');
@@ -175,8 +175,8 @@ function doClosure(proposal, i, tdused, tdreserve) {
 
 function setValues(used, tdused, tdreserve, proposal, i) {
     used = JSON.parse(used);
-    tdused.innerHTML = used[0].get_money_used;
-    tdreserve.innerHTML = proposal[i].money_allocated - used[0].get_money_used;
+    tdused.innerHTML = "$" + used[0].get_money_used;
+    tdreserve.innerHTML = "$" + (proposal[i].money_allocated - used[0].get_money_used);
 }
 
 function getEvents() {
