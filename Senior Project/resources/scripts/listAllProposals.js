@@ -49,7 +49,7 @@ function createColumnHead(name) {
     var newTd = document.createElement('td');
     newTd.setAttribute('align', 'middle');
     newTd.setAttribute('width', 200);
-    newTd.innerHTML = name;
+    newTd.innerHTML = '<b>' + name + '</b>';
     return newTd;
 }
 
