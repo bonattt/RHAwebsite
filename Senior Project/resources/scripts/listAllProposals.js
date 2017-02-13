@@ -18,6 +18,16 @@ const proposal_attrs = [
     "attendees"
 ]
 
+const FIELDS = [
+            "proposal_name",
+            "money_requested",
+            "money_allocated",
+            "proposed_date",
+            "event_date",
+            "week_proposed",
+            "quarter_proposed"
+        ]
+
 var body = document.getElementsByTagName('body')[0];
 var tables = new Array();
 
@@ -30,11 +40,11 @@ function displayProposals() {
 //    }
 //
 //    function createHTMLFromResponseText(proposal) {
-        var proposal = JSON.parse(xhr.responseText);
+        var proposals = JSON.parse(xhr.responseText);
         var startingYear = 2015;
         var proposalsForCurrentYear = new Array();
-        for (var i = proposal.length - 1; i >= 0; i--) {
-            var proposedDate = new Date(proposal[i].proposed_date);
+        for (var i = proposals.length - 1; i >= 0; i--) {
+            var proposedDate = new Date(proposals[i].proposed_date);
             if (proposedDate.getFullYear() == (startingYear + 1) && proposedDate.getMonth() > 6) {
                 var paragraph = startingYear.toString();
                 paragraph = document.createElement('p');
@@ -45,7 +55,7 @@ function displayProposals() {
                 proposalsForCurrentYear = new Array();
                 startingYear++;
             }
-            proposalsForCurrentYear.push(proposal[i]);
+            proposalsForCurrentYear.push(proposals[i]);
         }
         var paragraph = startingYear.toString();
         paragraph = document.createElement('p');
@@ -116,15 +126,15 @@ function drawTable(proposals) {
         tddate.innerHTML = eventDate;
         tddate.setAttribute("id", "event_date" + id);
 
-        tdweek = document.createElement('td');
-        tdweek.innerHTML = proposals[i].week_proposed;
-        tdweek.setAttribute("id", "week_proposed" + id);
-
         var tdProposedDate = document.createElement('td');
         var proposedEventDate = new Date(proposals[i].proposed_date);
         proposedEventDate = (proposedEventDate.getMonth() + 1) + "/" + proposedEventDate.getUTCDate() + "/" + proposedEventDate.getFullYear();
         tdProposedDate.innerHTML = proposedEventDate;
         tdProposedDate.setAttribute("id", "proposed_date" + id);
+
+        tdweek = document.createElement('td');
+        tdweek.innerHTML = proposals[i].week_proposed;
+        tdweek.setAttribute("id", "week_proposed" + id);
 
         var tdquarter = document.createElement('td');
         tdquarter.innerHTML = proposals[i].quarter_proposed;
@@ -153,9 +163,9 @@ function drawTable(proposals) {
         tr.appendChild(tdused);
         tr.appendChild(tdpaid);
         tr.appendChild(tddate);
+        tr.appendChild(tdProposedDate);
         tr.appendChild(tdquarter);
         tr.appendChild(tdweek);
-        tr.appendChild(tdProposedDate);
         tbdy.appendChild(tr);
     }
     table.appendChild(tbdy);
@@ -173,26 +183,33 @@ function addModalPopulateListener(tr, proposal) {
 //            "money_allocated",
 //            "proposed_date",
 //            "event_date",
-//            "description"
+//            "week_proposed",
+//            "quarter_proposed"
 //        ]
-        var entry = document.getElementById('proposalModal-money_allocated');
-        entry.value = parseFloat(proposal.money_allocated);
+        FIELDS.forEach(function (attr){
+            console.log(attr);
+            var entry = document.getElementById('proposalModal-' + attr);
+            entry.value = proposal[attr];
+        });
 
-        entry = document.getElementById('proposalModal-money_requested');
-        entry.value = parseFloat(proposal.money_requested);
-
-        entry = document.getElementById('proposalModal-proposal_name');
-        entry.value = proposal.proposal_name;
-
-        entry = document.getElementById('proposalModal-proposed_date');
-        console.log(proposal.proposed_date)
-        entry.value = proposal.proposed_date;
-
-        entry = document.getElementById('proposalModal-event_date');
-        entry.value = proposal.event_date;
-
-        entry = document.getElementById('proposalModal-description');
-        entry.value = proposal.description;
+//        var entry = document.getElementById('proposalModal-money_allocated');
+//        entry.value = parseFloat(proposal.money_allocated);
+//
+//        entry = document.getElementById('proposalModal-money_requested');
+//        entry.value = parseFloat(proposal.money_requested);
+//
+//        entry = document.getElementById('proposalModal-proposal_name');
+//        entry.value = proposal.proposal_name;
+//
+//        entry = document.getElementById('proposalModal-proposed_date');
+//        console.log(proposal.proposed_date)
+//        entry.value = proposal.proposed_date;
+//
+//        entry = document.getElementById('proposalModal-event_date');
+//        entry.value = proposal.event_date;
+//
+//        entry = document.getElementById('proposalModal-description');
+//        entry.value = proposal.description;
     });
 }
 
@@ -249,17 +266,17 @@ function setupModalButtons() {
 //        var signupOpen = document.getElementById('proposalModal-event_signup_open');
 //        var signupClose = document.getElementById('proposalModal-event_signup_close');
 
-        var fields = [
-            "proposal_name",
-            "money_requested",
-            "money_allocated",
-            "proposed_date",
-            "event_date",
-            "description"
-        ]
+//        var fields = [
+//            "proposal_name",
+//            "money_requested",
+//            "money_allocated",
+//            "proposed_date",
+//            "event_date",
+//            "description"
+//        ]
 
         var json_data = {}
-        fields.forEach(function(attr) {
+        FIELDS.forEach(function(attr) {
             var entry = document.getElementById('proposalModal-' + attr);
             console.log('proposalModal-' + attr);
             json_data[attr] = entry.value;
