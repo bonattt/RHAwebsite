@@ -72,12 +72,13 @@
 					<label for="imageFile">Image:<input type="file" name="imageFile" id="imageFile"></label>
 					<label for="description">Event Description:</label>
 					<input type="text" id="description" name="description">
+					<label>If this proposal does not require sign ups, do not change the following 2 fields.</label>
 					<label for="signUpOpenDate">Date Signups Open:</label>
 					<input type="date" id="signUpOpenDate" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true" />
-					<label for="eventDate">Event Date:</label>
-					<input type="date" id="eventDate" name="eventDate" data-date-inline-picker="false" data-date-open-on-focus="true" />
 					<label for="signUpCloseDate">Date Signups Close:</label>
 					<input type="date" id="signUpCloseDate" name="signUpCLoseDate" data-date-inline-picker="false" data-date-open-on-focus="true" />
+					<label for="eventDate">Event Date:</label>
+					<input type="date" id="eventDate" name="eventDate" data-date-inline-picker="false" data-date-open-on-focus="true" />
 					<label for="proposer">Proposer:</label>
 					<input type="text" id="proposer" name="proposer">
 					<label for="proposedDate">Date of Proposal:</label>
@@ -90,7 +91,6 @@
 					<input type="number" min="0.00" max="25000" step="0.01" id="moneyRequested" name="moneyRequested">
 					<label for="moneyAllocated">Money Allocated:</label>
 					<input type="number" min="0.00" max="25000" step="0.01" id="moneyAllocated" name="moneyAllocated">
-					<label for="approved">Approved  <input type="checkbox" id="approved" name="approved"/></label>
 					<button type="submit" class="btn btn-default">Submit</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					</form>

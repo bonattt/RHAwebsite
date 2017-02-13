@@ -4,6 +4,14 @@ var table = document.createElement('table');
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
+        var div = document.getElementById('submitAttendanceDiv');
+        var newButton = document.createElement('button');
+        newButton.setAttribute('id', 'submitAttendance');
+        newButton.setAttribute('data-toggle', 'modal');
+        newButton.setAttribute('data-target', '#uploadModal');
+        newButton.innerHTML = 'New Attendance Record';
+        div.appendChild(newButton);
+
         setupSubmitAttendanceButton();
         var cancelBtn = document.getElementById('update-modal-cancel');
         cancelBtn.addEventListener('click', function () {
