@@ -78,10 +78,6 @@ CREATE TABLE Equipment (
     rentalTimeInDays int DEFAULT 2
 );
 
-insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipmentEmbed, rentalTimeInDays) values (DEFAULT, 'Equipment1', 'This is equipment 1', '<iframe src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=800&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=25v1djivm37d6psb5284pojmqs%40group.calendar.google.com&amp;color=%23AB8B00&amp;ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>', 3);
-insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipmentEmbed, rentalTimeInDays) values (DEFAULT, 'Equipment2', 'This is equipment 2', '<iframe src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=s2bdbeg620ghgp9bh1e6k818uo%40group.calendar.google.com&amp;color=%238D6F47&amp;ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>', 3);
-
-
 CREATE TABLE Rentals (
     rental_id SERIAL PRIMARY KEY,
     member_id INT references Members (user_id),
@@ -99,8 +95,6 @@ CREATE TABLE FloorAttendanceNumerics (
     floor_minimum_attendance int
 );
 
-
---Populated via populate_floor_money()
 CREATE TABLE FloorMoney (
     floormoney_id SERIAL PRIMARY KEY,
     hall_and_floor varchar(50), -- Still working this one out.
@@ -119,11 +113,6 @@ CREATE TABLE FloorExpenses (
     turned_in_date DATE,
     processed_date DATE  
 );
-
-INSERT INTO FloorExpenses (floor_id, event_description, amount) VALUES (1, 'Test 1: positive value', 30);
--- INSERT INTO FloorExpenses (floor_id, event_description, amount) VALUES (1, 'Test 2: negative value', -10);
-    
-
 
 
 /* Pre-populates the FloorMoney table with barebones entries for update_floor_money() to be
@@ -149,6 +138,7 @@ $$ LANGUAGE plpgsql;
 
 /* Updates floor money table using function suite below. Assuming floor money table is not empty and that
    the number of residents is accurate and does not need to be changed.
+
 
    RETURNS: void
 */
@@ -280,8 +270,6 @@ CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, money
     return possible;
   END;
 $possible$ LANGUAGE plpgsql;
-
-
 
 
 /* Counts the number of residents on a given floor from the Members table 
@@ -448,6 +436,43 @@ CREATE OR REPLACE FUNCTION get_money_used(prop_id int)
     RETURN used;
   END;
 $used$ LANGUAGE plpgsql;
+
+
+/* Inserts for FloorAttendanceNumerics */
+
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Blum', 4);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Scharp', 4);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Mees', 4);
+
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Apartments E 1', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Apartments E 2', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Apartments E 3', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Apartments W 1', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Apartments W 2', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Apartments W 3', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'BSB 1', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'BSB 2', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'BSB 3', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Deming 0', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Deming 1', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Deming 2', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Deming Attic', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Lakeside 1', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Lakeside 2', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Lakeside 3', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Lakeside 4', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Percopo 1', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Percopo 2', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Percopo 3', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Speed 1', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Speed 2', 2);
+INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Speed 3', 2);
+
+
+/* Inserts for Equipment*/
+
+insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipmentEmbed, rentalTimeInDays) values (DEFAULT, 'Equipment1', 'This is equipment 1', '<iframe src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=800&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=25v1djivm37d6psb5284pojmqs%40group.calendar.google.com&amp;color=%23AB8B00&amp;ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>', 3);
+insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipmentEmbed, rentalTimeInDays) values (DEFAULT, 'Equipment2', 'This is equipment 2', '<iframe src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=s2bdbeg620ghgp9bh1e6k818uo%40group.calendar.google.com&amp;color=%238D6F47&amp;ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>', 3);
 
 
 INSERT into Committee VALUES (DEFAULT, 'On-campus', 'The On-campus committee plans everything that RHA does on campus for the residents. We keep Chauncey''s stocked with the
