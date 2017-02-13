@@ -45,7 +45,6 @@ function populateCalendarData(calendars) {
 }
 
  function addNewCalendar(dataElementId, targetIdRoot) {
-	console.log("whatup tho");
 	var dataset = document.getElementById(dataElementId).dataset;
 	for (attr in dataset) {
 		var textField = document.getElementById(targetIdRoot + attr);
