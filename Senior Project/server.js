@@ -65,6 +65,10 @@ app.get('/floorMoney', function (req, res) {
   res.sendFile(__dirname + '/html/floorMoney.html');
 });
 
+app.get('/budgetManagement', function (req, res) {
+  res.sendFile(__dirname + '/html/budgetManagement.html');
+});
+
 app.get('/officers', function (req, res) {
   res.sendFile(__dirname + '/html/officers.html');
 });
