@@ -702,7 +702,7 @@ height: 150pt;
 	cursor: pointer;
 }
 
-#snackbar, #unregisterSnackbar {
+#snackbar, #unregisterSnackbar, #notLoggedInSnackbar {
     visibility: hidden;
     min-width: 250px;
     margin-left: -125px;
@@ -717,7 +717,7 @@ height: 150pt;
     bottom: 30px;
 }
 
-#snackbar.show, #unregisterSnackbar.show {
+#snackbar.show, #unregisterSnackbar.show, #notLoggedInSnackbar.show {
     visibility: visible;
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;

@@ -193,10 +193,26 @@ function drawActiveMembersTable(members) {
     tbdy.appendChild(tdAttendance);
     tbdy.appendChild(tdAttendance0);
     tbdy.appendChild(tdAttendance1);
-    
+
     var countForColoring = 0;
     for (var i = 0; i < members.length; i++) {
-        if (members[i].active) {
+        var meetingsAttended = 0;
+        for(var j = 0; j < members[i].meet_attend.Q1.length; j++) {
+            if(members[i].meet_attend.Q1[j] == 1){
+                meetingsAttended ++;
+            }
+        }
+        for(var j = 0; j < members[i].meet_attend.Q2.length; j++) {
+            if(members[i].meet_attend.Q2[j] == 1){
+                meetingsAttended ++;
+            }
+        }
+        for(var j = 0; j < members[i].meet_attend.Q3.length; j++) {
+            if(members[i].meet_attend.Q3[j] == 1){
+                meetingsAttended ++;
+            }
+        }
+        if (meetingsAttended > 4) {
             tr = document.createElement('tr');
             tr.setAttribute('member', i);
             tr.setAttribute('data-toggle', 'modal');
