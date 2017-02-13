@@ -1,22 +1,4 @@
 
-const proposal_attrs = [
-    "proposer",
-    "proposal_name",
-    "week_proposed",
-    "quarter_proposed",
-    "money_requested",
-    "approved",
-    "money_allocated",
-    "paid",
-    "proposed_date",
-    "event_date",
-    "event_signup_open",
-    "event_signup_close",
-    "cost_to_attendee",
-    "image_path",
-    "description",
-    "attendees"
-]
 
 const FIELDS = [
             "proposal_name",
@@ -36,10 +18,6 @@ var last_proposal_clicked = -1;
 function displayProposals() {
     var xhr = getEvents();
     xhr.onload = function () {
-//        createHTMLFromResponseText(xhr.responseText)
-//    }
-//
-//    function createHTMLFromResponseText(proposal) {
         var proposals = JSON.parse(xhr.responseText);
         var startingYear = 2015;
         var proposalsForCurrentYear = new Array();
@@ -177,39 +155,11 @@ function addModalPopulateListener(tr, proposal) {
     tr.addEventListener('click', function() {
         last_proposal_clicked = id;
         var entry;
-//        var fields = [
-//            "proposal_name",
-//            "money_requested",
-//            "money_allocated",
-//            "proposed_date",
-//            "event_date",
-//            "week_proposed",
-//            "quarter_proposed"
-//        ]
         FIELDS.forEach(function (attr){
             console.log(attr);
             var entry = document.getElementById('proposalModal-' + attr);
             entry.value = proposal[attr];
         });
-
-//        var entry = document.getElementById('proposalModal-money_allocated');
-//        entry.value = parseFloat(proposal.money_allocated);
-//
-//        entry = document.getElementById('proposalModal-money_requested');
-//        entry.value = parseFloat(proposal.money_requested);
-//
-//        entry = document.getElementById('proposalModal-proposal_name');
-//        entry.value = proposal.proposal_name;
-//
-//        entry = document.getElementById('proposalModal-proposed_date');
-//        console.log(proposal.proposed_date)
-//        entry.value = proposal.proposed_date;
-//
-//        entry = document.getElementById('proposalModal-event_date');
-//        entry.value = proposal.event_date;
-//
-//        entry = document.getElementById('proposalModal-description');
-//        entry.value = proposal.description;
     });
 }
 
@@ -259,21 +209,6 @@ function setupModalButtons() {
     var submitBtn = document.getElementById("proposalModal-submit");
     submitBtn.addEventListener('click', function() {
         var id = last_proposal_clicked;
-//        var nameEntry = document.getElementById('proposalModal-proposal_name');
-//        var cost = document.getElementById('proposalModal-cost_to_attendee');
-//        var desc = document.getElementById('proposalModal-description');
-//        var eventDate = document.getElementById('proposalModal-event_date');
-//        var signupOpen = document.getElementById('proposalModal-event_signup_open');
-//        var signupClose = document.getElementById('proposalModal-event_signup_close');
-
-//        var fields = [
-//            "proposal_name",
-//            "money_requested",
-//            "money_allocated",
-//            "proposed_date",
-//            "event_date",
-//            "description"
-//        ]
 
         var json_data = {}
         FIELDS.forEach(function(attr) {
@@ -285,9 +220,8 @@ function setupModalButtons() {
         var apiUri = 'events/' + id;
         var xhr = xhrPutRequest(apiUri);
         xhr.onload = function() {
-            alert("success!");
+            location.reload();
         }
-//        alert('send:\n' + JSON.stringify(json_data) + '\nto: ' + id);
         xhr.send(JSON.stringify(json_data));
     });
 
