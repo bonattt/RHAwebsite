@@ -25,22 +25,24 @@ function setup() {
             var indicatorOl = document.getElementById("carousel-indicators");
             var carouselInnerDiv = document.getElementById("carousel-inner");
             console.log(xhr2.responseText);
-            var firstImage = JSON.parse(xhr2.responseText).shift();
-            var div = document.createElement('div');
-            div.setAttribute('class', 'item active');
-            div.innerHTML = "<img class='carousel-img' src='./images/carousel/" + firstImage + "' alt='rha-image'>";
-            carouselInnerDiv.appendChild(div);
-            indicatorOl.appendChild("<li data-target='#myCarousel' data-slide-to='0' class='active'></li>");
+
             var counter = 1;
             JSON.parse(xhr2.responseText).forEach(fileName => {
                 console.log(fileName);
-                var otherDivs = document.createElement('div');
-                otherDivs.setAttribute('class', 'item');
+                var div = document.createElement('div');
+                div.setAttribute('class', 'item');
                 var filePath = "./images/carousel/" + fileName;
 
-                otherDivs.innerHTML = "<img class='carousel-img' src=" + filePath + ">";
-                carouselInnerDiv.appendChild(otherDivs);
-                indicatorOl.appendChild("<li data-target='#myCarousel' data-slide-to='" + counter + "' class='active'></li>");
+                div.innerHTML = "<img class='carousel-img' src=" + filePath + ">";
+                var liToAdd = document.createElement('li');
+                if(counter == 1) {
+                    div.setAttribute('class', 'item active');
+                    liToAdd.setAttribute('class', 'active');
+                }
+                liToAdd.setAttribute('data-target', '#myCarousel');
+                liToAdd.setAttribute('data-slide-to', counter);
+                carouselInnerDiv.appendChild(div);
+                indicatorOl.appendChild(liToAdd);
                 counter++;
             });
         }
