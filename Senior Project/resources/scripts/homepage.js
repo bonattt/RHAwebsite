@@ -17,6 +17,42 @@ function setup() {
     };
     xhr.send();
 
+    var galleryURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/carouselPhoto';
+    var xhr2 = new XMLHttpRequest();
+    xhr2.open('GET', galleryURL, true);
+    xhr2.onreadystatechange = function (e) {
+        if (xhr2.readyState == 4 && xhr2.status == 200) {
+            var indicatorOl = document.getElementById("carousel-indicators");
+            var carouselInnerDiv = document.getElementById("carousel-inner");
+           
+
+            var counter = 1;
+            JSON.parse(xhr2.responseText).forEach(fileName => {
+           
+                var div = document.createElement('div');
+                div.setAttribute('class', 'item');
+                var filePath = "./images/carousel/" + fileName;
+
+                div.innerHTML = "<img class='carousel-img' src=" + filePath + ">";
+                var liToAdd = document.createElement('li');
+                if(counter == 1) {
+                    div.setAttribute('class', 'item active');
+                    liToAdd.setAttribute('class', 'active');
+                }
+                liToAdd.setAttribute('data-target', '#myCarousel');
+                liToAdd.setAttribute('data-slide-to', counter);
+                carouselInnerDiv.appendChild(div);
+                indicatorOl.appendChild(liToAdd);
+                counter++;
+            });
+        }
+    };
+    xhr2.onerror = function (err) {
+        console.log('there was en error');
+        console.log(err);
+    }
+    xhr2.send();
+
     var title = document.getElementById("title");
     if (JSON.parse(sessionStorage.getItem('userData'))) {
         title.innerHTML = "Welcome, " + JSON.parse(sessionStorage.getItem('userData')).name.split(" ")[0] + "!";
@@ -82,8 +118,7 @@ function showModal(editImage) {
 
 
     function submitChanges(description) {
-        console.log("lol");
-        //div.querySelectorAll(":nth-child(2)")[0].innerHTML = header.value;
+
         div.querySelectorAll(":nth-child(3)")[0].innerHTML = description.value;
 
         modal.style.display = "none";
@@ -104,7 +139,7 @@ function uploadCarouselPhoto() {
 
     photoxhr.onreadystatechange = function (e) {
         if(photoxhr.readyState == 4 && photoxhr.status == 200) {
-            $('#carouselUploadModal').modal('hide');
+            location.reload();
         }
     };
 

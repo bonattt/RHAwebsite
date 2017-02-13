@@ -1009,6 +1009,7 @@ img {
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
+	max-height: 80%;
 }
 
 #membersTable {
@@ -1043,6 +1044,8 @@ td {
 }
 
 #submitAttendance {
-	margin: auto;
-    width: auto;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
 }
+
