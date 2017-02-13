@@ -30,14 +30,20 @@ function submit() {
     var eventDate = document.getElementById("eventDate").value;
     var signUpCloseDate = document.getElementById("signUpCloseDate").value;
     var proposer = document.getElementById("proposer").value;
-    var dateProposed = document.getElementById("proposedDate")
+    var dateProposed = document.getElementById("proposedDate").value;
     var weekProposed = document.getElementById("weekProposed").value;
     var quarter = document.getElementById("quarterProposed").value;
     var moneyRequested = document.getElementById("moneyRequested").value;
-    var approved = document.getElementById("approved").value;
     var moneyAllocated = document.getElementById("moneyAllocated").value;
     var files = document.getElementById("imageFile").files;
+    var approved = true;
 
+    if (signUpCloseDate == "" && signUpOpenDate == "") {
+        console.log("I happened");
+        signUpCloseDate = null;
+        signUpOpenDate = null;
+        approved = false;
+    }
 
     var formData = new FormData();
     formData.append("imageFile", files[0]);
@@ -60,9 +66,10 @@ function submit() {
             dbObject["week_proposed"] = weekProposed;
             dbObject["quarter_proposed"] = quarter;
             dbObject["money_requested"] = moneyRequested;
-            dbObject["approved"] = approved;
+            dbObject["paid"] = false;
             dbObject["money_allocated"] = moneyAllocated;
             dbObject["image_path"] = image_path;
+            dbObject["approved"] = approved;
 
             dbxhr.open('POST', dbAPIURL, true);
             dbxhr.setRequestHeader('Content-Type', 'application/json');
