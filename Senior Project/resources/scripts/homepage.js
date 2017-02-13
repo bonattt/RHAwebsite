@@ -24,11 +24,11 @@ function setup() {
         if (xhr2.readyState == 4 && xhr2.status == 200) {
             var indicatorOl = document.getElementById("carousel-indicators");
             var carouselInnerDiv = document.getElementById("carousel-inner");
-            console.log(xhr2.responseText);
+           
 
             var counter = 1;
             JSON.parse(xhr2.responseText).forEach(fileName => {
-                console.log(fileName);
+           
                 var div = document.createElement('div');
                 div.setAttribute('class', 'item');
                 var filePath = "./images/carousel/" + fileName;
@@ -118,8 +118,7 @@ function showModal(editImage) {
 
 
     function submitChanges(description) {
-        console.log("lol");
-        //div.querySelectorAll(":nth-child(2)")[0].innerHTML = header.value;
+
         div.querySelectorAll(":nth-child(3)")[0].innerHTML = description.value;
 
         modal.style.display = "none";
@@ -140,7 +139,7 @@ function uploadCarouselPhoto() {
 
     photoxhr.onreadystatechange = function (e) {
         if(photoxhr.readyState == 4 && photoxhr.status == 200) {
-            $('#carouselUploadModal').modal('hide');
+            location.reload();
         }
     };
 
