@@ -30,7 +30,7 @@ function submit() {
     var eventDate = document.getElementById("eventDate").value;
     var signUpCloseDate = document.getElementById("signUpCloseDate").value;
     var proposer = document.getElementById("proposer").value;
-    var dateProposed = document.getElementById("proposedDate")
+    var dateProposed = document.getElementById("proposedDate").value;
     var weekProposed = document.getElementById("weekProposed").value;
     var quarter = document.getElementById("quarterProposed").value;
     var moneyRequested = document.getElementById("moneyRequested").value;
