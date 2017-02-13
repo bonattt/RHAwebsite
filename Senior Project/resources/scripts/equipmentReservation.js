@@ -21,7 +21,6 @@ function setup() {
 }
 
 function populateCalendarData(calendars) {
-	console.log(calendars);
 	calendars = JSON.parse(calendars);
 	var body = document.getElementsByTagName('body')[0];
 	var selector = document.getElementById('calendar-selector');
