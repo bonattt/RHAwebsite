@@ -15,7 +15,7 @@ var tables = new Array();
 
 var last_proposal_clicked = -1;
 
-function displayProposals() {
+function displayProposals(isAdmin) {
     var xhr = getEvents();
     xhr.onload = function () {
         var proposals = JSON.parse(xhr.responseText);
@@ -29,7 +29,7 @@ function displayProposals() {
                 paragraph.innerText = startingYear + "-" + (startingYear + 1);
                 paragraph.setAttribute('class', 'yearTextListProposals');
                 body.appendChild(paragraph);
-                drawTable(proposalsForCurrentYear.reverse());
+                drawTable(proposalsForCurrentYear.reverse(), isAdmin);
                 proposalsForCurrentYear = new Array();
                 startingYear++;
             }
@@ -40,7 +40,7 @@ function displayProposals() {
         paragraph.innerText = startingYear + "-" + (startingYear + 1);
         paragraph.setAttribute('class', 'yearTextListProposals');
         body.appendChild(paragraph);
-        drawTable(proposalsForCurrentYear.reverse());
+        drawTable(proposalsForCurrentYear.reverse(), isAdmin);
     }
     xhr.send();
 }
@@ -55,11 +55,9 @@ function createColumnHead(name) {
     return newTd;
 }
 
-function createTableRow(index, proposal) {
+function createTableRow(index, proposal, isAdmin) {
     var tr = document.createElement('tr');
     tr.setAttribute('proposal', index);
-    tr.setAttribute('data-toggle', 'modal');
-    tr.setAttribute('data-target', '#proposalModal');
     //doClosure(members, index);
     if (index % 2 == 0) {
         tr.setAttribute('bgcolor', '#f0f0f0');
@@ -67,11 +65,10 @@ function createTableRow(index, proposal) {
     for (attr in proposal) {
         tr.dataset[attr] = proposal[attr];
     }
-
     return tr
 }
 
-function drawTable(proposals) {
+function drawTable(proposals, isAdmin) {
     var table = document.createElement('table');
     table.innerHTML = "";
     table.setAttribute('border', 1);
@@ -94,8 +91,9 @@ function drawTable(proposals) {
     for (var i = proposals.length - 1; i >= 0; i--) {
         var tr = createTableRow(i, proposals[i]);
         var id = proposals[i].proposal_id
-        addModalPopulateListener(tr, proposals[i]);
-
+        if (isAdmin) {
+            addModalPopulateListener(tr, proposals[i]);
+        }
         var tdname = document.createElement('td');
         tdname.innerHTML = proposals[i].proposal_name;
         tdname.setAttribute("id", "proposal_name" + id);
@@ -154,6 +152,8 @@ function drawTable(proposals) {
 
 function addModalPopulateListener(tr, proposal) {
     var id = proposal.proposal_id;
+    tr.setAttribute('data-toggle', 'modal');
+    tr.setAttribute('data-target', '#proposalModal');
     tr.addEventListener('click', function() {
         last_proposal_clicked = id;
         var entry;
@@ -243,7 +243,16 @@ function setupModalButtons() {
 }
 
 
+
 $(document).ready(function () {
-    displayProposals();
-    setupModalButtons();
+    var officersxhr = getOfficers();
+    officersxhr.onload = function () {
+        var isAdmin = false;
+        if (userIsOfficer(officersxhr.responseText)) {
+            isAdmin = true;
+            setupModalButtons();
+        }
+        displayProposals(isAdmin);
+    };
+    officersxhr.send();
 });
