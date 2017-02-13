@@ -2,11 +2,11 @@
 var displayingAllMembers = true;
 var table = document.createElement('table');
 
-function setAdmin(officers) {    
+function setAdmin(officers) {
     if (userIsOfficer(officers)) {
         setupSubmitAttendanceButton();
         var cancelBtn = document.getElementById('update-modal-cancel');
-        cancelBtn.addEventListener('click', function() {
+        cancelBtn.addEventListener('click', function () {
             document.getElementById("csvFile").value = '';
         });
     }
@@ -164,8 +164,28 @@ function drawActiveMembersTable(members) {
     tdHall.setAttribute('align', 'middle');
     tdHall.setAttribute('width', 200);
     tdHall.innerHTML = "Hall";
+
+    var tdAttendance = document.createElement('td');
+    tdAttendance.setAttribute('align', 'middle');
+    tdAttendance.setAttribute('width', 200);
+    tdAttendance.innerHTML = "Fall Attendance";
+
+    var tdAttendance0 = document.createElement('td');
+    tdAttendance0.setAttribute('align', 'middle');
+    tdAttendance0.setAttribute('width', 200);
+    tdAttendance0.innerHTML = "Winter Attendance";
+
+    var tdAttendance1 = document.createElement('td');
+    tdAttendance1.setAttribute('align', 'middle');
+    tdAttendance1.setAttribute('width', 200);
+    tdAttendance1.innerHTML = "Spring Attendance";
+
     tbdy.appendChild(tdName);
     tbdy.appendChild(tdHall);
+    tbdy.appendChild(tdAttendance);
+    tbdy.appendChild(tdAttendance0);
+    tbdy.appendChild(tdAttendance1);
+    
     var countForColoring = 0;
     for (var i = 0; i < members.length; i++) {
         if (members[i].active) {
@@ -184,8 +204,20 @@ function drawActiveMembersTable(members) {
 
             var td2 = document.createElement('td');
             td2.innerHTML = members[i].hall;
+
+            var td3 = document.createElement('td');
+            td3.innerHTML = members[i].meet_attend.Q1;
+
+            var td4 = document.createElement('td');
+            td4.innerHTML = members[i].meet_attend.Q2;
+
+            var td5 = document.createElement('td');
+            td5.innerHTML = members[i].meet_attend.Q3;
             tr.appendChild(td);
             tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tr.appendChild(td5);
             tbdy.appendChild(tr);
         }
     }
@@ -196,15 +228,15 @@ function drawActiveMembersTable(members) {
 function setupSubmitAttendanceButton() {
     var addCommitteeBtn = document.getElementById("submitAttendance");
     addCommitteeBtn.style.display = "block"; //*/
-    addCommitteeBtn.addEventListener('click', function() {       
-        
+    addCommitteeBtn.addEventListener('click', function () {
+
         var submitBtn = document.getElementById('update-modal-submit');
         var submitAttendanceSubmit = function (e) {
 
             var quarterToUpdate = 'Q1';
-            if(document.getElementById('Quarter1').checked) {
+            if (document.getElementById('Quarter1').checked) {
 
-            } else if(document.getElementById('Quarter2').checked) {
+            } else if (document.getElementById('Quarter2').checked) {
                 quarterToUpdate = 'Q2';
             } else {
                 quarterToUpdate = 'Q3';
@@ -220,7 +252,7 @@ function setupSubmitAttendanceButton() {
                 var xhr = xhrPutRequest(urlExtension);
 
                 xhr.onreadystatechange = function (e) {
-                    if(xhr.readyState == 4 && xhr.status == 200) {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
                         location.reload();
                     }
                 };
@@ -242,9 +274,9 @@ function setupSubmitAttendanceButton() {
             cancelBtn.removeEventListener('click', addCommitteeCancel);
         }
         var cancelBtn = document.getElementById('update-modal-cancel');
-        cancelBtn.addEventListener('click', function() {
+        cancelBtn.addEventListener('click', function () {
             // do nothing.
-        });        
+        });
     });
 }
 
@@ -258,7 +290,7 @@ function displayOtherTable(members) {
     }
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     setup();
     var officersxhr = getOfficers();
     officersxhr.onload = () => { setAdmin(officersxhr.responseText) }

@@ -2,17 +2,17 @@
 <html lang="en">
 
 <head>
-	<link rel="icon" href="../images/RHA.jpg">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="icon" href="../images/RHA.jpg">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
-	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
 
-	<script type="text/javascript" src="./scripts/rosefire.js"></script>
-	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
-	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
+    <script type="text/javascript" src="./scripts/rosefire.js"></script>
+    <script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
+    <script language="Javascript" src="../scripts/adminPermission.js">  </script>
     <script language="Javascript" src="../scripts/photoGallery.js">  </script>
 
     <title>
@@ -29,12 +29,12 @@
 
         <div id="photoGalleryWrapper">
             <h1>Photo Gallery</h1>
+            <div id="buttonDiv">
+                <button id="addPhoto" data-toggle="modal" data-target="#uploadModal">Upload a photo!</button>
+            </div>
             <div id='photos'> </div>
         </div>
-        <div id="buttonDiv">
-            <button id="addPhoto" data-toggle="modal" data-target="#uploadModal" >Upload a photo!</button>
-        </div>
-        
+
     </div>
 
     <div id="uploadModal" class="modal fade" role="dialog">
@@ -47,9 +47,9 @@
                 </div>
                 <div class="modal-body">
                     <form action="javascript:uploadPhoto()">
-                    <label for="imageFile">Image:<input type="file" name="imageFile" id="imageFile"></label>
-                    <button type="submit" class="btn btn-default">Submit</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <label for="imageFile">Image:<input type="file" name="imageFile" id="imageFile"></label>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </form>
                 </div>
             </div>
@@ -57,7 +57,7 @@
     </div>
 
     <div id="photoModal" class="modal fade in" role="dialog">
-        <p class="close" id="photoGalleryClose" data-dismiss = "modal">&times;</p>
+        <p class="close" id="photoGalleryClose" data-dismiss="modal">&times;</p>
         <img id="modalPhoto">
     </div>
 </body>
