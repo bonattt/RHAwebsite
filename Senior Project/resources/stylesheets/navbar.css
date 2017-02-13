@@ -21,6 +21,7 @@
 #navBar {
     background-color: #800000;
     height: 4em;
+    margin: -10pt;
 }
 
 #rha-image {
