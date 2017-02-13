@@ -8,6 +8,7 @@ function setup() {
 
     function createHTMLFromResponseText(floorMoney) {
         floorMoney = JSON.parse(floorMoney);
+        floorMoney = floorMoney.sort();
         var body = document.getElementsByTagName('body')[0];
         var table = document.createElement('table');
         table.setAttribute('border', 1);
@@ -29,25 +30,27 @@ function setup() {
         tbdy.appendChild(tdBalance);
         var countForColoring = 0;
         for (var i = 0; i < floorMoney.length; i++) {
-            tr = document.createElement('tr');
-            tr.setAttribute('floorMoney', i);
-            tr.setAttribute('data-toggle', 'modal');
-            tr.setAttribute('data-target', '#myModal');
-            doClosure(floorMoney, i);
+            if (floorMoney[i].hall_and_floor != "Off-campus") {
+                tr = document.createElement('tr');
+                tr.setAttribute('floorMoney', i);
+                tr.setAttribute('data-toggle', 'modal');
+                tr.setAttribute('data-target', '#myModal');
+                doClosure(floorMoney, i);
 
-            if (countForColoring % 2 == 0) {
-                tr.setAttribute('bgcolor', '#f0f0f0');
+                if (countForColoring % 2 == 0) {
+                    tr.setAttribute('bgcolor', '#f0f0f0');
+                }
+                countForColoring++;
+
+                var td = document.createElement('td');
+                td.innerHTML = floorMoney[i].hall_and_floor;
+
+                var td2 = document.createElement('td');
+                td2.innerHTML = floorMoney[i].current_earned.toFixed(2);
+                tr.appendChild(td);
+                tr.appendChild(td2);
+                tbdy.appendChild(tr);
             }
-            countForColoring++;
-
-            var td = document.createElement('td');
-            td.innerHTML = floorMoney[i].hall_and_floor;
-
-            var td2 = document.createElement('td');
-            td2.innerHTML = floorMoney[i].current_earned.toFixed(2);
-            tr.appendChild(td);
-            tr.appendChild(td2);
-            tbdy.appendChild(tr);
         }
         table.appendChild(tbdy);
         body.appendChild(table);
@@ -81,7 +84,7 @@ function setUpModal(floorMoney, i) {
 
     var xhrAttendanceQ3 = createXhrRequestJSON('POST', urlExtensionAttendance);
     xhrAttendanceQ3.send(JSON.stringify({ floorName: floorMoney[i].hall_and_floor, quarter: "Q3" }));
-    
+
     setTimeout(function () { setValues(xhrAwards.responseText, xhrExpenses.responseText, xhrAttendanceQ1.responseText, xhrAttendanceQ2.responseText, xhrAttendanceQ3.responseText) }, 300);
     document.getElementById('funds-modal-funds_name').innerHTML = floorMoney[i].hall_and_floor;
     document.getElementById('funds-modal-current_earned').innerHTML = floorMoney[i].current_balance.toFixed(2);
