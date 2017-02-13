@@ -142,6 +142,18 @@ app.post('/api/v1/carouselPhoto', type, function(req, res) {  //we will need to 
   });
 });
 
+app.get('/api/v1/carouselPhoto', type, function (req, res) {
+  var target_path = 'resources/images/carousel/';
+  var fileList = new Array();
+  fs.readdir(target_path, (err, files) => {
+    files.forEach(file => {
+      fileList.push(file);
+      });
+    res.status(200).send(fileList);
+    return;
+  });
+});
+
 app.post('/api/v1/committeePhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
     var fileType = req.file.mimetype.split('/')[1];
     var tmp_path = req.file.path;
