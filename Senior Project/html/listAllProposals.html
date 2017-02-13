@@ -28,23 +28,26 @@
 
 					<label>Name</label> <br/>
 					<input id="proposalModal-proposal_name" type="text" value="name"> </input><br/><br/>
-					<label>Cost</label> <br/>
-					<input id="proposalModal-cost_to_attendee" type="text" value="cost"> </input><br/><br/>
+
+					<label>Monsy Allocated</label> <br/>
+					<input id="proposalModal-money_allocated" type="number" step="0.01"> </input><br/><br/>
+
+					<label>Monsy Requested</label> <br/>
+					<input id="proposalModal-money_requested" type="number" step="0.01"> </input><br/><br/>
+
 					<label>Description</label> <br/>
 					<textarea id="proposalModal-description" type="text" value="description"> </textarea><br/><br/>
 
-					<div id="proposalModal-event_date">
+					<div>
 						<label>Event Date</label> <br/>
+						<input type="date" value="03/03/2017" id="proposalModal-event_date"> </input>
 					</div> <br/>
 
-					<div id="proposalModal-event_signup_open">
-						<label>Signups Open Date</label> <br/>
+					<div>
+						<label>Proposed Date</label> <br/>
+						<input type="date" value="02/02/2017" id="proposalModal-proposed_date"> </input>
 					</div> <br/>
 
-					<div id="proposalModal-event_signup_close">
-						<label>Signups Close Date</label> <br/>
-					</div> <br/>
-					<label for="imageFile">Image<input type="file" name="imageFile" id="imageFile"></label>
 					<!--
 					<input id="proposalModal-event_date" type="text" value="eventDate"> </input><br/><br/>
 					<label>Sign Ups Open Date</label> <br/>
