@@ -162,6 +162,7 @@ function addModalPopulateListener(tr, proposal) {
             var entry = document.getElementById('proposalModal-' + attr);
             entry.value = proposal[attr];
         });
+        document.getElementById('proposalModal-paid').checked = proposal.paid;
     });
 }
 
@@ -218,8 +219,9 @@ function setupModalButtons() {
             console.log('proposalModal-' + attr);
             json_data[attr] = entry.value;
         });
+        json_data.paid = document.getElementById('proposalModal-paid').checked;
 
-        var apiUri = 'event/' + id;
+        var apiUri = 'events/' + id;
         var xhr = xhrPutRequest(apiUri);
         xhr.onload = function() {
             location.reload();
