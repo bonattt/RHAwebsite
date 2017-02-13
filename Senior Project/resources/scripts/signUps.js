@@ -260,7 +260,12 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     var eventTextSignUps = getEventTextSignupsHtml(proposal, cost, eventDate, signUpOpenDate);
     colDiv.appendChild(eventTextSignUps);
     
-    var username = JSON.parse(sessionStorage.getItem("userData")).username;
+    var username;
+    if(sessionStorage.getItem("userData") == null) {
+        username = null;
+    } else {
+        username = JSON.parse(sessionStorage.getItem("userData")).username;
+    }
     var eventActionDiv = getEventActionDiv(proposal_id, username, signUpOpenDate, attendees);
     colDiv.appendChild(eventActionDiv);
     
@@ -337,17 +342,29 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     if (signUpOpenDate < new Date()) {
         var signupLink = document.createElement('a');
         signupLink.setAttribute('id', 'signUpLink'+proposal_id);
-        if ($.inArray(username, attendees) == -1) {
-            signupLink.addEventListener('click', function() {signUp(proposal_id + "")});
+        if(username != null) {
+            if ($.inArray(username, attendees) == -1) {
+                signupLink.addEventListener('click', function() {signUp(proposal_id + "")});
+                var innerParagraph = document.createElement('p');
+                innerParagraph.setAttribute('class', 'signUpLink');
+                innerParagraph.appendChild(document.createTextNode('Sign Up'));
+                signupLink.appendChild(innerParagraph);
+            } else {
+                signupLink.addEventListener('click', function() {unregister(proposal_id)});
+                var innerParagraph = document.createElement('p');
+                innerParagraph.setAttribute('class', 'signUpLink');
+                innerParagraph.appendChild(document.createTextNode('Unregister'));
+                signupLink.appendChild(innerParagraph);
+            }
+        } else {
+            signupLink.addEventListener('click', function() {
+                var snackbar = document.getElementById("notLoggedInSnackbar");
+                snackbar.className = "show";
+                setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+            });
             var innerParagraph = document.createElement('p');
             innerParagraph.setAttribute('class', 'signUpLink');
             innerParagraph.appendChild(document.createTextNode('Sign Up'));
-            signupLink.appendChild(innerParagraph);
-        } else {
-            signupLink.addEventListener('click', function() {unregister(proposal_id)});
-            var innerParagraph = document.createElement('p');
-            innerParagraph.setAttribute('class', 'signUpLink');
-            innerParagraph.appendChild(document.createTextNode('Unregister'));
             signupLink.appendChild(innerParagraph);
         }
     } else {
