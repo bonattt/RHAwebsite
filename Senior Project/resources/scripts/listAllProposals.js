@@ -1,217 +1,324 @@
-var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
+
+
+const FIELDS = [
+        "proposal_name",
+        "money_requested",
+        "money_allocated",
+//            "proposed_date",
+//            "event_date",
+        "week_proposed",
+        "quarter_proposed"
+    ]
+
+const BROWSER = (function(){
+    // Code snippet from Stack Overflow
+    // http://stackoverflow.com/questions/2400935/browser-detection-in-javascript
+    var ua= navigator.userAgent, tem,
+    M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if(/trident/i.test(M[1])){
+        tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+        return 'IE '+(tem[1] || '');
+    }
+    if(M[1]=== 'Chrome'){
+        tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
+        if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+    }
+    M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+    if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
+    return M.join(' ');
+})().toLowerCase();
+
+
 var body = document.getElementsByTagName('body')[0];
 var tables = new Array();
 
+var last_proposal_clicked = -1;
 
-function displayProposals() {
+function displayProposals(isAdmin) {
     var xhr = getEvents();
     xhr.onload = function () {
-        createHTMLFromResponseText(xhr.responseText)
-    }
-    xhr.send();
-
-    function createHTMLFromResponseText(proposal) {
-        proposal = JSON.parse(proposal);
+        var proposals = JSON.parse(xhr.responseText);
         var startingYear = 2015;
         var proposalsForCurrentYear = new Array();
-        for (var i = proposal.length - 1; i >= 0; i--) {
-            var proposedDate = new Date(proposal[i].proposed_date);
+        for (var i = proposals.length - 1; i >= 0; i--) {
+            var proposedDate = new Date(proposals[i].proposed_date);
             if (proposedDate.getFullYear() == (startingYear + 1) && proposedDate.getMonth() > 6) {
                 var paragraph = startingYear.toString();
                 paragraph = document.createElement('p');
                 paragraph.innerText = startingYear + "-" + (startingYear + 1);
                 paragraph.setAttribute('class', 'yearTextListProposals');
                 body.appendChild(paragraph);
-                drawTable(proposalsForCurrentYear.reverse());
+                drawTable(proposalsForCurrentYear.reverse(), isAdmin);
                 proposalsForCurrentYear = new Array();
                 startingYear++;
             }
-            proposalsForCurrentYear.push(proposal[i]);
+            proposalsForCurrentYear.push(proposals[i]);
         }
         var paragraph = startingYear.toString();
         paragraph = document.createElement('p');
         paragraph.innerText = startingYear + "-" + (startingYear + 1);
         paragraph.setAttribute('class', 'yearTextListProposals');
         body.appendChild(paragraph);
-        drawTable(proposalsForCurrentYear.reverse());
+        drawTable(proposalsForCurrentYear.reverse(), isAdmin);
     }
+    xhr.send();
+}
 
-    function drawTable(proposal) {
+function createColumnHead(name) {
+    var newTd = document.createElement('td');
+    newTd.setAttribute('align', 'middle');
+    newTd.setAttribute('width', 200);
+    newTd.innerHTML = '<b>' + name + '</b>';
+    newTd.dataset.toggle = "modal";
+    newTd.dataset.target = "#infoModal";
+    return newTd;
+}
 
-        var table = document.createElement('table');
-        var tbdy = document.createElement('tbody');
-        var tdName = document.createElement('td');
-        var tdRequested = document.createElement('td');
-        var tdBudgeted = document.createElement('td');
+function createTableRow(index, proposal, isAdmin) {
+    var tr = document.createElement('tr');
+    tr.setAttribute('proposal', index);
+    //doClosure(members, index);
+    if (index % 2 == 0) {
+        tr.setAttribute('bgcolor', '#f0f0f0');
+    }
+    for (attr in proposal) {
+        tr.dataset[attr] = proposal[attr];
+    }
+    return tr
+}
+
+function drawTable(proposals, isAdmin) {
+    var table = document.createElement('table');
+    table.innerHTML = "";
+    table.setAttribute('border', 1);
+    table.setAttribute('align', 'center');
+    table.setAttribute('bordercolor', '#808080');
+    table.setAttribute('class', 'proposalsTable');
+    var tbdy = document.createElement('tbody');
+
+    tbdy.appendChild(createColumnHead("Name"));
+    tbdy.appendChild(createColumnHead("Amount Requested"));
+    tbdy.appendChild(createColumnHead("Amout Budgeted"));
+    tbdy.appendChild(createColumnHead("Reserve"));
+    tbdy.appendChild(createColumnHead("Used"));
+    tbdy.appendChild(createColumnHead("Paid"));
+    tbdy.appendChild(createColumnHead("Event Date"));
+    tbdy.appendChild(createColumnHead("Proposed Date"));
+    tbdy.appendChild(createColumnHead("Proposed Quarter"));
+    tbdy.appendChild(createColumnHead("Proposed Week"));
+
+    for (var i = proposals.length - 1; i >= 0; i--) {
+        var tr = createTableRow(i, proposals[i]);
+        var id = proposals[i].proposal_id
+        if (isAdmin) {
+            console.log("adding listener " + id);
+            addRowListener(tr, proposals[i]);
+        }
+        else {console.log("not adding listener " + id)}
+        var tdname = document.createElement('td');
+        tdname.innerHTML = proposals[i].proposal_name;
+        tdname.setAttribute("id", "proposal_name" + id);
+
+        var tddate = document.createElement('td');
+        var eventDate = new Date(proposals[i].event_date);
+        eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
+        tddate.innerHTML = eventDate;
+        tddate.setAttribute("id", "event_date" + id);
+
+        var tdProposedDate = document.createElement('td');
+        var proposedEventDate = new Date(proposals[i].proposed_date);
+        proposedEventDate = (proposedEventDate.getMonth() + 1) + "/" + proposedEventDate.getUTCDate() + "/" + proposedEventDate.getFullYear();
+        tdProposedDate.innerHTML = proposedEventDate;
+        tdProposedDate.setAttribute("id", "proposed_date" + id);
+
+        tdweek = document.createElement('td');
+        tdweek.innerHTML = proposals[i].week_proposed;
+        tdweek.setAttribute("id", "week_proposed" + id);
+
+        var tdquarter = document.createElement('td');
+        tdquarter.innerHTML = proposals[i].quarter_proposed;
+        tdquarter.setAttribute("id", "quarter_proposed" + id);
+
+        var tdrequested = document.createElement('td');
+        tdrequested.innerHTML = "$" + proposals[i].money_requested;
+        tdrequested.setAttribute("id", "money_requested" + id);
+
+        var tdallocated = document.createElement('td');
+        tdallocated.innerHTML = "$" + proposals[i].money_allocated;
+        tdallocated.setAttribute("id", "money_allocated" + id);
+
+        var tdpaid = document.createElement('td');
+        tdpaid.innerHTML = proposals[i].paid;
+        tdpaid.setAttribute("id", "paid" + id);
+
         var tdreserve = document.createElement('td');
         var tdused = document.createElement('td');
-        var tdIsOpen = document.createElement('td');
-        var tdProposedDate = document.createElement('td');
-        var tdQuarter = document.createElement('td');
-        var tdWeek = document.createElement('td');
-        var tdDate = document.createElement('td');
-        var countForColoring = 0;
-        table.innerHTML = "";
-        table.setAttribute('border', 1);
-        table.setAttribute('align', 'center');
-        table.setAttribute('bordercolor', '#808080');
-        table.setAttribute('class', 'proposalsTable');
 
-        tdName.setAttribute('align', 'middle');
-        tdName.setAttribute('width', 200);
-        tdName.innerHTML = "Name";
-
-        tdRequested.setAttribute('align', 'middle');
-        tdRequested.setAttribute('width', 200);
-        tdRequested.innerHTML = "Amount Requested";
-
-        tdBudgeted.setAttribute('align', 'middle');
-        tdBudgeted.setAttribute('width', 200);
-        tdBudgeted.innerHTML = "Amount Budgeted";
-
-        tdreserve.setAttribute('align', 'middle');
-        tdreserve.setAttribute('width', 200);
-        tdreserve.innerHTML = "Reserve";
-
-        tdused.setAttribute('align', 'middle');
-        tdused.setAttribute('width', 200);
-        tdused.innerHTML = "Used";
-
-        tdIsOpen.setAttribute('align', 'middle');
-        tdIsOpen.setAttribute('width', 200);
-        tdIsOpen.innerHTML = "Is Open";
-
-        tdDate.setAttribute('align', 'middle');
-        tdDate.setAttribute('width', 200);
-        tdDate.innerHTML = "Event Date";
-
-        tdProposedDate.setAttribute('align', 'middle');
-        tdProposedDate.setAttribute('width', 200);
-        tdProposedDate.innerHTML = "Proposed Date";
-
-        tdQuarter.setAttribute('align', 'middle');
-        tdQuarter.setAttribute('width', 200);
-        tdQuarter.innerHTML = "Proposed Quarter";
-
-        tdWeek.setAttribute('align', 'middle');
-        tdWeek.setAttribute('width', 200);
-        tdWeek.innerHTML = "Proposed Week";
-
-
-        tbdy.appendChild(tdName);
-        tbdy.appendChild(tdRequested);
-        tbdy.appendChild(tdBudgeted);
-        tbdy.appendChild(tdreserve);
-        tbdy.appendChild(tdused);
-        tbdy.appendChild(tdIsOpen);
-        tbdy.appendChild(tdDate);
-        tbdy.appendChild(tdQuarter);
-        tbdy.appendChild(tdWeek);
-        tbdy.appendChild(tdProposedDate);
-
-        for (var i = proposal.length - 1; i >= 0; i--) {
-            tr = document.createElement('tr');
-            tr.setAttribute('proposal', i);
-            tr.setAttribute('data-toggle', 'modal');
-            tr.setAttribute('data-target', '#myModal');
-            //doClosure(members, i);
-            if (countForColoring % 2 == 0) {
-                tr.setAttribute('bgcolor', '#f0f0f0');
-            }
-            countForColoring++;
-
-            var tdname = document.createElement('td');
-            tdname.innerHTML = proposal[i].proposal_name;
-
-            var tddate = document.createElement('td');
-            var eventDate = new Date(proposal[i].event_date);
-            eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
-            tddate.innerHTML = eventDate;
-
-            tdweek = document.createElement('td');
-            tdweek.innerHTML = proposal[i].week_proposed;
-
-            var tdProposedDate = document.createElement('td');
-            var proposedEventDate = new Date(proposal[i].proposed_date);
-            proposedEventDate = (proposedEventDate.getMonth() + 1) + "/" + proposedEventDate.getUTCDate() + "/" + proposedEventDate.getFullYear();
-            tdProposedDate.innerHTML = proposedEventDate;
-
-            var tdquarter = document.createElement('td');
-            tdquarter.innerHTML = proposal[i].quarter_proposed;
-
-            var tdrequested = document.createElement('td');
-            tdrequested.innerHTML = proposal[i].money_requested;
-
-            var tdallocated = document.createElement('td');
-            tdallocated.innerHTML = proposal[i].money_allocated;
-
-            var tdpaid = document.createElement('td');
-            tdpaid.innerHTML = proposal[i].paid;
-
-
-            var tdreserve = document.createElement('td');
-            var tdused = document.createElement('td');
-
-            doClosure(proposal, i, tdused, tdreserve);
-            tr.appendChild(tdname);
-            tr.appendChild(tdrequested);
-            tr.appendChild(tdallocated);
-            tr.appendChild(tdreserve);
-            tr.appendChild(tdused);
-            tr.appendChild(tdpaid);
-            tr.appendChild(tddate);
-            tr.appendChild(tdquarter);
-            tr.appendChild(tdweek);
-            tr.appendChild(tdProposedDate);
-            tbdy.appendChild(tr);
-        }
-        table.appendChild(tbdy);
-        body.appendChild(table);
+        doClosure(proposals, i, tdused, tdreserve);
+        tr.appendChild(tdname);
+        tr.appendChild(tdrequested);
+        tr.appendChild(tdallocated);
+        tr.appendChild(tdreserve);
+        tr.appendChild(tdused);
+        tr.appendChild(tdpaid);
+        tr.appendChild(tddate);
+        tr.appendChild(tdProposedDate);
+        tr.appendChild(tdquarter);
+        tr.appendChild(tdweek);
+        tbdy.appendChild(tr);
     }
+    table.appendChild(tbdy);
+    body.appendChild(table);
+}
 
-    function doClosure(proposal, i, tdused, tdreserve) {
-        var urlExtensionUsed = 'getMoneyUsed';
-        var xhrUsed = createXhrRequestJSON('POST', urlExtensionUsed);
-        xhrUsed.send(JSON.stringify({ proposal_id: proposal[i].proposal_id }));
-        setTimeout(function () { setValues(xhrUsed.responseText, tdused, tdreserve, proposal, i) }, 300);
-    }
+function addRowListener(tr, proposal) {
+    var id = proposal.proposal_id;
+    tr.setAttribute('data-toggle', 'modal');
+    tr.setAttribute('data-target', '#proposalModal');
+    tr.addEventListener('click', function() {
+        last_proposal_clicked = id;
+        var entry;
+        FIELDS.forEach(function (attr){
+            console.log(attr);
+            var entry = document.getElementById('proposalModal-' + attr);
+            entry.value = proposal[attr];
+        });
+        unMarshalDateStr(proposal);
+        document.getElementById('proposalModal-paid').checked = proposal.paid;
+    });
+}
 
-    function setValues(used, tdused, tdreserve, proposal, i) {
-        used = JSON.parse(used);
-        tdused.innerHTML = used[0].get_money_used;
-        tdreserve.innerHTML = proposal[i].money_allocated - used[0].get_money_used;
-    }
+function unMarshalDateStr(proposal) {
+    var proposed_date = document.getElementById('proposalModal-proposed_date');
+    var event_date = document.getElementById('proposalModal-event_date');
+    if (BROWSER.includes("chrome")) {
+        proposed_date.value = unMarshalHtml5(proposal.proposed_date);
+        console.log(unMarshalHtml5(proposal.proposed_date));
+        event_date.value = unMarshalHtml5(proposal.event_date);
+        console.log(unMarshalHtml5(proposal.event_date));
 
-    function getEvents() {
-        var url = apiURL + 'api/v1/allEvents';
-        function createCORSRequest(method, url) {
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-                xhr.open(method, url, true);
-            } else if (typeof XDomainRequest != "undefined") {
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-            } else {
-                xhr = null;
-            }
-            return xhr;
-        }
-        var xhr = createCORSRequest('GET', url);
-        if (!xhr) {
-            throw new Error('CORS not supported');
-        }
-
-        xhr.onload = function () {
-            var responseText = xhr.responseText;
-        }
-
-        xhr.onerror = function () {
-            console.log("There was an error");
-        }
-        return xhr;
+//    } else if (BROWSER.includes("firefox")) {
+    } else {
+        proposed_date.value = proposal.proposed_date;
+        event_date.value = proposal.event_date;
     }
 }
 
+function marshalDate(json_data) {
+    var entry = document.getElementById('proposalModal-proposed_date');
+    var date = new Date(entry.value);
+    json_data.proposed_date = date;
+
+    entry = document.getElementById('proposalModal-event_date');
+    date = new Date(entry.value);
+    json_data.event_date = date;
+
+}
+
+function unMarshalHtml5(dateStr) {
+    var date = new Date(dateStr);
+    var msg = date.getFullYear();
+    msg += '-';
+    var month = date.getMonth();
+    if (month < 10) {month = "0" + month}
+    msg += month;
+    msg += '-'
+    var day = date.getDate();
+    if (day < 10) {day = "0" + day}
+    msg += day;
+    console.log("Unmarshaled date: "  + msg);
+    return msg
+}
+
+function doClosure(proposal, i, tdused, tdreserve) {
+    var urlExtensionUsed = 'getMoneyUsed';
+    var xhrUsed = createXhrRequestJSON('POST', urlExtensionUsed);
+    xhrUsed.onload = function () { setValues(xhrUsed.responseText, tdused, tdreserve, proposal, i) };
+    xhrUsed.send(JSON.stringify({ proposal_id: proposal[i].proposal_id }));
+}
+
+function setValues(used, tdused, tdreserve, proposal, i) {
+    used = JSON.parse(used);
+    tdused.innerHTML = "$" + used[0].get_money_used;
+    tdreserve.innerHTML = "$" + (proposal[i].money_allocated - used[0].get_money_used);
+}
+
+function getEvents() {
+    var url = BASE_API_URL + 'allEvents/';
+    function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        if ("withCredentials" in xhr) {
+            xhr.open(method, url, true);
+        } else if (typeof XDomainRequest != "undefined") {
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+        } else {
+            xhr = null;
+        }
+        return xhr;
+    }
+    var xhr = createCORSRequest('GET', url);
+    if (!xhr) {
+        throw new Error('CORS not supported');
+    }
+
+    xhr.onload = function () {
+        var responseText = xhr.responseText;
+    }
+
+    xhr.onerror = function () {
+        console.log("There was an error");
+    }
+    return xhr;
+}
+
+function setupModalButtons() {
+    var submitBtn = document.getElementById("proposalModal-submit");
+    submitBtn.addEventListener('click', function() {
+        var id = last_proposal_clicked;
+
+        var json_data = {}
+        FIELDS.forEach(function(attr) {
+            var entry = document.getElementById('proposalModal-' + attr);
+            console.log('proposalModal-' + attr);
+            json_data[attr] = entry.value;
+        });
+        json_data.paid = document.getElementById('proposalModal-paid').checked;
+        marshalDate(json_data);
+
+        var apiUri = 'events/' + id;
+        var xhr = xhrPutRequest(apiUri);
+        xhr.onload = function() {
+            location.reload();
+        }
+        xhr.send(JSON.stringify(json_data));
+    });
+
+    var deleteBtn = document.getElementById("deleteConfirmModal-delete");
+    deleteBtn.addEventListener('click', function() {
+        var apiUri = 'events/' + last_proposal_clicked;
+        var xhr = xhrDeleteRequest(apiUri);
+        xhr.onload = function() {
+            alert('delete request successful');
+            //location.reload();
+        }
+        xhr.send();
+        alert("delete request sent")
+    });
+}
+
+
+
 $(document).ready(function () {
-    displayProposals();
+    console.log(BROWSER);
+    var officersxhr = getOfficers();
+    officersxhr.onload = function () {
+        var isAdmin = false;
+        if (userIsOfficer(officersxhr.responseText)) {
+            isAdmin = true;
+            setupModalButtons();
+        }
+        displayProposals(isAdmin);
+    };
+    officersxhr.send();
 });
