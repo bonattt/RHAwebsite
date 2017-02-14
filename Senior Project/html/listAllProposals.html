@@ -26,8 +26,8 @@
 				</div>
 				<div id="proposalModalBody" class="modal-body">
 
-					<label>Name</label> <br/>
-					<input id="proposalModal-proposal_name" type="text" value="name"> </input><br/><br/>
+					<label>Proposal Name</label> <br/>
+					<input id="proposalModal-proposal_name" type="text" value="name" size="50"> </input><br/><br/>
 
 					<label>Proposer</label> <br/>
 					<input id="proposalModal-proposer" type="text" value="name"> </input><br/><br/>
@@ -35,54 +35,44 @@
 					<label>Description</label> <br/>
 					<textarea id="proposalModal-description" type="text" value="name"> </textarea><br/><br/>
 
-					<label>Money Allocated</label> <br/>
-					<input id="proposalModal-money_allocated" type="number" step="0.01"> </input><br/><br/>
 
-					<label>Money Requested</label> <br/>
-					<input id="proposalModal-money_requested" type="number" step="0.01"> </input><br/><br/>
 					<div id="proposalModal-money">
-						<label>Money Allocated</label> <br/>
-						<input id="proposalModal-money_allocated" type="number" step="0.01"> </input><br/><br/>
-
-						<label>Money Requested</label> <br/>
-						<input id="proposalModal-money_requested" type="number" step="0.01"> </input><br/><br/>
-
+						<label>Money Allocated</label> &nbsp;&nbsp;
+						<label>Money Requested</label> &nbsp;&nbsp;
 						<label>Cost To Attendee </label> <br/>
-						<input id="proposalModal-cost_to_attendee" type="number" step="0.01"> </input><br/><br/>
-					</div>
+
+						<input id="proposalModal-money_allocated" type="number" step="0.01"> </input> &nbsp;&nbsp;
+						<input id="proposalModal-money_requested" type="number" step="0.01"> </input> &nbsp;&nbsp;
+						<input id="proposalModal-cost_to_attendee" type="number" step="0.01"> </input> &nbsp;&nbsp;
+					</div> <br/>
 
 					<div id="proposalModal-checkboxes">
-						<label> Paid </label>
-						<input id="proposalModal-paid" type="checkbox"> </input><br/><br/>
+						<label> Paid </label> &nbsp;&nbsp;
+						<input id="proposalModal-paid" type="checkbox"> </input>
 
-						<label> Approved </label>
-						<input id="proposalModal-approved" type="checkbox"> </input><br/><br/>
-					</div>
+					</div> <br/>
 
 					<div id="proposalModal-eventDates">
-						<label>Event Date</label> <br/>
-						<input type="date" id="proposalModal-event_date"> </input>
-
+						<label>Event Date</label> &nbsp;&nbsp;
 						<label>Proposed Date</label> <br/>
-						<input type="date" id="proposalModal-proposed_date"> </input>
+						<input type="date" id="proposalModal-event_date"> </input> &nbsp;&nbsp;
+						<input type="date" id="proposalModal-proposed_date"> </input> &nbsp;&nbsp;
 					</div> <br/>
 
 					<div id="proposalModal-signupsDates">
-						<label>Signups Open</label> <br/>
-						<input type="date" id="proposalModal-event_signup_open"> </input>
-
+						<label>Signups Open</label> &nbsp;&nbsp;
 						<label>Signups Close</label> <br/>
-						<input type="date" id="proposalModal-event_signup_close"> </input>
+						<input type="date" class="modalEntry" id="proposalModal-event_signup_open"> </input> &nbsp;&nbsp;
+						<input type="date" id="proposalModal-event_signup_close"> </input> &nbsp;&nbsp;
 					</div> <br/>
 
 					<div>
-						<label>Week Proposed </label> <br/>
-						<input type="number" value="0" id="proposalModal-week_proposed" min="0" max="11"> </input>
-					</div> <br/>
-
-					<div>
+						<label>Week Proposed </label> &nbsp;&nbsp;
 						<label>Quarter Proposed </label> <br/>
-						<input type="number" value="0" id="proposalModal-quarter_proposed" min="0" max="3"> </input>
+						<input type="number" value="0" id="proposalModal-week_proposed" min="0" max="11"> </input> &nbsp;&nbsp;
+
+
+						<input type="number" value="0" id="proposalModal-quarter_proposed" min="0" max="3"> </input> &nbsp;&nbsp;
 					</div> <br/>
 
 					<!--

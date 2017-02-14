@@ -312,6 +312,10 @@ function setupModalButtons() {
         xhr.onload = function() {
             location.reload();
         }
+        console.log(json_data);
+        alert(JSON.stringify(json_data));
+        removeNullValues(json_data);
+        console.log(json_data);
         xhr.send(JSON.stringify(json_data));
     });
 
@@ -326,6 +330,13 @@ function setupModalButtons() {
     });
 }
 
+function removeNullValues(json_data) {
+    for (attr in json_data) {
+        if (json_data == null) {
+            delete json_data[attr];
+        }
+    }
+}
 
 
 $(document).ready(function () {
