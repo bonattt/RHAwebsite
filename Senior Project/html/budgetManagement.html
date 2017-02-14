@@ -96,8 +96,7 @@
 								<!-- this person physically received the check for this money -->
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input class="modal-text-entry" id="paymentModal-receiver" type="text"
-										   value="Person"></input>
+									<input class="modal-text-entry" id="paymentModal-receiver" type="text"></input>
 								</td>
 							</tr>
 							<tr>
@@ -105,8 +104,7 @@
 								<!-- this person physically received the check for this money -->
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input class="modal-text-entry" id="paymentModal-cm" type="number"
-										   value="Person"></input>
+									<input class="modal-text-entry" id="paymentModal-cm" type="number"></input>
 								</td>
 							</tr>
 							<tr>
@@ -114,10 +112,12 @@
 								<!-- the event which this payment was for -->
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<select id="paymentModal-event" data-event1="1" data-event2="2" data-event3="3">
-										<option> Event1 </option>
-										<option> Event2 </option>
-										<option> Event3 </option>
+									<select id="paymentModal-event" data-basketballtournament="9" data-assassins="14" data-trihop="18" data-countryconcert="7" data-moana="3">
+										<option>assassins</option>
+										<option>basketballTournament</option>
+										<option>countryconcert</option>
+										<option>moana</option>
+										<option>trihop</option>
 									</select>
 								</td>
 							</tr>
@@ -146,7 +146,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td> <label for="imageFile"> Recipts:
+								<td> <label for="imageFile"> Receipts:
 									<input type="file" name="imageFile" id="imageFile">
 								</label> </td>
 								<td> &nbsp;&nbsp; </td>
@@ -178,15 +178,14 @@
 								<!-- this person physically received the check for this money -->
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input class="modal-text-entry" id="fundModal-name" type="text"
-										   value="Person"></input>
+									<input class="modal-text-entry" id="fundModal-name" type="text"></input>
 								</td>
 							</tr>
 							<tr>
 								<td> <label>Amount:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td> <input class="modal-text-entry" id="fundModal-funds_amount" type="number"
-											value="0.00" step="1.00"></input>
+											value="0.01"></input>
 								</td>
 							</tr>
 						</tbody>
