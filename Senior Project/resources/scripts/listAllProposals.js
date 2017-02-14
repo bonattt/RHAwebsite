@@ -1,14 +1,33 @@
 
 
 const FIELDS = [
-            "proposal_name",
-            "money_requested",
-            "money_allocated",
-            "proposed_date",
-            "event_date",
-            "week_proposed",
-            "quarter_proposed"
-        ]
+        "proposal_name",
+        "money_requested",
+        "money_allocated",
+//            "proposed_date",
+//            "event_date",
+        "week_proposed",
+        "quarter_proposed"
+    ]
+
+const BROWSER = (function(){
+    // Code snippet from Stack Overflow
+    // http://stackoverflow.com/questions/2400935/browser-detection-in-javascript
+    var ua= navigator.userAgent, tem,
+    M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if(/trident/i.test(M[1])){
+        tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+        return 'IE '+(tem[1] || '');
+    }
+    if(M[1]=== 'Chrome'){
+        tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
+        if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+    }
+    M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+    if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
+    return M.join(' ');
+})().toLowerCase();
+
 
 var body = document.getElementsByTagName('body')[0];
 var tables = new Array();
@@ -92,8 +111,10 @@ function drawTable(proposals, isAdmin) {
         var tr = createTableRow(i, proposals[i]);
         var id = proposals[i].proposal_id
         if (isAdmin) {
-            addModalPopulateListener(tr, proposals[i]);
+            console.log("adding listener " + id);
+            addRowListener(tr, proposals[i]);
         }
+        else {console.log("not adding listener " + id)}
         var tdname = document.createElement('td');
         tdname.innerHTML = proposals[i].proposal_name;
         tdname.setAttribute("id", "proposal_name" + id);
@@ -150,7 +171,7 @@ function drawTable(proposals, isAdmin) {
     body.appendChild(table);
 }
 
-function addModalPopulateListener(tr, proposal) {
+function addRowListener(tr, proposal) {
     var id = proposal.proposal_id;
     tr.setAttribute('data-toggle', 'modal');
     tr.setAttribute('data-target', '#proposalModal');
@@ -162,8 +183,39 @@ function addModalPopulateListener(tr, proposal) {
             var entry = document.getElementById('proposalModal-' + attr);
             entry.value = proposal[attr];
         });
+        unMarshalDateStr(proposal);
         document.getElementById('proposalModal-paid').checked = proposal.paid;
     });
+}
+
+function unMarshalDateStr(proposal) {
+    var proposed_date = document.getElementById('proposalModal-proposed_date');
+    var event_date = document.getElementById('proposalModal-event_date');
+    if (BROWSER.includes("chrome")) {
+        proposed_date.value = unMarshalHtml5(proposal.proposed_date);
+        console.log(unMarshalHtml5(proposal.proposed_date));
+        event_date.value = unMarshalHtml5(proposal.event_date);
+        console.log(unMarshalHtml5(proposal.event_date));
+
+//    } else if (BROWSER.includes("firefox")) {
+    } else {
+        proposed_date.value = proposal.proposed_date;
+        event_date.value = proposal.event_date;
+    }
+}
+
+function unMarshalHtml5(dateStr) {
+    var date = new Date(dateStr);
+    var msg = date.getFullYear();
+    msg += '-';
+    var month = date.getMonth();
+    if (month < 10) {month = "0" + month}
+    msg += month;
+    msg += '-'
+    var day = date.getDate();
+    if (day < 10) {day = "0" + day}
+    msg += day;
+    return msg
 }
 
 function doClosure(proposal, i, tdused, tdreserve) {
@@ -245,6 +297,7 @@ function setupModalButtons() {
 
 
 $(document).ready(function () {
+    console.log(BROWSER);
     var officersxhr = getOfficers();
     officersxhr.onload = function () {
         var isAdmin = false;
