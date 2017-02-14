@@ -70,6 +70,7 @@ function submit() {
             dbObject["money_allocated"] = moneyAllocated;
             dbObject["image_path"] = image_path;
             dbObject["approved"] = approved;
+            dbObject["description"] = description;
 
             dbxhr.open('POST', dbAPIURL, true);
             dbxhr.setRequestHeader('Content-Type', 'application/json');
