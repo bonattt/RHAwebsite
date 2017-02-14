@@ -255,8 +255,10 @@ function doClosure(proposal, i, tdused, tdreserve) {
 
 function setValues(used, tdused, tdreserve, proposal, i) {
     used = JSON.parse(used);
-    tdused.innerHTML = "$" + used[0].get_money_used;
-    tdreserve.innerHTML = "$" + (proposal[i].money_allocated - used[0].get_money_used);
+    var usedVal = used[0].get_money_used;
+    tdused.innerHTML = "$" + (Math.round(usedVal*100) / 100);
+    var reserve = proposal[i].money_allocated - used[0].get_money_used;
+    tdreserve.innerHTML = "$" + (Math.round(reserve*100) / 100);
 }
 
 function getEvents() {
