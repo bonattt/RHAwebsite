@@ -233,11 +233,11 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     }
     
     var signUpCloseDate = new Date(proposal.event_signup_close);
-    signUpCloseDate = (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear();
+    var signUpCloseDateFormatted = (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear();
     var signUpOpenDate = new Date(proposal.event_signup_open);
     var signUpOpenDateFormatted = (signUpOpenDate.getMonth() + 1) + "/" + signUpOpenDate.getUTCDate() + "/" + signUpOpenDate.getFullYear();
     
-    var signupHtml = getSignupDateHtml(proposal, signUpCloseDate, signUpOpenDate, signUpOpenDateFormatted);
+    var signupHtml = getSignupDateHtml(proposal, signUpCloseDateFormatted, signUpOpenDate, signUpOpenDateFormatted);
     
     var attendees = proposal.attendees;
     var eventDate = new Date(proposal.event_date);
@@ -257,7 +257,7 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     imgTag.setAttribute('alt', 'Event Image');
     colDiv.appendChild(imgTag);
     
-    var eventTextSignUps = getEventTextSignupsHtml(proposal, cost, eventDate, signUpOpenDate);
+    var eventTextSignUps = getEventTextSignupsHtml(proposal, cost, eventDate, signUpOpenDate, signUpCloseDate);
     colDiv.appendChild(eventTextSignUps);
     
     var username;
@@ -272,7 +272,7 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     return rowDiv;
 }
 
-function getEventTextSignupsHtml (proposal, cost, eventDate, signUpOpenDate) {
+function getEventTextSignupsHtml (proposal, cost, eventDate, signUpOpenDate, signUpCloseDate) {
     var proposal_id = proposal.proposal_id;
 
     var eventTextSignUps = document.createElement('div');
@@ -321,11 +321,12 @@ function getEventTextSignupsHtml (proposal, cost, eventDate, signUpOpenDate) {
     
     var signupsDate = document.createElement('p');
     var dateStr = (signUpOpenDate.getMonth()+1) + '/' + signUpOpenDate.getDate() + '/' + signUpOpenDate.getFullYear();
+    var dateStrClose = (signUpCloseDate.getMonth()+1) + '/' + signUpCloseDate.getDate() + '/' + signUpCloseDate.getFullYear();
     signupsDate.setAttribute('class', 'eventSignUpDate');
     if (signUpOpenDate > new Date()) {
         signupsDate.appendChild(document.createTextNode('Sign-ups open on: ' + dateStr));
     } else {
-        signupsDate.appendChild(document.createTextNode('Sign-ups close on: ' + dateStr));
+        signupsDate.appendChild(document.createTextNode('Sign-ups close on: ' + dateStrClose));
     }
     eventTextSignUps.appendChild(signupsDate);
     
