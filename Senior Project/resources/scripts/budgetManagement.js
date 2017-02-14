@@ -43,20 +43,18 @@ function setupButtons() {
         var apiUrl = 'payment/';
         var xhr = xhrPostRequest(apiUrl);
         xhr.onload = function() {
-            alert('successfully sent!');
+            location.reload();
         }
         xhr.onerror = function() {
-            alert('error sending request!');
         }
         xhr.send(JSON.stringify(json_obj));
-        alert(JSON.stringify(json_obj));
     });
 
     var deletePaymentButton = document.getElementById('detailsModal-delete');
     deletePaymentButton.addEventListener('click', function() {
         var apiUri = 'payment/'  + current_id;
         var xhr = xhrDeleteRequest(apiUri);
-        xhr.onload = function() { alert('success!'); }
+        xhr.onload = function() { location.reload(); }
         xhr.send();
     });
 
@@ -64,7 +62,7 @@ function setupButtons() {
     editSubmit.addEventListener('click', function() {
         var apiUri = 'fund/' + current_id
         var xhr = xhrPutRequest(apiUri);
-        xhr.onload = function() { alert('success!'); }
+        xhr.onload = function() {  }
 
         var funds_amount = document.getElementById('editFundModal-funds_amount');
 
