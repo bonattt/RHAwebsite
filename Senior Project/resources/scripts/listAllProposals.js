@@ -7,7 +7,10 @@ const FIELDS = [
 //            "proposed_date",
 //            "event_date",
         "week_proposed",
-        "quarter_proposed"
+        "quarter_proposed",
+        "proposer",
+        "description",
+        "cost_to_attendee",
     ]
 
 const BROWSER = (function(){
@@ -183,28 +186,33 @@ function addRowListener(tr, proposal) {
             var entry = document.getElementById('proposalModal-' + attr);
             entry.value = proposal[attr];
         });
-        unMarshalDateStr(proposal);
+        unMarshalDates(proposal);
         document.getElementById('proposalModal-paid').checked = proposal.paid;
+        document.getElementById('proposalModal-approved').checked = proposal.approved;
     });
 }
 
-function unMarshalDateStr(proposal) {
+function unMarshalDates(proposal) {
     var proposed_date = document.getElementById('proposalModal-proposed_date');
     var event_date = document.getElementById('proposalModal-event_date');
+    var event_signup_open = document.getElementById('proposalModal-event_signup_open');
+    var event_signup_close = document.getElementById('proposalModal-event_signup_close');
     if (BROWSER.includes("chrome")) {
         proposed_date.value = unMarshalHtml5(proposal.proposed_date);
-        console.log(unMarshalHtml5(proposal.proposed_date));
         event_date.value = unMarshalHtml5(proposal.event_date);
-        console.log(unMarshalHtml5(proposal.event_date));
+        event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
+        event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
 
 //    } else if (BROWSER.includes("firefox")) {
     } else {
         proposed_date.value = proposal.proposed_date;
         event_date.value = proposal.event_date;
+        event_signup_open.value = proposal.event_signup_open;
+        event_signup_close.value = proposal.event_signup_close;
     }
 }
 
-function marshalDate(json_data) {
+function marshalDates(json_data) {
     var entry = document.getElementById('proposalModal-proposed_date');
     var date = new Date(entry.value);
     json_data.proposed_date = date;
@@ -212,6 +220,14 @@ function marshalDate(json_data) {
     entry = document.getElementById('proposalModal-event_date');
     date = new Date(entry.value);
     json_data.event_date = date;
+
+    entry = document.getElementById('proposalModal-event_signup_open');
+    date = new Date(entry.value);
+    json_data.event_signup_open = date;
+
+    entry = document.getElementById('proposalModal-event_signup_close');
+    date = new Date(entry.value);
+    json_data.event_signup_close = date;
 
 }
 
@@ -284,7 +300,10 @@ function setupModalButtons() {
             json_data[attr] = entry.value;
         });
         json_data.paid = document.getElementById('proposalModal-paid').checked;
-        marshalDate(json_data);
+        json_data.approved = document.getElementById('proposalModal-approved').checked;
+        marshalDates(json_data);
+
+        json_data.description = "hello, I am a description";
 
         var apiUri = 'events/' + id;
         var xhr = xhrPutRequest(apiUri);
@@ -296,14 +315,12 @@ function setupModalButtons() {
 
     var deleteBtn = document.getElementById("deleteConfirmModal-delete");
     deleteBtn.addEventListener('click', function() {
-        var apiUri = 'events/' + last_proposal_clicked;
+        var apiUri = 'event/' + last_proposal_clicked;
         var xhr = xhrDeleteRequest(apiUri);
         xhr.onload = function() {
-            alert('delete request successful');
-            //location.reload();
+            location.reload();
         }
         xhr.send();
-        alert("delete request sent")
     });
 }
 

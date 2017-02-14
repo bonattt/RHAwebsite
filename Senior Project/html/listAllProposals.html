@@ -29,23 +29,45 @@
 					<label>Name</label> <br/>
 					<input id="proposalModal-proposal_name" type="text" value="name"> </input><br/><br/>
 
-					<label>Monsy Allocated</label> <br/>
-					<input id="proposalModal-money_allocated" type="number" step="0.01"> </input><br/><br/>
+					<label>Proposer</label> <br/>
+					<input id="proposalModal-proposer" type="text" value="name"> </input><br/><br/>
 
-					<label>Monsy Requested</label> <br/>
-					<input id="proposalModal-money_requested" type="number" step="0.01"> </input><br/><br/>
+					<label>Description</label> <br/>
+					<textarea id="proposalModal-description" type="text" value="name"> </textarea><br/><br/>
 
-					<label> Paid </label>
-					<input id="proposalModal-paid" type="checkbox"> </input><br/><br/>
+					<div id="proposalModal-money">
+						<label>Money Allocated</label> <br/>
+						<input id="proposalModal-money_allocated" type="number" step="0.01"> </input><br/><br/>
 
-					<div>
+						<label>Money Requested</label> <br/>
+						<input id="proposalModal-money_requested" type="number" step="0.01"> </input><br/><br/>
+
+						<label>Cost To Attendee </label> <br/>
+						<input id="proposalModal-cost_to_attendee" type="number" step="0.01"> </input><br/><br/>
+					</div>
+
+					<div id="proposalModal-checkboxes">
+						<label> Paid </label>
+						<input id="proposalModal-paid" type="checkbox"> </input><br/><br/>
+
+						<label> Approved </label>
+						<input id="proposalModal-approved" type="checkbox"> </input><br/><br/>
+					</div>
+
+					<div id="proposalModal-eventDates">
 						<label>Event Date</label> <br/>
-						<input type="date" value="03/03/2017" id="proposalModal-event_date"> </input>
+						<input type="date" id="proposalModal-event_date"> </input>
+
+						<label>Proposed Date</label> <br/>
+						<input type="date" id="proposalModal-proposed_date"> </input>
 					</div> <br/>
 
-					<div>
-						<label>Proposed Date</label> <br/>
-						<input type="date" value="02/02/2017" id="proposalModal-proposed_date"> </input>
+					<div id="proposalModal-signupsDates">
+						<label>Signups Open</label> <br/>
+						<input type="date" id="proposalModal-event_signup_open"> </input>
+
+						<label>Signups Close</label> <br/>
+						<input type="date" id="proposalModal-event_signup_close"> </input>
 					</div> <br/>
 
 					<div>
