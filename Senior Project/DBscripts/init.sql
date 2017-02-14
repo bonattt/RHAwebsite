@@ -195,6 +195,7 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
     earned double precision := 0;
     meet_attended double precision := 0;
     counter int;
+    min_attend int := 0;
     multiplier double precision;
     weeks int[] := ARRAY[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     quarters varchar[] := ARRAY['Q1', 'Q2', 'Q3'];
@@ -211,9 +212,10 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
       END;
       FOREACH x IN ARRAY weeks
       LOOP
+        SELECT INTO min_attend FloorAttendanceNumerics.floor_minimum_attendance FROM FloorAttendanceNumerics WHERE FloorAttendanceNumerics.floor_name = floor;
         SELECT INTO counter 
         CASE 
-          WHEN (SELECT count_attendance(x, y, floor)) > 1 THEN 1
+          WHEN (SELECT count_attendance(x, y, floor)) >= min_attend THEN 1
           ELSE 0
         END;
         meet_attended := meet_attended + counter;
@@ -240,6 +242,7 @@ CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, money
     attended int;
     possible double precision := 0;
     current_max_meetings int;
+    min_attend int := 0;
     counter int;
     multiplier double precision := (1.0 / 1.5) ^ (9.0) * (1.0 / 3.0) * moneyRate * size;
     quarters varchar[] := ARRAY['Q1', 'Q2', 'Q3'];
@@ -258,9 +261,10 @@ CREATE OR REPLACE FUNCTION calc_possible_earnings(floor varchar, size int, money
       END;
       FOREACH x IN ARRAY weeks
       LOOP
+        SELECT INTO min_attend FloorAttendanceNumerics.floor_minimum_attendance FROM FloorAttendanceNumerics WHERE FloorAttendanceNumerics.floor_name = floor;
         attended := 
         CASE 
-          WHEN (SELECT count_attendance(x, y, floor)) > 1 THEN attended + 1
+          WHEN (SELECT count_attendance(x, y, floor)) >= min_attend THEN attended + 1
           ELSE attended + 0
         END;
       END LOOP;
@@ -369,6 +373,7 @@ CREATE OR REPLACE FUNCTION count_attendance_for_floor(floor varchar, quarter var
   RETURNS int AS $attendance$
   DECLARE
     attendance int;
+    min_attend int := 0;
     weeks int[] := ARRAY[0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     x int;
   BEGIN
@@ -376,9 +381,10 @@ CREATE OR REPLACE FUNCTION count_attendance_for_floor(floor varchar, quarter var
       ELSE attendance := 0;
     END IF;
     FOREACH x IN ARRAY weeks LOOP
+      SELECT INTO min_attend FloorAttendanceNumerics.floor_minimum_attendance FROM FloorAttendanceNumerics WHERE FloorAttendanceNumerics.floor_name = floor;
       attendance := 
         CASE 
-          WHEN (SELECT count_attendance(x, quarter, floor)) > 1 THEN attendance + 1
+          WHEN (SELECT count_attendance(x, quarter, floor)) >= min_attend THEN attendance + 1
           ELSE attendance + 0
         END;
     END LOOP;
