@@ -27,7 +27,7 @@ function populateCalendarData(calendars) {
 
 	for (var i = 0; i < calendars.length; i++) {
 		var data = document.createElement('div');
-		data.setAttribute('id', 'calendar' + (i + 1));
+		data.setAttribute('id', calendars[i].equipmentname);
 		data.setAttribute('data-id', calendars[i].equipmentid);
 		data.setAttribute('data-name', calendars[i].equipmentname);
 		data.setAttribute('data-desc', calendars[i].equipmentdescription);
@@ -36,7 +36,7 @@ function populateCalendarData(calendars) {
 		body.appendChild(data);
 
 		var option = document.createElement('option');
-		option.setAttribute('value', "calendar" + calendars[i].equipmentid);
+		option.setAttribute('value', calendars[i].equipmentname);
 		option.innerHTML = calendars[i].equipmentname;
 
 		selector.appendChild(option);
