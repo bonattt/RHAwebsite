@@ -204,6 +204,17 @@ function unMarshalDateStr(proposal) {
     }
 }
 
+function marshalDate(json_data) {
+    var entry = document.getElementById('proposalModal-proposed_date');
+    var date = new Date(entry.value);
+    json_data.proposed_date = date;
+
+    entry = document.getElementById('proposalModal-event_date');
+    date = new Date(entry.value);
+    json_data.event_date = date;
+
+}
+
 function unMarshalHtml5(dateStr) {
     var date = new Date(dateStr);
     var msg = date.getFullYear();
@@ -215,6 +226,7 @@ function unMarshalHtml5(dateStr) {
     var day = date.getDate();
     if (day < 10) {day = "0" + day}
     msg += day;
+    console.log("Unmarshaled date: "  + msg);
     return msg
 }
 
@@ -272,6 +284,7 @@ function setupModalButtons() {
             json_data[attr] = entry.value;
         });
         json_data.paid = document.getElementById('proposalModal-paid').checked;
+        marshalDate(json_data);
 
         var apiUri = 'events/' + id;
         var xhr = xhrPutRequest(apiUri);
