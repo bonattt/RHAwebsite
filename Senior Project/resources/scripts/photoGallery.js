@@ -1,8 +1,16 @@
-//Get all pictures by classname and loop through them, adding an on click to each of them
-//That on click should be a function that takes the image path
-//Have a modal pop up that has that image on it
+var isAdmin = false;
 
 function setup() {
+    var officersxhr = getOfficers(); // from adminPErmission.js
+    officersxhr.onload = function () {
+        if (userIsOfficer(officersxhr.responseText)) {
+            console.log("yo i'm in officer yo");
+            var modalDelete = document.getElementById('modal-delete');
+            modalDelete.style.display = "block";
+        }
+    }
+    officersxhr.send();
+
     var galleryURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
     var xhr = new XMLHttpRequest();
     xhr.open('GET', galleryURL, true);
@@ -28,7 +36,7 @@ function setup() {
     // document.getElementById("fileNames").innerHTML = "<img class='photoGalleryImage' src='../images/gallery/31da25d45be0dbb169ee52557995c2e6_PRAISE-HELIX.png'>";
 }
 
-function setUpModal(filePath){
+function setUpModal(filePath) {
     console.log("setting up modal");
     var modalImage = document.getElementById('modalPhoto');
     modalImage.setAttribute('class', 'modalPhoto');
