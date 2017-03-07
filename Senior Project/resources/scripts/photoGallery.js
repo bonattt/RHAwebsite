@@ -3,10 +3,12 @@ var isAdmin = false;
 function setup() {
     var officersxhr = getOfficers(); // from adminPErmission.js
     officersxhr.onload = function () {
+        var modalDelete = document.getElementById('modal-delete');
         if (userIsOfficer(officersxhr.responseText)) {
-            console.log("yo i'm in officer yo");
-            var modalDelete = document.getElementById('modal-delete');
             modalDelete.style.display = "block";
+            //add functionality to delete button
+        } else {
+            modalDelete.addEventListener('click', noPermission);
         }
     }
     officersxhr.send();
@@ -41,6 +43,10 @@ function setUpModal(filePath) {
     var modalImage = document.getElementById('modalPhoto');
     modalImage.setAttribute('class', 'modalPhoto');
     modalImage.setAttribute('src', filePath);
+}
+
+function noPermission(){
+    alert("You do not have permission to delete photos.  Please contact a member of RHA exec to delete the photo for you.");
 }
 
 function showPictureModal(source) {
