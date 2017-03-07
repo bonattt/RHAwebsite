@@ -117,6 +117,11 @@ CREATE TABLE FloorExpenses (
     processed_date DATE  
 );
 
+CREATE TABLE InfoText (
+  info_text_id SERIAL PRIMARY KEY,
+  info_text_desc varchar(30),
+  body varchar(5000)
+);
 
 /* Pre-populates the FloorMoney table with barebones entries for update_floor_money() to be
   useable both on the initial creation of the database as well as whenever attendance is
@@ -504,97 +509,122 @@ INSERT into Committee VALUES (DEFAULT, 'Publicity', 'Publicity committee is for 
 
 -- Most entries below this point are temporary. Once the database has begun regular use, these inserts will become obselete
 -- BSB 1
-INSERT INTO Members VALUES (DEFAULT, 'duncanj', 'Jason', 'Duncan', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'wilkinsj', 'Joe', 'Wilkins', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'schradn', 'Nathan', 'Schrader', 'BSB 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'secrest', 'Taylor', 'Secrest', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'hubera', 'Alex', 'Huber', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'merleys', 'Shay', 'Merley', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'larueg', 'Gavin', 'La Rue', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'debrotm', 'Michael', 'DeBrota', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'siebenw', 'Wesley', 'Siebenthaler', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'senglik', 'Ka', 'Seng Lim', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'keltzb', 'Brandon', 'Keltz', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'georgen', 'Nihaal', 'George', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'dhruvah', 'Harsh', 'Dhruva', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'bensenk', 'Kyle', 'Bensen', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'donohoc', 'Caleb', 'Donoho', 'BSB 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'steward', 'Devon', 'Stewart', 'BSB 1', null, null, false, false, '{"Q1": [0, 0, 0], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'duncanj', 'Jason', 'Duncan', 'BSB 1', null, null, false, false, '{"Q1": [0,1,1,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'wilkinsj', 'Joe', 'Wilkins', 'BSB 1', null, null, false, false, '{"Q1": [0,1,1,1,1,0,1,0,1], "Q2": [0,0,1,0,0,0,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'schradn', 'Nathan', 'Schrader', 'BSB 1', null, null, false, false, '{"Q1": [0,0,1,0,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'secrest', 'Taylor', 'Secrest', 'BSB 1', null, null, false, false, '{"Q1": [0,1,0,1,0,1,0,1], "Q2": [0,0,0,0,0,1,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'hubera', 'Alex', 'Huber', 'BSB 1', null, null, false, false, '{"Q1": [0,1,1,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'merleys', 'Shay', 'Merley', 'BSB 1', null, null, false, false, '{"Q1": [0,1,0,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'larueg', 'Gavin', 'La Rue', 'BSB 1', null, null, false, false, '{"Q1": [0,1,0,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'debrotm', 'Michael', 'DeBrota', 'BSB 1', null, null, false, false, '{"Q1": [0,1,0,1,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'siebenw', 'Wesley', 'Siebenthaler', 'BSB 1', null, null, false, false, '{"Q1": [0,0,1,0,0,0,0,0,0], "Q2": [0,0,0,0,0,1,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'senglik', 'Ka', 'Seng Lim', 'BSB 1', null, null, false, false, '{"Q1": [0,1,1,0,0,0,0,0], "Q2": [1,0,0,1,1,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'keltzb', 'Brandon', 'Keltz', 'BSB 1', null, null, false, false, '{"Q1": [0,1,1,0,0,0,0,0], "Q2": [1,0,0,1,1,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'georgen', 'Nihaal', 'George', 'BSB 1', null, null, false, false, '{"Q1": [0,1,1,1,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'dhruvah', 'Harsh', 'Dhruva', 'BSB 1', null, null, false, false, '{"Q1": [0,1,1,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'bensenk', 'Kyle', 'Bensen', 'BSB 1', null, null, false, false, '{"Q1": [0,1,0,1,0,0,0,1], "Q2": [1,0,1,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'donohoc', 'Caleb', 'Donoho', 'BSB 1', null, null, false, false, '{"Q1": [0,1,0,1,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'steward', 'Devon', 'Stewart', 'BSB 1', null, null, false, false, '{"Q1": [0,0,1,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'myersk', 'Kyle', 'Myers', 'BSB 1', null, null, false, false, '{"Q1": [0,0,0,0,1,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'slanink', 'Kevin', 'Slaninka', 'BSB 1', null, null, false, false, '{"Q1": [0,0,0,0,1,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'adamj', 'Jacob', 'Adam', 'BSB 1', null, null, false, false, '{"Q1": [0,0,0,1,0,1,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'ryanj', 'Johann', 'Ryan', 'BSB 1', null, null, false, false, '{"Q1": [0,0,0,0,1,1,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'shahp', 'Pranav', 'Shah', 'BSB 1', null, null, false, false, '{"Q1": [0,0,0,1,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'pascom', 'Madeleine', 'Pasco', 'BSB 1', null, null, false, false, '{"Q1": [0,0,0,0,0,0,1,0], "Q2": [1,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'bakera', 'Adam', 'Baker', 'BSB 1', null, null, false, false, '{"Q1": [0,0,0,0,0,0,0,0], "Q2": [1,0,0,1,0,0,0,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'sutterj', 'Jonathan', 'Sutterer', 'BSB 1', null, null, false, false, '{"Q1": [0,0,0,0,0,0,0,0], "Q2": [0,0,1,0,1,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'griesej', 'Jeffery', 'Grieser', 'BSB 1', null, null, false, false, '{"Q1": [0,0,0,0,0,0,0,0], "Q2": [0,0,0,0,0,0,1,0,0], "Q3": []}');
+
 
 -- BSB 2
-INSERT INTO Members VALUES (DEFAULT, 'gaidoa', 'Antonio', 'Gaido', 'BSB 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'haymanc', 'Chase', 'Hayman', 'BSB 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'hendera', 'Andrew', 'Henderson', 'BSB 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'lando', 'Owen', 'Land', 'BSB 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'wolhfab', 'Brandon', 'Wolhfarth', 'BSB 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'kniermj', 'Joseph', 'Knierman', 'BSB 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'rohokas', 'Shriraj', 'Rohokale', 'BSB 2', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'vincenr', 'Ryan', 'Vincencio', 'BSB 2', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'narayaa', 'Akarsh', 'Narayan', 'BSB 2', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'heitzd', 'Drake', 'Heitz', 'BSB 2', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'zhangz', 'Zhuoqun', 'Zhang', 'BSB 2', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'mccormt', 'Tyler', 'McCormick', 'BSB 2', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'gaidoa', 'Antonio', 'Gaido', 'BSB 2', null, null, false, false, '{"Q1": [0,1,0,0,0,0,0,0], "Q2": [1,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'haymanc', 'Chase', 'Hayman', 'BSB 2', null, null, false, false, '{"Q1": [0,1,1,1,0,1,1,0], "Q2": [1,0,1,0,1,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'hendera', 'Andrew', 'Henderson', 'BSB 2', null, null, false, false, '{"Q1": [0,1,0,0,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'lando', 'Owen', 'Land', 'BSB 2', null, null, false, false, '{"Q1": [0,1,0,0,1,0,0,0], "Q2": [1,1,0,1,1,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'wolhfab', 'Brandon', 'Wolhfarth', 'BSB 2', null, null, false, false, '{"Q1": [0,1,1,1,1,1,1,1], "Q2": [1,0,1,1,1,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'kniermj', 'Joseph', 'Knierman', 'BSB 2', null, null, false, false, '{"Q1": [0,1,1,0,1,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'rohokas', 'Shriraj', 'Rohokale', 'BSB 2', null, null, false, false, '{"Q1": [0,0,1,0,0,0,1,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'vincenr', 'Ryan', 'Vincencio', 'BSB 2', null, null, false, false, '{"Q1": [0,0,1,1,0,1,1,1], "Q2": [1,0,1,1,1,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'narayaa', 'Akarsh', 'Narayan', 'BSB 2', null, null, false, false, '{"Q1": [0,0,1,0,0,0,0,0], "Q2": [0,1,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'heitzd', 'Drake', 'Heitz', 'BSB 2', null, null, false, false, '{"Q1": [0,0,1,0,0,0,1,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'zhangz', 'Zhuoqun', 'Zhang', 'BSB 2', null, null, false, false, '{"Q1": [0,0,1,1,1,0,1,0], "Q2": [0,0,1,1,0,0,0,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'mccormt', 'Tyler', 'McCormick', 'BSB 2', null, null, false, false, '{"Q1": [0,0,1,1,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'maing', 'George', 'Main' 'BSB 2', null, null, false, false, '{"Q1": [0,0,0,1,1,0,1,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'tongd', 'Dayong', 'Tong', 'BSB 2', null, null, false, false, '{"Q1": [0,0,0,1,0,0,0,0], "Q2": [1,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'robinsm', 'Max', 'Robinson', 'BSB 2', null, null, false, false, '{"Q1": [0,0,0,0,0,1,0,0], "Q2": [0,0,0,1,0,0,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'brycep', 'Bryce', 'Pruemer', 'BSB 2', null, null, false, false, '{"Q1": [0,0,0,0,0,1,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'reinhat', 'Tyler', 'Reinhardt', 'BSB 2', null, null, false, false, '{"Q1": [0,0,0,0,0,1,0,0], "Q2": [0,0,0,0,0,1,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'bakern', 'Nicholas', 'Baker', 'BSB 2', null, null, false, false, '{"Q1": [0,0,0,0,0,0,0,1], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'tylerr', 'Rolando', 'Tyler' 'BSB 2', null, null, false, false, '{"Q1": [0,0,0,0,0,0,0,0], "Q2": [1,0,0,0,0,1,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'bullarj', 'Joseph', 'Bullard', 'BSB 2', null, null, false, false, '{"Q1": [0,0,0,0,0,0,0,0], "Q2": [0,1,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'ladipoo', 'Oluwaseun', 'Ladipo', 'BSB 2', null, null, false, false, '{"Q1": [0,0,0,0,0,0,0,0], "Q2": [0,0,0,0,0,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'wangn', 'Noah', 'Wang', 'BSB 2', null, null, false, false, '{"Q1": [0,0,0,0,0,0,0,0], "Q2": [0,0,0,0,0,1,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'hud', 'Dongrui', 'Hu', 'BSB 2', null, null, false, false, '{"Q1": [0,0,0,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,1,0], "Q3": []}');
 
 -- BSB 3
-INSERT INTO Members VALUES (DEFAULT, 'kovacsa', 'Alexa', 'Kovacs', 'BSB 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'perezm', 'Marissa', 'Perez', 'BSB 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'dins', 'Sidrah', 'Din', 'BSB 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'chapmak', 'Katherine', 'Chapman', 'BSB 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'gutmanc', 'Christina', 'Gutman', 'BSB 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'kovacsa', 'Alexa', 'Kovacs', 'BSB 3', null, null, false, false, '{"Q1": [0,1,0,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'perezm', 'Marissa', 'Perez', 'BSB 3', null, null, false, false, '{"Q1": [0,1,1,0,1,1,1,0], "Q2": [1,0,0,1,0,0,0,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'dins', 'Sidrah', 'Din', 'BSB 3', null, null, false, false, '{"Q1": [0,1,0,0,1,0,1,0], "Q2": [1,0,0,1,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'chapmak', 'Katherine', 'Chapman', 'BSB 3', null, null, false, false, '{"Q1": [0,1,0,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'gutmanc', 'Christina', 'Gutman', 'BSB 3', null, null, false, false, '{"Q1": [0,1,1,0,1,1,0,0], "Q2": [0,0,0,1,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'sullivs', 'Shannon', 'Sullivan', 'BSB 3', null, null, false, false, '{"Q1": [0,0,0,1,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'ramaiyk', 'Krishna', 'Ramaiya', 'BSB 3', null, null, false, false, '{"Q1": [0,0,0,0,0,1,0,1], "Q2": [0,0,0,1,0,0,0,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'browna', 'Abigail', 'Brown', 'BSB 3', null, null, false, false, '{"Q1": [0,0,0,0,0,0,0,1], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'freyt', 'Taylor', 'Frey', 'BSB 3', null, null, false, false, '{"Q1": [0,0,0,0,0,0,0,0], "Q2": [0,1,1,1,0,0,0,1,0], "Q3": []}');
 
 -- Speed 1
-INSERT INTO Members VALUES (DEFAULT, 'paytonz', 'Zachary', 'Payton', 'Speed 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'washbuk', 'Kyle', 'Washburn', 'Speed 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'suppa', 'Austin', 'Supp', 'Speed 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'flammr', 'Ryan', 'Flamm', 'Speed 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'spenced', 'Dallas', 'Spencer', 'Speed 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'stichtj', 'Jared', 'Stichtenoth', 'Speed 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'footez', 'Zachary', 'Foote', 'Speed 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'paytonz', 'Zachary', 'Payton', 'Speed 1', null, null, false, false, '{"Q1": [0,1,0,0,0,0,0,0], "Q2": [1,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'washbuk', 'Kyle', 'Washburn', 'Speed 1', null, null, false, false, '{"Q1": [0,1,0,0,1,0,1,1], "Q2": [1,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'suppa', 'Austin', 'Supp', 'Speed 1', null, null, false, false, '{"Q1": [0,1,1,1,1,1,1,1], "Q2": [1,0,1,0,0,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'flammr', 'Ryan', 'Flamm', 'Speed 1', null, null, false, false, '{"Q1": [0,1,1,1,1,1,1,1], "Q2": [0,1,1,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'spenced', 'Dallas', 'Spencer', 'Speed 1', null, null, false, false, '{"Q1": [0,0,0,1,0,1,0,0,0], "Q2": [0,0,1,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'stichtj', 'Jared', 'Stichtenoth', 'Speed 1', null, null, false, false, '{"Q1": [0,0,1,0,1,0,0,0], "Q2": [1,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'footez', 'Zachary', 'Foote', 'Speed 1', null, null, false, false, '{"Q1": [0,0,1,1,1,1,1,1], "Q2": [1,0,1,0,1,1,1,1,0], "Q3": []}');
 
 -- Speed 2
-INSERT INTO Members VALUES (DEFAULT, 'mcmichj', 'John', 'McMichen', 'Speed 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'robertc', 'Coleman', 'Robertson', 'Speed 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'laui', 'Isaac', 'Lau', 'Speed 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'schwindn', 'Nathanael', 'Schwindt', 'Speed 2', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'tylerp', 'Philip', 'Tyler', 'Speed 2', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'mcmichj', 'John', 'McMichen', 'Speed 2', null, null, false, false, '{"Q1": [0,1,1,0,1,1,0,1], "Q2": [1,1,1,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'robertc', 'Coleman', 'Robertson', 'Speed 2', null, null, false, false, '{"Q1": [0,1,0,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'laui', 'Isaac', 'Lau', 'Speed 2', null, null, false, false, '{"Q1": [0,1,0,0,0,1,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'schwindn', 'Nathanael', 'Schwindt', 'Speed 2', null, null, false, false, '{"Q1": [0,0,1,1,1,1,0,1], "Q2": [1,1,1,0,1,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'tylerp', 'Philip', 'Tyler', 'Speed 2', null, null, false, false, '{"Q1": [0,0,1,1,1,1,0,1], "Q2": [1,0,0,1,1,0,0,0,0], "Q3": []}');
 
 -- Speed 3
-INSERT INTO Members VALUES (DEFAULT, 'saluccn', 'Noah', 'Salucci', 'Speed 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'mcinerh', 'Haulein', 'McInerney', 'Speed 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'barrert', 'Tanner', 'Barrera', 'Speed 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'kime', 'Eugene', 'Kim', 'Speed 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'saluccn', 'Noah', 'Salucci', 'Speed 3', null, null, false, false, '{"Q1": [0,1,1,0,1,0,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'mcinerh', 'Haulein', 'McInerney', 'Speed 3', null, null, false, false, '{"Q1": [0,1,1,0,1,1,0,0], "Q2": [1,0,1,0,0,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'barrert', 'Tanner', 'Barrera', 'Speed 3', null, null, false, false, '{"Q1": [0,1,1,1,1,1,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'kime', 'Eugene', 'Kim', 'Speed 3', null, null, false, false, '{"Q1": [0,1,1,1,1,1,0,0], "Q2": [0,0,0,0,0,0,0,0,0], "Q3": []}');
 
 -- Deming 0
-INSERT INTO Members VALUES (DEFAULT, 'paula', 'Alexander', 'Paul', 'Deming 0', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'taylorn', 'Nicholas', 'Taylor', 'Deming 0', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'bergc', 'Colin', 'Berg', 'Deming 0', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'palmutj', 'Joshua', 'Palamuttam', 'Deming 0',  null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'feeleyb', 'Brennan', 'Feeley', 'Deming 0',  null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'fletchj', 'James', 'Fletcher', 'Deming 0',  null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'yagerg', 'Guy', 'Yager', 'Deming 0',  null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'brazdap', 'Patrick', 'Braz da Silva', 'Deming 0',  null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'crutchj', 'John', 'Crutchfield', 'Deming 0',  null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'oberlir', 'Ryan', 'Oberlinter', 'Deming 0',  null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'paula', 'Alexander', 'Paul', 'Deming 0', null, null, false, false, '{"Q1": [0,1,1,0,0,1,1,0], "Q2": [1,1,1,1,1,0,0,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'taylorn', 'Nicholas', 'Taylor', 'Deming 0', null, null, false, false, '{"Q1": [0,1,1,1,1,1,1,1], "Q2": [1,0,0,0,1,0,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'bergc', 'Colin', 'Berg', 'Deming 0', null, null, false, false, '{"Q1": [0,1,1,0,1,1,1,1], "Q2": [1,0,0,1,1,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'palmutj', 'Joshua', 'Palamuttam', 'Deming 0',  null, null, false, false, '{"Q1": [0,1,1,1,1,1,1,1], "Q2": [1,0,1,1,1,1,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'feeleyb', 'Brennan', 'Feeley', 'Deming 0',  null, null, false, false, '{"Q1": [0,1,0,1,0,0,0,0], "Q2": [0,0,0,1,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'fletchj', 'James', 'Fletcher', 'Deming 0',  null, null, false, false, '{"Q1": [0,1,0,0,0,0,0,0,0], "Q2": [0,1,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'yagerg', 'Guy', 'Yager', 'Deming 0',  null, null, false, false, '{"Q1": [0,1,1,0,0,1,0,0], "Q2": [1,0,1,1,0,0,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'brazdap', 'Patrick', 'Braz da Silva', 'Deming 0',  null, null, false, false, '{"Q1": [0,0,1,0,0,0,0,0], "Q2": [1,0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'crutchj', 'John', 'Crutchfield', 'Deming 0',  null, null, false, false, '{"Q1": [0,0,1,1,1,0,1,0], "Q2": [1,1,0,0,0,0,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'oberlir', 'Ryan', 'Oberlinter', 'Deming 0',  null, null, false, false, '{"Q1": [0,0,1,1,1,1,0,1], "Q2": [0,0,0,0,1,1,1,1,0], "Q3": []}');
 
 -- Deming 1
-INSERT INTO Members VALUES (DEFAULT, 'blesicv', 'Victor', 'Blesic', 'Deming 1',  null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'prinsa', 'Aaron', 'Prins', 'Deming 1',  null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'walbrind', 'David', 'Walbring', 'Deming 1',  null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'cail', 'Lingzhe', 'Cai', 'Deming 1',  null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'batht', 'Tyler', 'Bath', 'Deming 1',  null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'webern', 'Nicholas', 'Weber', 'Deming 1',  null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'bikakiz', 'Zack', 'Bikakis', 'Deming 1',  null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'mckniga', 'Aidan', 'McKnight', 'Deming 1',  null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'blesicv', 'Victor', 'Blesic', 'Deming 1',  null, null, false, false, '{"Q1": [0,0,1,1,0,1,1,1], "Q2": [0,1,0,0,1,1,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'prinsa', 'Aaron', 'Prins', 'Deming 1',  null, null, false, false, '{"Q1": [0,1,1,1,0,1,1,1], "Q2": [1,0,0,1,1,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'walbrind', 'David', 'Walbring', 'Deming 1',  null, null, false, false, '{"Q1": [0,0,1,1,1,1,1,1], "Q2": [1,0,0,1,1,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'cail', 'Lingzhe', 'Cai', 'Deming 1',  null, null, false, false, '{"Q1": [0,1,1,1,0,0,0,1], "Q2": [1,0,0,0,1,1,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'batht', 'Tyler', 'Bath', 'Deming 1',  null, null, false, false, '{"Q1": [0,0,1,0,0,1,0,1], "Q2": [0,0,0,0,0,0,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'webern', 'Nicholas', 'Weber', 'Deming 1',  null, null, false, false, '{"Q1": [0,1,1,1,0,0,0,1], "Q2": [0,0,0,0,0,0,0,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'bikakiz', 'Zack', 'Bikakis', 'Deming 1',  null, null, false, false, '{"Q1": [0,0,1,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'mckniga', 'Aidan', 'McKnight', 'Deming 1',  null, null, false, false, '{"Q1": [0,1,1,0,0,0,0,0], "Q2": [0,0,0,1,0,0,0,0,0], "Q3": []}');
 
 -- Deming 2
-INSERT INTO Members VALUES (DEFAULT, 'waywooj', 'Joshua', 'Waywood', 'Deming 2',  null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'swansoz', 'Zachary', 'Swanson', 'Deming 2',  null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'yus', 'Shijun', 'Yu', 'Deming 2', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'thorntt', 'Tyler', 'Thornton', 'Deming 2', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'marvinj', 'Jason', 'Marvin', 'Deming 2', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'waywooj', 'Joshua', 'Waywood', 'Deming 2',  null, null, false, false, '{"Q1": [0,1,0,0,0,1,0,1], "Q2": [0,0,0,0,0,0,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'swansoz', 'Zachary', 'Swanson', 'Deming 2',  null, null, false, false, '{"Q1": [0,1,0,1,0,0,1,0], "Q2": [1,0,0,1,0,0,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'yus', 'Shijun', 'Yu', 'Deming 2', null, null, false, false, '{"Q1": [0,0,1,0,1,1,1,1], "Q2": [1,0,1,0,1,1,1,1,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'thorntt', 'Tyler', 'Thornton', 'Deming 2', null, null, false, false, '{"Q1": [0,0,1,0,0,0,0,0,0], "Q2": [0,0,0,0,0,0,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'marvinj', 'Jason', 'Marvin', 'Deming 2', null, null, false, false, '{"Q1": [0,0,1,0,1,0,1,0], "Q2": [0,0,1,0,0,1,1,1,0], "Q3": []}');
 
 -- Deming Attic
-INSERT INTO Members VALUES (DEFAULT, 'childsc', 'Chaz', 'Childs', 'Deming Attic', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'childsc', 'Chaz', 'Childs', 'Deming Attic', null, null, false, false, '{"Q1": [0,1,0,0,0,1,1,1], "Q2": [1,0,1,1,0,1,1,1,0], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'beckmaj', 'Jacob', 'Beckmann', 'Deming Attic', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'baileyr', 'Ryan', 'Bailey', 'Deming Attic', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'mcpherc', 'Cameron', 'McPherson', 'Deming Attic', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
@@ -604,7 +634,7 @@ INSERT INTO Members VALUES (DEFAULT, 'houy', 'Youheng', 'Hou', 'Deming Attic', n
 INSERT INTO Members VALUES (DEFAULT, 'bechtoc', 'Cole', 'Bechtold', 'Deming Attic', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 
 -- Scharp
-INSERT INTO Members VALUES (DEFAULT, 'workinj', 'Jacob', 'Working', 'Scharp', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'workinj', 'Jacob', 'Working', 'Scharp', null, null, false, false, '{"Q1": [0,0,1,0,1,0,0,1,1], "Q2": [1,0,1,0,1,0,1,0,0], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'allansd', 'Daniel', 'Allanson', 'Scharp', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'lewerb', 'Benjamin', 'Lewer', 'Scharp', null, null, false, false, '{"Q1": [0, 1 ,1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'joness', 'Stephen', 'Jones', 'Scharp', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
@@ -629,7 +659,7 @@ INSERT INTO Members VALUES (DEFAULT, 'hansenm', 'Morgan', 'Hansen', 'Scharp', nu
 
 -- Mees
 INSERT INTO Members VALUES (DEFAULT, 'shaferw', 'Wyatt', 'Shafer', 'Mees', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'meyerj', 'Jason', 'Meyer', 'Mees', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'meyerj', 'Jason', 'Meyer', 'Mees', null, null, false, false, '{"Q1": [0,0,1,0,0,1,0,1], "Q2": [1,0,1,1,1,1,1,1,0], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'braasck', 'Kyle', 'Braasch', 'Mees', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'kurapam', 'Manoj', 'Kurapati', 'Mees', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'johannc', 'Carlyn', 'Johannigman', 'Mees', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
@@ -646,13 +676,13 @@ INSERT INTO Members VALUES (DEFAULT, 'dressej', 'Jennifer', 'Dressel', 'Mees', n
 
 -- Blum
 INSERT INTO Members VALUES (DEFAULT, 'wolfeb', 'Bryan', 'Wolfe', 'Blum', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'mikhaid', 'Daniel', 'Mikhail', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'mikhaid', 'Daniel', 'Mikhail', 'Blum', null, null, false, false, '{"Q1": [0,1,1,0,1,1,1,1], "Q2": [1,0,0,0,0,0,1,1,0], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'gonzali', 'Igor', 'Gonzalez', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'santanb', 'Brennan', 'Santaniello', 'Blum', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'busches', 'Scott', 'Busche', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'braaksa', 'Ashley', 'Braaksma', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'lir', 'Ronghan', 'Li', 'Blum', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'blacks', 'Sydney', 'Black', 'Blum', null, 'Publicity Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 2057, 1234567890, 406);
+INSERT INTO Members VALUES (DEFAULT, 'blacks', 'Sydney', 'Black', 'Blum', null, 'Publicity Chair', false, false, '{"Q1": [0,1,1,1,1,0,0,1], "Q2": [1,0,1,0,1,1,1,1,0], "Q3": []}', 2057, 1234567890, 406);
 INSERT INTO Members VALUES (DEFAULT, 'wangj', 'Jiawen', 'Wang', 'Blum', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'rudiche', 'Erin', 'Rudich', 'Blum', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'storkl', 'Lauren', 'Stork', 'Blum', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
@@ -665,8 +695,8 @@ INSERT INTO Members VALUES (DEFAULT, 'mccuais', 'Samantha', 'McCuaig', 'Blum', n
 
 -- Percopo 1
 INSERT INTO Members VALUES (DEFAULT, 'adamst', 'Ty', 'Adams', 'Percopo 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'tuskac', 'Carley', 'Tuska', 'Percopo 1', null, 'Off-Campus Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 1111, 1234567890, 123);
-INSERT INTO Members VALUES (DEFAULT, 'doyelb', 'Michael', 'Doyel', 'Percopo 1', null, 'Service Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 5476, 1234567890, 125);
+INSERT INTO Members VALUES (DEFAULT, 'tuskac', 'Carley', 'Tuska', 'Percopo 1', null, 'Off-Campus Chair', false, false, '{"Q1": [0,1,1,1,1,1,1,1], "Q2": [1,0,1,1,1,1,1,1,0], "Q3": []}', 1111, 1234567890, 123);
+INSERT INTO Members VALUES (DEFAULT, 'doyelb', 'Michael', 'Doyel', 'Percopo 1', null, 'Service Chair', false, false, '{"Q1": [0,1,1,1,1,1,1,1], "Q2": [1,1,1,1,1,1,1,1,0], "Q3": []}', 5476, 1234567890, 125);
 INSERT INTO Members VALUES (DEFAULT, 'burkeb', 'Brian', 'Burke', 'Percopo 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'turskim', 'Michael', 'Turski', 'Percopo 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'jursc', 'Connor', 'Jurs', 'Percopo 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
@@ -675,26 +705,26 @@ INSERT INTO Members VALUES (DEFAULT, 'marzari', 'Isabella', 'Marzari', 'Percopo 
 -- Percopo 2
 INSERT INTO Members VALUES (DEFAULT, 'majumda', 'Ari-Jit', 'Majumdar', 'Percopo 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'crewsm', 'Madeline', 'Crews', 'Percopo 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'hunleya', 'Allison', 'Hunley', 'Percopo 2', null, 'President', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 2522, 1234567890, 312);
+INSERT INTO Members VALUES (DEFAULT, 'hunleya', 'Allison', 'Hunley', 'Percopo 2', null, 'President', false, false, '{"Q1": [0,1,1,1,1,1,1,1], "Q2": [1,0,1,0,1,1,1,1,0], "Q3": []}', 2522, 1234567890, 312);
 INSERT INTO Members VALUES (DEFAULT, 'sheffei', 'Ian', 'Sheffert', 'Percopo 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 
 -- Percopo 3
-INSERT INTO Members VALUES (DEFAULT, 'lindsej', 'Jacob', 'Lindsey', 'Percopo 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'lindsej', 'Jacob', 'Lindsey', 'Percopo 3', null, null, false, false, '{"Q1": [0,1,0,1,1,1,1,1], "Q2": [1,0,1,1,1,1,1,0,0], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'guptan', 'Nathan', 'Gupta', 'Percopo 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 
 -- Apartments E 1
-INSERT INTO Members VALUES (DEFAULT, 'domkem', 'Michael', 'Domke', 'Apartments E 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'domkem', 'Michael', 'Domke', 'Apartments E 1', null, null, false, false, '{"Q1": [0,1,1,0,1,1,1,1], "Q2": [1,0,1,1,1,0,1,1,0], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'kuzal', 'Luke', 'Kuza', 'Apartments E 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'waskule', 'Elizabeth', 'Waskul', 'Apartments E 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 
 -- Apartments E 2
-INSERT INTO Members VALUES (DEFAULT, 'honioue', 'Eleanor', 'Honious', 'Apartments E 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'honioue', 'Eleanor', 'Honious', 'Apartments E 2', null, null, false, false, '{"Q1": [0,1,0,0,0,0,0,0], "Q2": [1,1,1,1,0,0,0,0,0], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'markisg', 'Gabrielle', 'Markison', 'Apartments E 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'brauna', 'Anna', 'Braun', 'Apartments E 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'hainesc', 'Charisse', 'Haines', 'Apartments E 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 
 -- Apartments E 3
-INSERT INTO Members VALUES (DEFAULT, 'lauriod', 'Daniel', 'Lauriola', 'Apartments E 3', null, 'On-campus Chair', false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}', 9048, 1234567890, 302);
+INSERT INTO Members VALUES (DEFAULT, 'lauriod', 'Daniel', 'Lauriola', 'Apartments E 3', null, 'On-campus Chair', false, false, '{"Q1": [0,1,1,1,1,1,1,1], "Q2": [1,0,1,1,1,0,1,1,0], "Q3": []}', 9048, 1234567890, 302);
 INSERT INTO Members VALUES (DEFAULT, 'xuz', 'Zihang', 'Xu', 'Apartments E 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'pratta', 'Avery', 'Pratt', 'Apartments E 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'dudaj', 'Jason', 'Duda', 'Apartments E 3', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
@@ -702,7 +732,7 @@ INSERT INTO Members VALUES (DEFAULT, 'davidj', 'Joshua', 'David', 'Apartments E 
 INSERT INTO Members VALUES (DEFAULT, 'ryank', 'Katharine', 'Ryan', 'Apartments E 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 
 -- Apartments W 1
-INSERT INTO Members VALUES (DEFAULT, 'alangav', 'Vibha', 'Alangar', 'Apartments W 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'alangav', 'Vibha', 'Alangar', 'Apartments W 1', null, null, false, false, '{"Q1": [0,1,0,1,1,1,1,1], "Q2": [1,0,0,1,1,0,1,0,0], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'bushd', 'Dalton', 'Bush', 'Apartments W 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'stewartg', 'Grant', 'Stewart', 'Apartments W 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'declerm', 'Matthew', 'DeClerck', 'Apartments W 1', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
@@ -710,14 +740,14 @@ INSERT INTO Members VALUES (DEFAULT, 'declerm', 'Matthew', 'DeClerck', 'Apartmen
 -- Apartments W 2
 INSERT INTO Members VALUES (DEFAULT, 'usherj', 'James', 'Usher', 'Apartments W 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'rodibabs', 'Brooks', 'Rodibaugh', 'Apartments W 2', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'miskowbs', 'Bartosz', 'Miskowiec', 'Apartments W 2', null, 'Vice President', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 5196, 1234567890, 207);
+INSERT INTO Members VALUES (DEFAULT, 'miskowbs', 'Bartosz', 'Miskowiec', 'Apartments W 2', null, 'Vice President', false, false, '{"Q1": [0,1,1,1,1,0,1,1], "Q2": [1,1,1,1,1,1,1,1,0], "Q3": []}', 5196, 1234567890, 207);
 
 -- Apartments W 3
-INSERT INTO Members VALUES (DEFAULT, 'kraussa', 'Amanda', 'Krauss', 'Apartments W 3', null, 'NCC Chair', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 4567, 1234567890, 306);
+INSERT INTO Members VALUES (DEFAULT, 'kraussa', 'Amanda', 'Krauss', 'Apartments W 3', null, 'NCC Chair', false, false, '{"Q1": [0,1,1,1,1,1,1,0], "Q2": [1,0,1,1,1,0,1,0,0], "Q3": []}', 4567, 1234567890, 306);
 INSERT INTO Members VALUES (DEFAULT, 'lauert', 'Tressa', 'Lauer', 'Apartments W 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 
 -- Lakeside 1
-INSERT INTO Members VALUES (DEFAULT, 'adarvea', 'Allesandro', 'Adarve Cuellar', 'Lakeside 1', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'adarvea', 'Allesandro', 'Adarve Cuellar', 'Lakeside 1', null, null, false, false, '{"Q1": [0,1,1,1,0,1,0,1], "Q2": [1,0,0,0,1,0,0,0,0], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'hullb', 'Brandon', 'Hull', 'Lakeside 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'johnsor', 'Russell', 'Johnson', 'Lakeside 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'stallas', 'Silven', 'Stallard', 'Lakeside 1', null, null, false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}');
@@ -726,10 +756,10 @@ INSERT INTO Members VALUES (DEFAULT, 'stallas', 'Silven', 'Stallard', 'Lakeside 
 INSERT INTO Members VALUES (DEFAULT, 'yatesa', 'Austin', 'Yates', 'Lakeside 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'wised', 'Douglas', 'Wise', 'Lakeside 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
 INSERT INTO Members VALUES (DEFAULT, 'mattoxn', 'Nicole', 'Mattox', 'Lakeside 2', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'kimmelb', 'Benjamin', 'Kimmel', 'Lakeside 2', null, 'Webmaster', false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}', 1234, 1234567890, 213);
+INSERT INTO Members VALUES (DEFAULT, 'kimmelb', 'Benjamin', 'Kimmel', 'Lakeside 2', null, 'Webmaster', false, false, '{"Q1": [0,1,1,1,1,1,1,1], "Q2": [1,1,1,1,1,0,1,1,0], "Q3": []}', 1234, 1234567890, 213);
 
 -- Lakeside 3
-INSERT INTO Members VALUES (DEFAULT, 'sahabuj', 'Jane', 'Sahabu', 'Lakeside 3', null, null, false, false, '{"Q1": [0, 1, 1], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'sahabuj', 'Jane', 'Sahabu', 'Lakeside 3', null, null, false, false, '{"Q1": [0,1,1,1,1,0,1,1], "Q2": [1,0,1,1,1,1,1,0,0], "Q3": []}');
 
 -- Lakeside 4
 INSERT INTO Members VALUES (DEFAULT, 'baira', 'Alexander', 'Bair', 'Lakeside 4', null, null, false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
@@ -745,9 +775,9 @@ INSERT INTO Members VALUES (DEFAULT, 'rhodeska', 'Kyle', 'Rhodes', 'Apartments E
 INSERT INTO Members VALUES (DEFAULT, 'liobiset', 'Eric', 'Liobis', 'Scharp', null, 'Co-Advisor', false, false, '{"Q1": [0, 0, 1], "Q2": [], "Q3": []}', 8, 1234567890);
 
 -- Us
-INSERT INTO Members VALUES (DEFAULT, 'bonattt', 'Thomas', 'Bonatti', 'Off-campus', null, 'Cheeky GM', false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'cookmn', 'Morgan', 'Cook', 'Off-campus', null, 'Puppy Holder', false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
-INSERT INTO Members VALUES (DEFAULT, 'mcphersm', 'Sean', 'McPherson', 'Off-campus', null, 'Yes-man', false, false, '{"Q1": [0, 1, 0], "Q2": [], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'bonattt', 'Thomas', 'Bonatti', 'Off-campus', null, 'Cheeky GM', false, false, '{"Q1": [0,1,1,1,1,0,1,1], "Q2": [1,0,1,1,1,1,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'cookmn', 'Morgan', 'Cook', 'Off-campus', null, 'Puppy Holder', false, false, '{"Q1": [0,1,1,1,1,0,1,1], "Q2": [1,0,1,1,1,1,1,0,0], "Q3": []}');
+INSERT INTO Members VALUES (DEFAULT, 'mcphersm', 'Sean', 'McPherson', 'Off-campus', null, 'Yes-man', false, false, '{"Q1": [0,1,1,1,1,0,1,1], "Q2": [1,0,1,1,1,1,1,0,0], "Q3": []}');
 
 
 
@@ -951,3 +981,8 @@ INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Rock Out for Ryland Tickets', 8, 2
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Hall Improvement Funds', 9, 2, 10000.00, true, 10000.00, true, '2017-3-24', '2017-3-1', '2017-3-23', '2017-3-23', 5, '../images/events/rose-seal.png');
 INSERT INTO Proposals VALUES (DEFAULT, 1, 1, 'Thomas 22nd Birthday', 9, 2, 10000.00, true, 10000.00, false, '2017-2-6', '2017-1-1', '2017-2-1', '2017-2-1', 9.99, '../images/events/rose-seal.png');
  '2017-2-6', '2017-1-1', '2017-2-1', '2017-2-1', 9.99, '../images/events/rose-seal.png');
+
+-- InfoText inserts
+INSERT INTO InfoText (info_text_desc, body) VALUES ('frontpage_text', 
+  'Residence Hall Association is an organization for students living on campus in a residence hall. If you live in a residence hall, then you are already a member. All you have to do is come to a meeting and have fun sharing ideas! R.H.A has several responsibilities and plans events for on campus residents.'
+);
