@@ -188,7 +188,6 @@ function addRowListener(tr, proposal) {
         });
         unMarshalDates(proposal);
         document.getElementById('proposalModal-paid').checked = proposal.paid;
-        document.getElementById('proposalModal-approved').checked = proposal.approved;
     });
 }
 
@@ -242,6 +241,7 @@ function unMarshalHtml5(dateStr) {
     var day = date.getDate();
     if (day < 10) {day = "0" + day}
     msg += day;
+    console.log("in: " + dateStr);
     console.log("Unmarshaled date: "  + msg);
     return msg
 }
@@ -302,7 +302,6 @@ function setupModalButtons() {
             json_data[attr] = entry.value;
         });
         json_data.paid = document.getElementById('proposalModal-paid').checked;
-        json_data.approved = document.getElementById('proposalModal-approved').checked;
         marshalDates(json_data);
 
         json_data.description = "hello, I am a description";
