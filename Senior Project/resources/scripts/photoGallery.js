@@ -66,6 +66,7 @@ function uploadPhoto() {
     photoxhr.onreadystatechange = function (e) {
         if (photoxhr.readyState == 4 && photoxhr.status == 200) {
             $('#uploadModal').modal('hide');
+            location.reload();
         }
     };
 
