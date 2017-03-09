@@ -12,6 +12,12 @@ function setAdmin(officers) {
         newButton.innerHTML = 'New Attendance Record';
         div.appendChild(newButton);
 
+        var div2 = document.getElementById('undoAttendanceDiv');
+        var undoButton = document.createElement('button');
+        undoButton.setAttribute('id', 'undoAttendance');
+        undoButton.innerHTML = 'Undo Last Attendance Upload';
+        div.appendChild(undoButton);
+
         setupSubmitAttendanceButton();
         var cancelBtn = document.getElementById('update-modal-cancel');
         cancelBtn.addEventListener('click', function () {
