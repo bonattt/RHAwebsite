@@ -135,7 +135,7 @@ COPY Equipment FROM '/tmp/equipment.csv' DELIMITER ',' CSV HEADER;
 COPY Rentals FROM '/tmp/rentals.csv' DELIMITER ',' CSV HEADER;
 COPY FloorMoney FROM '/tmp/floormoney.csv' DELIMITER ',' CSV HEADER;
 COPY FloorExpenses FROM '/tmp/floorexpenses.csv' DELIMITER ',' CSV HEADER;
-COPY InfoTExt FROM '/tmp/infotext.csv' DELIMITER ',' CSV HEADER;
+COPY InfoText FROM '/tmp/infotext.csv' DELIMITER ',' CSV HEADER;
 /* Inserts for FloorAttendanceNumerics */
 
 INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Blum', 4);
