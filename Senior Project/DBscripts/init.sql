@@ -165,7 +165,6 @@ INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_atte
 INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Speed 1', 2);
 INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Speed 2', 2);
 INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Speed 3', 2);
->>>>>>> refs/remotes/origin/master
 
 /* Pre-populates the FloorMoney table with barebones entries for update_floor_money() to be
   useable both on the initial creation of the database as well as whenever attendance is
