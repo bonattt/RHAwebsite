@@ -12,9 +12,12 @@
 	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
 	<link rel="stylesheet" type="text/css" href="../stylesheets/budget.css">
 
-	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
-	<script language="Javascript" src="../scripts/navbar-factory.js">  </script>
-	<script language="Javascript" src="../scripts/budgetManagement.js">  </script>
+	<script language="Javascript" src="../scripts/adminPermission.js">
+	</script>
+	<script language="Javascript" src="../scripts/navbar-factory.js">
+	</script>
+	<script language="Javascript" src="../scripts/budgetManagement.js">
+	</script>
 	<script type="text/javascript" src="./scripts/rosefire.js"></script>
 
 	<link rel="icon" href="../images/RHA.jpg">
@@ -34,7 +37,9 @@
 		<button id="addPaymentButton" data-toggle="modal" data-target="#paymentModal">Add Payment</button>
 	</div>
 
-	<div id="notAdminMsg"> <br><h3>Please login as an administrator to view this page.</h3> </div>
+	<div id="notAdminMsg"> <br>
+		<h3>Please login as an administrator to view this page.</h3>
+	</div>
 
 	<div id="tables" class="adminOnly">
 		<table>
@@ -79,16 +84,14 @@
 								<td> <label>Amount:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input class="modal-text-entry" id="paymentModal-amountUsed" type="number"
-											step="0.00" value='0.01'></input>
+									<input class="modal-text-entry" id="paymentModal-amountUsed" type="number" step="0.00" value='0.01'></input>
 								</td>
 							</tr>
 							<tr>
 								<td> <label> Account Code:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input class="modal-text-entry" id="paymentModal-accountCode" type="number"
-											value=""></input>
+									<input class="modal-text-entry" id="paymentModal-accountCode" type="number" value=""></input>
 								</td>
 							</tr>
 							<tr>
@@ -112,7 +115,8 @@
 								<!-- the event which this payment was for -->
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<select id="paymentModal-event" data-basketballtournament="9" data-assassins="14" data-trihop="18" data-countryconcert="7" data-moana="3">
+									<select id="paymentModal-event" data-basketballtournament="9" data-assassins="14" data-trihop="18" data-countryconcert="7"
+									    data-moana="3">
 										<option>assassins</option>
 										<option>basketballTournament</option>
 										<option>countryconcert</option>
@@ -125,24 +129,21 @@
 								<td> <label>Turned-in Date:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input type="date" id="paymentModal-dateReceived" name="signUpOpenDate"
-										   data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+									<input type="date" id="paymentModal-dateReceived" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
 								</td>
 							</tr>
 							<tr>
 								<td> <label>Processed Date:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input type="date" id="paymentModal-dateProcessed" name="signUpOpenDate"
-										   data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+									<input type="date" id="paymentModal-dateProcessed" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
 								</td>
 							</tr>
 							<tr>
 								<td> <label>Description:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<textarea type="date" id="paymentModal-description" name="signUpOpenDate"
-											  data-date-inline-picker="false" data-date-open-on-focus="true"></textarea>
+									<textarea type="date" id="paymentModal-description" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></textarea>
 								</td>
 							</tr>
 							<tr>
@@ -184,8 +185,7 @@
 							<tr>
 								<td> <label>Amount:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="fundModal-funds_amount" type="number"
-											value="0.01"></input>
+								<td> <input class="modal-text-entry" id="fundModal-funds_amount" type="number" value="0.01"></input>
 								</td>
 							</tr>
 						</tbody>
@@ -215,8 +215,7 @@
 								<!-- this person physically received the check for this money -->
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input class="modal-text-entry" id="editFundModal-funds_amount" type="number"
-										   value="0.00" step="1.01"></input>
+									<input class="modal-text-entry" id="editFundModal-funds_amount" type="number" value="0.00" step="1.01"></input>
 								</td>
 							</tr>
 
@@ -245,20 +244,27 @@
 						<tbody>
 							<tr>
 								<td> <label> Description: </label> </td>
-								<td> <p id="detailsModal-description"> </p> </td>
+								<td>
+									<p id="detailsModal-description"> </p>
+								</td>
 							</tr>
 							<tr>
 								<td> <label> account ID: </label> </td>
-								<td> <p id="detailsModal-accountcode"> </p> </td>
+								<td>
+									<p id="detailsModal-accountcode"> </p>
+								</td>
 							</tr>
 							<tr>
 								<td> <label> reciepts: </label> </td>
-								<td> <p id="detailsModal-reciepts"> </p> </td>
+								<td>
+									<p id="detailsModal-reciepts"> </p>
+								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<div class="modal-footer">
+					<button id="downloadPdf" type="button" class="btn btn-info left-btn" data-dismiss="modal">Download as PDF</button>
 					<button id="detailsModal-delete" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
 					<button id="detailsModal-close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
@@ -267,4 +273,5 @@
 	</div>
 
 </body>
+
 </html>
