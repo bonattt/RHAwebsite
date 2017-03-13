@@ -30,11 +30,14 @@ function setup() {
     function createHTMLFromResponseText(members) {
         drawAllMembersTable(members);
         var allMembersButton = document.getElementById('allMembers');
+        var submitAttendanceDiv = document.getElementById('submitAttendanceDiv');
         $(".allMembers").change(function () {
             displayOtherTable(members);
+            submitAttendanceDiv.style.display = "block";
         });
         $(".activeMembers").change(function () {
             displayOtherTable(members);
+            submitAttendanceDiv.style.display = "none";
         });
     }
 }

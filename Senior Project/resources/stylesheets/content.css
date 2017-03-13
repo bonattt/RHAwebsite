@@ -576,6 +576,10 @@ input[type=date] {
 	width: 100%;
 }
 
+textArea {
+	width: 100%;
+}
+
 form label {
 	text-align: left;
 	width: 100%;
