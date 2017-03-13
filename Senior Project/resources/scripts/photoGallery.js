@@ -18,7 +18,6 @@ function setup() {
     xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             JSON.parse(xhr.responseText).forEach(fileName => {
-                console.log(fileName);
                 var photosDiv = document.getElementById("photos");
                 var image = document.createElement('image');
                 var filePath = "./images/gallery/" + fileName;
