@@ -129,25 +129,8 @@ app.get('/api/v1/galleryPhoto', type, function (req, res) {
 });
 
 app.delete('/api/v1/galleryPhoto', urlencodedParser, function(req, res, next) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
-  // //var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
-  // console.log("request is:");
-  // console.log(req);
-  // // var fileType = req.file.mimetype.split('/')[1];
-  // // var tmp_path = req.file.path;
-  console.log("path is:");
-  console.log(req.body);
   var target_path = req.body.imagePath + "";
-  // console.log("request body thing");
-  // console.log(res);
-  // // var pathToSend = '../images/gallery/' + req.file.filename + '.' + fileType;
-  // fs.unlink(target_path);
-  // console.log(res);
-  // res.status(200).json({ status: 'The file ' + target_path + ' was deleted.' }).send();
-  // return;
-
-  // var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
   fs.unlink(target_path);
-  console.log(target_path);
   res.status(200).json({ status: 'The file ' + target_path + ' was deleted.' }).send();
   return;
 });
