@@ -17,6 +17,7 @@ function setAdmin(officers) {
         undoButton.setAttribute('id', 'undoAttendance');
         undoButton.innerHTML = 'Undo Last Attendance Upload';
         div.appendChild(undoButton);
+        undoAttendanceSubmission();
 
         setupSubmitAttendanceButton();
         var cancelBtn = document.getElementById('update-modal-cancel');
@@ -310,6 +311,21 @@ function setupSubmitAttendanceButton() {
         cancelBtn.addEventListener('click', function () {
             // do nothing.
         });
+    });
+}
+
+function undoAttendanceSubmission() {
+    var undoButton = document.getElementById("undoAttendance");
+    undoButton.addEventListener('click', function () {
+        var urlExtension = 'attendance/undo';
+        var xhr = xhrGetRequest(urlExtension);
+
+        xhr.onreadystatechange = function(e) {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                location.reload();
+            }
+        };
+        xhr.send();
     });
 }
 
