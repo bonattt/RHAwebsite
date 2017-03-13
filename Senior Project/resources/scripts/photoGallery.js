@@ -6,7 +6,6 @@ function setup() {
         var modalDelete = document.getElementById('modal-delete');
         if (userIsOfficer(officersxhr.responseText)) {
             modalDelete.style.display = "block";
-            //add functionality to delete button
         } else {
             modalDelete.addEventListener('click', noPermission);
         }
@@ -43,10 +42,34 @@ function setUpModal(filePath) {
     var modalImage = document.getElementById('modalPhoto');
     modalImage.setAttribute('class', 'modalPhoto');
     modalImage.setAttribute('src', filePath);
+    var modalDelete = document.getElementById('modal-delete')
+    modalDelete.addEventListener("click", function () { deleteFunction(filePath) });
 }
 
-function noPermission(){
+function noPermission() {
     alert("You do not have permission to delete photos.  Please contact a member of RHA exec to delete the photo for you.");
+}
+
+function deleteFunction(filePath) {
+    console.log("deleting the function");
+    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
+    var formData = new FormData();
+    console.log("file is:");
+    var photoxhr = new XMLHttpRequest();
+    var dbObject = {};
+    dbObject["imagePath"] = 'resources' + filePath.replace('.', "");
+    console.log(dbObject);
+
+    photoxhr.open('DELETE', photoDeleteApi, true);
+    photoxhr.setRequestHeader('Content-Type', 'application/json');
+
+    photoxhr.onreadystatechange = function (e) {
+        if (photoxhr.readyState == 4 && photoxhr.status == 200) {
+            location.reload();
+        }
+    };
+    console.log(formData);
+    photoxhr.send(JSON.stringify(dbObject));
 }
 
 function showPictureModal(source) {
@@ -54,11 +77,8 @@ function showPictureModal(source) {
     var modal = document.getElementById('photoModal');
     var photo = document.getElementById('photo');
     var cancelButton = document.getElementById("photoGalleryClose");
-    console.log(photo);
-    console.log(source);
     photo.setAttribute('src', source);
     photo.src = source;
-    console.log(modal);
 
     modal.style.display = "block";
     window.onclick = function (event) {
