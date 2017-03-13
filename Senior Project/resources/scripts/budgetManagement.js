@@ -58,6 +58,9 @@ function setupButtons() {
         xhr.send();
     });
 
+    var downloadPdfButton = document.getElementById('downloadPdf');
+    downloadPdfButton.addEventListener('click', downloadPdf());
+
     var editSubmit = document.getElementById('editFundModal-submit');
     editSubmit.addEventListener('click', function() {
         var apiUri = 'fund/' + current_id
@@ -197,6 +200,10 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
     });
 
     return link;
+}
+
+function downloadPdf() {
+    
 }
 
 function buildRow(data, keys, rowNumber) {
