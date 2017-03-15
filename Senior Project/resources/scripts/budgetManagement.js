@@ -156,23 +156,26 @@ function buildPaymentRow(payment, rowNumber) {
     var amount = parseFloat(Math.round(payment.amountused * 100) / 100).toFixed(2);
     col.appendChild(document.createTextNode("$" + amount));
     col.setAttribute('class', 'tableEntry');
+    col.setAttribute('id', 'row' + rowNumber + '_amountUsed');
     row.appendChild(col);
 
     col = document.createElement('td');
     col.appendChild(document.createTextNode(composeDateStr(payment.datereceived)));
     col.setAttribute('class', 'tableEntry');
+    col.setAttribute('id', 'row' + rowNumber + '_dateReceived');
     row.appendChild(col);
 
     col = document.createElement('td');
     col.appendChild(document.createTextNode(composeDateStr(payment.dateprocessed)));
     col.setAttribute('class', 'tableEntry');
+    col.setAttribute('id', 'row' + rowNumber + '_dateProcessed');
     row.appendChild(col);
 
 //    col = document.createElement('td');
 //    col.appendChild(document.createTextNode(payment.reciepts));
 //    col.setAttribute('class', 'tableEntry');
 //    row.appendChild(col);
-    row.appendChild(getDisplayExpenseDetailsLink(payment));
+    row.appendChild(getDisplayExpenseDetailsLink(payment, rowNumber));
     return row;
 }
 
@@ -203,7 +206,8 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
 }
 
 function downloadPdf() {
-    
+    var desc = document.getElementById('detailsModal-description');
+    var accId = document.getElementById('detailsModal-accountCode');
 }
 
 function buildRow(data, keys, rowNumber) {
@@ -212,13 +216,12 @@ function buildRow(data, keys, rowNumber) {
     row.appendChild(col);
 
     row.setAttribute('id', 'row' + rowNumber);
-    var colNumber = 0;
 
     keys.forEach(function(key) {
         col = document.createElement('td');
         col.appendChild(document.createTextNode(data[key]));
         col.setAttribute('class', 'tableEntry');
-        col.setAttribute('id', 'row' + rowNumber + 'col' + colNumber);
+        col.setAttribute('id', 'row' + rowNumber + '_' + key);
         row.appendChild(col);
     });
     return row;
