@@ -9,14 +9,24 @@ multer = require('multer');
 app = express();
 
 
-var upload = multer({dest: 'resources/images/'});
+var upload = multer({ dest: 'resources/images/' });
+var path = require('path');
 var type = upload.single('imageFile');
+var bodyParser = require('body-parser');
+var urlencodedParser = bodyParser.urlencoded({ extended: false});
+var cookieParser = require('cookie-parser');
 
 app.use(express.static('resources'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Max-Age', '86400');
+  res.header("Access-Control-Allow-Headers", "Origin, X-HTTP-Method-Override, X-Requested-With, Content-Type, Accept");
   next();
 });
 
@@ -34,7 +44,7 @@ app.get('/proposals', function (req, res) {
 });
 
 app.get('/listAllProposals', function (req, res) {
-	res.sendFile(__dirname + '/html/listAllProposals.html');
+  res.sendFile(__dirname + '/html/listAllProposals.html');
 });
 
 app.get('/sign-ups', function (req, res) {
@@ -77,32 +87,31 @@ app.get('/committees', function (req, res) {
   res.sendFile(__dirname + '/html/committees.html');
 });
 
-app.post('/api/v1/eventPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
+app.post('/api/v1/eventPhoto', type, function (req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
   var fileType = req.file.mimetype.split('/')[1];
   var tmp_path = req.file.path;
   var target_path = 'resources/images/events/' + req.file.filename + '.' + fileType;
   var pathToSend = '../images/events/' + req.file.filename + '.' + fileType;
-  fs.readFile(tmp_path, function(err, data) {
+  fs.readFile(tmp_path, function (err, data) {
     fs.writeFile(target_path, data);
     fs.unlink(tmp_path);
     res.filePath = target_path;
     console.log(res);
-    res.status(200).json({filepath: pathToSend}).send();
+    res.status(200).json({ filepath: pathToSend }).send();
     return;
   });
 });
 
-app.post('/api/v1/galleryPhoto', type, function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
+app.post('/api/v1/galleryPhoto', type, function (req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
   var fileType = req.file.mimetype.split('/')[1];
   var tmp_path = req.file.path;
   var target_path = 'resources/images/gallery/' + req.file.filename + '.' + fileType;
   var pathToSend = '../images/gallery/' + req.file.filename + '.' + fileType;
-  fs.readFile(tmp_path, function(err, data) {
+  fs.readFile(tmp_path, function (err, data) {
     fs.writeFile(target_path, data);
     fs.unlink(tmp_path);
     res.filePath = target_path;
-    console.log(res);
-    res.status(200).json({filepath: pathToSend}).send();
+    res.status(200).json({ filepath: pathToSend }).send();
     return;
   });
 });
@@ -113,31 +122,30 @@ app.get('/api/v1/galleryPhoto', type, function (req, res) {
   fs.readdir(target_path, (err, files) => {
     files.forEach(file => {
       fileList.push(file);
-      });
+    });
     res.status(200).send(fileList);
     return;
   });
 });
 
-app.delete('/api/v1/galleryPhoto', function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
-  var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
-  fs.unlink(toDeleteAbsolute);
-  console.log(res);
-  res.status(200).json({status: 'The file ' + toDeleteAbsolute + ' was deleted.'}).send();
+app.delete('/api/v1/galleryPhoto', urlencodedParser, function(req, res, next) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
+  var target_path = req.body.imagePath + "";
+  fs.unlink(target_path);
+  res.status(200).json({ status: 'The file ' + target_path + ' was deleted.' }).send();
   return;
 });
 
-app.post('/api/v1/carouselPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
+app.post('/api/v1/carouselPhoto', type, function (req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
   var fileType = req.file.mimetype.split('/')[1];
   var tmp_path = req.file.path;
   var target_path = 'resources/images/carousel/' + req.file.filename + '.' + fileType;
   var pathToSend = '../images/carousel/' + req.file.filename + '.' + fileType;
-  fs.readFile(tmp_path, function(err, data) {
+  fs.readFile(tmp_path, function (err, data) {
     fs.writeFile(target_path, data);
     fs.unlink(tmp_path);
     res.filePath = target_path;
     console.log(res);
-    res.status(200).json({filepath: pathToSend}).send();
+    res.status(200).json({ filepath: pathToSend }).send();
     return;
   });
 });
@@ -148,53 +156,53 @@ app.get('/api/v1/carouselPhoto', type, function (req, res) {
   fs.readdir(target_path, (err, files) => {
     files.forEach(file => {
       fileList.push(file);
-      });
+    });
     res.status(200).send(fileList);
     return;
   });
 });
 
-app.post('/api/v1/committeePhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
-    var fileType = req.file.mimetype.split('/')[1];
-    var tmp_path = req.file.path;
-    var target_path = 'resources/images/committees/' + req.file.filename + '.' + fileType;
-    var pathToSend = '../images/committees/' + req.file.filename + '.' + fileType;
-    fs.readFile(tmp_path, function(err, data) {
-      fs.writeFile(target_path, data);
-      fs.unlink(tmp_path);
-      res.filePath = target_path;
-      res.status(200).json({filepath: pathToSend}).send();
-      return;
-    });
+app.post('/api/v1/committeePhoto', type, function (req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
+  var fileType = req.file.mimetype.split('/')[1];
+  var tmp_path = req.file.path;
+  var target_path = 'resources/images/committees/' + req.file.filename + '.' + fileType;
+  var pathToSend = '../images/committees/' + req.file.filename + '.' + fileType;
+  fs.readFile(tmp_path, function (err, data) {
+    fs.writeFile(target_path, data);
+    fs.unlink(tmp_path);
+    res.filePath = target_path;
+    res.status(200).json({ filepath: pathToSend }).send();
+    return;
   });
+});
 
-app.delete('/api/v1/committeePhoto', function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
+app.delete('/api/v1/committeePhoto', function (req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
   var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
   fs.unlink(toDeleteAbsolute);
   console.log(res);
-  res.status(200).json({status: 'The file ' + toDeleteAbsolute + ' was deleted.'}).send();
+  res.status(200).json({ status: 'The file ' + toDeleteAbsolute + ' was deleted.' }).send();
   return;
 });
 
-app.post('/api/v1/officerPhoto', type, function(req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
-    var fileType = req.file.mimetype.split('/')[1];
-    var tmp_path = req.file.path;
-    var target_path = 'resources/images/officers/' + req.file.filename + '.' + fileType;
-    var pathToSend = '../images/officers/' + req.file.filename + '.' + fileType;
-    fs.readFile(tmp_path, function(err, data) {
-      fs.writeFile(target_path, data);
-      fs.unlink(tmp_path);
-      res.filePath = target_path;
-      res.status(200).json({filepath: pathToSend}).send();
-      return;
-    });
+app.post('/api/v1/officerPhoto', type, function (req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
+  var fileType = req.file.mimetype.split('/')[1];
+  var tmp_path = req.file.path;
+  var target_path = 'resources/images/officers/' + req.file.filename + '.' + fileType;
+  var pathToSend = '../images/officers/' + req.file.filename + '.' + fileType;
+  fs.readFile(tmp_path, function (err, data) {
+    fs.writeFile(target_path, data);
+    fs.unlink(tmp_path);
+    res.filePath = target_path;
+    res.status(200).json({ filepath: pathToSend }).send();
+    return;
   });
+});
 
-app.delete('/api/v1/officerPhoto', function(req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
+app.delete('/api/v1/officerPhoto', function (req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
   var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
   fs.unlink(toDeleteAbsolute);
   console.log(res);
-  res.status(200).json({status: 'The file ' + toDeleteAbsolute + ' was deleted.'}).send();
+  res.status(200).json({ status: 'The file ' + toDeleteAbsolute + ' was deleted.' }).send();
   return;
 });
 
