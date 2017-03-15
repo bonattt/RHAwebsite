@@ -2,27 +2,30 @@ var isAdmin = false;
 
 function setup() {
     var officersxhr = getOfficers(); // from adminPErmission.js
+    var galleryURL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery';
     officersxhr.onload = function () {
         var modalDelete = document.getElementById('modal-delete');
         if (userIsOfficer(officersxhr.responseText)) {
+            galleryURL += 'All';
             modalDelete.style.display = "block";
         } else {
+            galleryURL += 'Restricted';
             modalDelete.addEventListener('click', noPermission);
         }
     }
     officersxhr.send();
 
-    var galleryURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
+    // setTimeout(function() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', galleryURL, true);
     xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            JSON.parse(xhr.responseText).forEach(fileName => {
+            JSON.parse(xhr.responseText).forEach(row => {
                 var photosDiv = document.getElementById("photos");
                 var image = document.createElement('image');
-                var filePath = "./images/gallery/" + fileName;
-                image.innerHTML = "<img class='photoGalleryImage' src=" + filePath + " data-toggle='modal' data-target='#photoModal'>";
-                image.addEventListener("click", function () { setUpModal(filePath) });
+                console.log(row.path_to_photo);
+                image.innerHTML = "<img class='photoGalleryImage' src=" + row.path_to_photo + " data-toggle='modal' data-target='#photoModal'>";
+                image.addEventListener("click", function () { setUpModal(row.path_to_photo) });
                 photosDiv.appendChild(image);
             });
         }
@@ -32,6 +35,8 @@ function setup() {
         console.log(err);
     }
     xhr.send();
+    // }, 1000);
+
     // setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
     // document.getElementById("fileNames").innerHTML = "<img class='photoGalleryImage' src='../images/gallery/31da25d45be0dbb169ee52557995c2e6_PRAISE-HELIX.png'>";
 }
@@ -46,7 +51,7 @@ function setUpModal(filePath) {
 }
 
 function noPermission() {
-    alert("You do not have permission to delete photos.  Please contact a member of RHA exec to delete the photo for you.");
+    alert("You do not have permission to delete photos.  Please contact a member of RHA exec to delete the photo for you."); // When would this ever happen?
 }
 
 function deleteFunction(filePath) {
