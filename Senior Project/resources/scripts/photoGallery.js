@@ -5,18 +5,25 @@ function setup() {
     var galleryURL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery';
     officersxhr.onload = function () {
         var modalDelete = document.getElementById('modal-delete');
+        var modalApprove = document.getElementById('modal-approve');
+        var modalUnapprove = document.getElementById('modal-unapprove');
         if (userIsOfficer(officersxhr.responseText)) {
             galleryURL += 'All';
-            modalDelete.style.display = "block";
+            modalDelete.style.display = "inline-block";
+            modalApprove.style.display = "inline-block";
+            modalUnapprove.style.display = "inline-block";
         } else {
             galleryURL += 'Restricted';
-            modalDelete.addEventListener('click', noPermission);
         }
     }
     officersxhr.send();
 
-    // setTimeout(function() {
+    setTimeout(function () { displayImages(galleryURL) }, 300);
+}
+
+function displayImages(galleryURL) {
     var xhr = new XMLHttpRequest();
+    console.log(galleryURL);
     xhr.open('GET', galleryURL, true);
     xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -25,7 +32,7 @@ function setup() {
                 var image = document.createElement('image');
                 console.log(row.path_to_photo);
                 image.innerHTML = "<img class='photoGalleryImage' src=" + row.path_to_photo + " data-toggle='modal' data-target='#photoModal'>";
-                image.addEventListener("click", function () { setUpModal(row.path_to_photo) });
+                image.addEventListener("click", function () { setUpModal(row.path_to_photo, row.photo_gallery_id) });
                 photosDiv.appendChild(image);
             });
         }
@@ -35,23 +42,52 @@ function setup() {
         console.log(err);
     }
     xhr.send();
-    // }, 1000);
-
-    // setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
-    // document.getElementById("fileNames").innerHTML = "<img class='photoGalleryImage' src='../images/gallery/31da25d45be0dbb169ee52557995c2e6_PRAISE-HELIX.png'>";
 }
 
-function setUpModal(filePath) {
+function setUpModal(filePath, photoID) {
     console.log("setting up modal");
     var modalImage = document.getElementById('modalPhoto');
     modalImage.setAttribute('class', 'modalPhoto');
     modalImage.setAttribute('src', filePath);
     var modalDelete = document.getElementById('modal-delete')
+    var modalApprove = document.getElementById('modal-approve');
+    var modalUnapprove = document.getElementById('modal-unapprove');
     modalDelete.addEventListener("click", function () { deleteFunction(filePath) });
+    modalApprove.addEventListener("click", function () { approveImage(photoID) });
+    modalUnapprove.addEventListener("click", function () { unapproveImage(photoID) });
+
 }
 
-function noPermission() {
-    alert("You do not have permission to delete photos.  Please contact a member of RHA exec to delete the photo for you."); // When would this ever happen?
+function approveImage(imageID) {
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery';
+    var xhr = new XMLHttpRequest();
+    var json_data = {"approved": "approved"};
+    xhr.open('PUT', url + '/' + imageID, true);
+    xhr.onreadystatechange = function (e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log("It worked, I guess?");
+            location.reload();
+        } else {
+            console.log("something went wrong");
+            console.log("readyState: " + xhr.readyState + " --- status: " + xhr.status);
+        }
+    }
+    xhr.send(JSON.stringify(json_data));
+}
+
+function unapproveImage(imageID) {
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery';
+    var xhr = new XMLHttpRequest();
+    xhr.open('DELETE', url + '/' + imageID, true);
+    xhr.onreadystatechange = function (e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log("It worked, I guess?");
+            location.reload();
+        } else {
+            console.log("something went wrong");
+        }
+    }
+    xhr.send();
 }
 
 function deleteFunction(filePath) {
