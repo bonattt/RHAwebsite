@@ -54,7 +54,7 @@
 
 	<div id="buttonDiv">
 		<button id="addPhoto" class="adminOnly" data-toggle="modal" data-target="#carouselUploadModal">Upload a photo!</button>
-		<button id="deletePhoto" class="adminOnly" data-toggle="modal" data-target="#carouselDeleteModal">Delete a photo.</button>
+		<button id="deletePhoto" class="adminOnly" data-toggle="modal" data-target="#carouselDeleteModal">Delete a photo</button>
 	</div>
 
 	<div class="edit newsArea">
@@ -106,11 +106,9 @@
 				<div class="modal-body">
 					<form action="javascript:uploadCarouselPhoto()">
 						<label for="imageFile">Image:<input type="file" name="imageFile" id="imageFile"></label>
+						<button type="submit" class="btn btn-default">Submit</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					</form>
-				</div>
-				<div class="modal-footer">
-					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
-					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -125,11 +123,11 @@
 					<h4 class="modal-title">Choose a Photo Index to Delete</h4>
 				</div>
 				<div class="modal-body">
-					<form id = "deletePhotoForm" action="javascript:deleteCarouselPhoto()">
+					<form id="deletePhotoForm" action="javascript:deleteCarouselPhoto()">
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal">Delete</button>
+					<button id="modal-delete-photo" type="button" class="btn btn-default" data-dismiss="modal" data-target="#deleteConfirmationModal">Delete</button>
 				</div>
 			</div>
 		</div>

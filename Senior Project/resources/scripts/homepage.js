@@ -22,6 +22,34 @@ function populateDeletePhotoModal() {
     for (var i = 1; i <= carouselInner.children.length; i++) {
         deletePhotoForm.innerHTML += '<label><input type="radio" name="usernames" value="' + i + '" /> ' + i + '</label>';
     }
+    var radios = document.getElementsByTagName('input');
+    var deleteButton = document.getElementById('modal-delete-photo');
+    console.log(deleteButton);
+    deleteButton.addEventListener("click", function() {figureOutSelectedRadioButton(radios)});
+}
+
+function figureOutSelectedRadioButton(radios) {
+    var carouselInner = document.getElementById("carousel-inner");
+    console.log("figuring out the selected radio button :)");
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            deleteFunction("/images" + carouselInner.childNodes[i].firstChild.src.split("/images")[1]);
+            location.reload();
+        }
+    }
+}
+
+function deleteFunction(filePath) {
+    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/photo';
+    var formData = new FormData();
+    var photoxhr = new XMLHttpRequest();
+    var dbObject = {};
+    dbObject["imagePath"] = 'resources' + filePath;
+
+    photoxhr.open('DELETE', photoDeleteApi, true);
+    photoxhr.setRequestHeader('Content-Type', 'application/json');
+
+    photoxhr.send(JSON.stringify(dbObject));
 }
 
 function setup() {
@@ -151,6 +179,7 @@ function showModal(editImage) {
 }
 
 function uploadCarouselPhoto() {
+    console.log("uploading a carousel photo");
     var photoUploadApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/carouselPhoto';
     var photoxhr = new XMLHttpRequest();
     var files = document.getElementById("imageFile").files;
@@ -166,10 +195,6 @@ function uploadCarouselPhoto() {
     };
 
     photoxhr.send(formData);
-}
-
-function deleteCarouselPhoto() {
-    alert("yo whaddup");
 }
 
 function updateFrontPageText() {
