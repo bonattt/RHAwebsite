@@ -59,7 +59,10 @@ function setupButtons() {
     });
 
     var downloadPdfButton = document.getElementById('downloadPdf');
-    downloadPdfButton.addEventListener('click', downloadPdf());
+    downloadPdfButton.addEventListener('click', function () {
+        downloadPdf();
+    });
+    
 
     var editSubmit = document.getElementById('editFundModal-submit');
     editSubmit.addEventListener('click', function() {
@@ -190,8 +193,8 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
     data.target = "#detailsModal"
 
     link.addEventListener('click', function() {
-        current_id = json_obj.expenses_id;
-        console.log('click');
+        var thisObject = document.getElementById('currentPayment');
+        thisObject.innerHTML = JSON.stringify(json_obj);
         var description = document.getElementById('detailsModal-description');
         description.innerHTML = json_obj.description;
 
@@ -206,8 +209,17 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
 }
 
 function downloadPdf() {
-    var desc = document.getElementById('detailsModal-description');
-    var accId = document.getElementById('detailsModal-accountCode');
+    var pdfApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/pdfDownload';
+    var currentPayment = JSON.parse(document.getElementById('currentPayment').innerHTML);
+
+    xhr = new XMLHttpRequest();
+    xhr.open('POST', pdfApi, true);
+    xhr.onreadystatechange = function () {
+        if(xhr.readyState == 4 && xhr.status == 200) {
+            console.log(xhr.response);
+        }
+    }
+    xhr.send();
 }
 
 function buildRow(data, keys, rowNumber) {

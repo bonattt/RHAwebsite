@@ -87,6 +87,11 @@ app.get('/committees', function (req, res) {
   res.sendFile(__dirname + '/html/committees.html');
 });
 
+app.post('/api/v1/pdfDownload', function (req, res) {
+  res.status(200).json({ response: "shindig!"}).send();
+  return;
+});
+
 app.post('/api/v1/eventPhoto', type, function (req, res) {  //we will need to make this more secure (only let those that have admin permissions make this call)
   var fileType = req.file.mimetype.split('/')[1];
   var tmp_path = req.file.path;
