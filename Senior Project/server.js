@@ -111,6 +111,7 @@ app.post('/api/v1/galleryPhoto', type, function (req, res) {  //we will need to 
     fs.writeFile(target_path, data);
     fs.unlink(tmp_path);
     res.filePath = target_path;
+    console.log(res);
     res.status(200).json({ filepath: pathToSend }).send();
     return;
   });
