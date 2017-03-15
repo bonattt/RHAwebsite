@@ -9,6 +9,7 @@ COPY InfoText TO '/tmp/committee.csv' DELIMITER '.' CSV HEADER;
 COPY Equipment TO '/tmp/equipment.csv' DELIMITER ',' CSV HEADER;
 COPY Rentals TO '/tmp/rentals.csv' DELIMITER ',' CSV HEADER;
 COPY FloorMoney TO '/tmp/floormoney.csv' DELIMITER ',' CSV HEADER;
+COPY PhotoGallery TO '/tmp/photogallery.csv' DELIMITER ',' CSV HEADER;
 COPY FloorExpenses TO '/tmp/floorexpenses.csv' DELIMITER ',' CSV HEADER;
 
 
@@ -22,4 +23,5 @@ DROP TABLE Equipment CASCADE;
 DROP TABLE Rentals CASCADE;
 DROP TABLE FloorAttendanceNumerics CASCADE;
 DROP TABLE FloorMoney CASCADE;
+DROP TABLE PhotoGallery CASCADE;
 DROP TABLE FloorExpenses CASCADE;
