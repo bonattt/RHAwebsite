@@ -4,12 +4,23 @@ function setAdmin(officers) {
     if (userIsOfficer(officers)) {
         var uploadButton = document.getElementById("addPhoto");
         uploadButton.setAttribute("class", "");
+        var deleteButton = document.getElementById("deletePhoto");
+        deleteButton.setAttribute("class", "");
+        populateDeletePhotoModal();
 
         var textButton = document.getElementById("editText");
         textButton.setAttribute("class", "");
 
         //        var editButtons = insertEditButtonsBefore(showModal, {"style": "float: right;"});
         //        alert(editButtons.length)
+    }
+}
+
+function populateDeletePhotoModal() {
+    var carouselInner = document.getElementById("carousel-inner");
+    deletePhotoForm = document.getElementById("deletePhotoForm");
+    for (var i = 1; i <= carouselInner.children.length; i++) {
+        deletePhotoForm.innerHTML += '<label><input type="radio" name="usernames" value="' + i + '" /> ' + i + '</label>';
     }
 }
 
@@ -155,6 +166,10 @@ function uploadCarouselPhoto() {
     };
 
     photoxhr.send(formData);
+}
+
+function deleteCarouselPhoto() {
+    alert("yo whaddup");
 }
 
 function updateFrontPageText() {
