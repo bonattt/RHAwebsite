@@ -10,6 +10,10 @@ function setup() {
             modalDelete.style.display = "inline-block";
         } else {
             galleryURL += 'Restricted';
+            var photoGallerySections = document.getElementsByClassName("photo-gallery-sections");
+            for (var i = 0; i < photoGallerySections.length; i++) {
+                photoGallerySections[i].style.display = "none";
+            }
         }
     }
     officersxhr.send();
@@ -24,10 +28,21 @@ function displayImages(galleryURL) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             JSON.parse(xhr.responseText).forEach(row => {
                 var photosDiv = document.getElementById("photos");
+                var photosPendingDiv = document.getElementById("photosPending");
                 var image = document.createElement('image');
-                image.innerHTML = "<img class='photoGalleryImage' src=" + row.path_to_photo + " data-toggle='modal' data-target='#photoModal'>";
+                var img = document.createElement('img');
+                img.setAttribute("class", "photoGalleryImage");
+                img.setAttribute("src", row.path_to_photo);
+                img.setAttribute("data-toggle", "modal");
+                img.setAttribute("data-target", "#photoModal");
+                image.appendChild(img);
                 image.addEventListener("click", function () { setUpModal(row.path_to_photo, row.photo_gallery_id, row.approved) });
-                photosDiv.appendChild(image);
+                if (row.approved == "pending") {
+                    console.log("found pending. ID: " + row.photo_gallery_id);
+                    photosPendingDiv.appendChild(image);
+                } else {
+                    photosDiv.appendChild(image);
+                }
             });
         }
     };
