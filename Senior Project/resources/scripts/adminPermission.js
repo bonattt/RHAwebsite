@@ -58,14 +58,11 @@ var insertEditButtons = function(dataElementRoot, uiElementRootId, idFieldName, 
 // submitFunc       - the function which is called uppon pressing the submit button.
 // idFieldName      - the value of this field will passed to submitFunc for use in the API url.
 var generateEditButtonListener = function(dataElementId, uiElementRootId, submitFunc, idFieldName) {
-     console.log("edit callback created for " + dataElementId + ", " + uiElementRootId);
      return function(event) {
-            console.log("edit button pressed for " + dataElementId + ", " + uiElementRootId);
             var deleteBtn = document.getElementById('modal-delete');
             if (deleteBtn != null && typeof deleteBtn != "undefined") {
                 deleteBtn.disabled = false;
             } else {
-                console.log(deleteBtn);
             }
             setupEditModal(dataElementId, uiElementRootId, submitFunc, idFieldName);
      };
@@ -93,7 +90,6 @@ var appendAttributes = function (element, attributes) {
 }
 
 var setupEditModal = function (dataElementId, uiElementRootId, submitFunc, idFieldName) {
-    console.log('dataset id = ' + dataElementId);
     var dataset = document.getElementById(dataElementId).dataset;
 	for (attr in dataset) {
 		var textField = document.getElementById(uiElementRootId + attr);

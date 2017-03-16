@@ -51,7 +51,7 @@ function noPermission() {
 
 function deleteFunction(filePath) {
     console.log("deleting the function");
-    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
+    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/photo';
     var formData = new FormData();
     console.log("file is:");
     var photoxhr = new XMLHttpRequest();
