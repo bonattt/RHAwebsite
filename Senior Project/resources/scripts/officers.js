@@ -52,6 +52,7 @@ function setAdmin(officers) {
         });
 
         var deleteBtn = document.getElementById('modal-delete');
+        deleteBtn.style.display = "inline";
         deleteBtn.addEventListener('click', function() {
             var imageEntry = document.getElementById("imageFilePut");
             imageEntry.value = '';
