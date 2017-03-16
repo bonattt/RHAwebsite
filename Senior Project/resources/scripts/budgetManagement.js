@@ -210,16 +210,19 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
 
 function downloadPdf() {
     var pdfApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/pdfDownload';
-    var currentPayment = JSON.parse(document.getElementById('currentPayment').innerHTML);
+    var toSend = document.getElementById('currentPayment').innerHTML;
 
     xhr = new XMLHttpRequest();
     xhr.open('POST', pdfApi, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if(xhr.readyState == 4 && xhr.status == 200) {
             console.log(xhr.response);
+            //DownloadPdf code here
         }
     }
-    xhr.send();
+    console.log(toSend);
+    xhr.send(toSend);
 }
 
 function buildRow(data, keys, rowNumber) {

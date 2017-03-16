@@ -88,7 +88,8 @@ app.get('/committees', function (req, res) {
 });
 
 app.post('/api/v1/pdfDownload', function (req, res) {
-  res.status(200).json({ response: "shindig!"}).send();
+  console.log(req.body);
+  res.status(200).json({ response: req.body}).send();
   return;
 });
 
