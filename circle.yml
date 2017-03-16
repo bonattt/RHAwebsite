@@ -2,4 +2,5 @@
 
 test:
   override:
-    - ./node_modules/.bin/mocha --reporter spec
+    - npm install
+    - npm test
