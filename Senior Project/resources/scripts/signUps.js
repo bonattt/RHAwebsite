@@ -497,14 +497,38 @@ function submitFunc(json_data, put_id) {
         location.reload();
     }
     var imageInput = document.getElementById('imageFile');
-    if (imageInput.value != '') {
-        var photoXhr = new PhotoPostXhr("eventPhoto");
-        photoXhr.imageCallback(xhr, json_data, 'image_path');
-        var files = document.getElementById("imageFile").files;
+    // if (imageInput.value != '') {
+    //     var photoXhr = new PhotoPostXhr("eventPhoto");
+    //     photoXhr.imageCallback(xhr, json_data, 'image_path');
+    //     var files = document.getElementById("imageFile").files;
+    //     var formData = new FormData();
+    //     formData.append("imageFile", files[0]);
+    //     photoXhr.send(formData);
+    //     imageInput.value = '';
+    // } else {
+    //     xhr.send(JSON.stringify(json_data));
+    // }
+
+        if (imageInput.value != '') {
+        var image_to_delete = data.image.replace('.', "");
+        var photoPost = new XMLHttpRequest();
+        photoPost.open('POST', location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/eventPhoto', true);
+        var files = imageInput.files;
         var formData = new FormData();
         formData.append("imageFile", files[0]);
-        photoXhr.send(formData);
-        imageInput.value = '';
+        photoPost.onreadystatechange = function (e) {
+            if (photoPost.readyState == 4 && photoPost.status == 200) {
+                deleteFunction(data.image.substring(2));
+                json_data.image = JSON.parse(photoPost.response).filepath;
+                xhr.onreadystatechange = function (e) {
+                    if(xhr.readyState == 4 && xhr.status == 200) {
+                        location.reload();
+                    }
+                };
+                xhr.send(JSON.stringify(json_data));
+            }
+        }
+        photoPost.send(formData);
     } else {
         xhr.send(JSON.stringify(json_data));
     }
