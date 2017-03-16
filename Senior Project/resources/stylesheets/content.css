@@ -1053,3 +1053,14 @@ td {
 	display: block;
 }
 
+.modal-backdrop.in{
+	opacity: 0.75;
+}
+
+#modal-delete {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	margin-top: 2.5%;
+	display: none;
+}
