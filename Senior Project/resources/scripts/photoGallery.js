@@ -86,7 +86,7 @@ function deletePhotoDB(imageID) {
     xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             console.log("It worked, I guess?");
-            // location.reload();
+            location.reload();
         } else {
         }
     }
@@ -95,7 +95,7 @@ function deletePhotoDB(imageID) {
 }
 
 function deleteFunction(filePath, imageID) {
-    filePath = filePath.substring(2, filePath.length);
+    filePath = filePath.substring(1, filePath.length);
     console.log("deleting the file " + filePath);
     var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
     var photoxhr = new XMLHttpRequest();
