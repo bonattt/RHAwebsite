@@ -287,7 +287,7 @@ function setupSubmitAttendanceButton() {
 
                 xhr.onreadystatechange = function (e) {
                     if (xhr.readyState == 4 && xhr.status == 200) {
-                        location.reload();
+                        setTimeout(function () { window.reload()}, 400);
                     }
                 };
                 xhr.send(JSON.stringify({ membersToUpdate: result }));
