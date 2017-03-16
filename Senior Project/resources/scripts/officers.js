@@ -6,100 +6,128 @@ const MESSAGE_MODAL_ID = 'messageModal';
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-		setupAddOfficerButton();
+        setupAddOfficerButton();
         var editbuttons = insertEditButtons(
-                    'officer',
-                    'officers-modal-',
-                    'user_id',
-                    function(json_data, put_id) {
-            var apiUrl = 'member/' + put_id
-            var xhr = xhrPutRequest(apiUrl);
-            delete json_data.user_id;
-            delete json_data.username;
-            for (attr in json_data) {
-                if (json_data[attr] == null) {
-                    delete json_data[attr]
+            'officer',
+            'officers-modal-',
+            'user_id',
+            function (json_data, put_id) {
+                var apiUrl = 'member/' + put_id
+                var xhr = xhrPutRequest(apiUrl);
+                delete json_data.user_id;
+                delete json_data.username;
+                for (attr in json_data) {
+                    if (json_data[attr] == null) {
+                        delete json_data[attr]
+                    }
                 }
-            }
 
-            if (json_data.membertype == '') {
-                msg = 'Officers must have a member type.'
-                delete json_data.membertype;
-            }
-            xhr.onload = function() { location.reload() };
-            var imageEntry = document.getElementById("imageFilePut");
-            var global_id = selected_element_id.replace('officer', '');
-            global_id = parseInt(global_id);
-//            alert(selected_element_id + ' ?= ' + put_id + ' = ' + (selected_element_id == put_id));
-            if(global_id != put_id) {
-                alert('WARNING WARNING:\nselected_element_id: ' + global_id + '\nput_id: ' + put_id);
-            }
-            if (imageEntry.value != '') {
-                var image_to_delete = json_data.image;
-                var photoDelete = new PhotoDeleteXhr('officerPhoto');
-                photoDelete.send(JSON.stringify({'todelete': image_to_delete}));
+                if (json_data.membertype == '') {
+                    msg = 'Officers must have a member type.'
+                    delete json_data.membertype;
+                }
+                xhr.onload = function () { location.reload() };
+                var imageEntry = document.getElementById("imageFilePut");
+                var global_id = selected_element_id.replace('officer', '');
+                global_id = parseInt(global_id);
+                //            alert(selected_element_id + ' ?= ' + put_id + ' = ' + (selected_element_id == put_id));
+                if (global_id != put_id) {
+                    alert('WARNING WARNING:\nselected_element_id: ' + global_id + '\nput_id: ' + put_id);
+                }
+                if (imageEntry.value != '') {
+                    console.log("inside this if");
+                    console.log(json_data);
+                    var image_to_delete = json_data.image;
 
-                var photoPost = new PhotoPostXhr("officerPhoto");
-                photoPost.imageCallback(xhr, json_data, 'image');
-                var files = imageEntry.files;
-                var formData = new FormData();
-                formData.append("imageFile", files[0]);
-                imageEntry.value = ''
-                photoPost.send(formData);
-            } else {
-                xhr.send(JSON.stringify(json_data));
-            }
-        });
+                    var photoPost = new XMLHttpRequest();
+                    photoPost.open('POST', location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/officerPhoto', true);
+                    var files = imageEntry.files;
+                    var formData = new FormData();
+                    formData.append("imageFile", files[0]);
+
+                    photoPost.onreadystatechange = function (e) {
+                        console.log("yoooooooooo");
+                        if (photoPost.readyState == 4 && photoPost.status == 200) {
+                            console.log("DELETING THE FUNCTION!!!");
+                            deleteFunction(image_to_delete.substring(2, image_to_delete.length));
+                            json_data.image = JSON.parse(photoPost.response).filepath;
+                            xhr.onreadystatechange = function (e) {
+                                if (xhr.readyState == 4 && xhr.status == 200) {
+                                    location.reload();
+                                }
+                            };
+                            xhr.send(JSON.stringify(json_data));
+                        }
+                    }
+                    photoPost.send(formData);
+                } else {
+                    xhr.send(JSON.stringify(json_data));
+                }
+                imageEntry.value = '';
+            });
 
         var deleteBtn = document.getElementById('modal-delete');
-        deleteBtn.addEventListener('click', function() {
+        deleteBtn.addEventListener('click', function () {
             var imageEntry = document.getElementById("imageFilePut");
             imageEntry.value = '';
         });
 
         var cancelBtn = document.getElementById('modal-cancel');
-        cancelBtn.addEventListener('click', function() {
+        cancelBtn.addEventListener('click', function () {
             var imageEntry = document.getElementById("imageFilePut");
             imageEntry.value = '';
         });
 
         var deleteConfirm = document.getElementById('confirm-delete');
-        deleteConfirm.addEventListener('click', function() {
+        deleteConfirm.addEventListener('click', function () {
             // "selected_element_id" global decleared in adminPermission.js ... sorry about that... :(
-            var element = document.getElementById(selected_element_id); 
+            var element = document.getElementById(selected_element_id);
             var dataset = element.dataset;
-            var json_data = {"memberType": null};
+            var json_data = { "memberType": null };
             var apiUrl = 'member/' + dataset.user_id
             var xhr = xhrPutRequest(apiUrl);
-            xhr.onload = function () {location.reload()}
+            xhr.onload = function () { location.reload() }
             xhr.send(JSON.stringify(json_data));
-        });        
+        });
     }
     //var addOfficeButton = document.getElementById("addOfficer");
     //addOfficeButton.addEventListener("click", showEmptyModal);
     //addOfficeButton.style.display = "block";
 }
 
+function deleteFunction(filePath) {
+    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/photo';
+    var formData = new FormData();
+    var photoxhr = new XMLHttpRequest();
+    var dbObject = {};
+    dbObject["imagePath"] = 'resources' + filePath;
+
+    photoxhr.open('DELETE', photoDeleteApi, true);
+    photoxhr.setRequestHeader('Content-Type', 'application/json');
+
+    photoxhr.send(JSON.stringify(dbObject));
+}
+
 function setupAddOfficerButton() {
     var addOfficerBtn = document.getElementById('addOfficer');
     addOfficerBtn.style.display = "block"; //*/
-    addOfficerBtn.addEventListener('click', function() {        
+    addOfficerBtn.addEventListener('click', function () {
         var usernameEntry = document.getElementById('new-officer-username');
         usernameEntry.value = ''
         var memebertypeEntry = document.getElementById('new-officer-membertype');
         memebertypeEntry.value = ''
     });
     var submitBtn = document.getElementById('modal-new-officer-submit');
-    submitBtn.addEventListener('click', function() {
+    submitBtn.addEventListener('click', function () {
         var usernameEntry = document.getElementById('new-officer-username');
         var username = usernameEntry.value;
         var membertypeEntry = document.getElementById('new-officer-membertype');
         var memberType = membertypeEntry.value;
-        
+
         var urlExtension = 'members/' + username;
-        var json_data = {"memberType": memberType};
+        var json_data = { "memberType": memberType };
         var xhr = xhrPutRequest(urlExtension);
-        xhr.onload = function() {location.reload()};
+        xhr.onload = function () { location.reload() };
         var imageEntry = document.getElementById("imageFilePost");
         if (imageEntry.value != '') {
             var photoPost = new PhotoPostXhr("officerPhoto");
@@ -114,11 +142,10 @@ function setupAddOfficerButton() {
         }
     });
     var cancelBtn = document.getElementById('modal-new-officer-cancel');
-    cancelBtn.addEventListener('click', function() {
-        console.log("cancel!")
+    cancelBtn.addEventListener('click', function () {
         var imageEntry = document.getElementById("imageFilePost");
         imageEntry.value = '';
-    }); 
+    });
 }
 
 function showMessageModal(message) {
@@ -140,7 +167,7 @@ function showMessageModal(message) {
 
 
 function setup() {
-	
+
 	/*enableSubmitButton("everyOfficerEver", "officers-modal-", function(json) {
 		editName = json.firstname + ' ' + json.lastname
 		console.log("editName: " + editName);
@@ -161,7 +188,7 @@ function setup() {
     var officerId;
 
     var xhr = xhrGetRequest('officers');
-    xhr.onload = function () { 
+    xhr.onload = function () {
         createHTMLFromResponseText(xhr.responseText);
     }
     xhr.send();
@@ -173,10 +200,10 @@ function setup() {
         for (var i = 0; i < officer.length; i++) {
             if (officer[i].memberType != "") {
                 var html = "<div class='officer'>";
-                html += "<h3 class='edit' id='officer" + officer[i].user_id + "'>" 
-				
-				html += officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].membertype
-				html += "</h3>";
+                html += "<h3 class='edit' id='officer" + officer[i].user_id + "'>"
+
+                html += officer[i].firstname + " " + officer[i].lastname + " - " + officer[i].membertype
+                html += "</h3>";
                 html += "<img src='" + officer[i].image + "' alt='" + officer[i].membertype + "'height='294' width='195'>";
                 html += "<p>Email: <a href='mailto:" + officer[i].username + "@rose-hulman.edu'>" + officer[i].username + "@rose-hulman.edu</a></p>";
                 html += "<p> Phone Number: " + officer[i].phone_number + "</p>";
@@ -187,15 +214,13 @@ function setup() {
 
                 var officers = document.getElementById("officers");
                 officers.innerHTML += html;
-				
-				var dataset = document.getElementById('officer' + officer[i].user_id).dataset;
-				var fields = ["user_id", "firstname", "lastname", "username",
-					"membertype", "phone_number", "room_number", "hall", "cm"];
-                console.log("about to set fields");
-				fields.forEach(function(field){
-                    console.log("setting field " + field + " to " + officer[i][field]);
-					dataset[field] = officer[i][field];
-				});
+
+                var dataset = document.getElementById('officer' + officer[i].user_id).dataset;
+                var fields = ["user_id", "firstname", "lastname", "username",
+                    "membertype", "phone_number", "room_number", "hall", "cm", "image"];
+                fields.forEach(function (field) {
+                    dataset[field] = officer[i][field];
+                });
             }
         }
         var officersxhr = getOfficers();
@@ -208,7 +233,7 @@ function setup() {
 }
 
 function addDataset(fields, officer) {
-	
+
 }
 /* 
 function showEmptyModal() {
@@ -314,7 +339,7 @@ function saveOfficer() {
     return xhr;
 }//*/
 function showModal(editImage) {
-	var eventSrc = (editImage.target || editImage.srcElement);
+    var eventSrc = (editImage.target || editImage.srcElement);
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
     var nameAndTitle = eventSrc.parentElement.innerHTML;
@@ -435,6 +460,6 @@ function showModal(editImage) {
     }
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     setup();
 });
