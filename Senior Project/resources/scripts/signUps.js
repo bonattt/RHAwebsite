@@ -391,7 +391,7 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
         innerParagraph3.appendChild(document.createTextNode('View Emails'));
         showEmailLink.appendChild(innerParagraph3);
         eventActionDiv.appendChild(showEmailLink);
-        
+
         var editButton = createEditButton(proposal_id)
         eventActionDiv.appendChild(editButton);
     }
@@ -509,8 +509,9 @@ function submitFunc(json_data, put_id) {
     //     xhr.send(JSON.stringify(json_data));
     // }
 
-        if (imageInput.value != '') {
-        var image_to_delete = data.image.replace('.', "");
+    if (imageInput.value != '') {
+        console.log(json_data);
+        var image_to_delete = json_data.image.replace('.', "");
         var photoPost = new XMLHttpRequest();
         photoPost.open('POST', location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/eventPhoto', true);
         var files = imageInput.files;
@@ -521,7 +522,7 @@ function submitFunc(json_data, put_id) {
                 deleteFunction(data.image.substring(2));
                 json_data.image = JSON.parse(photoPost.response).filepath;
                 xhr.onreadystatechange = function (e) {
-                    if(xhr.readyState == 4 && xhr.status == 200) {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
                         location.reload();
                     }
                 };
