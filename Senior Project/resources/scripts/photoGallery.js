@@ -38,7 +38,6 @@ function displayImages(galleryURL) {
                 image.appendChild(img);
                 image.addEventListener("click", function () { setUpModal(row.path_to_photo, row.photo_gallery_id, row.approved) });
                 if (row.approved == "pending") {
-                    console.log("found pending. ID: " + row.photo_gallery_id);
                     photosPendingDiv.appendChild(image);
                 } else {
                     photosDiv.appendChild(image);
@@ -62,8 +61,6 @@ function setUpModal(filePath, photoID, approved) {
         modalApprove.style.display = "none";
         // buttons better not show up
     }
-    console.log("setting up modal");
-    console.log(photoID);
     var modalImage = document.getElementById('modalPhoto');
     modalImage.setAttribute('class', 'modalPhoto');
     modalImage.setAttribute('src', filePath);
@@ -82,11 +79,7 @@ function approveImage(imageID) {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            console.log("It worked, I guess?");
             location.reload();
-        } else {
-            console.log("something went wrong");
-            console.log("readyState: " + xhr.readyState + " --- status: " + xhr.status);
         }
     }
     xhr.send(JSON.stringify(json_data));
@@ -94,13 +87,11 @@ function approveImage(imageID) {
 
 function deletePhotoDB(imageID) {
     var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery/' + imageID;
-    console.log(url);
     var xhr = new XMLHttpRequest();
     xhr.open('DELETE', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            console.log("It worked, I guess?");
             location.reload();
         } else {
         }
@@ -111,12 +102,10 @@ function deletePhotoDB(imageID) {
 
 function deleteFunction(filePath, imageID) {
     filePath = filePath.substring(1, filePath.length);
-    console.log("deleting the file " + filePath);
     var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
     var photoxhr = new XMLHttpRequest();
     var dbObject = {};
     dbObject["imagePath"] = 'resources' + filePath.replace('.', "");
-    console.log(dbObject);
 
     photoxhr.open('DELETE', photoDeleteApi, true);
     photoxhr.setRequestHeader('Content-Type', 'application/json');
@@ -131,7 +120,6 @@ function deleteFunction(filePath, imageID) {
 }
 
 function showPictureModal(source) {
-    console.log("inside empty modal");
     var modal = document.getElementById('photoModal');
     var photo = document.getElementById('photo');
     var cancelButton = document.getElementById("photoGalleryClose");
@@ -151,7 +139,6 @@ function uploadPhoto() {
     var photoUploadApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
     var photoxhr = new XMLHttpRequest();
     var files = document.getElementById("imageFile").files;
-    console.log(files[0]);
     var formData = new FormData();
     formData.append("imageFile", files[0]);
     photoxhr.open('POST', photoUploadApi, true);
@@ -160,7 +147,6 @@ function uploadPhoto() {
         if (photoxhr.readyState == 4 && photoxhr.status == 200) {
             $('#uploadModal').modal('hide');
             var xhr = new XMLHttpRequest();
-            console.log(JSON.parse(photoxhr.response).filepath);
             var json_data = {"path_to_photo": JSON.parse(photoxhr.response).filepath, "approved": "pending"};
             xhr.open('POST', url, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -170,7 +156,6 @@ function uploadPhoto() {
                     // location.reload();
                 } else {
                     //shit might not have worked bois
-                    console.log(xhr.response);
                 }
             }
             xhr.send(JSON.stringify(json_data));
