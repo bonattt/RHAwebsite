@@ -723,7 +723,7 @@ function showEmailModal(event) {
     xhr.send();
     xhr.onload = function () {
         var response = JSON.parse(xhr.responseText);
-        console.log(response[0].attendees);
+        console.log(response[0].max_attendance);
         var eventAttendees = response[0].attendees;
         var modal = document.getElementById('listModal');
         var span = document.getElementsByClassName("closeList")[0];
@@ -739,6 +739,10 @@ function showEmailModal(event) {
 
         for (var i = 0; i < rightSide; i++) {
             html += "<br>" + eventAttendees[i] + "@rose-hulman.edu"
+            if (i == response[0].max_attendance-1) {
+                html += "<p>------Wait list-------</p>"
+                continue;
+            }
             if (i != rightSide - 1) {
                 html += "; ";
             }
