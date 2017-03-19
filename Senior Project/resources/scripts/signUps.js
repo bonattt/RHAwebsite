@@ -682,6 +682,7 @@ function showListModal(event) {
     xhr.send();
     xhr.onload = function () {
         var response = JSON.parse(xhr.responseText);
+        console.log(response[0].max_attendance);
         console.log(response[0].attendees);
         var eventAttendees = response[0].attendees;
         var modal = document.getElementById('listModal');
@@ -697,7 +698,10 @@ function showListModal(event) {
         }
 
         for (var i = 0; i < rightSide; i++) {
-            console.log("The person at " + i + "is: " + eventAttendees[i]);
+            console.log("The person at " + i + " is: " + eventAttendees[i]);
+            if (i == response[0].max_attendance) {
+                html += "<p>------Wait list-------</p>"
+            }
             html += "<br>" + eventAttendees[i];
         }
         list.innerHTML = "The attendees for this event are:";
