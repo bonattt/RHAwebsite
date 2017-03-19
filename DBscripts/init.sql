@@ -117,6 +117,40 @@ CREATE TABLE FloorExpenses (
     processed_date DATE  
 );
 
+CREATE TABLE PhotoGallery (
+    photo_gallery_id SERIAL PRIMARY KEY,
+    path_to_photo varchar(200),
+    approved varchar(30) -- Three values: 'approved', 'not approved', and 'pending'. Potential for more states should we decide they are necessary
+);
+
+-- Delete us after PR is made
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/2da67dcacc00fd58f8625c32ced43d72.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/4ce628bb19549936a189ac1a352b0d09.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/5bed0ece1e99aa5322bb786773fcfc16.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/6bc45faaafe75a1a61f753a10bfc8a4a.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/6de093c8f9655c72433ec289467b5391.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/9a32146d4cff9110fc540e59732185a4.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/9aab4b6853d01059fe3e97bc8628c2ca.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/9cc74c6be5c3970601e5c1eaacacc3e4.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/49ed806cf004f05b985fa085df19921d.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/67f7d02283544f6b33800900a1c8957b.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/74c82b0724c48c0a5eac84ebe7d51e2c.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/427ea5eab0ff6f58c3c4c24910827087.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/684c81a4bf2201aefe91f2bec67568ea.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/899c3417a6c8d9becda2dd685e5c7dec.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/67509ac31604f0fe9b3feba3fc4620e7.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/12115766_1195222930494335_5577980285924013420_n.jpg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/3986915852da0abf109992adbaf19c95.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/a9ddacdfa218500fb7978c589b3baab7.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/aadd533b7fea7d6f5a7ef24557783938.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/advisor.jpg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/ae5c7bec16a3e0ac65d5554f51e58708.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/b02dfc92a3e29effac8a028d3f44bc4c.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/bd9615a2caad7a178652680942c82712.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/c5a272018e906327dd0d0961d9064012.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/c3540920ff7e6c039cf52f26b3807ffa.jpeg', 'pending');
+-- INSERT INTO PhotoGallery (photo_gallery_id, path_to_photo, approved) VALUES (DEFAULT, './images/gallery/cd4cb930c8843af96869661c0adf2d08.jpeg', 'pending');
+
 
 CREATE TABLE InfoText (
   info_text_id SERIAL PRIMARY KEY,
@@ -135,6 +169,7 @@ COPY Equipment FROM '/tmp/equipment.csv' DELIMITER ',' CSV HEADER;
 COPY Rentals FROM '/tmp/rentals.csv' DELIMITER ',' CSV HEADER;
 COPY FloorMoney FROM '/tmp/floormoney.csv' DELIMITER ',' CSV HEADER;
 COPY FloorExpenses FROM '/tmp/floorexpenses.csv' DELIMITER ',' CSV HEADER;
+COPY PhotoGallery FROM '/tmp/photogallery.csv' DELIMITER ',' CSV HEADER;
 COPY InfoText FROM '/tmp/infotext.csv' DELIMITER ',' CSV HEADER;
 /* Inserts for FloorAttendanceNumerics */
 

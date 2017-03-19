@@ -15,7 +15,6 @@ PhotoPostXhr.prototype.imageCallback = function(xhr, json_data, field_name) {
         if (typeof field_name == 'undefined') {
             field_name = 'image';
         }
-        console.log(theXhr.responseText);
         var image_path = JSON.parse(theXhr.responseText).filepath;
         json_data[field_name] = image_path;
 //        alert(JSON.stringify(json_data));
@@ -27,12 +26,12 @@ PhotoPostXhr.prototype.callback = function(callback) {
     this.xhr.onload = callback;
 }
 
-function PhotoDeleteXhr(apiCall) {
-    this.xhr = new XMLHttpRequest();
-    this.xhr.open('DELETE', getPhotoApiUrl(apiCall));
-}
+// function PhotoDeleteXhr(apiCall) {
+//     this.xhr = new XMLHttpRequest();
+//     this.xhr.open('DELETE', getPhotoApiUrl(apiCall));
+// }
 
-PhotoDeleteXhr.prototype = PhotoPostXhr.prototype
+// PhotoDeleteXhr.prototype = PhotoPostXhr.prototype
 
 function getPhotoApiUrl(backendFilepath) {
     return location.protocol + '//' + location.hostname +

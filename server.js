@@ -111,6 +111,7 @@ app.post('/api/v1/galleryPhoto', type, function (req, res) {  //we will need to 
     fs.writeFile(target_path, data);
     fs.unlink(tmp_path);
     res.filePath = target_path;
+    console.log(res);
     res.status(200).json({ filepath: pathToSend }).send();
     return;
   });
@@ -128,7 +129,7 @@ app.get('/api/v1/galleryPhoto', type, function (req, res) {
   });
 });
 
-app.delete('/api/v1/galleryPhoto', urlencodedParser, function(req, res, next) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
+app.delete('/api/v1/photo', urlencodedParser, function(req, res, next) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
   var target_path = req.body.imagePath + "";
   fs.unlink(target_path);
   res.status(200).json({ status: 'The file ' + target_path + ' was deleted.' }).send();
