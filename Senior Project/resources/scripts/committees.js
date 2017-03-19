@@ -12,9 +12,9 @@ function setAdmin(officers) {
         deleteConfirm.addEventListener('click', function () {
             var element = document.getElementById(selected_element_id);
             var deleteid = element.dataset.committeeid;
-
             var apiExtension = 'committee/' + deleteid
             var xhr = xhrDeleteRequest(apiExtension);
+            deleteFunction(element.dataset.image.substring(2, element.dataset.image.length));
             xhr.onload = function () { location.reload() }
             xhr.send();
             document.getElementById("imageFile").value = '';
