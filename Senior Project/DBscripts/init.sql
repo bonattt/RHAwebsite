@@ -59,7 +59,8 @@ CREATE TABLE Proposals (
     cost_to_attendee double precision,
     image_path varchar(100), 
     description varchar(400),
-    attendees jsonb
+    attendees jsonb,
+    max_attendance INT
 );
 
 
