@@ -24,7 +24,8 @@ function setAdmin(officers) {
             document.getElementById("imageFile").value = '';
         });
         var deleteBtn = document.getElementById('modal-delete');
-        deleteBtn.addEventListener('click', function () {
+        deleteBtn.style.display = "inline";
+        deleteBtn.addEventListener('click', function() {
             document.getElementById("imageFile").value = '';
         });
     }

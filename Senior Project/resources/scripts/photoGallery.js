@@ -2,28 +2,46 @@ var isAdmin = false;
 
 function setup() {
     var officersxhr = getOfficers(); // from adminPErmission.js
+    var galleryURL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery';
     officersxhr.onload = function () {
         var modalDelete = document.getElementById('modal-delete');
         if (userIsOfficer(officersxhr.responseText)) {
-            modalDelete.style.display = "block";
+            galleryURL += 'All';
+            modalDelete.style.display = "inline-block";
         } else {
-            modalDelete.addEventListener('click', noPermission);
+            galleryURL += 'Restricted';
+            var photoGallerySections = document.getElementsByClassName("photo-gallery-sections");
+            for (var i = 0; i < photoGallerySections.length; i++) {
+                photoGallerySections[i].style.display = "none";
+            }
         }
     }
     officersxhr.send();
 
-    var galleryURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
+    setTimeout(function () { displayImages(galleryURL) }, 300);
+}
+
+function displayImages(galleryURL) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', galleryURL, true);
     xhr.onreadystatechange = function (e) {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            JSON.parse(xhr.responseText).forEach(fileName => {
+            JSON.parse(xhr.responseText).forEach(row => {
                 var photosDiv = document.getElementById("photos");
+                var photosPendingDiv = document.getElementById("photosPending");
                 var image = document.createElement('image');
-                var filePath = "./images/gallery/" + fileName;
-                image.innerHTML = "<img class='photoGalleryImage' src=" + filePath + " data-toggle='modal' data-target='#photoModal'>";
-                image.addEventListener("click", function () { setUpModal(filePath) });
-                photosDiv.appendChild(image);
+                var img = document.createElement('img');
+                img.setAttribute("class", "photoGalleryImage");
+                img.setAttribute("src", row.path_to_photo);
+                img.setAttribute("data-toggle", "modal");
+                img.setAttribute("data-target", "#photoModal");
+                image.appendChild(img);
+                image.addEventListener("click", function () { setUpModal(row.path_to_photo, row.photo_gallery_id, row.approved) });
+                if (row.approved == "pending") {
+                    photosPendingDiv.appendChild(image);
+                } else {
+                    photosDiv.appendChild(image);
+                }
             });
         }
     };
@@ -32,47 +50,76 @@ function setup() {
         console.log(err);
     }
     xhr.send();
-    // setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
-    // document.getElementById("fileNames").innerHTML = "<img class='photoGalleryImage' src='../images/gallery/31da25d45be0dbb169ee52557995c2e6_PRAISE-HELIX.png'>";
 }
 
-function setUpModal(filePath) {
-    console.log("setting up modal");
+function setUpModal(filePath, photoID, approved) {
+    var modalApprove = document.getElementById('modal-approve');
+
+    if (approved == "pending") {
+        modalApprove.style.display = "inline-block";
+    } else {
+        modalApprove.style.display = "none";
+        // buttons better not show up
+    }
     var modalImage = document.getElementById('modalPhoto');
     modalImage.setAttribute('class', 'modalPhoto');
     modalImage.setAttribute('src', filePath);
     var modalDelete = document.getElementById('modal-delete')
-    modalDelete.addEventListener("click", function () { deleteFunction(filePath) });
+    var modalApprove = document.getElementById('modal-approve');
+    modalDelete.addEventListener("click", function () { deleteFunction(filePath, photoID) });
+    modalApprove.addEventListener("click", function () { approveImage(photoID) });
+
 }
 
-function noPermission() {
-    alert("You do not have permission to delete photos.  Please contact a member of RHA exec to delete the photo for you.");
+function approveImage(imageID) {
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery';
+    var xhr = new XMLHttpRequest();
+    var json_data = {"approved": "approved", "photo_gallery_id": imageID};
+    xhr.open('PUT', url + '/' + imageID, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function (e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            location.reload();
+        }
+    }
+    xhr.send(JSON.stringify(json_data));
 }
 
-function deleteFunction(filePath) {
-    console.log("deleting the function");
+function deletePhotoDB(imageID) {
+    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery/' + imageID;
+    var xhr = new XMLHttpRequest();
+    xhr.open('DELETE', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function (e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            location.reload();
+        } else {
+        }
+    }
+    xhr.send();
+
+}
+
+function deleteFunction(filePath, imageID) {
+    filePath = filePath.substring(1, filePath.length);
     var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/photo';
-    var formData = new FormData();
-    console.log("file is:");
     var photoxhr = new XMLHttpRequest();
     var dbObject = {};
     dbObject["imagePath"] = 'resources' + filePath.replace('.', "");
-    console.log(dbObject);
 
     photoxhr.open('DELETE', photoDeleteApi, true);
     photoxhr.setRequestHeader('Content-Type', 'application/json');
 
     photoxhr.onreadystatechange = function (e) {
         if (photoxhr.readyState == 4 && photoxhr.status == 200) {
-            location.reload();
+            deletePhotoDB(imageID);
         }
     };
-    console.log(formData);
     photoxhr.send(JSON.stringify(dbObject));
+
 }
 
 function showPictureModal(source) {
-    console.log("inside empty modal");
     var modal = document.getElementById('photoModal');
     var photo = document.getElementById('photo');
     var cancelButton = document.getElementById("photoGalleryClose");
@@ -88,10 +135,10 @@ function showPictureModal(source) {
 }
 
 function uploadPhoto() {
+    var url = "http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery";
     var photoUploadApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
     var photoxhr = new XMLHttpRequest();
     var files = document.getElementById("imageFile").files;
-
     var formData = new FormData();
     formData.append("imageFile", files[0]);
     photoxhr.open('POST', photoUploadApi, true);
@@ -99,11 +146,26 @@ function uploadPhoto() {
     photoxhr.onreadystatechange = function (e) {
         if (photoxhr.readyState == 4 && photoxhr.status == 200) {
             $('#uploadModal').modal('hide');
+            var xhr = new XMLHttpRequest();
+            var json_data = {"path_to_photo": JSON.parse(photoxhr.response).filepath, "approved": "pending"};
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function (e) {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    //shit worked bois
+                    // location.reload();
+                } else {
+                    //shit might not have worked bois
+                }
+            }
+            xhr.send(JSON.stringify(json_data));
             location.reload();
         }
     };
 
     photoxhr.send(formData);
+
+
 }
 
 $(document).ready(function () {

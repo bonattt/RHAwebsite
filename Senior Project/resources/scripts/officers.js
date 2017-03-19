@@ -67,7 +67,8 @@ function setAdmin(officers) {
             });
 
         var deleteBtn = document.getElementById('modal-delete');
-        deleteBtn.addEventListener('click', function () {
+        deleteBtn.style.display = "inline";
+        deleteBtn.addEventListener('click', function() {
             var imageEntry = document.getElementById("imageFilePut");
             imageEntry.value = '';
         });
@@ -156,34 +157,8 @@ function showMessageModal(message) {
     $('#' + MESSAGE_MODAL_ID).modal('show');
 }
 
-//function setupMessageModal() {
-//    $('#' + MESSAGE_MODAL_ID).modal({'show': false});
-//    var closeModalBtn = document.getElementById('message-okay');
-//    closeModalBtn.addEventListener('click', function () {
-//        var modalBody = document.getElementById('messageModalBody');
-//        modalBody.innerHTML = ''
-//    });
-//}
-
 
 function setup() {
-
-	/*enableSubmitButton("everyOfficerEver", "officers-modal-", function(json) {
-		editName = json.firstname + ' ' + json.lastname
-		console.log("editName: " + editName);
-		var officerID = officerMap[editName];
-		console.log("oficerID: " + officerID);
-		// console.log("officerMap: ");
-		// console.log(officerMap);
-		var urlExtension = 'member/' + officerID;
-		var xhr = xhrPutRequest(urlExtension);
-		console.log("email: " + json.email);
-		json.username = json.email.split("@")[0];
-		console.log("username: " + json.username);
-		alert(JSON.stringify(json));
-		// xhr.send(JSON.stringify(json));
-		// location.reload();
-	});*/
 
     var officerId;
 
@@ -235,109 +210,7 @@ function setup() {
 function addDataset(fields, officer) {
 
 }
-/* 
-function showEmptyModal() {
-    var modal = document.getElementById('myModal');
-    var span = document.getElementsByClassName("close")[0];
-    var name = "Name: ";
-    var title = "Title: ";
-    var email = "Email: ";
-    var phoneNumber = "Phone number: ";
-    var room = "Room number: ";
-    var cm = "CM: ";
 
-    var titleInput = document.createElement("textarea");
-    titleInput.setAttribute("rows", "1");
-    titleInput.setAttribute("cols", "30");
-
-    var nameInput = document.createElement("textarea");
-    nameInput.setAttribute("rows", "1");
-    nameInput.setAttribute("cols", "30");
-
-
-    var emailInput = document.createElement("textarea");
-    emailInput.setAttribute("rows", "1");
-    emailInput.setAttribute("cols", "30");
-
-    var phnNumInput = document.createElement("textarea");
-    phnNumInput.setAttribute("rows", "1");
-    phnNumInput.setAttribute("cols", "30");
-
-    var CMInput = document.createElement("textarea");
-    CMInput.setAttribute("rows", "1");
-    CMInput.setAttribute("cols", "30");
-
-
-    var nameNode = document.getElementById("nameInput");
-    var emailNode = document.getElementById("emailInput");
-    var phnNode = document.getElementById("phnNumInput");
-    var CMNode = document.getElementById("CMInput");
-    var titleNode = document.getElementById("titleInput");
-
-
-    titleNode.appendChild(titleInput);
-    document.getElementById("title").innerHTML = title;
-    nameNode.appendChild(nameInput);
-    document.getElementById("name").innerHTML = name;
-    emailNode.appendChild(emailInput);
-    document.getElementById("email").innerHTML = email;
-    phnNode.appendChild(phnNumInput);
-    document.getElementById("phnNum").innerHTML = phoneNumber;
-    if (CMInput) {
-        CMNode.appendChild(CMInput);
-    }
-    if (document.getElementById("CM")) {
-        document.getElementById("CM").innerHTML = cm;
-    }
-
-    modal.style.display = "block";
-    span.onclick = function () {
-        modal.style.display = "none";
-        nameNode.removeChild(nameNode.firstChild);
-        emailNode.removeChild(emailNode.firstChild);
-        phnNode.removeChild(phnNode.firstChild);
-        titleNode.removeChild(titleNode.firstChild);
-        if (CMNode.firstChild) {
-            CMNode.removeChild(CMNode.firstChild);
-        }
-    }
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            nameNode.removeChild(nameNode.firstChild);
-            emailNode.removeChild(emailNode.firstChild);
-            phnNode.removeChild(phnNode.firstChild);
-            titleNode.removeChild(titleNode.firstChild);
-            if (CMNode.firstChild) {
-                CMNode.removeChild(CMNode.firstChild);
-            }
-        }
-    }
-} // */
-/*
-function saveOfficer() {
-    var modal = document.getElementById("myModal");
-    modal.style.display = "none";
-    var fullname = document.getElementById("fullname").value;
-    var officerID = officerMap[editName];
-    var urlExtension = 'member/' + officerID;
-    var xhr = xhrPutRequest(urlExtension);
-   
-    var titleText = document.getElementById("title-input-field").value;
-    var emailText = document.getElementById("email-text").value;
-    var phoneText = document.getElementById("phone-text").value;
-    var hallText = document.getElementById("room-text").value.split(" ")[0];
-    var roomText = document.getElementById("room-text").value.split(" ")[1];
-    var cmText = document.getElementById("cm-text").value;
-
-    var firstName = fullname.split(" ")[0];
-    var lastName = fullname.split(" ")[1];
-    var username = emailText.split("@")[0];
-    console.log(roomText);
-    xhr.send(JSON.stringify({ membertype: titleText, firstname: firstName, lastname: lastName, username: username, phone_number: phoneText, cm: cmText, room_number: roomText, hall: hallText }));
-    location.reload();
-    return xhr;
-}//*/
 function showModal(editImage) {
     var eventSrc = (editImage.target || editImage.srcElement);
     var modal = document.getElementById('myModal');
