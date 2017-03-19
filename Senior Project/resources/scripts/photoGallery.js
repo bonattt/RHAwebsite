@@ -102,7 +102,7 @@ function deletePhotoDB(imageID) {
 
 function deleteFunction(filePath, imageID) {
     filePath = filePath.substring(1, filePath.length);
-    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
+    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/photo';
     var photoxhr = new XMLHttpRequest();
     var dbObject = {};
     dbObject["imagePath"] = 'resources' + filePath.replace('.', "");
