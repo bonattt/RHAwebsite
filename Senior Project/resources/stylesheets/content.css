@@ -1053,6 +1053,12 @@ td {
 	display: block;
 }
 
+#undoAttendance {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
 .modal-backdrop.in{
 	opacity: 0.75;
 }
