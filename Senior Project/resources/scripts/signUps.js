@@ -146,69 +146,68 @@ function setupAdmin(officers) {
 }
 
 function displaySignUps() {
-    var officersxhr = getOfficers(); // from adminPErmission.js
+    var officersxhr = getOfficers(); // from adminPermission.js
     officersxhr.onload = function () {
         if (userIsOfficer(officersxhr.responseText)) {
             setupAdmin();
-            enableDeleteButton();
+        }
+
+        var xhr = getEvents();
+        xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
+        xhr.send();
+        //    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+
+        function createHTMLFromResponseText(proposal) {
+            proposal = JSON.parse(proposal);
+            var editButtons = [];
+
+            for (var i = 0; i < proposal.length; i++) {
+                var proposal_id = proposal[i].proposal_id;
+                var eventHtml = generatePageHTML(proposal[i]);
+                var tileArea = document.getElementsByClassName("eventTileArea")[0];
+                tileArea.appendChild(eventHtml);
+            }
+            populateDateSelect(EVENT_DATE);
+            populateDateSelect(SIGNUPS_OPEN);
+            populateDateSelect(SIGNUPS_CLOSE);
+
+            editButtons.forEach(function (element) {
+                console.log(element)
+            });
+        }
+
+        function getEvents() {
+            var url = apiURL + 'api/v1/events';
+            function createCORSRequest(method, url) {
+                var xhr = new XMLHttpRequest();
+                if ("withCredentials" in xhr) {
+                    xhr.open(method, url, true);
+                } else if (typeof XDomainRequest != "undefined") {
+                    xhr = new XDomainRequest();
+                    xhr.open(method, url);
+                } else {
+                    xhr = null;
+                }
+                return xhr;
+            }
+
+            var xhr = createCORSRequest('GET', url);
+            if (!xhr) {
+                throw new Error('CORS not supported');
+            }
+
+            xhr.onload = function () {
+                var responseText = xhr.responseText;
+            }
+
+            xhr.onerror = function () {
+                console.log("There was an error");
+            }
+            // xhr.send();
+            return xhr;
         }
     }
     officersxhr.send();
-
-    var xhr = getEvents();
-    xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
-    xhr.send();
-    //    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
-
-    function createHTMLFromResponseText(proposal) {
-        proposal = JSON.parse(proposal);
-        var editButtons = [];
-
-        for (var i = 0; i < proposal.length; i++) {
-            var proposal_id = proposal[i].proposal_id;
-            var eventHtml = generatePageHTML(proposal[i]);
-            var tileArea = document.getElementsByClassName("eventTileArea")[0];
-            tileArea.appendChild(eventHtml);
-        }
-        populateDateSelect(EVENT_DATE);
-        populateDateSelect(SIGNUPS_OPEN);
-        populateDateSelect(SIGNUPS_CLOSE);
-
-        editButtons.forEach(function (element) {
-            console.log(element)
-        });
-    }
-
-    function getEvents() {
-        var url = apiURL + 'api/v1/events';
-        function createCORSRequest(method, url) {
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-                xhr.open(method, url, true);
-            } else if (typeof XDomainRequest != "undefined") {
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-            } else {
-                xhr = null;
-            }
-            return xhr;
-        }
-
-        var xhr = createCORSRequest('GET', url);
-        if (!xhr) {
-            throw new Error('CORS not supported');
-        }
-
-        xhr.onload = function () {
-            var responseText = xhr.responseText;
-        }
-
-        xhr.onerror = function () {
-            console.log("There was an error");
-        }
-        // xhr.send();
-        return xhr;
-    }
 }
 
 var getSignupDateHtml = function (proposal, signUpCloseDate, signUpOpenDate, signUpOpenDateFormatted) {
