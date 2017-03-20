@@ -213,6 +213,7 @@ function buildRow(data, keys, rowNumber) {
         col.setAttribute('class', 'tableEntry');
         col.setAttribute('id', 'row' + rowNumber + 'col' + colNumber);
         row.appendChild(col);
+        colNumber++;
     });
     return row;
 }
