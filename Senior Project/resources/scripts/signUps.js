@@ -131,7 +131,8 @@ function saveEvent() {
     }
     console.log("new event name is: ");
     console.log(newEventName);
-
+    alert(newEventName);
+    alert(newEventImage);
     xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate, event_signup_open: newEventSignUpOpenDate, event_date: newEventDate, attendees: newAttendees }));
 
     return xhr;
@@ -266,7 +267,7 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     } else {
         username = JSON.parse(sessionStorage.getItem("userData")).username;
     }
-    var eventActionDiv = getEventActionDiv(proposal_id, username, signUpOpenDate, attendees);
+    var eventActionDiv = getEventActionDiv(proposal, username, signUpOpenDate, attendees); ////////////////////////////////////////////////////////////////////////
     colDiv.appendChild(eventActionDiv);
 
     return rowDiv;
@@ -286,7 +287,8 @@ function getEventTextSignupsHtml(proposal, cost, eventDate, signUpOpenDate, sign
         "event_date",
         "event_signup_open",
         "event_signup_close",
-        "description"
+        "description",
+        "image_path"
     ];
     fields.forEach(function (field) {
         eventTextSignUps.dataset[field] = proposal[field];
@@ -333,25 +335,25 @@ function getEventTextSignupsHtml(proposal, cost, eventDate, signUpOpenDate, sign
     return eventTextSignUps;
 }
 
-function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
+function getEventActionDiv(proposal, username, signUpOpenDate, attendees) {
     // html += "<div id='eventActions" + proposal_id + "' class='eventActions'>";
     var eventActionDiv = document.createElement('div');
-    eventActionDiv.setAttribute('id', 'eventActions' + proposal_id);
+    eventActionDiv.setAttribute('id', 'eventActions' + proposal.proposal_id);
     eventActionDiv.setAttribute('class', 'eventActions');
 
     // signup / unregister button, ? event is current 
     if (signUpOpenDate < new Date()) {
         var signupLink = document.createElement('a');
-        signupLink.setAttribute('id', 'signUpLink' + proposal_id);
+        signupLink.setAttribute('id', 'signUpLink' + proposal.proposal_id);
         if (username != null) {
             if ($.inArray(username, attendees) == -1) {
-                signupLink.addEventListener('click', function () { signUp(proposal_id + "") });
+                signupLink.addEventListener('click', function () { signUp(proposal.proposal_id + "") });
                 var innerParagraph = document.createElement('p');
                 innerParagraph.setAttribute('class', 'signUpLink');
                 innerParagraph.appendChild(document.createTextNode('Sign Up'));
                 signupLink.appendChild(innerParagraph);
             } else {
-                signupLink.addEventListener('click', function () { unregister(proposal_id) });
+                signupLink.addEventListener('click', function () { unregister(proposal.proposal_id) });
                 var innerParagraph = document.createElement('p');
                 innerParagraph.setAttribute('class', 'signUpLink');
                 innerParagraph.appendChild(document.createTextNode('Unregister'));
@@ -376,7 +378,7 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     eventActionDiv.appendChild(signupLink);
 
     var showListLink = document.createElement('a');
-    showListLink.addEventListener('click', function () { showListModal(proposal_id) });
+    showListLink.addEventListener('click', function () { showListModal(proposal.proposal_id) });
     var innerParagraph2 = document.createElement('p');
     innerParagraph2.setAttribute('class', 'viewListLink');
     innerParagraph2.appendChild(document.createTextNode('View List'));
@@ -385,14 +387,14 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
 
     if (isAdmin) {
         var showEmailLink = document.createElement('a');
-        showEmailLink.addEventListener('click', function () { showEmailModal(proposal_id) });
+        showEmailLink.addEventListener('click', function () { showEmailModal(proposal.proposal_id) });
         var innerParagraph3 = document.createElement('p');
         innerParagraph3.setAttribute('class', 'viewListLink');
         innerParagraph3.appendChild(document.createTextNode('View Emails'));
         showEmailLink.appendChild(innerParagraph3);
         eventActionDiv.appendChild(showEmailLink);
 
-        var editButton = createEditButton(proposal_id)
+        var editButton = createEditButton(proposal) //////////////////////////////////////////////////////////////////////////////////////
         eventActionDiv.appendChild(editButton);
     }
     var cancelBtn = document.getElementById('modal-cancel');
@@ -419,21 +421,22 @@ function enableDeleteButton() {
     });
 }
 
-function createEditButton(proposal_id) {
+function createEditButton(proposal) {
+    console.log(proposal);
     var editButton = document.createElement('a');
-    editButton.addEventListener('click', getSetupModalDates(dataElementId(proposal_id)));
+    editButton.addEventListener('click', getSetupModalDates(dataElementId(proposal.proposal_id)));
     editButton.addEventListener('click', generateEditButtonListener(
-        dataElementId(proposal_id), MODAL_FIELD_ROOT_ID, submitFunc, "proposal_id"
+        dataElementId(proposal.proposal_id), MODAL_FIELD_ROOT_ID, submitFunc, "proposal_id"
     ));
     editButton.addEventListener('click', function () {
         var delBtn = document.getElementById('confirm-delete');
-        delBtn.dataset.lastclicked = proposal_id
+        delBtn.dataset.lastclicked = proposal.proposal_id
     });
     editButton.dataset.toggle = 'modal';
     editButton.dataset.target = '#myModal';
     var innerParagraph3 = document.createElement('p');
     innerParagraph3.setAttribute('class', 'editEvent');
-    innerParagraph3.setAttribute('id', 'editEvent' + proposal_id);
+    innerParagraph3.setAttribute('id', 'editEvent' + proposal.proposal_id);
     innerParagraph3.appendChild(document.createTextNode('Edit Event'));
     editButton.appendChild(innerParagraph3);
     return editButton;
@@ -488,7 +491,6 @@ function submitFunc(json_data, put_id) {
     json_data.event_date = composeDate(EVENT_DATE);
     json_data.event_signup_open = composeDate(SIGNUPS_OPEN);
     json_data.event_signup_close = composeDate(SIGNUPS_CLOSE);
-    console.log(json_data);
 
     var apiExtension = "events/" + put_id;
     var xhr = xhrPutRequest(apiExtension);
@@ -510,8 +512,6 @@ function submitFunc(json_data, put_id) {
     // }
 
     if (imageInput.value != '') {
-        console.log(json_data);
-        var image_to_delete = json_data.image.replace('.', "");
         var photoPost = new XMLHttpRequest();
         photoPost.open('POST', location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/eventPhoto', true);
         var files = imageInput.files;
@@ -519,8 +519,8 @@ function submitFunc(json_data, put_id) {
         formData.append("imageFile", files[0]);
         photoPost.onreadystatechange = function (e) {
             if (photoPost.readyState == 4 && photoPost.status == 200) {
-                deleteFunction(data.image.substring(2));
                 json_data.image = JSON.parse(photoPost.response).filepath;
+                deleteFunction(json_data.image_path);
                 xhr.onreadystatechange = function (e) {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         location.reload();
@@ -530,6 +530,8 @@ function submitFunc(json_data, put_id) {
             }
         }
         photoPost.send(formData);
+        alert("yo I'm editing the photo, man.");
+        alert(JSON.stringify(json_data));
     } else {
         xhr.send(JSON.stringify(json_data));
     }
@@ -813,6 +815,6 @@ function submit() {
     editPen.addEventListener("click", function (e) {
         showEditModal(e);
     }, false);
-
+    alert("saving the event");
     saveEvent();
 }
