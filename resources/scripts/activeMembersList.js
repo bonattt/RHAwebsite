@@ -31,10 +31,10 @@ function setAdmin(officers) {
 function setup() {
     var urlExtension = 'members/';
     var xhr = xhrGetRequest(urlExtension);
-    xhr.send();
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+    //setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
-    function createHTMLFromResponseText(members) {
+    xhr.onload = function() {
+        var members = xhr.responseText;
         drawAllMembersTable(members);
         var allMembersButton = document.getElementById('allMembers');
         var submitAttendanceDiv = document.getElementById('submitAttendanceDiv');
@@ -47,6 +47,7 @@ function setup() {
             submitAttendanceDiv.style.display = "none";
         });
     }
+    xhr.send();
 }
 
 function showModal() {
