@@ -1,10 +1,11 @@
 function setup() {
     var urlExtension = 'floorMoney/';
     var xhr = xhrGetRequest(urlExtension);
+    xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
     xhr.send();
 
 
-    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+//    setTimeout(, 300);
 
     function createHTMLFromResponseText(floorMoney) {
         floorMoney = JSON.parse(floorMoney);
