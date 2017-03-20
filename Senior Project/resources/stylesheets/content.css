@@ -1053,14 +1053,39 @@ td {
 	display: block;
 }
 
+#undoAttendance {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
 .modal-backdrop.in{
 	opacity: 0.75;
+}
+
+#modal-buttons {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 #modal-delete {
 	margin-left: auto;
 	margin-right: auto;
-	display: block;
+	margin-top: 2.5%;
+	display: none;
+}
+
+#modal-approve {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 2.5%;
+	display: none;
+}
+
+#modal-unapprove {
+	margin-left: auto;
+	margin-right: auto;
 	margin-top: 2.5%;
 	display: none;
 }
