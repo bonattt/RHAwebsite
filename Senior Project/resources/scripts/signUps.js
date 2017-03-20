@@ -234,7 +234,7 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     var signUpCloseDate = new Date(proposal.event_signup_close);
     var signUpCloseDateFormatted = (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear();
     var signUpOpenDate = new Date(proposal.event_signup_open);
-    var signUpOpenDateFormatted = (signUpOpenDate.getMonth() + 1) + "/" + signUpOpenDate.getUTCDate() + "/" + signUpOpenDate.getFullYear();
+    var signUpOpenDateFormatted = (signUpOpenDate.getMonth() + 1) + "/" + (signUpOpenDate.getUTCDate() + 1) + "/" + signUpOpenDate.getFullYear();
 
     var signupHtml = getSignupDateHtml(proposal, signUpCloseDateFormatted, signUpOpenDate, signUpOpenDateFormatted);
 
@@ -453,6 +453,7 @@ function setupModalDates(rootId, dataElementId, field) {
     var month_event_date = document.getElementById(rootId + "_month");
     var year_event_date = document.getElementById(rootId + "_year");
     day_event_date.value = date.getDate();
+    console.log(date.getDate()) ;
     month_event_date.value = MONTH_NAMES[date.getMonth()];
     year_event_date.value = date.getFullYear();
 }
@@ -460,10 +461,11 @@ function setupModalDates(rootId, dataElementId, field) {
 
 function populateDateSelect(divId) {
     var div = document.getElementById(divId);
-    var date = new Date();
     div.appendChild(generateOptions(divId + '_month', 0, 12, 1, MONTH_NAMES));
     div.appendChild(generateOptions(divId + '_day', 1, 31, 1));
     div.appendChild(generateOptions(divId + '_year', 2016, 2019, 1));
+    console.log("In populateDateSelect. Printing the div Im modifying: ");
+    console.log(div);
 }
 
 function generateOptions(idAttr, start, end, step, names) {
@@ -493,7 +495,7 @@ function submitFunc(json_data, put_id) {
     var xhr = xhrPutRequest(apiExtension);
     xhr.onload = function () {
         console.log('successfully delivered API call!');
-        location.reload();
+        // location.reload();
     }
     var imageInput = document.getElementById('imageFile');
     if (imageInput.value != '') {
@@ -514,9 +516,9 @@ function composeDate(modalId) {
     var monthName = document.getElementById(modalId + '_month').value
     date.setMonth(MONTH_NAMES.indexOf(monthName));
     date.setFullYear(document.getElementById(modalId + '_year').value);
-    date.setDate(document.getElementById(modalId + '_day').value - 1);
+    date.setDate(document.getElementById(modalId + '_day').value);
 
-    console.log(date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear());
+    console.log(date.getMonth() + '/' + (date.getDate() + 1) + '/' + date.getFullYear());
     //date.setHours(DEFAULT_HOURS);   
     //date.setMinutes(DEFAULT_MINUTES);
     return date;
