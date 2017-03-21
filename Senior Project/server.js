@@ -96,7 +96,6 @@ app.post('/api/v1/eventPhoto', type, function (req, res) {  //we will need to ma
     fs.writeFile(target_path, data);
     fs.unlink(tmp_path);
     res.filePath = target_path;
-    console.log(res);
     res.status(200).json({ filepath: pathToSend }).send();
     return;
   });

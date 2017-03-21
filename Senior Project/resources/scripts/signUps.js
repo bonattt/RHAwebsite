@@ -131,13 +131,14 @@ function saveEvent() {
     }
     console.log("new event name is: ");
     console.log(newEventName);
-
     xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate, event_signup_open: newEventSignUpOpenDate, event_date: newEventDate, attendees: newAttendees }));
 
     return xhr;
 }
 function setupAdmin(officers) {
     isAdmin = true;
+    var deleteButton = document.getElementById("modal-delete");
+    deleteButton.style.display = "inline";
     enableDeleteButton();
     //    var hiddenFeatures = document.getElementsByClassName('adminOnly')
     //    hiddenFeatures.forEach( function(element) {
@@ -170,10 +171,6 @@ function displaySignUps() {
             populateDateSelect(EVENT_DATE);
             populateDateSelect(SIGNUPS_OPEN);
             populateDateSelect(SIGNUPS_CLOSE);
-
-            editButtons.forEach(function (element) {
-                console.log(element)
-            });
         }
 
         function getEvents() {
@@ -265,7 +262,7 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     } else {
         username = JSON.parse(sessionStorage.getItem("userData")).username;
     }
-    var eventActionDiv = getEventActionDiv(proposal_id, username, signUpOpenDate, attendees);
+    var eventActionDiv = getEventActionDiv(proposal, username, signUpOpenDate, attendees); ////////////////////////////////////////////////////////////////////////
     colDiv.appendChild(eventActionDiv);
 
     return rowDiv;
@@ -285,7 +282,8 @@ function getEventTextSignupsHtml(proposal, cost, eventDate, signUpOpenDate, sign
         "event_date",
         "event_signup_open",
         "event_signup_close",
-        "description"
+        "description",
+        "image_path"
     ];
     fields.forEach(function (field) {
         eventTextSignUps.dataset[field] = proposal[field];
@@ -332,25 +330,25 @@ function getEventTextSignupsHtml(proposal, cost, eventDate, signUpOpenDate, sign
     return eventTextSignUps;
 }
 
-function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
+function getEventActionDiv(proposal, username, signUpOpenDate, attendees) {
     // html += "<div id='eventActions" + proposal_id + "' class='eventActions'>";
     var eventActionDiv = document.createElement('div');
-    eventActionDiv.setAttribute('id', 'eventActions' + proposal_id);
+    eventActionDiv.setAttribute('id', 'eventActions' + proposal.proposal_id);
     eventActionDiv.setAttribute('class', 'eventActions');
 
     // signup / unregister button, ? event is current 
     if (signUpOpenDate < new Date()) {
         var signupLink = document.createElement('a');
-        signupLink.setAttribute('id', 'signUpLink' + proposal_id);
+        signupLink.setAttribute('id', 'signUpLink' + proposal.proposal_id);
         if (username != null) {
             if ($.inArray(username, attendees) == -1) {
-                signupLink.addEventListener('click', function () { signUp(proposal_id + "") });
+                signupLink.addEventListener('click', function () { signUp(proposal.proposal_id + "") });
                 var innerParagraph = document.createElement('p');
                 innerParagraph.setAttribute('class', 'signUpLink');
                 innerParagraph.appendChild(document.createTextNode('Sign Up'));
                 signupLink.appendChild(innerParagraph);
             } else {
-                signupLink.addEventListener('click', function () { unregister(proposal_id) });
+                signupLink.addEventListener('click', function () { unregister(proposal.proposal_id) });
                 var innerParagraph = document.createElement('p');
                 innerParagraph.setAttribute('class', 'signUpLink');
                 innerParagraph.appendChild(document.createTextNode('Unregister'));
@@ -375,7 +373,7 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
     eventActionDiv.appendChild(signupLink);
 
     var showListLink = document.createElement('a');
-    showListLink.addEventListener('click', function () { showListModal(proposal_id) });
+    showListLink.addEventListener('click', function () { showListModal(proposal.proposal_id) });
     var innerParagraph2 = document.createElement('p');
     innerParagraph2.setAttribute('class', 'viewListLink');
     innerParagraph2.appendChild(document.createTextNode('View List'));
@@ -384,14 +382,14 @@ function getEventActionDiv(proposal_id, username, signUpOpenDate, attendees) {
 
     if (isAdmin) {
         var showEmailLink = document.createElement('a');
-        showEmailLink.addEventListener('click', function () { showEmailModal(proposal_id) });
+        showEmailLink.addEventListener('click', function () { showEmailModal(proposal.proposal_id) });
         var innerParagraph3 = document.createElement('p');
         innerParagraph3.setAttribute('class', 'viewListLink');
         innerParagraph3.appendChild(document.createTextNode('View Emails'));
         showEmailLink.appendChild(innerParagraph3);
         eventActionDiv.appendChild(showEmailLink);
-        
-        var editButton = createEditButton(proposal_id)
+
+        var editButton = createEditButton(proposal) //////////////////////////////////////////////////////////////////////////////////////
         eventActionDiv.appendChild(editButton);
     }
     var cancelBtn = document.getElementById('modal-cancel');
@@ -413,26 +411,29 @@ function enableDeleteButton() {
         var id = delBtn.dataset.lastclicked;
         var apiUrl = 'event/' + id;
         var xhr = xhrDeleteRequest(apiUrl);
+        var image = document.getElementById("eventTextSignUps" + id).dataset.image_path;
+        deleteFunction(image.substring(2, image.length));
         xhr.onload = function () { location.reload() };
         xhr.send();
     });
 }
 
-function createEditButton(proposal_id) {
+function createEditButton(proposal) {
+    console.log(proposal);
     var editButton = document.createElement('a');
-    editButton.addEventListener('click', getSetupModalDates(dataElementId(proposal_id)));
+    editButton.addEventListener('click', getSetupModalDates(dataElementId(proposal.proposal_id)));
     editButton.addEventListener('click', generateEditButtonListener(
-        dataElementId(proposal_id), MODAL_FIELD_ROOT_ID, submitFunc, "proposal_id"
+        dataElementId(proposal.proposal_id), MODAL_FIELD_ROOT_ID, submitFunc, "proposal_id"
     ));
     editButton.addEventListener('click', function () {
         var delBtn = document.getElementById('confirm-delete');
-        delBtn.dataset.lastclicked = proposal_id
+        delBtn.dataset.lastclicked = proposal.proposal_id
     });
     editButton.dataset.toggle = 'modal';
     editButton.dataset.target = '#myModal';
     var innerParagraph3 = document.createElement('p');
     innerParagraph3.setAttribute('class', 'editEvent');
-    innerParagraph3.setAttribute('id', 'editEvent' + proposal_id);
+    innerParagraph3.setAttribute('id', 'editEvent' + proposal.proposal_id);
     innerParagraph3.appendChild(document.createTextNode('Edit Event'));
     editButton.appendChild(innerParagraph3);
     return editButton;
@@ -453,7 +454,7 @@ function setupModalDates(rootId, dataElementId, field) {
     var month_event_date = document.getElementById(rootId + "_month");
     var year_event_date = document.getElementById(rootId + "_year");
     day_event_date.value = date.getDate();
-    console.log(date.getDate()) ;
+    console.log(date.getDate());
     month_event_date.value = MONTH_NAMES[date.getMonth()];
     year_event_date.value = date.getFullYear();
 }
@@ -489,25 +490,62 @@ function submitFunc(json_data, put_id) {
     json_data.event_date = composeDate(EVENT_DATE);
     json_data.event_signup_open = composeDate(SIGNUPS_OPEN);
     json_data.event_signup_close = composeDate(SIGNUPS_CLOSE);
-    console.log(json_data);
 
     var apiExtension = "events/" + put_id;
     var xhr = xhrPutRequest(apiExtension);
     xhr.onload = function () {
-        location.reload();
+        // location.reload();
     }
     var imageInput = document.getElementById('imageFile');
+    // if (imageInput.value != '') {
+    //     var photoXhr = new PhotoPostXhr("eventPhoto");
+    //     photoXhr.imageCallback(xhr, json_data, 'image_path');
+    //     var files = document.getElementById("imageFile").files;
+    //     var formData = new FormData();
+    //     formData.append("imageFile", files[0]);
+    //     photoXhr.send(formData);
+    //     imageInput.value = '';
+    // } else {
+    //     xhr.send(JSON.stringify(json_data));
+    // }
+
     if (imageInput.value != '') {
-        var photoXhr = new PhotoPostXhr("eventPhoto");
-        photoXhr.imageCallback(xhr, json_data, 'image_path');
-        var files = document.getElementById("imageFile").files;
+        var photoPost = new XMLHttpRequest();
+        photoPost.open('POST', location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/eventPhoto', true);
+        var files = imageInput.files;
         var formData = new FormData();
         formData.append("imageFile", files[0]);
-        photoXhr.send(formData);
-        imageInput.value = '';
+        console.log(files[0].name);
+        photoPost.onreadystatechange = function (e) {
+            if (photoPost.readyState == 4 && photoPost.status == 200) {
+                deleteFunction(json_data.image_path.substring(2, json_data.image_path.length));
+                xhr.onreadystatechange = function (e) {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        location.reload();
+                    }
+                };
+                json_data.image_path = JSON.parse(photoPost.response).filepath;
+                xhr.send(JSON.stringify(json_data));
+            }
+        }
+        photoPost.send(formData);
     } else {
         xhr.send(JSON.stringify(json_data));
     }
+
+}
+
+function deleteFunction(filePath) {
+    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/photo';
+    var formData = new FormData();
+    var photoxhr = new XMLHttpRequest();
+    var dbObject = {};
+    dbObject["imagePath"] = 'resources' + filePath;
+
+    photoxhr.open('DELETE', photoDeleteApi, true);
+    photoxhr.setRequestHeader('Content-Type', 'application/json');
+
+    photoxhr.send(JSON.stringify(dbObject));
 }
 
 function composeDate(modalId) {
@@ -739,7 +777,7 @@ function showEmailModal(event) {
 
         for (var i = 0; i < rightSide; i++) {
             html += "<br>" + eventAttendees[i] + "@rose-hulman.edu"
-            if (i == response[0].max_attendance-1) {
+            if (i == response[0].max_attendance - 1) {
                 html += "<p>------Wait list-------</p>"
                 continue;
             }
@@ -796,6 +834,5 @@ function submit() {
     editPen.addEventListener("click", function (e) {
         showEditModal(e);
     }, false);
-
     saveEvent();
 }
