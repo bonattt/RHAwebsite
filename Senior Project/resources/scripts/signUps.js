@@ -526,6 +526,7 @@ function submitFunc(json_data, put_id) {
                         location.reload();
                     }
                 };
+                alert(JSON.stringify(json_data));
                 xhr.send(JSON.stringify(json_data));
             }
         }
