@@ -69,8 +69,13 @@ function lastUpdated() {
 	date = document.createElement("p");
 
 	today = new Date();
+	date.innerHTML = getLastUpdatedString(today);
 
-	var day = today.getDay();
+	update.appendChild(date);
+}
+
+function getLastUpdatedString(today) {
+    var day = today.getDay();
 
 	if(day == 0) {
 		day = "Sunday";
@@ -105,11 +110,7 @@ function lastUpdated() {
 
 	currDate = day + ", " + (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
 	currTime = hours + ":" + minutes + AMorPM;
-
-	date.innerHTML = "This calendar was last updated on " + currDate + " at " + currTime;
-
-	update.appendChild(date);
-
+	return "This calendar was last updated on " + currDate + " at " + currTime;
 }
 
 function switchCalendarView(calendarToView) {
