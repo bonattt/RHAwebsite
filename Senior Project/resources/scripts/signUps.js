@@ -520,7 +520,7 @@ function submitFunc(json_data, put_id) {
         photoPost.onreadystatechange = function (e) {
             if (photoPost.readyState == 4 && photoPost.status == 200) {
                 json_data.image = JSON.parse(photoPost.response).filepath;
-                deleteFunction(json_data.image_path);
+                deleteFunction(json_data.image_path.substring(2, json_data.image_path.length));
                 xhr.onreadystatechange = function (e) {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         location.reload();
@@ -535,6 +535,19 @@ function submitFunc(json_data, put_id) {
     } else {
         xhr.send(JSON.stringify(json_data));
     }
+}
+
+function deleteFunction(filePath) {
+    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/photo';
+    var formData = new FormData();
+    var photoxhr = new XMLHttpRequest();
+    var dbObject = {};
+    dbObject["imagePath"] = 'resources' + filePath;
+
+    photoxhr.open('DELETE', photoDeleteApi, true);
+    photoxhr.setRequestHeader('Content-Type', 'application/json');
+
+    photoxhr.send(JSON.stringify(dbObject));
 }
 
 function composeDate(modalId) {
