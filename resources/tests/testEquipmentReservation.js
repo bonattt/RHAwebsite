@@ -76,4 +76,33 @@ window.onload = function() {
 
 	});
 
+	QUnit.test( "lastUpdated: afternoon", function( assert ) {
+
+	    var today = new Date("2017-03-08T20:05:00.000Z");
+	    var hour = 3;
+        var result = getLastUpdatedString(today).toLowerCase();
+        console.log("RESULT (afternoon): " + result);
+        assert.ok(result.includes("3:05"), "has correct hour and minute");
+        assert.ok(result.includes("pm"), "is afternoon");
+	});
+
+	QUnit.test( "lastUpdated: morning, same day (timezone)", function( assert ) {
+	    var today = new Date("2017-03-08T10:15:00.000Z");
+	    var hour = 3;
+        var result = getLastUpdatedString(today).toLowerCase();
+        console.log("RESULT (morning): " + result);
+        assert.ok(result.includes("5:15"), "has correct hour and minute");
+        assert.ok(result.includes("am"), "is morning");
+	});
+
+	QUnit.test( "lastUpdated: previous day (timezone)", function( assert ) {
+
+	    var today = new Date("2017-03-08T04:15:00.000Z");
+	    var hour = 3;
+        var result = getLastUpdatedString(today).toLowerCase();
+        console.log("RESULT (previous day): " + result);
+        assert.ok(result.includes("11:15"), "has correct hour and minute");
+        assert.ok(result.includes("pm"), "is afternoon");
+	});
+
 }
