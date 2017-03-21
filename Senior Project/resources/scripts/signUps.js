@@ -494,8 +494,7 @@ function submitFunc(json_data, put_id) {
     var apiExtension = "events/" + put_id;
     var xhr = xhrPutRequest(apiExtension);
     xhr.onload = function () {
-        console.log('successfully delivered API call!');
-        // location.reload();
+        location.reload();
     }
     var imageInput = document.getElementById('imageFile');
     if (imageInput.value != '') {
