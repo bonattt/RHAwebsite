@@ -1,3 +1,4 @@
+$.holdReady(true);
 
 window.onload = function() {
 	QUnit.test( "", function( assert ) {
