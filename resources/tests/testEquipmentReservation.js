@@ -1,6 +1,12 @@
 $.holdReady(true);
 
 window.onload = function() {
+
+    // create #calendar-last-updated
+    var element = document.createElement("div");
+    element.setAttribute('id', 'calendar-last-updated');
+    document.getElementById('hiddenDiv').appendChild(element);
+
 	QUnit.test( "populateCalendarData", function( assert ) {
 	    var embed3 = "<iframe src=\"https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=800&amp;" +
 	        "wkst=1&amp;bgcolor=%23FFFFFF&amp;src=25v1djivm37d6psb5284pojmqs%40group.calendar.google.com&amp;" +
@@ -50,9 +56,9 @@ window.onload = function() {
 	});
 
 	QUnit.test( "lastUpdated", function( assert ) {
-        var element = document.createElement("div");
-        element.setAttribute('id', 'calendar-last-updated');
-        document.getElementById('hiddenDiv').appendChild(element);
+//        var element = document.createElement("div");
+//        element.setAttribute('id', 'calendar-last-updated');
+//        document.getElementById('hiddenDiv').appendChild(element);
 
         lastUpdated();
         assert.equal(element.children.length, 1, "one child added.");
@@ -103,6 +109,19 @@ window.onload = function() {
         console.log("RESULT (previous day): " + result);
         assert.ok(result.includes("11:15"), "has correct hour and minute");
         assert.ok(result.includes("pm"), "is afternoon");
+	});
+
+	QUnit.test( "Switch Calendar View", function( assert ) {
+        // #calendar-wrapper
+	    var calendarWrapper = document.createElement('div');
+        calendarWrapper.setAttribute('id', 'calendar-wrapper');
+        calendarWrapper.innerHTML = "this should be removed";
+        document.getElementById('hiddenDiv').appendChild(calendarWrapper);
+
+        var testSelection = document.getElementById('testSelector');
+        switchCalendarView(testSelection);
+
+        assert.ok(! calendarWrapper.innerHTML.includes("this should be removed"), "clears out the target div");
 	});
 
 }
