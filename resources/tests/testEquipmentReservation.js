@@ -28,6 +28,7 @@ window.onload = function() {
                 "rentaltimeindays": 3
               }
             ];
+        var fields = ["id", "name", "desc", "embed"]
 	    var selector = document.createElement('select');
 	    selector.setAttribute('id', 'calendar-selector');
 	    populateCalendarData(JSON.stringify(calendars));
@@ -36,16 +37,43 @@ window.onload = function() {
         var kanJam = document.getElementById("Kan Jam");
 	    assert.ok(kanJam, "Kan Jam is created");
         var kanJamData = kanJam;
-	    for (var field in calendars[0]) {
-	        assert.equal(kanJamData.getAttribute('data-'+field), calendars[0][field], "Kan Jam has correct " + field);
+	    for (var f in fields) {
+	        assert.equal(kanJamData.getAttribute('data-'+f), calendars[0][f], "Kan Jam has correct " + f);
 	    }
 
         var cornhole = document.getElementById("Cornhole")
 	    assert.ok(cornhole, "Cornhole is created");
 	    var cornholeData = cornhole;
-	    for (var field in calendars[1]) {
-	        assert.equal(cornholeData.getAttribute('data-'+field), calendars[1][field], "Cornhole has correct " + field);
+	    for (var f in fields) {
+	        assert.equal(cornholeData.getAttribute('data-'+f), calendars[1][f], "Cornhole has correct " + f);
 	    }
+	});
+
+	QUnit.test( "lastUpdated", function( assert ) {
+        var element = document.createElement("div");
+        element.setAttribute('id', 'calendar-last-updated');
+        document.getElementById('hiddenDiv').appendChild(element);
+
+        lastUpdated();
+        assert.equal(element.children.length, 1, "one child added.");
+
+        element.appendChild(document.createElement("p"));
+        element.appendChild(document.createElement("p"));
+
+        lastUpdated();
+        assert.equal(element.children.length, 1, "Children removed and one added");
+
+        var testDate = new Date();
+        var dateStr = element.children[0].textContent;
+        console.log(dateStr);
+
+        var daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednsday", "Thursday", "Friday", "Saturday"];
+        assert.ok(dateStr.includes(daysOfTheWeek[testDate.getDay()]), "date string has day of the week");
+
+        assert.ok(dateStr.includes(testDate.getDate()+''), "date string has date");
+        assert.ok(dateStr.includes((testDate.getMonth()+1)+''), "date string has month");
+        assert.ok(dateStr.includes(testDate.getFullYear()+''), "date string has year");
+
 	});
 
 }
