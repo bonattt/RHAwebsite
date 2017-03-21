@@ -131,14 +131,14 @@ function saveEvent() {
     }
     console.log("new event name is: ");
     console.log(newEventName);
-    alert(newEventName);
-    alert(newEventImage);
     xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate, event_signup_open: newEventSignUpOpenDate, event_date: newEventDate, attendees: newAttendees }));
 
     return xhr;
 }
 function setupAdmin(officers) {
     isAdmin = true;
+    var deleteButton = document.getElementById("modal-delete");
+    deleteButton.style.display = "inline";
     enableDeleteButton();
     //    var hiddenFeatures = document.getElementsByClassName('adminOnly')
     //    hiddenFeatures.forEach( function(element) {
@@ -171,10 +171,6 @@ function displaySignUps() {
             populateDateSelect(EVENT_DATE);
             populateDateSelect(SIGNUPS_OPEN);
             populateDateSelect(SIGNUPS_CLOSE);
-
-            editButtons.forEach(function (element) {
-                console.log(element)
-            });
         }
 
         function getEvents() {
@@ -415,6 +411,8 @@ function enableDeleteButton() {
         var id = delBtn.dataset.lastclicked;
         var apiUrl = 'event/' + id;
         var xhr = xhrDeleteRequest(apiUrl);
+        var image = document.getElementById("eventTextSignUps" + id).dataset.image_path;
+        deleteFunction(image.substring(2, image.length));
         xhr.onload = function () { location.reload() };
         xhr.send();
     });
@@ -456,7 +454,7 @@ function setupModalDates(rootId, dataElementId, field) {
     var month_event_date = document.getElementById(rootId + "_month");
     var year_event_date = document.getElementById(rootId + "_year");
     day_event_date.value = date.getDate();
-    console.log(date.getDate()) ;
+    console.log(date.getDate());
     month_event_date.value = MONTH_NAMES[date.getMonth()];
     year_event_date.value = date.getFullYear();
 }
@@ -496,7 +494,7 @@ function submitFunc(json_data, put_id) {
     var apiExtension = "events/" + put_id;
     var xhr = xhrPutRequest(apiExtension);
     xhr.onload = function () {
-        location.reload();
+        // location.reload();
     }
     var imageInput = document.getElementById('imageFile');
     // if (imageInput.value != '') {
@@ -517,25 +515,24 @@ function submitFunc(json_data, put_id) {
         var files = imageInput.files;
         var formData = new FormData();
         formData.append("imageFile", files[0]);
+        console.log(files[0].name);
         photoPost.onreadystatechange = function (e) {
             if (photoPost.readyState == 4 && photoPost.status == 200) {
-                json_data.image = JSON.parse(photoPost.response).filepath;
                 deleteFunction(json_data.image_path.substring(2, json_data.image_path.length));
                 xhr.onreadystatechange = function (e) {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         location.reload();
                     }
                 };
-                alert(JSON.stringify(json_data));
+                json_data.image_path = JSON.parse(photoPost.response).filepath;
                 xhr.send(JSON.stringify(json_data));
             }
         }
         photoPost.send(formData);
-        alert("yo I'm editing the photo, man.");
-        alert(JSON.stringify(json_data));
     } else {
         xhr.send(JSON.stringify(json_data));
     }
+
 }
 
 function deleteFunction(filePath) {
@@ -780,7 +777,7 @@ function showEmailModal(event) {
 
         for (var i = 0; i < rightSide; i++) {
             html += "<br>" + eventAttendees[i] + "@rose-hulman.edu"
-            if (i == response[0].max_attendance-1) {
+            if (i == response[0].max_attendance - 1) {
                 html += "<p>------Wait list-------</p>"
                 continue;
             }
@@ -837,6 +834,5 @@ function submit() {
     editPen.addEventListener("click", function (e) {
         showEditModal(e);
     }, false);
-    alert("saving the event");
     saveEvent();
 }
