@@ -147,69 +147,68 @@ function setupAdmin(officers) {
 }
 
 function displaySignUps() {
-    var officersxhr = getOfficers(); // from adminPErmission.js
+    var officersxhr = getOfficers(); // from adminPermission.js
     officersxhr.onload = function () {
         if (userIsOfficer(officersxhr.responseText)) {
             setupAdmin();
-            enableDeleteButton();
+        }
+
+        var xhr = getEvents();
+        xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
+        xhr.send();
+        //    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
+
+        function createHTMLFromResponseText(proposal) {
+            proposal = JSON.parse(proposal);
+            var editButtons = [];
+
+            for (var i = 0; i < proposal.length; i++) {
+                var proposal_id = proposal[i].proposal_id;
+                var eventHtml = generatePageHTML(proposal[i]);
+                var tileArea = document.getElementsByClassName("eventTileArea")[0];
+                tileArea.appendChild(eventHtml);
+            }
+            populateDateSelect(EVENT_DATE);
+            populateDateSelect(SIGNUPS_OPEN);
+            populateDateSelect(SIGNUPS_CLOSE);
+
+            editButtons.forEach(function (element) {
+                console.log(element)
+            });
+        }
+
+        function getEvents() {
+            var url = apiURL + 'api/v1/events';
+            function createCORSRequest(method, url) {
+                var xhr = new XMLHttpRequest();
+                if ("withCredentials" in xhr) {
+                    xhr.open(method, url, true);
+                } else if (typeof XDomainRequest != "undefined") {
+                    xhr = new XDomainRequest();
+                    xhr.open(method, url);
+                } else {
+                    xhr = null;
+                }
+                return xhr;
+            }
+
+            var xhr = createCORSRequest('GET', url);
+            if (!xhr) {
+                throw new Error('CORS not supported');
+            }
+
+            xhr.onload = function () {
+                var responseText = xhr.responseText;
+            }
+
+            xhr.onerror = function () {
+                console.log("There was an error");
+            }
+            // xhr.send();
+            return xhr;
         }
     }
     officersxhr.send();
-
-    var xhr = getEvents();
-    xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
-    xhr.send();
-    //    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
-
-    function createHTMLFromResponseText(proposal) {
-        proposal = JSON.parse(proposal);
-        var editButtons = [];
-
-        for (var i = 0; i < proposal.length; i++) {
-            var proposal_id = proposal[i].proposal_id;
-            var eventHtml = generatePageHTML(proposal[i]);
-            var tileArea = document.getElementsByClassName("eventTileArea")[0];
-            tileArea.appendChild(eventHtml);
-        }
-        populateDateSelect(EVENT_DATE);
-        populateDateSelect(SIGNUPS_OPEN);
-        populateDateSelect(SIGNUPS_CLOSE);
-
-        editButtons.forEach(function (element) {
-            console.log(element)
-        });
-    }
-
-    function getEvents() {
-        var url = apiURL + 'api/v1/events';
-        function createCORSRequest(method, url) {
-            var xhr = new XMLHttpRequest();
-            if ("withCredentials" in xhr) {
-                xhr.open(method, url, true);
-            } else if (typeof XDomainRequest != "undefined") {
-                xhr = new XDomainRequest();
-                xhr.open(method, url);
-            } else {
-                xhr = null;
-            }
-            return xhr;
-        }
-
-        var xhr = createCORSRequest('GET', url);
-        if (!xhr) {
-            throw new Error('CORS not supported');
-        }
-
-        xhr.onload = function () {
-            var responseText = xhr.responseText;
-        }
-
-        xhr.onerror = function () {
-            console.log("There was an error");
-        }
-        // xhr.send();
-        return xhr;
-    }
 }
 
 var getSignupDateHtml = function (proposal, signUpCloseDate, signUpOpenDate, signUpOpenDateFormatted) {
@@ -236,7 +235,7 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     var signUpCloseDate = new Date(proposal.event_signup_close);
     var signUpCloseDateFormatted = (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear();
     var signUpOpenDate = new Date(proposal.event_signup_open);
-    var signUpOpenDateFormatted = (signUpOpenDate.getMonth() + 1) + "/" + signUpOpenDate.getUTCDate() + "/" + signUpOpenDate.getFullYear();
+    var signUpOpenDateFormatted = (signUpOpenDate.getMonth() + 1) + "/" + (signUpOpenDate.getUTCDate() + 1) + "/" + signUpOpenDate.getFullYear();
 
     var signupHtml = getSignupDateHtml(proposal, signUpCloseDateFormatted, signUpOpenDate, signUpOpenDateFormatted);
 
@@ -457,6 +456,7 @@ function setupModalDates(rootId, dataElementId, field) {
     var month_event_date = document.getElementById(rootId + "_month");
     var year_event_date = document.getElementById(rootId + "_year");
     day_event_date.value = date.getDate();
+    console.log(date.getDate()) ;
     month_event_date.value = MONTH_NAMES[date.getMonth()];
     year_event_date.value = date.getFullYear();
 }
@@ -464,10 +464,11 @@ function setupModalDates(rootId, dataElementId, field) {
 
 function populateDateSelect(divId) {
     var div = document.getElementById(divId);
-    var date = new Date();
     div.appendChild(generateOptions(divId + '_month', 0, 12, 1, MONTH_NAMES));
     div.appendChild(generateOptions(divId + '_day', 1, 31, 1));
     div.appendChild(generateOptions(divId + '_year', 2016, 2019, 1));
+    console.log("In populateDateSelect. Printing the div Im modifying: ");
+    console.log(div);
 }
 
 function generateOptions(idAttr, start, end, step, names) {
@@ -495,7 +496,6 @@ function submitFunc(json_data, put_id) {
     var apiExtension = "events/" + put_id;
     var xhr = xhrPutRequest(apiExtension);
     xhr.onload = function () {
-        console.log('successfully delivered API call!');
         location.reload();
     }
     var imageInput = document.getElementById('imageFile');
@@ -556,9 +556,9 @@ function composeDate(modalId) {
     var monthName = document.getElementById(modalId + '_month').value
     date.setMonth(MONTH_NAMES.indexOf(monthName));
     date.setFullYear(document.getElementById(modalId + '_year').value);
-    date.setDate(document.getElementById(modalId + '_day').value - 1);
+    date.setDate(document.getElementById(modalId + '_day').value);
 
-    console.log(date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear());
+    console.log(date.getMonth() + '/' + (date.getDate() + 1) + '/' + date.getFullYear());
     //date.setHours(DEFAULT_HOURS);   
     //date.setMinutes(DEFAULT_MINUTES);
     return date;

@@ -202,8 +202,8 @@ var enableSubmitButton = function(dataElementId, uiElementRootId, submitFunc, id
 }*/
 
 function getOfficers() {
-    var urlExtention = 'officers/';
-    var xhr = xhrGetRequest(urlExtention);
+    var urlExtension = 'officers/';
+    var xhr = xhrGetRequest(urlExtension);
     return xhr;
 }
 
@@ -231,25 +231,25 @@ function createCORSRequestJSON(method, url) {
 	return xhr;
 }
 
-function xhrGetRequest(urlExtention) {
-	return createXhrRequest('GET', urlExtention);
+function xhrGetRequest(urlExtension) {
+	return createXhrRequest('GET', urlExtension);
 }
 
-function xhrPostRequest(urlExtention) {
-	return createXhrRequestJSON('POST', urlExtention);
+function xhrPostRequest(urlExtension) {
+	return createXhrRequestJSON('POST', urlExtension);
 }
 
-function xhrPutRequest(urlExtention) {
-	return createXhrRequestJSON('PUT', urlExtention);
+function xhrPutRequest(urlExtension) {
+	return createXhrRequestJSON('PUT', urlExtension);
 }
 
-function xhrDeleteRequest(urlExtention) {
-    return createXhrRequestJSON('DELETE', urlExtention);
+function xhrDeleteRequest(urlExtension) {
+    return createXhrRequestJSON('DELETE', urlExtension);
 }
 
-function createXhrRequestJSON(method, urlExtention) {
-	checkUrlExtension(urlExtention);
-    var fullApiUrl = BASE_API_URL + urlExtention;
+function createXhrRequestJSON(method, urlExtension) {
+	checkUrlExtension(urlExtension);
+    var fullApiUrl = BASE_API_URL + urlExtension;
 	var xhr = createCORSRequestJSON(method, fullApiUrl);
 	if (!xhr) {
 		throw new Error('CORS not supported');
@@ -263,9 +263,9 @@ function createXhrRequestJSON(method, urlExtention) {
 	return xhr;
 }
 
-function createXhrRequest(method, urlExtention) {
-	checkUrlExtension(urlExtention);
-	var xhr = createCORSRequest(method, BASE_API_URL + urlExtention);
+function createXhrRequest(method, urlExtension) {
+	checkUrlExtension(urlExtension);
+	var xhr = createCORSRequest(method, BASE_API_URL + urlExtension);
 	if (!xhr) {
 		throw new Error('CORS not supported');
 	}
