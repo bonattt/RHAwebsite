@@ -16,6 +16,7 @@
     "express": "^4.14.0",
     "multer": "^1.2.0",
     "rosefire-node": "git+https://ada.csse.rose-hulman.edu/rosefire/node-sdk.git#2.1.0",
+    "ssf": "^0.8.2",
     "xlsx": "^0.9.3"
   }
 }
