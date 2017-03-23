@@ -162,7 +162,8 @@ app.get('/api/v1/galleryPhoto', type, function (req, res) {
   });
 });
 
-app.delete('/api/v1/galleryPhoto', urlencodedParser, function (req, res, next) { //we will need to make this more secure (I don't think everyone should upload junk to here)
+
+app.delete('/api/v1/photo', urlencodedParser, function(req, res, next) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
   var target_path = req.body.imagePath + "";
   fs.unlink(target_path);
   res.status(200).json({

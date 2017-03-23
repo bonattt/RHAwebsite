@@ -26,6 +26,7 @@ function submit() {
     var name = document.getElementById("name").value;
     var costToAttendee = document.getElementById("costToAttendee").value;
     var description = document.getElementById("description").value;
+    var maxAttendance = document.getElementById("maxAttendance").value;
     var signUpOpenDate = document.getElementById("signUpOpenDate").value;
     var eventDate = document.getElementById("eventDate").value;
     var signUpCloseDate = document.getElementById("signUpCloseDate").value;
@@ -56,6 +57,7 @@ function submit() {
             var image_path = JSON.parse(photoxhr.responseText).filepath;
             var dbxhr = new XMLHttpRequest();
             var dbObject = {};
+            console.log(maxAttendance);
             dbObject["proposal_name"] = name;
             dbObject["cost_to_attendee"] = costToAttendee;
             dbObject["event_date"] = eventDate;
@@ -71,6 +73,7 @@ function submit() {
             dbObject["image_path"] = image_path;
             dbObject["approved"] = approved;
             dbObject["description"] = description;
+            dbObject["max_attendance"] = maxAttendance;
 
             dbxhr.open('POST', dbAPIURL, true);
             dbxhr.setRequestHeader('Content-Type', 'application/json');
