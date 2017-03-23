@@ -281,7 +281,14 @@ function setupSubmitAttendanceButton() {
             var reader = new FileReader();
 
             var readerOnload = function (e) {
-                var result = reader.result.split("\r\n").sort();
+                var preResult = reader.result.split("\r\n");
+                var result = [];
+                preResult.foreach(e => {
+                    if(e != '') {
+                        result.push(e);
+                    }
+                });
+                result = result.sort();
                 var urlExtension = 'attendance/' + quarterToUpdate;
                 var xhr = xhrPutRequest(urlExtension);
 
