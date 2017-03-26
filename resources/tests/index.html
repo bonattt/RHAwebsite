@@ -21,18 +21,20 @@
     <h3>
         <a href="./testEquipmentReservation.html"> equipmentReservation.js</a> (23 tests, 22 pass, 1 failure)
     </h3>
-    <p>
-        <tab/> I've found an error in here. When the equipment peices are added to the selector, it's adding the data
-        to an additional element, which has no id, and appending that to the body. There don't seem to be   any errors on
-        the page, so I'm guessing this is data is uneeded and should be removed. In any event, the code could be more
-        clear as to it's function.
-    </p>
     <h3>
         <a href="./testFloorMoney.html"> floorMoney.js </a> (refactor)
     </h3>
     <h3>
         <a href="./testHomepage.html"> homepage.js</a> (BROKEN)
     </h3>
+    <p>
+        I'd like to not some code that seems sketchy to me. We're using "getElementsByTag" to get the radio buttons
+        for photo deleting. That means if we add any inputs earlier on the document, we could mess up that part of the
+        code. We should probably be using radio button groups instead.
+    </p>
+    <p>
+        We're using radio buttons completely wrong. We've got redundant button names...
+    </p>
     <h3>
         <a href="./testImageUpload.html"> imageUpload.js </a>
     </h3>
