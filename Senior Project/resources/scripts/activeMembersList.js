@@ -12,6 +12,13 @@ function setAdmin(officers) {
         newButton.innerHTML = 'New Attendance Record';
         div.appendChild(newButton);
 
+        var div2 = document.getElementById('undoAttendanceDiv');
+        var undoButton = document.createElement('button');
+        undoButton.setAttribute('id', 'undoAttendance');
+        undoButton.innerHTML = 'Undo Last Attendance Upload';
+        div.appendChild(undoButton);
+        undoAttendanceSubmission();
+
         setupSubmitAttendanceButton();
         var cancelBtn = document.getElementById('update-modal-cancel');
         cancelBtn.addEventListener('click', function () {
@@ -30,11 +37,14 @@ function setup() {
     function createHTMLFromResponseText(members) {
         drawAllMembersTable(members);
         var allMembersButton = document.getElementById('allMembers');
+        var submitAttendanceDiv = document.getElementById('submitAttendanceDiv');
         $(".allMembers").change(function () {
             displayOtherTable(members);
+            submitAttendanceDiv.style.display = "block";
         });
         $(".activeMembers").change(function () {
             displayOtherTable(members);
+            submitAttendanceDiv.style.display = "none";
         });
     }
 }
@@ -277,7 +287,7 @@ function setupSubmitAttendanceButton() {
 
                 xhr.onreadystatechange = function (e) {
                     if (xhr.readyState == 4 && xhr.status == 200) {
-                        location.reload();
+                        setTimeout(function () { location.reload()}, 600);
                     }
                 };
                 xhr.send(JSON.stringify({ membersToUpdate: result }));
@@ -301,6 +311,21 @@ function setupSubmitAttendanceButton() {
         cancelBtn.addEventListener('click', function () {
             // do nothing.
         });
+    });
+}
+
+function undoAttendanceSubmission() {
+    var undoButton = document.getElementById("undoAttendance");
+    undoButton.addEventListener('click', function () {
+        var urlExtension = 'attendance/undo';
+        var xhr = xhrGetRequest(urlExtension);
+
+        xhr.onreadystatechange = function(e) {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                location.reload();
+            }
+        };
+        xhr.send();
     });
 }
 

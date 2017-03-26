@@ -4,10 +4,52 @@ function setAdmin(officers) {
     if (userIsOfficer(officers)) {
         var uploadButton = document.getElementById("addPhoto");
         uploadButton.setAttribute("class", "");
+        var deleteButton = document.getElementById("deletePhoto");
+        deleteButton.setAttribute("class", "");
+        populateDeletePhotoModal();
 
-//        var editButtons = insertEditButtonsBefore(showModal, {"style": "float: right;"});
-//        alert(editButtons.length)
+        var textButton = document.getElementById("editText");
+        textButton.setAttribute("class", "");
+
+        //        var editButtons = insertEditButtonsBefore(showModal, {"style": "float: right;"});
+        //        alert(editButtons.length)
     }
+}
+
+function populateDeletePhotoModal() {
+    var carouselInner = document.getElementById("carousel-inner");
+    deletePhotoForm = document.getElementById("deletePhotoForm");
+    for (var i = 1; i <= carouselInner.children.length; i++) {
+        deletePhotoForm.innerHTML += '<label><input type="radio" name="usernames" value="' + i + '" /> ' + i + '</label>';
+    }
+    var radios = document.getElementsByTagName('input');
+    var deleteButton = document.getElementById('modal-delete-photo');
+    console.log(deleteButton);
+    deleteButton.addEventListener("click", function() {figureOutSelectedRadioButton(radios)});
+}
+
+function figureOutSelectedRadioButton(radios) {
+    var carouselInner = document.getElementById("carousel-inner");
+    console.log("figuring out the selected radio button :)");
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            deleteFunction("/images" + carouselInner.childNodes[i].firstChild.src.split("/images")[1]);
+            location.reload();
+        }
+    }
+}
+
+function deleteFunction(filePath) {
+    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/photo';
+    var formData = new FormData();
+    var photoxhr = new XMLHttpRequest();
+    var dbObject = {};
+    dbObject["imagePath"] = 'resources' + filePath;
+
+    photoxhr.open('DELETE', photoDeleteApi, true);
+    photoxhr.setRequestHeader('Content-Type', 'application/json');
+
+    photoxhr.send(JSON.stringify(dbObject));
 }
 
 function setup() {
@@ -24,18 +66,26 @@ function setup() {
         if (xhr2.readyState == 4 && xhr2.status == 200) {
             var indicatorOl = document.getElementById("carousel-indicators");
             var carouselInnerDiv = document.getElementById("carousel-inner");
-           
-
+            var dbApiUrl = 'http://rha-website-1.csse.rose-hulman.edu:3000/API/v1/infoText/1';
+            var xhr3 = new XMLHttpRequest();
+            xhr3.open('GET', dbApiUrl, true);
+            xhr3.onreadystatechange = function (e) {
+                if (xhr3.readyState == 4 && xhr3.status == 200) {
+                    document.getElementById("shownDescription").innerHTML = JSON.parse(xhr3.responseText).body;
+                    document.getElementById("textToUpdate").value = JSON.parse(xhr3.responseText).body;
+                }
+            }
+            xhr3.send();
             var counter = 1;
             JSON.parse(xhr2.responseText).forEach(fileName => {
-           
+
                 var div = document.createElement('div');
                 div.setAttribute('class', 'item');
                 var filePath = "./images/carousel/" + fileName;
 
                 div.innerHTML = "<img class='carousel-img' src=" + filePath + ">";
                 var liToAdd = document.createElement('li');
-                if(counter == 1) {
+                if (counter == 1) {
                     div.setAttribute('class', 'item active');
                     liToAdd.setAttribute('class', 'active');
                 }
@@ -62,7 +112,7 @@ function setup() {
 }
 
 function showModal(editImage) {
-	var eventSrc = (editImage.srcElement || editImage.target);
+    var eventSrc = (editImage.srcElement || editImage.target);
     var modal = document.getElementById('myModal');
     var span = document.getElementsByClassName("close")[0];
     var img = eventSrc.innerHTML;
@@ -129,7 +179,8 @@ function showModal(editImage) {
 }
 
 function uploadCarouselPhoto() {
-    var photoUploadApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/carouselPhoto';
+    console.log("uploading a carousel photo");
+    var photoUploadApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/carouselPhoto';
     var photoxhr = new XMLHttpRequest();
     var files = document.getElementById("imageFile").files;
 
@@ -138,12 +189,31 @@ function uploadCarouselPhoto() {
     photoxhr.open('POST', photoUploadApi, true);
 
     photoxhr.onreadystatechange = function (e) {
-        if(photoxhr.readyState == 4 && photoxhr.status == 200) {
+        if (photoxhr.readyState == 4 && photoxhr.status == 200) {
             location.reload();
         }
     };
 
     photoxhr.send(formData);
+}
+
+function updateFrontPageText() {
+    var dbApiUrl = 'http://rha-website-1.csse.rose-hulman.edu:3000/API/v1/infoText/1';
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', dbApiUrl, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function (e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            location.reload();
+        }
+    };
+
+    var changedText = document.getElementById("textToUpdate").value;
+    var objectToUpdate = {
+        "body": changedText
+    };
+
+    xhr.send(JSON.stringify(objectToUpdate));
 }
 
 $(document).ready(function () {
