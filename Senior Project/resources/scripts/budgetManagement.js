@@ -26,17 +26,16 @@ function setupButtons() {
     var addPaymentSubmit = document.getElementById('paymentModal-submit');
     addPaymentSubmit.addEventListener('click', function() {
         var entryIds = [
-                'amountUsed','cm', 'accountCode', 'receiver', 'description',
-                'dateProcessed', 'dateReceived'
+                'amountUsed','CM', 'accountCode', 'receiver', 'description'
         ];
         var modalId = 'paymentModal-';
         var json_obj = parseModalEntries(modalId, entryIds);
 
-        json_obj.dateProcessed = new Date(json_obj.dateProcessed);
-        json_obj.dateReceived = new Date(json_obj.dateReceived);
+//        json_obj.dateProcessed = new Date(json_obj.dateProcessed);
+//        json_obj.dateReceived = new Date(json_obj.dateReceived);
         var select = document.getElementById('paymentModal-event');
-        json_obj.proposal_id = select.dataset[prepEventName(select.value)]
-        json_obj.reciepts = {"test1": "hello", "test2": "world!"};
+//        json_obj.proposal_id = select.dataset[prepEventName(select.value)]
+//        json_obj.reciepts = {"test1": "hello", "test2": "world!"};
 
         json_obj.amountUsed = parseFloat(json_obj.amountUsed);
 
