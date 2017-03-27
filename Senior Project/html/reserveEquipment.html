@@ -23,7 +23,7 @@
     <div id="navBar"> </div>
     <div id="proposalsPage">
         <h1>Equipment <br> Reservation</h1>
-        
+
         <div id="directions">
             <p>Interested in renting some equipment from RHA? Select from the drop down below and view its availability!</p>
         </div>
@@ -33,28 +33,35 @@
             <!-- <option value="calendar1">Cornholio</option>
             <option value="calendar2">Testerino</option> -->
         </select>
-            
+
 
         <div id="reservation-info">
-            <p>RHA has recently opened up their equipment for reservation by students and faculty. Here you are able to select and view the available times that a piece of 
-                equipment is available. Some things to know before renting:</p>
+            <p>RHA has recently opened up their equipment for reservation by students and faculty. Here you are able to select
+                and view the available times that a piece of equipment is available. Some things to know before renting:</p>
             <br>
             <ul>
                 <li>You may only rent one piece of equipment at a time.</li>
                 <li>Each item may only be reserved for at most 3 days.</li>
                 <li>You can reserve an item at most two weeks in advance.</li>
                 <li>Late penalties may be enforced, varying on the demand of the item.</li>
+                <li>All equipment must be returned by 5:00PM on its return date.</li>
             </ul>
         </div>
-        
-        <h3 id="equipment-deadline">Please remember that all equipment must be returned by 5:00PM on its respective return date.</h3>
+
+                <div class="propbutton">
+            <button class="submitButton">
+                <a href="mailto:rhitrha@gmail.com?subject=RHA%20Equipment%20Reservation&body=Your%20Name:%0D%0AEquipment%20Name:%0D%0ADate:%0D%0ATime:%0D%0AOrganization:%0D%0AReason:" class="submitButtonLink">
+                    <span class="submitMaintext">Submit a Reservation</span>
+                </a>
+            </button>
+        </div>
     </div>
 
     <div id="calendar-last-updated">
     </div>
 
     <div id="calendar-wrapper">
-        </div>
+    </div>
 
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -65,13 +72,13 @@
                     <h4 class="modal-title">Modal Header</h4>
                 </div>
                 <div class="modal-body">
-                    
-                        <label> name </label> <br/>
-                        <input id="calendar-modal-name" type="text" value="name"> </input>
-                        <br>
-                        <textarea id="calendar-modal-desc" type="textarea" value="description of the calendar" style="min-width: 200px; min-height: 100px;"> </textarea>
-                        <br>
-                        <textarea id="calendar-modal-embed" type="textarea" value="embed text for the desired calendar" styel="mid-width: 200px; min-height: 100px"></textarea>
+
+                    <label> name </label> <br/>
+                    <input id="calendar-modal-name" type="text" value="name"> </input>
+                    <br>
+                    <textarea id="calendar-modal-desc" type="textarea" value="description of the calendar" style="min-width: 200px; min-height: 100px;"> </textarea>
+                    <br>
+                    <textarea id="calendar-modal-embed" type="textarea" value="embed text for the desired calendar" styel="mid-width: 200px; min-height: 100px"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
