@@ -11,6 +11,7 @@ const FIELDS = [
         "proposer",
         "description",
         "cost_to_attendee",
+        "max_attendance",
     ]
 
 const BROWSER = (function(){
