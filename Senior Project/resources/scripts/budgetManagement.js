@@ -46,17 +46,17 @@ function setupButtons() {
     var addPaymentSubmit = document.getElementById('paymentModal-submit');
     addPaymentSubmit.addEventListener('click', function() {
         var entryIds = [
-                'amountUsed','CM', 'accountCode', 'receiver', 'description'
+                'amountUsed','CM', 'accountCode', 'receiver', 'description', 'dateprocessed', 'datereceived'
         ];
         var modalId = 'paymentModal-';
         var json_obj = parseModalEntries(modalId, entryIds);
 
-//        json_obj.dateProcessed = new Date(json_obj.dateProcessed);
-//        json_obj.dateReceived = new Date(json_obj.dateReceived);
+        json_obj.dateprocessed = new Date(json_obj.dateprocessed);
+        json_obj.datereceived = new Date(json_obj.datereceived);
         var select = document.getElementById('paymentModal-event');
         json_obj.proposal_id = select.options[select.selectedIndex].value;
         console.log(select);
-//        json_obj.reciepts = {"test1": "hello", "test2": "world!"};
+        json_obj.reciepts = {"test1": "hello", "test2": "world!"};
 
         json_obj.amountUsed = parseFloat(json_obj.amountUsed);
 
@@ -68,6 +68,8 @@ function setupButtons() {
         }
         xhr.onerror = function() {
         }
+        alert(JSON.stringify(json_obj));
+        console.log(json_obj);
         xhr.send(JSON.stringify(json_obj));
     });
 
