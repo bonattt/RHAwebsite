@@ -96,4 +96,8 @@ function submit() {
 
 $(document).ready(function() {
     setup();
+    $("#signUpOpenDate").datepicker();
+    $("#signUpCloseDate").datepicker();
+    $("#eventDate").datepicker();
+    $("#proposedDate").datepicker();
 });
