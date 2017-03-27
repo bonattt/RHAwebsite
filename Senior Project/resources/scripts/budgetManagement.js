@@ -1,11 +1,38 @@
 const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"]
+    "July", "August", "September", "October", "November", "December"
+]
+
+var gridData = [{
+        "amount": null,
+        "date": null
+    },
+    {
+        "amount": null,
+        "date": null
+    },
+    {
+        "amount": null,
+        "date": null
+    },
+    {
+        "amount": null,
+        "date": null
+    },
+    {
+        "amount": null,
+        "date": null
+    },
+    {
+        "amount": null,
+        "date": null
+    }
+]
 
 var current_id = -1;
 
 function parseModalEntries(idHeader, ids) {
     var json_obj = {};
-    ids.forEach(function(id) {
+    ids.forEach(function (id) {
         console.log("id: " + id + "\nidHeader: " + idHeader);
         var entry = document.getElementById(idHeader + id);
         json_obj[id] = entry.value;
@@ -24,10 +51,10 @@ function setupButtons() {
     addPaymentButton.setAttribute('data-target', '#paymentModal');
 
     var addPaymentSubmit = document.getElementById('paymentModal-submit');
-    addPaymentSubmit.addEventListener('click', function() {
+    addPaymentSubmit.addEventListener('click', function () {
         var entryIds = [
-                'amountUsed','cm', 'accountCode', 'receiver', 'description',
-                'dateProcessed', 'dateReceived'
+            'amountUsed', 'cm', 'accountCode', 'receiver', 'description',
+            'dateProcessed', 'dateReceived'
         ];
         var modalId = 'paymentModal-';
         var json_obj = parseModalEntries(modalId, entryIds);
@@ -36,37 +63,43 @@ function setupButtons() {
         json_obj.dateReceived = new Date(json_obj.dateReceived);
         var select = document.getElementById('paymentModal-event');
         json_obj.proposal_id = select.dataset[prepEventName(select.value)]
-        json_obj.receipts = {"test1": "hello", "test2": "world!"};
+        json_obj.receipts = {
+            "test1": "hello",
+            "test2": "world!"
+        };
 
         json_obj.amountUsed = parseFloat(json_obj.amountUsed);
 
         var apiUrl = 'payment/';
         var xhr = xhrPostRequest(apiUrl);
-        xhr.onload = function() {
+        xhr.onload = function () {
             location.reload();
         }
-        xhr.onerror = function() {
-        }
+        xhr.onerror = function () {}
         xhr.send(JSON.stringify(json_obj));
     });
 
     var deletePaymentButton = document.getElementById('detailsModal-delete');
-    deletePaymentButton.addEventListener('click', function() {
-        var apiUri = 'payment/'  + current_id;
+    deletePaymentButton.addEventListener('click', function () {
+        var apiUri = 'payment/' + current_id;
         var xhr = xhrDeleteRequest(apiUri);
-        xhr.onload = function() { location.reload(); }
+        xhr.onload = function () {
+            location.reload();
+        }
         xhr.send();
     });
 
     var editSubmit = document.getElementById('editFundModal-submit');
-    editSubmit.addEventListener('click', function() {
+    editSubmit.addEventListener('click', function () {
         var apiUri = 'fund/' + current_id
         var xhr = xhrPutRequest(apiUri);
-        xhr.onload = function() {  }
+        xhr.onload = function () {}
 
         var funds_amount = document.getElementById('editFundModal-funds_amount');
 
-        var json_obj = {"funds_amount": parseFloat(funds_amount.value)}
+        var json_obj = {
+            "funds_amount": parseFloat(funds_amount.value)
+        }
         xhr.send(JSON.stringify(json_obj));
     });
 }
@@ -75,9 +108,9 @@ function populateFundsTable() {
     var xhr = xhrGetRequest('funds/');
     var tbody = document.getElementById('fundsTable');
     var rowNumber = 0;
-    xhr.onload = function() {
+    xhr.onload = function () {
         var payments = JSON.parse(xhr.responseText);
-        payments.forEach(function(entry) {
+        payments.forEach(function (entry) {
             var row = buildFundsRow(entry, rowNumber);
             if (rowNumber % 2 == 1) {
                 row.setAttribute('class', 'colLight');
@@ -96,9 +129,9 @@ function populatePaymentsTable() {
     var tbody = document.getElementById('paymentsTable');
     var rowNumber = 0;
 
-    xhr.onload = function() {
+    xhr.onload = function () {
         var payments = JSON.parse(xhr.responseText);
-        payments.forEach(function(entry) {
+        payments.forEach(function (entry) {
             var row = buildPaymentRow(entry, rowNumber);
             if (rowNumber % 2 == 1) {
                 row.setAttribute('class', 'colLight');
@@ -128,7 +161,7 @@ function buildFundsRow(fund, rowNumber) {
     data.toggle = "modal";
     data.target = "#editFundModal";
 
-    editButton.addEventListener('click', function() {
+    editButton.addEventListener('click', function () {
         var header = document.getElementById('editFundModal-header');
         header.innerHTML = "Edit " + fund.fund_name + " Fund";
 
@@ -165,10 +198,10 @@ function buildPaymentRow(payment, rowNumber) {
     col.setAttribute('class', 'tableEntry');
     row.appendChild(col);
 
-//    col = document.createElement('td');
-//    col.appendChild(document.createTextNode(payment.reciepts));
-//    col.setAttribute('class', 'tableEntry');
-//    row.appendChild(col);
+    //    col = document.createElement('td');
+    //    col.appendChild(document.createTextNode(payment.reciepts));
+    //    col.setAttribute('class', 'tableEntry');
+    //    row.appendChild(col);
     row.appendChild(getDisplayExpenseDetailsLink(payment));
     return row;
 }
@@ -183,7 +216,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
     data.toggle = "modal"
     data.target = "#detailsModal"
 
-    link.addEventListener('click', function() {
+    link.addEventListener('click', function () {
         current_id = json_obj.expenses_id;
         console.log('click');
         var description = document.getElementById('detailsModal-description');
@@ -207,7 +240,7 @@ function buildRow(data, keys, rowNumber) {
     row.setAttribute('id', 'row' + rowNumber);
     var colNumber = 0;
 
-    keys.forEach(function(key) {
+    keys.forEach(function (key) {
         col = document.createElement('td');
         col.appendChild(document.createTextNode(data[key]));
         col.setAttribute('class', 'tableEntry');
@@ -262,4 +295,39 @@ function setup() {
 
 $(document).ready(function () {
     setup();
+    $("#receiptsGrid").shieldGrid({
+        dataSource: {
+            data: gridData,
+            schema: {
+                fields: {
+                    amount: {
+                        path: "amount",
+                        type: Number
+                    },
+                    date: {
+                        path: "date",
+                        type: "date"
+                    }
+                }
+            }
+        },
+        rowHover: false,
+        columns: [{
+                field: "amount",
+                title: "Amount",
+                width: "80px"
+            },
+            {
+                field: "date",
+                title: "Date",
+                format: "{0:MM/dd/yyyy}",
+                width: "120px"
+            }
+        ],
+        editing: {
+            enabled: true,
+            event: "click",
+            type: "cell"
+        }
+    });
 });
