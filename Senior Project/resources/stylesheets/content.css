@@ -449,7 +449,7 @@ h3{
 	font-family: "Arial Black", sans-serif;
 }
 
-#propbutton {
+.propbutton {
 	border-radius: 2%;
 	padding: 1.5%;
 	position: absolute;
@@ -458,7 +458,7 @@ h3{
 	width: 61%;
 }
 
-#propbutton > button {
+.propbutton > button {
 	background-color: rgb(136, 0, 21);
 	width: 49%;
 	height: 80px;
@@ -490,7 +490,7 @@ h3{
 	color: black;
 }
 
-#submitButton {
+.submitButton {
 	color: white;
 	display: inline-block;
 	float: left;
@@ -501,22 +501,22 @@ h3{
 	width: 30%;
 }
 
-#submitButtonLink {
+.submitButtonLink {
 	color: black;
 	display: block;
 	margin: auto;
 	/*width: 50%;*/
 }
 
-#submitButtonLink:hover {
+.submitButtonLink:hover {
 	text-decoration: none;
 }
 
-#submitButtonLink:focus {
+.submitButtonLink:focus {
 	text-decoration: none;
 }
 
-#submitMaintext {
+.submitMaintext {
 	text-align: center;
 	/*font-size: 300%;*/
 	font-size: 20pt;
