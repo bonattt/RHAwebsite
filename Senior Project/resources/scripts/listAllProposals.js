@@ -305,7 +305,9 @@ function setupModalButtons() {
         json_data.paid = document.getElementById('proposalModal-paid').checked;
         marshalDates(json_data);
 
-        json_data.description = "hello, I am a description";
+
+
+//        json_data.description = "hello, I am a description";
 
         var apiUri = 'events/' + id;
         var xhr = xhrPutRequest(apiUri);
