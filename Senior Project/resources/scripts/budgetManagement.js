@@ -36,7 +36,7 @@ function setupButtons() {
         json_obj.dateReceived = new Date(json_obj.dateReceived);
         var select = document.getElementById('paymentModal-event');
         json_obj.proposal_id = select.dataset[prepEventName(select.value)]
-        json_obj.reciepts = {"test1": "hello", "test2": "world!"};
+        json_obj.receipts = {"test1": "hello", "test2": "world!"};
 
         json_obj.amountUsed = parseFloat(json_obj.amountUsed);
 
