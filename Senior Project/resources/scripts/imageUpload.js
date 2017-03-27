@@ -15,10 +15,14 @@ PhotoPostXhr.prototype.imageCallback = function(xhr, json_data, field_name) {
         if (typeof field_name == 'undefined') {
             field_name = 'image';
         }
+
         console.log(theXhr.responseText);
-        var image_path = JSON.parse(theXhr.responseText).filepath;
-        json_data[field_name] = image_path;
-//        alert(JSON.stringify(json_data));
+        try {
+            var image_path = JSON.parse(theXhr.responseText).filepath;
+            json_data[field_name] = image_path;
+        } catch (err) {
+            console.error("failed to upload the image");
+        }
         xhr.send(JSON.stringify(json_data));
     }
 }
