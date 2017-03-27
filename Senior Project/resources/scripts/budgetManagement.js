@@ -64,11 +64,10 @@ function setupButtons() {
         var xhr = xhrPostRequest(apiUri);
         xhr.onload = function() {
             console.log(json_obj);
-            //location.reload();
+            location.reload();
         }
         xhr.onerror = function() {
         }
-        alert(JSON.stringify(json_obj));
         console.log(json_obj);
         xhr.send(JSON.stringify(json_obj));
     });
