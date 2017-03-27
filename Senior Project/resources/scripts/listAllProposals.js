@@ -305,20 +305,27 @@ function setupModalButtons() {
         json_data.paid = document.getElementById('proposalModal-paid').checked;
         marshalDates(json_data);
 
-
-
-//        json_data.description = "hello, I am a description";
-
         var apiUri = 'events/' + id;
         var xhr = xhrPutRequest(apiUri);
+
         xhr.onload = function() {
             location.reload();
         }
-        console.log(json_data);
-        alert(JSON.stringify(json_data));
         removeNullValues(json_data);
+
+        var files = document.getElementById("proposalModal-imageFile").files;
+        if(files.length > 0) {
+            var photoXhr = new PhotoPostXhr('/eventPhoto');
+            photoXhr.imageCallback(xhr, json_data, 'image_path');
+            var formData = new FormData();
+            formData.append("imageFile", files[0]);
+            photoXhr.send(formData);
+        } else {
+            xhr.send(JSON.stringify(json_data));
+        }
+
         console.log(json_data);
-        xhr.send(JSON.stringify(json_data));
+        document.getElementById("proposalModal-imageFile").value = '';
     });
 
     var deleteBtn = document.getElementById("deleteConfirmModal-delete");
