@@ -79,7 +79,7 @@ function submit() {
             dbxhr.setRequestHeader('Content-Type', 'application/json');
             dbxhr.onreadystatechange = function (e) {
                 if(dbxhr.readyState == 4 && dbxhr.status == 200) {
-                    $('#myModal').modal('hide');
+                    location.reload();
                 }
             }
             dbxhr.onerror = function () {
@@ -96,4 +96,8 @@ function submit() {
 
 $(document).ready(function() {
     setup();
+    $("#signUpOpenDate").datepicker();
+    $("#signUpCloseDate").datepicker();
+    $("#eventDate").datepicker();
+    $("#proposedDate").datepicker();
 });
