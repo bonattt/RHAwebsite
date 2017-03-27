@@ -79,7 +79,7 @@ function submit() {
             dbxhr.setRequestHeader('Content-Type', 'application/json');
             dbxhr.onreadystatechange = function (e) {
                 if(dbxhr.readyState == 4 && dbxhr.status == 200) {
-                    $('#myModal').modal('hide');
+                    location.reload();
                 }
             }
             dbxhr.onerror = function () {
