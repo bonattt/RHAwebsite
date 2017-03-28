@@ -2,7 +2,7 @@
 
 function PhotoPostXhr(apiCall) {
     this.xhr = new XMLHttpRequest();
-    this.xhr.open('POST', getPhotoApiUrl(apiCall));
+    this.xhr.open('POST', getPhotoApiUri(apiCall));
 }
 
 PhotoPostXhr.prototype.send = function(formData) {
@@ -15,14 +15,9 @@ PhotoPostXhr.prototype.imageCallback = function(xhr, json_data, field_name) {
         if (typeof field_name == 'undefined') {
             field_name = 'image';
         }
-
-        console.log(theXhr.responseText);
-        try {
-            var image_path = JSON.parse(theXhr.responseText).filepath;
-            json_data[field_name] = image_path;
-        } catch (err) {
-            console.error("failed to upload the image");
-        }
+        var image_path = JSON.parse(theXhr.responseText).filepath;
+        json_data[field_name] = image_path;
+//        alert(JSON.stringify(json_data));
         xhr.send(JSON.stringify(json_data));
     }
 }
@@ -33,42 +28,57 @@ PhotoPostXhr.prototype.callback = function(callback) {
 
 // function PhotoDeleteXhr(apiCall) {
 //     this.xhr = new XMLHttpRequest();
-//     this.xhr.open('DELETE', getPhotoApiUrl(apiCall));
+//     this.xhr.open('DELETE', getPhotoApiUri(apiCall));
 // }
 
 // PhotoDeleteXhr.prototype = PhotoPostXhr.prototype
 
-function getPhotoApiUrl(backendFilepath) {
+function getPhotoApiUri(backendFilepath) {
     return location.protocol + '//' + location.hostname +
                 (location.port ? ':' + location.port: '') +
                 '/api/v1/' + backendFilepath;
 }
 
 
-//function getPhotoUploadXhr(pagePhotoUrl) {
-//
-//    var photoAPIURL =
-//
-//    var formData = new FormData();
-//    formData.append("imageFile", files[0]);
-//    photoXhr.open('POST', photoAPIURL, true);
-//
-//    photoXhr.onreadystatechange = function (e) {
-//        if(photoXhr.readyState == 4 && photoXhr.status == 200) {
-//            var image_path = JSON.parse(photoXhr.responseText).filepath;
-//            var xhr = xhrPostRequest(urlExtension);
-//
-//            xhr.onreadystatechange = function (e) {
-//                if(xhr.readyState == 4 && xhr.status == 200) {
-//                    location.reload();
-//                }
-//            };
-//
-//
-//            xhr.send(JSON.stringify({ committeeName: committeeName.value, description: committeeDesc.value, image: image_path }));
-//            clearSubmitHandlers(submitBtn);
-//            return xhr;
-//        }
-//    };
-//    return photoXhr;
-//}
+function PhotoReplaceXhr(apiCall) {
+    this.xhr = new XMLHttpRequest();
+    this.xhr.open('POST', getPhotoApiUri(apiCall));
+}
+
+PhototReplaceXhr.prototype.send = function(file) {
+    var formData = new FormData();
+    formData.append("imageFile", file);
+    this.xhr.send(formData);
+}
+
+PhotoReplaceXhr.prototype.imageCallback = function(xhr, json_data, field_name) {
+    var thisXhr = this.xhr; // need to reference this in callback.
+    var image_to_delete = json_data[field_name].replace('..', '.');
+    thisXhr.open('POST', getPhotoApiUri('/committeePhoto'), true);
+    thisXhr.onreadystatechange = function (e) {
+        if (thisXhr.readyState == 4 && thisXhr.status == 200) {
+            imageDeleteFunction(json_data[field_name].substring(2));
+            json_data[field_name] = JSON.parse(thisXhr.response).filepath;
+            xhr.onreadystatechange = function (e) {
+                if(xhr.readyState == 4 && xhr.status == 200) {
+                    location.reload();
+                }
+            };
+            xhr.send(JSON.stringify(json_data));
+        }
+    }
+    thisXhr.send(formData);
+}
+
+function imageDeleteFunction(filePath) {
+    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/photo';
+    var formData = new FormData();
+    var photoxhr = new XMLHttpRequest();
+    var dbObject = {};
+    dbObject["imagePath"] = 'resources' + filePath;
+
+    photoxhr.open('DELETE', photoDeleteApi, true);
+    photoxhr.setRequestHeader('Content-Type', 'application/json');
+
+    photoxhr.send(JSON.stringify(dbObject));
+}
