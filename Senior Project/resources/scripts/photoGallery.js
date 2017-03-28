@@ -64,17 +64,18 @@ function setUpModal(filePath, photoID, approved) {
     var modalImage = document.getElementById('modalPhoto');
     modalImage.setAttribute('class', 'modalPhoto');
     modalImage.setAttribute('src', filePath);
-    var modalDelete = document.getElementById('modal-delete')
     var modalApprove = document.getElementById('modal-approve');
-    modalDelete.addEventListener("click", function () { deleteFunction(filePath, photoID) });
     modalApprove.addEventListener("click", function () { approveImage(photoID) });
-
+    var deleteConfirm = document.getElementById('confirm-delete');
+    deleteConfirm.addEventListener('click', function () {
+        deleteFunction(filePath, photoID);
+    });
 }
 
 function approveImage(imageID) {
     var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery';
     var xhr = new XMLHttpRequest();
-    var json_data = {"approved": "approved", "photo_gallery_id": imageID};
+    var json_data = { "approved": "approved", "photo_gallery_id": imageID };
     xhr.open('PUT', url + '/' + imageID, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function (e) {
@@ -147,7 +148,7 @@ function uploadPhoto() {
         if (photoxhr.readyState == 4 && photoxhr.status == 200) {
             $('#uploadModal').modal('hide');
             var xhr = new XMLHttpRequest();
-            var json_data = {"path_to_photo": JSON.parse(photoxhr.response).filepath, "approved": "pending"};
+            var json_data = { "path_to_photo": JSON.parse(photoxhr.response).filepath, "approved": "pending" };
             xhr.open('POST', url, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onreadystatechange = function (e) {
