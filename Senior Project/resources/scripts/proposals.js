@@ -39,6 +39,10 @@ function submit() {
     var files = document.getElementById("imageFile").files;
     var approved = true;
 
+    if(!name || !costToAttendee || !description || !maxAttendance || !eventDate || !proposer || !dateProposed || !weekProposed || !quarter || !moneyRequested || !moneyAllocated){
+        alert("Failure.  Repeat, I have failed.");
+    }
+
     if (signUpCloseDate == "" && signUpOpenDate == "") {
         console.log("I happened");
         signUpCloseDate = null;
