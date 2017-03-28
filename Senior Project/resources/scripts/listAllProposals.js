@@ -122,6 +122,7 @@ function drawTable(proposals, isAdmin) {
         var tdname = document.createElement('td');
         tdname.innerHTML = proposals[i].proposal_name;
         tdname.setAttribute("id", "proposal_name" + id);
+        tdname.dataset.image_path = proposals[i].image_path;
 
         var tddate = document.createElement('td');
         var eventDate = new Date(proposals[i].event_date);
@@ -304,22 +305,23 @@ function setupModalButtons() {
         });
         json_data.paid = document.getElementById('proposalModal-paid').checked;
         marshalDates(json_data);
-
+        json_data.image_path = document.getElementById('proposal_name'+last_proposal_clicked).dataset.image_path;
+        alert('image_path: ' + json_data.image_path);
         var apiUri = 'events/' + id;
         var xhr = xhrPutRequest(apiUri);
 
         xhr.onload = function() {
             location.reload();
         }
-        removeNullValues(json_data);
+        console.log(json_data);
+        removeNullValues(json_data, ["image_path"]);
 
         var files = document.getElementById("proposalModal-imageFile").files;
         if(files.length > 0) {
-            var photoXhr = new PhotoPostXhr('/eventPhoto');
+            var photoXhr = new PhotoReplaceXhr('eventPhoto');
+            console.log(json_data);
             photoXhr.imageCallback(xhr, json_data, 'image_path');
-            var formData = new FormData();
-            formData.append("imageFile", files[0]);
-            photoXhr.send(formData);
+            photoXhr.send(files[0]);
         } else {
             xhr.send(JSON.stringify(json_data));
         }
@@ -339,9 +341,12 @@ function setupModalButtons() {
     });
 }
 
-function removeNullValues(json_data) {
+function removeNullValues(json_data, exclude) {
+    if (typeof exclude == "undefined") {
+        exclude = [];
+    }
     for (attr in json_data) {
-        if (json_data == null) {
+        if (json_data[attr] == null && !exclude.include(attr)) {
             delete json_data[attr];
         }
     }
