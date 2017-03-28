@@ -77,7 +77,6 @@ function buildDeleteUri(uri) {
 }
 
 function imageDeleteFunction(filePath) {
-    alert('adress delete to ' + buildDeleteUri('/photo'));
     var photoDeleteApi = buildDeleteUri('/photo');
     var formData = new FormData();
     var photoxhr = new XMLHttpRequest();

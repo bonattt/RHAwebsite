@@ -115,7 +115,6 @@ function drawTable(proposals, isAdmin) {
         var tr = createTableRow(i, proposals[i]);
         var id = proposals[i].proposal_id
         if (isAdmin) {
-            console.log("adding listener " + id);
             addRowListener(tr, proposals[i]);
         }
         else {console.log("not adding listener " + id)}
@@ -184,7 +183,6 @@ function addRowListener(tr, proposal) {
         last_proposal_clicked = id;
         var entry;
         FIELDS.forEach(function (attr){
-            console.log(attr);
             var entry = document.getElementById('proposalModal-' + attr);
             entry.value = proposal[attr];
         });
@@ -213,7 +211,7 @@ function unMarshalDates(proposal) {
     }
 }
 
-function marshalDates(json_data) {
+function marshalAllDates(json_data) {
     var entry = document.getElementById('proposalModal-proposed_date');
     var date = new Date(entry.value);
     json_data.proposed_date = date;
@@ -229,7 +227,6 @@ function marshalDates(json_data) {
     entry = document.getElementById('proposalModal-event_signup_close');
     date = new Date(entry.value);
     json_data.event_signup_close = date;
-
 }
 
 function unMarshalHtml5(dateStr) {
@@ -243,8 +240,6 @@ function unMarshalHtml5(dateStr) {
     var day = date.getDate();
     if (day < 10) {day = "0" + day}
     msg += day;
-    console.log("in: " + dateStr);
-    console.log("Unmarshaled date: "  + msg);
     return msg
 }
 
@@ -304,7 +299,7 @@ function setupModalButtons() {
             json_data[attr] = entry.value;
         });
         json_data.paid = document.getElementById('proposalModal-paid').checked;
-        marshalDates(json_data);
+        marshalAllDates(json_data);
         json_data.image_path = document.getElementById('proposal_name'+last_proposal_clicked).dataset.image_path;
         alert('image_path: ' + json_data.image_path);
         var apiUri = 'events/' + id;
