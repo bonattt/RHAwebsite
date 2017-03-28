@@ -45,7 +45,7 @@ function PhotoReplaceXhr(apiCall) {
     this.xhr.open('POST', getPhotoApiUri(apiCall));
 }
 
-PhototReplaceXhr.prototype.send = function(file) {
+PhotoReplaceXhr.prototype.send = function(file) {
     var formData = new FormData();
     formData.append("imageFile", file);
     this.xhr.send(formData);
@@ -54,24 +54,31 @@ PhototReplaceXhr.prototype.send = function(file) {
 PhotoReplaceXhr.prototype.imageCallback = function(xhr, json_data, field_name) {
     var thisXhr = this.xhr; // need to reference this in callback.
     var image_to_delete = json_data[field_name].replace('..', '.');
-    thisXhr.open('POST', getPhotoApiUri('/committeePhoto'), true);
+    thisXhr.open('POST', getPhotoApiUri('committeePhoto/'), true);
     thisXhr.onreadystatechange = function (e) {
         if (thisXhr.readyState == 4 && thisXhr.status == 200) {
             imageDeleteFunction(json_data[field_name].substring(2));
             json_data[field_name] = JSON.parse(thisXhr.response).filepath;
             xhr.onreadystatechange = function (e) {
                 if(xhr.readyState == 4 && xhr.status == 200) {
-                    location.reload();
+//                    location.reload();
                 }
             };
             xhr.send(JSON.stringify(json_data));
         }
     }
-    thisXhr.send(formData);
+}
+
+function buildDeleteUri(uri) {
+    return location.protocol + '//'
+        + location.hostname
+        + (location.port ? ':' + location.port : '')
+        + '/api/v1' + uri;
 }
 
 function imageDeleteFunction(filePath) {
-    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/photo';
+    alert('adress delete to ' + buildDeleteUri('/photo'));
+    var photoDeleteApi = buildDeleteUri('/photo');
     var formData = new FormData();
     var photoxhr = new XMLHttpRequest();
     var dbObject = {};
@@ -79,6 +86,7 @@ function imageDeleteFunction(filePath) {
 
     photoxhr.open('DELETE', photoDeleteApi, true);
     photoxhr.setRequestHeader('Content-Type', 'application/json');
+    photoxhr.onload = function() { alert("status: "+ photoxhr.status); }
 
     photoxhr.send(JSON.stringify(dbObject));
 }
