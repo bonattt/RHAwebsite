@@ -4,27 +4,39 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
 
 var gridData = [{
         "amount": null,
-        "date": null
+        "date": new Date(
+            1970, 0, 1
+        )
     },
     {
         "amount": null,
-        "date": null
+        "date": new Date(
+            1970, 0, 1
+        )
     },
     {
         "amount": null,
-        "date": null
+        "date": new Date(
+            1970, 0, 1
+        )
     },
     {
         "amount": null,
-        "date": null
+        "date": new Date(
+            1970, 0, 1
+        )
     },
     {
         "amount": null,
-        "date": null
+        "date": new Date(
+            1970, 0, 1
+        )
     },
     {
         "amount": null,
-        "date": null
+        "date": new Date(
+            1970, 0, 1
+        )
     }
 ]
 
@@ -306,7 +318,7 @@ $(document).ready(function () {
                     },
                     date: {
                         path: "date",
-                        type: "date"
+                        type: Date
                     }
                 }
             }
@@ -320,7 +332,19 @@ $(document).ready(function () {
             {
                 field: "date",
                 title: "Date",
-                format: "{0:MM/dd/yyyy}",
+                format: function (value) {
+                    console.log(value);
+                    var day = value.getDate();
+                    var month = value.getMonth() + 1;
+                    var year = value.getFullYear();
+                    var date = month + '/' + day + '/' + year;
+                    if (date == '1/1/1970') {
+                        return 'Add a date';
+                    } else {
+                        return date;
+                    }
+                },
+                type: Date,
                 width: "120px"
             }
         ],
