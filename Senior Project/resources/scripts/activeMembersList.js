@@ -283,7 +283,7 @@ function setupSubmitAttendanceButton() {
             var readerOnload = function (e) {
                 var preResult = reader.result.split("\r\n");
                 var result = [];
-                preResult.foreach(e => {
+                preResult.forEach(e => {
                     if(e != '') {
                         result.push(e);
                     }
