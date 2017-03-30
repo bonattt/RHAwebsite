@@ -37,7 +37,6 @@ function submit() {
     var moneyRequested = document.getElementById("moneyRequested").value;
     var moneyAllocated = document.getElementById("moneyAllocated").value;
     var files = document.getElementById("imageFile").files;
-    var approved = true;
 
     if(!name || !costToAttendee || !description || !maxAttendance || !eventDate || !proposer || !dateProposed || !weekProposed || !quarter || !moneyRequested || !moneyAllocated){
         alert("Failure.  Repeat, I have failed.");
@@ -47,7 +46,6 @@ function submit() {
         console.log("I happened");
         signUpCloseDate = null;
         signUpOpenDate = null;
-        approved = false;
     }
 
     var formData = new FormData();
@@ -75,7 +73,6 @@ function submit() {
             dbObject["paid"] = false;
             dbObject["money_allocated"] = moneyAllocated;
             dbObject["image_path"] = image_path;
-            dbObject["approved"] = approved;
             dbObject["description"] = description;
             dbObject["max_attendance"] = maxAttendance;
 

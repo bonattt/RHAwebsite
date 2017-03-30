@@ -455,7 +455,7 @@ h3{
 	position: absolute;
 	bottom: -12%;
 	left: -2%;
-	width: 61%;
+	width: 50%;
 }
 
 .propbutton > button {
@@ -498,7 +498,7 @@ h3{
 	border: none;
 	border-radius: 10px;
 	background-color: none;
-	width: 30%;
+	width: 25%;
 }
 
 .submitButtonLink {
@@ -913,10 +913,24 @@ height: 150pt;
 
 #calendar-wrapper {
 	position: absolute;
-  	right: 4.75%;
+  	right: 3.5%;
   	bottom: 2%;
   	width: 45%;
   	height: 50%;
+}
+
+#delete-calendar {
+	display: none;
+	position: absolute;
+	right: 2.75%;
+	bottom: 53%;
+	width: 10%;
+	font-size: 10pt;
+	color: white;
+	background-color: rgb(136, 0, 21);
+	font-weight: bold;
+	border: none;
+	border-radius: 5px;
 }
 
 #calendar-last-updated {
