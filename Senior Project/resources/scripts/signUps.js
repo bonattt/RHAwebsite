@@ -21,7 +21,6 @@ var editValue;
 var listLinks;
 
 var isAdmin = false;
-var isAMember = false;
 
 const EVENT_DATE = 'signups-modal-event_date';
 const SIGNUPS_CLOSE = 'signups-modal-event_signup_close';
@@ -149,25 +148,6 @@ function setupAdmin(officers) {
 
 function displaySignUps() {
     var officersxhr = getOfficers(); // from adminPermission.js
-    var username = JSON.parse(sessionStorage.getItem("userData")).username;
-    var memberXhr = xhrGetRequest('members/');
-    memberXhr.onload = function () {
-        for (var member in memberXhr.responseText) {
-            if (member["username"] == username && member["hall"] != null) {
-                console.log("feelin' myself");
-                isAMember = true;
-                break;
-            }
-        }
-        if (!isAMember) {
-            //do nothing for now 
-            console.log("Ahh!");
-            var signUpLinks = document.getElementsByClassName("signUpLink");
-            console.log(signUpLinks);
-        }
-    };
-    memberXhr.send();
-
     officersxhr.onload = function () {
         if (userIsOfficer(officersxhr.responseText)) {
             setupAdmin();
@@ -357,44 +337,40 @@ function getEventActionDiv(proposal, username, signUpOpenDate, attendees) {
     eventActionDiv.setAttribute('class', 'eventActions');
 
     // signup / unregister button, ? event is current 
-    if (!isAMember) {
-
-    } else {
-        if (signUpOpenDate < new Date()) {
-            var signupLink = document.createElement('a');
-            signupLink.setAttribute('id', 'signUpLink' + proposal.proposal_id);
-            if (username != null) {
-                if ($.inArray(username, attendees) == -1) {
-                    signupLink.addEventListener('click', function () { signUp(proposal.proposal_id + "") });
-                    var innerParagraph = document.createElement('p');
-                    innerParagraph.setAttribute('class', 'signUpLink');
-                    innerParagraph.appendChild(document.createTextNode('Sign Up'));
-                    signupLink.appendChild(innerParagraph);
-                } else {
-                    signupLink.addEventListener('click', function () { unregister(proposal.proposal_id) });
-                    var innerParagraph = document.createElement('p');
-                    innerParagraph.setAttribute('class', 'signUpLink');
-                    innerParagraph.appendChild(document.createTextNode('Unregister'));
-                    signupLink.appendChild(innerParagraph);
-                }
-            } else {
-                signupLink.addEventListener('click', function () {
-                    var snackbar = document.getElementById("notLoggedInSnackbar");
-                    snackbar.className = "show";
-                    setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
-                });
+    if (signUpOpenDate < new Date()) {
+        var signupLink = document.createElement('a');
+        signupLink.setAttribute('id', 'signUpLink' + proposal.proposal_id);
+        if (username != null) {
+            if ($.inArray(username, attendees) == -1) {
+                signupLink.addEventListener('click', function () { signUp(proposal.proposal_id + "") });
                 var innerParagraph = document.createElement('p');
                 innerParagraph.setAttribute('class', 'signUpLink');
                 innerParagraph.appendChild(document.createTextNode('Sign Up'));
                 signupLink.appendChild(innerParagraph);
+            } else {
+                signupLink.addEventListener('click', function () { unregister(proposal.proposal_id) });
+                var innerParagraph = document.createElement('p');
+                innerParagraph.setAttribute('class', 'signUpLink');
+                innerParagraph.appendChild(document.createTextNode('Unregister'));
+                signupLink.appendChild(innerParagraph);
             }
         } else {
-            var signupLink = document.createElement('p');
-            signupLink.setAttribute('class', 'signUpLink');
-            signupLink.appendChild(document.createTextNode('Signups Closed'));
+            signupLink.addEventListener('click', function () {
+                var snackbar = document.getElementById("notLoggedInSnackbar");
+                snackbar.className = "show";
+                setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+            });
+            var innerParagraph = document.createElement('p');
+            innerParagraph.setAttribute('class', 'signUpLink');
+            innerParagraph.appendChild(document.createTextNode('Sign Up'));
+            signupLink.appendChild(innerParagraph);
         }
-        eventActionDiv.appendChild(signupLink);
+    } else {
+        var signupLink = document.createElement('p');
+        signupLink.setAttribute('class', 'signUpLink');
+        signupLink.appendChild(document.createTextNode('Signups Closed'));
     }
+    eventActionDiv.appendChild(signupLink);
 
     var showListLink = document.createElement('a');
     showListLink.addEventListener('click', function () { showListModal(proposal.proposal_id) });
