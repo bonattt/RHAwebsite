@@ -23,6 +23,7 @@
 </head>
 
 <body>
+	<div id="proposalsSnackbar">Please fill all required fields.</div>
 	<div id="navBar"> </div>
 	<div id="proposalsPage">
 		<h1>EVENT <br> PROPOSALS</h1>
@@ -71,12 +72,13 @@
 				</div>
 				<div class="modal-body">
 					<form action="javascript:submit()">
-						<label for="name">Event Name:</label>
+						<label>Note: Fields with an * must be filled.</label>
+						<label for="name">*Event Name:</label>
 						<input type="text" id="name" name="name">
-						<label for="costToAttendee">Cost to Attendee:</label>
+						<label for="costToAttendee">*Cost to Attendee:</label>
 						<input type="number" id="costToAttendee" name="costToAttendee" min="0.00" max="10000" step="0.01" id="cTA" name="cTA">
-						<label for="imageFile">Image:<input type="file" name="imageFile" id="imageFile"></label>
-						<label for="description">Event Description:</label>
+						<label for="imageFile">*Image:<input type="file" name="imageFile" id="imageFile"></label>
+						<label for="description">*Event Description:</label>
 						<input type="text" id="description" name="description">
 						<label for="maxAttendance">Max Attendance:</label>
 						<input type="text" id="maxAttendance" name="maxAttendance">
@@ -87,19 +89,19 @@
 						<label for="signUpCloseDate">Date Signups Close:</label>
 						<input type="text" id="signUpCloseDate" name="signUpCLoseDate"
 						/>
-						<label for="eventDate">Event Date:</label>
+						<label for="eventDate">*Event Date:</label>
 						<input type="text" id="eventDate" name="eventDate"/>
-						<label for="proposer">Proposer:</label>
+						<label for="proposer">*Proposer:</label>
 						<input type="text" id="proposer" name="proposer">
-						<label for="proposedDate">Date of Proposal:</label>
+						<label for="proposedDate">*Date of Proposal:</label>
 						<input type="text" id="proposedDate" name="proposedDate"/>
-						<label for="weekProposed">Week Proposed:</label>
+						<label for="weekProposed">*Week Proposed:</label>
 						<input type="number" min="0" max="10" step="1" id="weekProposed" name="weekProposed">
-						<label for="quarterProposed">Quarter Proposed:</label>
+						<label for="quarterProposed">*Quarter Proposed:</label>
 						<input type="number" min="0" max="3" step="1" id="quarterProposed" name="quarterProposed">
-						<label for="moneyRequested">Money Requested:</label>
+						<label for="moneyRequested">*Money Requested:</label>
 						<input type="number" min="0.00" max="25000" step="0.01" id="moneyRequested" name="moneyRequested">
-						<label for="moneyAllocated">Money Allocated:</label>
+						<label for="moneyAllocated">*Money Allocated:</label>
 						<input type="number" min="0.00" max="25000" step="0.01" id="moneyAllocated" name="moneyAllocated">
 						<button type="submit" class="btn btn-default">Submit</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
