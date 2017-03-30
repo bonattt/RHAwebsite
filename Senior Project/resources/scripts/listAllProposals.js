@@ -314,15 +314,39 @@ function setupModalButtons() {
         json_data.paid = document.getElementById('proposalModal-paid').checked;
         marshalAllDates(json_data);
         json_data.image_path = document.getElementById('proposal_name'+last_proposal_clicked).dataset.image_path;
-        alert('image_path: ' + json_data.image_path);
         var apiUri = 'events/' + id;
         var xhr = xhrPutRequest(apiUri);
 
         xhr.onload = function() {
-            location.reload();
+//            location.reload();
         }
         console.log(json_data);
         removeNullValues(json_data, ["image_path"]);
+
+        var required_fields = ["proposed_date", "event_date", "proposal_name", "proposer","money_requested",
+                    "money_allocated", "cost_to_attendee", "week_proposed", "quarter_proposed"];
+        var missing_fields = [];
+        required_fields.forEach(function(field) {
+            if (! json_data[field]) {
+                missing_fields.push(field);
+                console.log(field + " is invalid");
+                delete json_data[field];
+            }
+            else if (Object.prototype.toString.call(json_data[field]) === '[object Date]') {
+                if (isNaN( json_data[field].getTime())) {
+                    missing_fields.push(field);
+                    console.log(field + " is an invalid date");
+                    delete json_data[field];
+                }
+            }
+        });
+
+        if (missing_fields.length == 0) {
+            $("#proposalModal").modal("hide");
+        } else {
+            displayMissingFieldWarning(missing_fields);
+            return;
+        }
 
         var files = document.getElementById("proposalModal-imageFile").files;
         if(files.length > 0) {
@@ -333,7 +357,6 @@ function setupModalButtons() {
         } else {
             xhr.send(JSON.stringify(json_data));
         }
-
         console.log(json_data);
         document.getElementById("proposalModal-imageFile").value = '';
     });
@@ -347,6 +370,19 @@ function setupModalButtons() {
         }
         xhr.send();
     });
+}
+
+function displayMissingFieldWarning(missing_fields) {
+    var infoBody = document.getElementById("infoModal-body");
+    var msg = 'some required fields were left blank: <br/>';
+    missing_fields.forEach(function(field) {
+        msg += 'please include the <b>' + field.replace(/_/g, ' ') + '</b><br/>';
+    });
+    infoBody.innerHTML = msg;
+    $("#infoModal").modal("show");
+    setTimeout(function() {
+        $("#infoModal").modal("hide");
+    }, 6000);
 }
 
 function removeNullValues(json_data, exclude) {
