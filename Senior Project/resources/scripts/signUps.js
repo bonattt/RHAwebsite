@@ -152,9 +152,13 @@ function displaySignUps() {
     var username = JSON.parse(sessionStorage.getItem("userData")).username;
     var memberXhr = xhrGetRequest('members/');
     memberXhr.onload = function () {
-        for (var member in memberXhr.responseText) {
-            if (member["username"] == username && member["hall"] != null) {
+        console.log(JSON.parse(memberXhr.responseText));
+        var members = JSON.parse(memberXhr.responseText);
+        for (var i = 0; i < members.length; i++) {
+            // console.log(members[i]);
+            if (members[i]["username"] == username && members[i]["hall"] != null) {
                 console.log("feelin' myself");
+                console.log(members[i]);
                 isAMember = true;
                 break;
             }
