@@ -123,17 +123,14 @@ function drawTable(proposals, isAdmin) {
         tdname.setAttribute("id", "proposal_name" + id);
         tdname.dataset.image_path = proposals[i].image_path;
 
-        var tddate = document.createElement('td');
-        var eventDate = new Date(proposals[i].event_date);
-        eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
-        tddate.innerHTML = eventDate;
-        tddate.setAttribute("id", "event_date" + id);
+        var tddate = getDateTD(proposals[i].event_date, id);
+//        document.createElement('td');
+//        var eventDate = new Date(proposals[i].event_date);
+//        eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
+//        tddate.innerHTML = eventDate;
+//        tddate.setAttribute("id", "event_date" + id);
 
-        var tdProposedDate = document.createElement('td');
-        var proposedEventDate = new Date(proposals[i].proposed_date);
-        proposedEventDate = (proposedEventDate.getMonth() + 1) + "/" + proposedEventDate.getUTCDate() + "/" + proposedEventDate.getFullYear();
-        tdProposedDate.innerHTML = proposedEventDate;
-        tdProposedDate.setAttribute("id", "proposed_date" + id);
+        var tdProposedDate = getDateTD(proposals[i].proposed_date, id);
 
         tdweek = document.createElement('td');
         tdweek.innerHTML = proposals[i].week_proposed;
@@ -173,6 +170,22 @@ function drawTable(proposals, isAdmin) {
     }
     table.appendChild(tbdy);
     body.appendChild(table);
+}
+
+
+function getDateTD(date, id) {
+    var tdProposedDate = document.createElement('td');
+    var proposedEventDate;
+    if (! date) {
+        proposedEventDate = "no date!"
+        tdProposedDate.style.color = 'red';
+    } else {
+        proposedEventDate = new Date(date);
+        proposedEventDate = (proposedEventDate.getMonth() + 1) + "/" + proposedEventDate.getUTCDate() + "/" + proposedEventDate.getFullYear();
+    }
+    tdProposedDate.innerHTML = proposedEventDate;
+    tdProposedDate.setAttribute("id", "proposed_date" + id);
+    return tdProposedDate;
 }
 
 function addRowListener(tr, proposal) {
