@@ -153,7 +153,7 @@ function displaySignUps() {
     var memberXhr = xhrGetRequest('members/');
     memberXhr.onload = function () {
         for (var member in memberXhr.responseText) {
-            if (member["username"] == username && member["hall"] != null && member["floor"] == null) {
+            if (member["username"] == username && member["hall"] != null) {
                 console.log("feelin' myself");
                 isAMember = true;
                 break;
