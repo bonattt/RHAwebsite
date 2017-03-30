@@ -220,7 +220,7 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button id="editFundModal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="editFundModal-submit" type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#editConfirmationModal"> Submit </button>
 					<button id="editFundModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
@@ -233,12 +233,11 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Are you sure? </h4>
+					<h4 class="modal-title" id="confirmationText">Are you sure? </h4>
 				</div>
 				<div class="modal-footer">
-					<button id="confirm-delete" type="button" class="btn btn-danger" data-dismiss="modal"> 
-                            Delete </button>
-					<button id="cancel-delete" type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
+					<button id="confirm-confirm" type="button" class="btn btn-danger" data-dismiss="modal">Confirm</button>
+					<button id="confirm-cancel" type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
 				</div>
 			</div>
 		</div>
