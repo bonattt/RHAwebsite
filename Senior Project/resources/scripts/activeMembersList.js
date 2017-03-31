@@ -95,36 +95,40 @@ function drawAllMembersTable(members) {
     tbdy.appendChild(tdAttendance1);
     var countForColoring = 0;
     for (var i = 0; i < members.length; i++) {
-        tr = document.createElement('tr');
-        tr.setAttribute('member', i);
-        tr.setAttribute('data-toggle', 'modal');
-        tr.setAttribute('data-target', '#myModal');
-        doClosure(members, i);
-        if (countForColoring % 2 == 0) {
-            tr.setAttribute('bgcolor', '#f0f0f0');
+        if (members[i].hall == null || members[i].hall == "") {
+            console.log("Nope!");
+        } else {
+            tr = document.createElement('tr');
+            tr.setAttribute('member', i);
+            tr.setAttribute('data-toggle', 'modal');
+            tr.setAttribute('data-target', '#myModal');
+            doClosure(members, i);
+            if (countForColoring % 2 == 0) {
+                tr.setAttribute('bgcolor', '#f0f0f0');
+            }
+            countForColoring++;
+
+            var td = document.createElement('td');
+            td.innerHTML = members[i].firstname + " " + members[i].lastname;
+
+            var td2 = document.createElement('td');
+            td2.innerHTML = members[i].hall;
+
+            var td3 = document.createElement('td');
+            td3.innerHTML = members[i].meet_attend.Q1;
+
+            var td4 = document.createElement('td');
+            td4.innerHTML = members[i].meet_attend.Q2;
+
+            var td5 = document.createElement('td');
+            td5.innerHTML = members[i].meet_attend.Q3;
+            tr.appendChild(td);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tr.appendChild(td5);
+            tbdy.appendChild(tr);
         }
-        countForColoring++;
-
-        var td = document.createElement('td');
-        td.innerHTML = members[i].firstname + " " + members[i].lastname;
-
-        var td2 = document.createElement('td');
-        td2.innerHTML = members[i].hall;
-
-        var td3 = document.createElement('td');
-        td3.innerHTML = members[i].meet_attend.Q1;
-
-        var td4 = document.createElement('td');
-        td4.innerHTML = members[i].meet_attend.Q2;
-
-        var td5 = document.createElement('td');
-        td5.innerHTML = members[i].meet_attend.Q3;
-        tr.appendChild(td);
-        tr.appendChild(td2);
-        tr.appendChild(td3);
-        tr.appendChild(td4);
-        tr.appendChild(td5);
-        tbdy.appendChild(tr);
     }
     table.appendChild(tbdy);
     body.appendChild(table);
