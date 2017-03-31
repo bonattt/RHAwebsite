@@ -12,11 +12,20 @@ function setAdmin(officers) {
         newButton.innerHTML = 'New Attendance Record';
         div.appendChild(newButton);
 
-        var div2 = document.getElementById('undoAttendanceDiv');
         var undoButton = document.createElement('button');
         undoButton.setAttribute('id', 'undoAttendance');
         undoButton.innerHTML = 'Undo Last Attendance Upload';
         div.appendChild(undoButton);
+
+        div2 = document.getElementById("purgeMembersDiv");
+        var purgeMembers = document.createElement("button");
+        purgeMembers.innerHTML = "Purge Members Table";
+        var undoPurge = document.createElement("button");
+        undoPurge.innerHTML = "Undo Purge";
+        // TODO: Add confirmation modal to the purgeMembers button
+        div2.appendChild(purgeMembers);
+        div2.appendChild(undoButton);
+
         undoAttendanceSubmission();
 
         setupSubmitAttendanceButton();
