@@ -77,16 +77,16 @@ CREATE TABLE Equipment (
     equipmentEmbed varchar(500),
 );
 
--- CREATE TABLE Rentals (
---     rental_id SERIAL PRIMARY KEY,
---     member_id INT references Members (user_id),
---     equipment_id INT references Equipment (equipmentID),
---     approved_by INT references Members (user_id),
---     reason_for_rental varchar(100),
---     rented_on DATE,
---     return_on DATE,
---     due_by DATE
--- );
+CREATE TABLE Rentals (
+    rental_id SERIAL PRIMARY KEY,
+    member_id INT references Members (user_id),
+    equipment_id INT references Equipment (equipmentID),
+    approved_by INT references Members (user_id),
+    reason_for_rental varchar(100),
+    rented_on DATE,
+    return_on DATE,
+    due_by DATE
+);
 
 CREATE TABLE FloorAttendanceNumerics (
     numerics_id SERIAL PRIMARY KEY,
@@ -524,30 +524,3 @@ CREATE OR REPLACE FUNCTION get_money_used(prop_id int)
     RETURN used;
   END;
 $used$ LANGUAGE plpgsql;
-
-
-/*  Drops the Members table of all members except for those who are considered Officers
-
-  RETURNS: void
-*/
-CREATE OR REPLACE FUNCTION purgeMembers()
-  RETURNS void AS $$
-  BEGIN
-    COPY Members TO '/tmp/nonMembersDropBackup.csv' DELIMITER ',' CSV HEADER;
-    DELETE FROM Members WHERE Members.membertype IS NULL OR Members.membertype = '';
-  END;
-$$ LANGUAGE plpgsql;
-
-
-/* Returns the Members table to the state it was in just prior to being purged of
-   non-officers, assuming it was only done once.
-  
-  Returns: void
-*/
-CREATE OR REPLACE FUNCTION backup_members_table()
-  RETURNS void AS $$
-  BEGIN
-    TRUNCATE Members;
-    COPY Members FROM '/tmp/nonMembersDropBackup.csv' DELIMITER ',' CSV HEADER;
-  END;
-$$ LANGUAGE plpgsql;
