@@ -63,10 +63,23 @@ function setupButtons() {
         json_obj.dateReceived = new Date(json_obj.dateReceived);
         var select = document.getElementById('paymentModal-event');
         json_obj.proposal_id = select.dataset[prepEventName(select.value)]
-        json_obj.receipts = {
-            "test1": "hello",
-            "test2": "world!"
-        };
+
+        /* parse through the table to insert dates*/
+        var grid = $("#receiptsGrid").swidget();
+        var receiptsObject = [];
+        for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
+            var currentRow = grid.contentTable[0].rows[i];
+            var dateText = currentRow.childNodes[1].innerHTML;
+            if (dateText != "Add a date") {
+                var dateArray = currentRow.childNodes[1].innerHTML.split('/');
+                var dateToSend = dateArray[2] + '-' + dateArray[0] + '-' + dateArray[1];
+                gridData[i].date = dateToSend;
+                if (gridData[i].amount != 0) {
+                    receiptsObject.push(gridData[i]);
+                }
+            }
+        }
+        json_obj.reciepts = receiptsObject;
 
         json_obj.amountUsed = parseFloat(json_obj.amountUsed);
 
@@ -225,8 +238,8 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
         var accountCode = document.getElementById('detailsModal-accountcode');
         accountCode.innerHTML = json_obj.accountcode;
 
-        var reciepts = document.getElementById('detailsModal-reciepts');
-        reciepts.innerHTML = JSON.stringify(json_obj.reciepts)
+        var receipts = document.getElementById('detailsModal-receipts');
+        receipts.innerHTML = JSON.stringify(json_obj.reciepts)
     });
 
     return link;
@@ -295,7 +308,7 @@ function updateTotal() {
             currentNum = parseFloat(currentRow.childNodes[0].childNodes[0].childNodes[0].value);
         }
         total += currentNum;
-        gridData[i].amount = currentNum.toFixed(2),
+        gridData[i].amount = currentNum.toFixed(2);
     }
     totalInput.value = total.toFixed(2).toString();
 }
