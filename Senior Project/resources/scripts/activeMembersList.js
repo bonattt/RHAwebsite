@@ -22,17 +22,28 @@ function setAdmin(officers) {
         console.log(div2);
         var purgeMembers = document.createElement("button");
         purgeMembers.setAttribute("id", "purgeMembers");
+        purgeMembers.setAttribute("data-toggle", "modal");
+        purgeMembers.setAttribute("data-target", "#purgeConfirmationModal");
         purgeMembers.innerHTML = "Purge Members Table";
-        purgeMembers.addEventListener("click", function () {
-            
+        var confirmPurge = document.getElementById("confirm-purge");
+        confirmPurge.addEventListener("click", function () {
+            var xhr = xhrGetRequest('purgeMembers/');
+            xhr.onload = function () {
+                location.reload();
+            };
+            xhr.send();
         });
+
         var undoPurge = document.createElement("button");
         undoPurge.setAttribute("id", "undoPurge");
         undoPurge.innerHTML = "Undo Members Purge";
         undoPurge.addEventListener("click", function () {
-
+            var xhr = xhrGetRequest('undoPurge/');
+            xhr.onload = function () {
+                location.reload();
+            };
+            xhr.send();
         });
-        // TODO: Add confirmation modal to the purgeMembers button
         div2.appendChild(purgeMembers);
         div2.appendChild(undoPurge);
 
