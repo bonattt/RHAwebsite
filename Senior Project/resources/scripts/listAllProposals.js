@@ -7,7 +7,11 @@ const FIELDS = [
 //            "proposed_date",
 //            "event_date",
         "week_proposed",
-        "quarter_proposed"
+        "quarter_proposed",
+        "proposer",
+        "description",
+        "cost_to_attendee",
+        "max_attendance",
     ]
 
 const BROWSER = (function(){
@@ -111,25 +115,22 @@ function drawTable(proposals, isAdmin) {
         var tr = createTableRow(i, proposals[i]);
         var id = proposals[i].proposal_id
         if (isAdmin) {
-            console.log("adding listener " + id);
             addRowListener(tr, proposals[i]);
         }
         else {console.log("not adding listener " + id)}
         var tdname = document.createElement('td');
         tdname.innerHTML = proposals[i].proposal_name;
         tdname.setAttribute("id", "proposal_name" + id);
+        tdname.dataset.image_path = proposals[i].image_path;
 
-        var tddate = document.createElement('td');
-        var eventDate = new Date(proposals[i].event_date);
-        eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
-        tddate.innerHTML = eventDate;
-        tddate.setAttribute("id", "event_date" + id);
+        var tddate = getDateTD(proposals[i].event_date, id);
+//        document.createElement('td');
+//        var eventDate = new Date(proposals[i].event_date);
+//        eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
+//        tddate.innerHTML = eventDate;
+//        tddate.setAttribute("id", "event_date" + id);
 
-        var tdProposedDate = document.createElement('td');
-        var proposedEventDate = new Date(proposals[i].proposed_date);
-        proposedEventDate = (proposedEventDate.getMonth() + 1) + "/" + proposedEventDate.getUTCDate() + "/" + proposedEventDate.getFullYear();
-        tdProposedDate.innerHTML = proposedEventDate;
-        tdProposedDate.setAttribute("id", "proposed_date" + id);
+        var tdProposedDate = getDateTD(proposals[i].proposed_date, id);
 
         tdweek = document.createElement('td');
         tdweek.innerHTML = proposals[i].week_proposed;
@@ -171,6 +172,22 @@ function drawTable(proposals, isAdmin) {
     body.appendChild(table);
 }
 
+
+function getDateTD(date, id) {
+    var tdProposedDate = document.createElement('td');
+    var proposedEventDate;
+    if (! date) {
+        proposedEventDate = "no date!"
+        tdProposedDate.style.color = 'red';
+    } else {
+        proposedEventDate = new Date(date);
+        proposedEventDate = (proposedEventDate.getMonth() + 1) + "/" + proposedEventDate.getUTCDate() + "/" + proposedEventDate.getFullYear();
+    }
+    tdProposedDate.innerHTML = proposedEventDate;
+    tdProposedDate.setAttribute("id", "proposed_date" + id);
+    return tdProposedDate;
+}
+
 function addRowListener(tr, proposal) {
     var id = proposal.proposal_id;
     tr.setAttribute('data-toggle', 'modal');
@@ -179,40 +196,57 @@ function addRowListener(tr, proposal) {
         last_proposal_clicked = id;
         var entry;
         FIELDS.forEach(function (attr){
-            console.log(attr);
             var entry = document.getElementById('proposalModal-' + attr);
+            console.log(attr + ': ' + entry.value);
             entry.value = proposal[attr];
         });
-        unMarshalDateStr(proposal);
+        unMarshalDates(proposal);
         document.getElementById('proposalModal-paid').checked = proposal.paid;
     });
 }
 
-function unMarshalDateStr(proposal) {
+function unMarshalDates(proposal) {
     var proposed_date = document.getElementById('proposalModal-proposed_date');
     var event_date = document.getElementById('proposalModal-event_date');
+    var event_signup_open = document.getElementById('proposalModal-event_signup_open');
+    var event_signup_close = document.getElementById('proposalModal-event_signup_close');
     if (BROWSER.includes("chrome")) {
         proposed_date.value = unMarshalHtml5(proposal.proposed_date);
-        console.log(unMarshalHtml5(proposal.proposed_date));
         event_date.value = unMarshalHtml5(proposal.event_date);
-        console.log(unMarshalHtml5(proposal.event_date));
+        event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
+        event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
 
 //    } else if (BROWSER.includes("firefox")) {
     } else {
         proposed_date.value = proposal.proposed_date;
         event_date.value = proposal.event_date;
+        event_signup_open.value = proposal.event_signup_open;
+        event_signup_close.value = proposal.event_signup_close;
     }
 }
 
-function marshalDate(json_data) {
+function marshalAllDates(json_data) {
     var entry = document.getElementById('proposalModal-proposed_date');
-    var date = new Date(entry.value);
+    var date = marshalDateString(entry.value); // new Date(entry.value);
     json_data.proposed_date = date;
 
     entry = document.getElementById('proposalModal-event_date');
-    date = new Date(entry.value);
+    date = marshalDateString(entry.value); // new Date(entry.value);
     json_data.event_date = date;
 
+    entry = document.getElementById('proposalModal-event_signup_open');
+    date = marshalDateString(entry.value); // new Date(entry.value);
+    json_data.event_signup_open = date;
+
+    entry = document.getElementById('proposalModal-event_signup_close');
+    date = marshalDateString(entry.value); // new Date(entry.value);
+    json_data.event_signup_close = date;
+}
+
+function marshalDateString(dateStr) {
+    var date = new Date(dateStr);
+//    date.setMonth(date.getMonth()+1);
+    return date;
 }
 
 function unMarshalHtml5(dateStr) {
@@ -226,8 +260,7 @@ function unMarshalHtml5(dateStr) {
     var day = date.getDate();
     if (day < 10) {day = "0" + day}
     msg += day;
-    console.log("Unmarshaled date: "  + msg);
-    return msg
+    return date
 }
 
 function doClosure(proposal, i, tdused, tdreserve) {
@@ -239,8 +272,10 @@ function doClosure(proposal, i, tdused, tdreserve) {
 
 function setValues(used, tdused, tdreserve, proposal, i) {
     used = JSON.parse(used);
-    tdused.innerHTML = "$" + used[0].get_money_used;
-    tdreserve.innerHTML = "$" + (proposal[i].money_allocated - used[0].get_money_used).toFixed(2);
+    var usedVal = used[0].get_money_used;
+    tdused.innerHTML = "$" + (Math.round(usedVal*100) / 100);
+    var reserve = proposal[i].money_allocated - used[0].get_money_used;
+    tdreserve.innerHTML = "$" + (Math.round(reserve*100) / 100);
 }
 
 function getEvents() {
@@ -284,29 +319,89 @@ function setupModalButtons() {
             json_data[attr] = entry.value;
         });
         json_data.paid = document.getElementById('proposalModal-paid').checked;
-        marshalDate(json_data);
-
+        marshalAllDates(json_data);
+        json_data.image_path = document.getElementById('proposal_name'+last_proposal_clicked).dataset.image_path;
         var apiUri = 'events/' + id;
         var xhr = xhrPutRequest(apiUri);
+
         xhr.onload = function() {
-            location.reload();
+//            location.reload();
         }
-        xhr.send(JSON.stringify(json_data));
+        console.log(json_data);
+        removeNullValues(json_data, ["image_path"]);
+
+        var required_fields = ["proposed_date", "event_date", "proposal_name", "proposer","money_requested",
+                    "money_allocated", "cost_to_attendee", "week_proposed", "quarter_proposed"];
+        var missing_fields = [];
+        required_fields.forEach(function(field) {
+            if (! json_data[field]) {
+                missing_fields.push(field);
+                console.log(field + " is invalid");
+                delete json_data[field];
+            }
+            else if (Object.prototype.toString.call(json_data[field]) === '[object Date]') {
+                if (isNaN( json_data[field].getTime())) {
+                    missing_fields.push(field);
+                    console.log(field + " is an invalid date");
+                    delete json_data[field];
+                }
+            }
+        });
+
+        if (missing_fields.length == 0) {
+            $("#proposalModal").modal("hide");
+        } else {
+            displayMissingFieldWarning(missing_fields);
+            return;
+        }
+
+        var files = document.getElementById("proposalModal-imageFile").files;
+        if(files.length > 0) {
+            var photoXhr = new PhotoReplaceXhr('eventPhoto');
+            console.log(json_data);
+            photoXhr.imageCallback(xhr, json_data, 'image_path');
+            photoXhr.send(files[0]);
+        } else {
+            xhr.send(JSON.stringify(json_data));
+        }
+        console.log(json_data);
+        document.getElementById("proposalModal-imageFile").value = '';
     });
 
     var deleteBtn = document.getElementById("deleteConfirmModal-delete");
     deleteBtn.addEventListener('click', function() {
-        var apiUri = 'events/' + last_proposal_clicked;
+        var apiUri = 'event/' + last_proposal_clicked;
         var xhr = xhrDeleteRequest(apiUri);
         xhr.onload = function() {
-            alert('delete request successful');
-            //location.reload();
+            location.reload();
         }
         xhr.send();
-        alert("delete request sent")
     });
 }
 
+function displayMissingFieldWarning(missing_fields) {
+    var infoBody = document.getElementById("infoModal-body");
+    var msg = 'some required fields were left blank: <br/>';
+    missing_fields.forEach(function(field) {
+        msg += 'please include the <b>' + field.replace(/_/g, ' ') + '</b><br/>';
+    });
+    infoBody.innerHTML = msg;
+    $("#infoModal").modal("show");
+    setTimeout(function() {
+        $("#infoModal").modal("hide");
+    }, 6000);
+}
+
+function removeNullValues(json_data, exclude) {
+    if (typeof exclude == "undefined") {
+        exclude = [];
+    }
+    for (attr in json_data) {
+        if (json_data[attr] == null && !exclude.include(attr)) {
+            delete json_data[attr];
+        }
+    }
+}
 
 
 $(document).ready(function () {

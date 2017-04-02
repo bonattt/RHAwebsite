@@ -526,7 +526,6 @@ function submitFunc(json_data, put_id) {
     }
     var imageInput = document.getElementById('imageFile');
     // if (imageInput.value != '') {
-    //     var photoXhr = new PhotoPostXhr("eventPhoto");
     //     photoXhr.imageCallback(xhr, json_data, 'image_path');
     //     var files = document.getElementById("imageFile").files;
     //     var formData = new FormData();
