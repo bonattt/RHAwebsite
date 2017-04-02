@@ -111,7 +111,7 @@
 								<td> &nbsp;&nbsp; </td>
 								<td>
 									<select id="paymentModal-event" data-basketballtournament="9" data-assassins="14" data-trihop="18" data-countryconcert="7"
-									    data-moana="3">
+										data-moana="3">
 										<option>assassins</option>
 										<option>basketballTournament</option>
 										<option>countryconcert</option>
@@ -226,8 +226,24 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button id="editFundModal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="editFundModal-submit" type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#editConfirmationModal"> Submit </button>
 					<button id="editFundModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="editConfirmationModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title" id="confirmationText">Are you sure? </h4>
+				</div>
+				<div class="modal-footer">
+					<button id="confirm-confirm" type="button" class="btn btn-danger" data-dismiss="modal">Confirm</button>
+					<button id="confirm-cancel" type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
 				</div>
 			</div>
 		</div>

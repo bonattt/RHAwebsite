@@ -39,6 +39,12 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/html/RHAhome.html');
 });
 
+app.get('/crash', function (req, res) {
+  console.log("brb crashing...");
+  process.exit(1);
+  console.log("failed to crash");
+});
+
 app.get('/proposals', function (req, res) {
   res.sendFile(__dirname + '/html/proposals.html');
 });
