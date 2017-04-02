@@ -296,8 +296,6 @@ function updateTotal() {
         }
         total += currentNum;
         gridData[i].amount = currentNum.toFixed(2),
-        console.log(total);
-        console.log(gridData[i]);
     }
     totalInput.value = total.toFixed(2).toString();
 }
@@ -319,11 +317,6 @@ $(document).ready(function () {
     $("#receiptsGrid").shieldGrid({
         dataSource: {
             data: gridData,
-            update: {
-                data: function (e) {
-                    console.log(e);
-                }
-            },
             schema: {
                 fields: {
                     amount: {
@@ -338,11 +331,6 @@ $(document).ready(function () {
             }
         },
         events: {
-            //  edit: function (e) {
-            //      var row = e.row;
-            //      var cell = e.cell;
-            //      console.log(e);
-            //  },
             save: function (e) {
                 updateTotal();
             }
