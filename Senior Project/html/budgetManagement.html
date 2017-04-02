@@ -83,13 +83,6 @@
 					<table>
 						<tbody>
 							<tr>
-								<td> <label>Amount:</label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td>
-									<input class="modal-text-entry" id="paymentModal-amountUsed" type="number" step="0.00" value='0.01'></input>
-								</td>
-							</tr>
-							<tr>
 								<td> <label> Account Code:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
@@ -153,6 +146,13 @@
 								<td> &nbsp;&nbsp; </td>
 								<td>
 									<div id="receiptsGrid"></div>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Total:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td>
+									<input class="modal-text-entry" id="paymentModal-amountUsed" type="number" steps='0.01' value='0.00' placeholder='0.00' disabled='true'></input>
 								</td>
 							</tr>
 						</tbody>

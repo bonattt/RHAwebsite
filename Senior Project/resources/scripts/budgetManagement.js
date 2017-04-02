@@ -3,40 +3,28 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
 ]
 
 var gridData = [{
-        "amount": null,
-        "date": new Date(
-            1970, 0, 1
-        )
+        "amount": 0,
+        "date": new Date()
     },
     {
-        "amount": null,
-        "date": new Date(
-            1970, 0, 1
-        )
+        "amount": 0,
+        "date": new Date()
     },
     {
-        "amount": null,
-        "date": new Date(
-            1970, 0, 1
-        )
+        "amount": 0,
+        "date": new Date()
     },
     {
-        "amount": null,
-        "date": new Date(
-            1970, 0, 1
-        )
+        "amount": 0,
+        "date": new Date()
     },
     {
-        "amount": null,
-        "date": new Date(
-            1970, 0, 1
-        )
+        "amount": 0,
+        "date": new Date()
     },
     {
-        "amount": null,
-        "date": new Date(
-            1970, 0, 1
-        )
+        "amount": 0,
+        "date": new Date()
     }
 ]
 
@@ -293,6 +281,27 @@ function setAdmin() {
     populateFundsTable();
 }
 
+function updateTotal() {
+    var grid = $("#receiptsGrid").swidget();
+    var totalInput = document.getElementById('paymentModal-amountUsed');
+    var total = 0.0;
+
+    for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
+        var currentRow = grid.contentTable[0].rows[i];
+        var currentNum;
+        if (currentRow.childNodes[0].childNodes[0].childNodes[0] == null) {
+            currentNum = parseFloat(currentRow.childNodes[0].innerHTML);
+        } else {
+            currentNum = parseFloat(currentRow.childNodes[0].childNodes[0].childNodes[0].value);
+        }
+        total += currentNum;
+        gridData[i].amount = currentNum.toFixed(2),
+        console.log(total);
+        console.log(gridData[i]);
+    }
+    totalInput.value = total.toFixed(2).toString();
+}
+
 function setup() {
     var officersxhr = getOfficers();
     officersxhr.onload = function () {
@@ -310,6 +319,11 @@ $(document).ready(function () {
     $("#receiptsGrid").shieldGrid({
         dataSource: {
             data: gridData,
+            update: {
+                data: function (e) {
+                    console.log(e);
+                }
+            },
             schema: {
                 fields: {
                     amount: {
@@ -323,35 +337,55 @@ $(document).ready(function () {
                 }
             }
         },
+        events: {
+            //  edit: function (e) {
+            //      var row = e.row;
+            //      var cell = e.cell;
+            //      console.log(e);
+            //  },
+            save: function (e) {
+                updateTotal();
+            }
+        },
         rowHover: false,
         columns: [{
                 field: "amount",
                 title: "Amount",
-                width: "80px"
+                format: function (value) {
+                    if (value == null) {
+                        return 'New amount'
+                    } else {
+                        return value;
+                    }
+                },
+                width: "10px"
             },
             {
                 field: "date",
                 title: "Date",
                 format: function (value) {
-                    console.log(value);
+                    var today = new Date();
                     var day = value.getDate();
                     var month = value.getMonth() + 1;
                     var year = value.getFullYear();
                     var date = month + '/' + day + '/' + year;
-                    if (date == '1/1/1970') {
+                    if (day == today.getDate() &&
+                        month == today.getMonth() + 1 &&
+                        year == today.getFullYear()) {
                         return 'Add a date';
                     } else {
                         return date;
                     }
                 },
                 type: Date,
-                width: "120px"
+                width: "20px"
             }
         ],
         editing: {
             enabled: true,
             event: "click",
-            type: "cell"
+            type: "cell",
+            insertNewRowAt: "pagebottom"
         }
     });
 });
