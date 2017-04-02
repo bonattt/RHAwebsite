@@ -1,0 +1,7 @@
+{
+    "events": {
+        "start": "echo Starting Server.",
+        "exit": "server exited normally.",
+        "crash": "echo server crashed!! && npm start"
+    }
+}

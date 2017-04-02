@@ -80,7 +80,7 @@ function setupButtons() {
         xhr.send();
     });
 
-    var editSubmit = document.getElementById('editFundModal-submit');
+    var editSubmit = document.getElementById('confirm-confirm');
     editSubmit.addEventListener('click', function() {
         var apiUri = 'fund/' + current_id
         var xhr = xhrPutRequest(apiUri);
@@ -90,6 +90,7 @@ function setupButtons() {
 
         var json_obj = {"funds_amount": parseFloat(funds_amount.value)}
         xhr.send(JSON.stringify(json_obj));
+        location.reload();
     });
 }
 
