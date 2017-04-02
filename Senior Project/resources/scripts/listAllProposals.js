@@ -197,6 +197,7 @@ function addRowListener(tr, proposal) {
         var entry;
         FIELDS.forEach(function (attr){
             var entry = document.getElementById('proposalModal-' + attr);
+            console.log(attr + ': ' + entry.value);
             entry.value = proposal[attr];
         });
         unMarshalDates(proposal);
@@ -226,20 +227,26 @@ function unMarshalDates(proposal) {
 
 function marshalAllDates(json_data) {
     var entry = document.getElementById('proposalModal-proposed_date');
-    var date = new Date(entry.value);
+    var date = marshalDateString(entry.value); // new Date(entry.value);
     json_data.proposed_date = date;
 
     entry = document.getElementById('proposalModal-event_date');
-    date = new Date(entry.value);
+    date = marshalDateString(entry.value); // new Date(entry.value);
     json_data.event_date = date;
 
     entry = document.getElementById('proposalModal-event_signup_open');
-    date = new Date(entry.value);
+    date = marshalDateString(entry.value); // new Date(entry.value);
     json_data.event_signup_open = date;
 
     entry = document.getElementById('proposalModal-event_signup_close');
-    date = new Date(entry.value);
+    date = marshalDateString(entry.value); // new Date(entry.value);
     json_data.event_signup_close = date;
+}
+
+function marshalDateString(dateStr) {
+    var date = new Date(dateStr);
+//    date.setMonth(date.getMonth()+1);
+    return date;
 }
 
 function unMarshalHtml5(dateStr) {
@@ -253,7 +260,7 @@ function unMarshalHtml5(dateStr) {
     var day = date.getDate();
     if (day < 10) {day = "0" + day}
     msg += day;
-    return msg
+    return date
 }
 
 function doClosure(proposal, i, tdused, tdreserve) {
