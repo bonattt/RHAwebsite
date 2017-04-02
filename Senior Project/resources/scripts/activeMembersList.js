@@ -5,6 +5,7 @@ var table = document.createElement('table');
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
         var div = document.getElementById('submitAttendanceDiv');
+        console.log(div);
         var newButton = document.createElement('button');
         newButton.setAttribute('id', 'submitAttendance');
         newButton.setAttribute('data-toggle', 'modal');
@@ -18,13 +19,22 @@ function setAdmin(officers) {
         div.appendChild(undoButton);
 
         div2 = document.getElementById("purgeMembersDiv");
+        console.log(div2);
         var purgeMembers = document.createElement("button");
+        purgeMembers.setAttribute("id", "purgeMembers");
         purgeMembers.innerHTML = "Purge Members Table";
+        purgeMembers.addEventListener("click", function () {
+            
+        });
         var undoPurge = document.createElement("button");
-        undoPurge.innerHTML = "Undo Purge";
+        undoPurge.setAttribute("id", "undoPurge");
+        undoPurge.innerHTML = "Undo Members Purge";
+        undoPurge.addEventListener("click", function () {
+
+        });
         // TODO: Add confirmation modal to the purgeMembers button
         div2.appendChild(purgeMembers);
-        div2.appendChild(undoButton);
+        div2.appendChild(undoPurge);
 
         undoAttendanceSubmission();
 

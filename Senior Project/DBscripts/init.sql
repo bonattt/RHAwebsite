@@ -544,7 +544,7 @@ $$ LANGUAGE plpgsql;
   
   Returns: void
 */
-CREATE OR REPLACE FUNCTION backup_members_table()
+CREATE OR REPLACE FUNCTION undoPurge()
   RETURNS void AS $$
   BEGIN
     TRUNCATE Members;

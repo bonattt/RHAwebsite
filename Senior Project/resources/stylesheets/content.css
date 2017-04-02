@@ -1075,20 +1075,27 @@ and the second two a "right" class for alignment. Potential reusability.
 	margin-left: auto;
 	margin-right: 0;
 	display: block;
+	float: right;
 }
 
 
 /*Do a position: absolute and move these around */
 .left-buttons {
+	position: absolute;
+	left: 22.7%;
+	top: 16%;
+	width: 15%;
+	float: left;
 	display: inline-block;
-	margin-left: 13%;
-	width: 20%;
 }
 
 .right-buttons {
+	position: absolute;
+	right: 22.7%;
+	top: 16%;
+	width: 15%;
+	float: right;
 	display: inline-block;
-	margin-right: 13%;
-	width: 20%;
 }
 
 /* ------------------------------------------------------------------------------------------ */
