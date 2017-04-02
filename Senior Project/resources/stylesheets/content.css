@@ -1079,13 +1079,13 @@ and the second two a "right" class for alignment. Potential reusability.
 
 
 /*Do a position: absolute and move these around */
-.left {
+.left-buttons {
 	display: inline-block;
 	margin-left: 13%;
 	width: 20%;
 }
 
-.right {
+.right-buttons {
 	display: inline-block;
 	margin-right: 13%;
 	width: 20%;
