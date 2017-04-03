@@ -30,7 +30,7 @@ CREATE TABLE Expenses (
     accountCode int, 
     dateReceived date, 
     dateProcessed date,
-    reciepts jsonb
+    receipts jsonb
           -- ['Amount': Money, 
           --  'InvoiceDate': datetime]
 );

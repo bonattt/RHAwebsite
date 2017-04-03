@@ -18,6 +18,26 @@ function prepEventName(str) {
     return str.replace(/ /g, '');
 }
 
+function setupEventSelector() {
+    console.log('setupEventSelector');
+    var apiExtension = 'allEvents/';
+    var xhr = xhrGetRequest(apiExtension);
+    xhr.onload = function() {
+        var selector = document.getElementById('paymentModal-event');
+        var eventList = JSON.parse(xhr.responseText)
+        console.log(eventList);
+        eventList.forEach(function(event) {
+            console.log('adding ' + event.proposal_name);
+            var option = document.createElement('option');
+            option.setAttribute('id', 'eventOption'+event.proposal_id);
+            option.setAttribute('value', event.proposal_id);
+            option.innerHTML = event.proposal_name;
+            selector.appendChild(option);
+        });
+    }
+    xhr.send();
+}
+
 function setupButtons() {
     var addPaymentButton = document.getElementById("addPaymentButton");
     addPaymentButton.setAttribute('data-toggle', 'modal');
@@ -26,27 +46,29 @@ function setupButtons() {
     var addPaymentSubmit = document.getElementById('paymentModal-submit');
     addPaymentSubmit.addEventListener('click', function() {
         var entryIds = [
-                'amountUsed','cm', 'accountCode', 'receiver', 'description',
-                'dateProcessed', 'dateReceived'
+                'amountUsed','CM', 'accountCode', 'receiver', 'description', 'dateprocessed', 'datereceived'
         ];
         var modalId = 'paymentModal-';
         var json_obj = parseModalEntries(modalId, entryIds);
 
-        json_obj.dateProcessed = new Date(json_obj.dateProcessed);
-        json_obj.dateReceived = new Date(json_obj.dateReceived);
+        json_obj.dateprocessed = new Date(json_obj.dateprocessed);
+        json_obj.datereceived = new Date(json_obj.datereceived);
         var select = document.getElementById('paymentModal-event');
-        json_obj.proposal_id = select.dataset[prepEventName(select.value)]
+        json_obj.proposal_id = select.options[select.selectedIndex].value;
+        console.log(select);
         json_obj.reciepts = {"test1": "hello", "test2": "world!"};
 
         json_obj.amountUsed = parseFloat(json_obj.amountUsed);
 
-        var apiUrl = 'payment/';
-        var xhr = xhrPostRequest(apiUrl);
+        var apiUri = 'payment/';
+        var xhr = xhrPostRequest(apiUri);
         xhr.onload = function() {
+            console.log(json_obj);
             location.reload();
         }
         xhr.onerror = function() {
         }
+        console.log(json_obj);
         xhr.send(JSON.stringify(json_obj));
     });
 
@@ -98,9 +120,24 @@ function populatePaymentsTable() {
     var rowNumber = 0;
 
     xhr.onload = function() {
-        var payments = JSON.parse(xhr.responseText);
-        payments.forEach(function(entry) {
-            var row = buildPaymentRow(entry, rowNumber);
+        var payments = JSON.parse(xhr.responseText)
+        populatePaymentsTableHelper(payments, rowNumber, tbody);
+    }
+    xhr.send();
+}
+
+function populatePaymentsTableHelper(payments, rowNumber, tbody) {
+    var xhr = xhrGetRequest('allEvents/');
+    xhr.onload = function() {
+        var allEvents = JSON.parse(xhr.responseText);
+        payments.forEach(function(pay) {
+            var proposal_name = '[event was deleted]';
+            allEvents.forEach(function(event) {
+                if (event.proposal_id == pay.proposal_id) {
+                    proposal_name = event.proposal_name;
+                }
+            });
+            var row = buildPaymentRow(pay, proposal_name, rowNumber);
             if (rowNumber % 2 == 1) {
                 row.setAttribute('class', 'colLight');
             } else {
@@ -144,10 +181,39 @@ function buildFundsRow(fund, rowNumber) {
     return row;
 }
 
-function buildPaymentRow(payment, rowNumber) {
+function buildPaymentRow(payment, proposal_name, rowNumber) {
     var col;
-    var keys = ['proposal_id', 'cm', 'receiver']
-    var row = buildRow(payment, keys, rowNumber);
+    var keys = ['cm', 'receiver']
+    console.log('payment');
+    console.log(payment);
+
+    var row = document.createElement('tr');
+    var col = document.createElement('td');
+    row.appendChild(col);
+
+    row.setAttribute('id', 'row' + rowNumber);
+    var colNumber = 0;
+    col = document.createElement('td');
+
+    col.appendChild(document.createTextNode(proposal_name));
+    col.setAttribute('class', 'tableEntry');
+    col.setAttribute('id', 'row' + rowNumber + 'col' + 0);
+    row.appendChild(col);
+
+    col = document.createElement('td');
+    col.appendChild(document.createTextNode(payment.cm));
+    col.setAttribute('class', 'tableEntry');
+    col.setAttribute('id', 'row' + rowNumber + 'col' + 1);
+    row.appendChild(col);
+
+    col = document.createElement('td');
+    col.appendChild(document.createTextNode(payment.receiver));
+    col.setAttribute('class', 'tableEntry');
+    col.setAttribute('id', 'row' + rowNumber + 'col' + 2);
+    row.appendChild(col);
+
+//    var row = buildRow(payment, keys, rowNumber);
+
 
     // special cases:
     col = document.createElement('td');
@@ -247,6 +313,7 @@ function setAdmin() {
     setupButtons();
     populatePaymentsTable();
     populateFundsTable();
+    setupEventSelector();
 }
 
 function setup() {

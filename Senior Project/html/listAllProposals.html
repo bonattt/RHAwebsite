@@ -26,49 +26,67 @@
 				</div>
 				<div id="proposalModalBody" class="modal-body">
 
-					<label>Name</label> <br/>
-					<input id="proposalModal-proposal_name" type="text" value="name"> </input><br/><br/>
+					<label>Proposal Name</label> <br/>
+					<input id="proposalModal-proposal_name" type="text" value="name" size="50"> </input><br/><br/>
 
-					<label>Money Allocated</label> <br/>
-					<input id="proposalModal-money_allocated" type="number" step="0.01"> </input><br/><br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<label>Proposer</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<label>Max Attendees</label>
+					<br/>
+					<input id="proposalModal-proposer" type="text" value="name"> </input> &nbsp;&nbsp;
+					<input id="proposalModal-max_attendance" type="number" step="1" min="1" value="10"> </input>
+					<br/><br/>
 
-					<label>Money Requested</label> <br/>
-					<input id="proposalModal-money_requested" type="number" step="0.01"> </input><br/><br/>
+					<label>Description</label> <br/>
+					<textarea id="proposalModal-description" type="text" value="name"> </textarea><br/><br/>
 
-					<label> Paid </label>
-					<input id="proposalModal-paid" type="checkbox"> </input><br/><br/>
 
-					<div>
-						<label>Event Date</label> <br/>
-						<input type="date" value="03/03/2017" id="proposalModal-event_date"> </input>
+					<div id="proposalModal-money">
+						<label>Money Allocated</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<label>Money Requested</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<label>Cost To Attendee </label>
+						<br/>
+
+						<input id="proposalModal-money_allocated" type="number" step="0.01"> </input> &nbsp;&nbsp;
+						<input id="proposalModal-money_requested" type="number" step="0.01"> </input> &nbsp;&nbsp;
+						<input id="proposalModal-cost_to_attendee" type="number" step="0.01"> </input> &nbsp;&nbsp;
 					</div> <br/>
 
-					<div>
+					<div id="proposalModal-checkboxes">
+						<label> Paid </label> &nbsp;&nbsp;
+						<input id="proposalModal-paid" type="checkbox"> </input>
+
+					</div> <br/>
+
+					<div id="proposalModal-eventDates">
+						<label>Event Date</label> &nbsp;&nbsp;
 						<label>Proposed Date</label> <br/>
-						<input type="date" value="02/02/2017" id="proposalModal-proposed_date"> </input>
+						<input type="date" id="proposalModal-event_date"> </input> &nbsp;&nbsp;
+						<input type="date" id="proposalModal-proposed_date"> </input> &nbsp;&nbsp;
+					</div> <br/>
+
+					<div id="proposalModal-signupsDates">
+						<label>Signups Open</label> &nbsp;&nbsp;
+						<label>Signups Close</label> <br/>
+						<input type="date" class="modalEntry" id="proposalModal-event_signup_open"> </input> &nbsp;&nbsp;
+						<input type="date" id="proposalModal-event_signup_close"> </input> &nbsp;&nbsp;
 					</div> <br/>
 
 					<div>
-						<label>Week Proposed </label> <br/>
-						<input type="number" value="0" id="proposalModal-week_proposed" min="0" max="11"> </input>
-					</div> <br/>
-
-					<div>
+						<label>Week Proposed </label> &nbsp;&nbsp;
 						<label>Quarter Proposed </label> <br/>
-						<input type="number" value="0" id="proposalModal-quarter_proposed" min="0" max="3"> </input>
-					</div> <br/>
+						<input type="number" value="0" id="proposalModal-week_proposed" min="0" max="11"> </input> &nbsp;&nbsp;
 
-					<!--
-					<input id="proposalModal-event_date" type="text" value="eventDate"> </input><br/><br/>
-					<label>Sign Ups Open Date</label> <br/>
-					<input id="proposalModal-event_signup_open" type="text" value="signUpsOpenDate"> </input><br/><br/>
-					<label>Sign Ups Close Date</label> <br/>
-					<input id="proposalModal-event_signup_close" type="text" value="signUpsCloseDate"> </input>
-					-->
+
+						<input type="number" value="0" id="proposalModal-quarter_proposed" min="0" max="3"> </input> &nbsp;&nbsp;
+					</div>
+					<br/>
+                    <label for="proposalModal-imageFile">Image<input type="file" name="imageFile" id="proposalModal-imageFile"></label>
 				</div>
 				<div class="modal-footer">
 					<button id="proposalModal-delete" type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#deleteConfirmModal"> Delete </button>
-					<button id="proposalModal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="proposalModal-submit" type="button" class="btn btn-default"> Submit </button>
 					<button id="proposalModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
@@ -84,8 +102,8 @@
 					<h4 class="modal-title">Info</h4>
 				</div>
 
-				<div class="modal-body">
-					TODO add a message here
+				<div id="infoModal-body" class="modal-body">
+
 				</div>
 
 				<div class="modal-footer">
@@ -125,6 +143,7 @@
 <script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
 <script type="text/javascript" src="./scripts/rosefire.js"></script>
 <script language="Javascript" src="../scripts/listAllProposals.js"></script>
+<script language="Javascript" src="../scripts/imageUpload.js"></script>
 </body>
 
 </html>
