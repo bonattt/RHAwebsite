@@ -1069,17 +1069,44 @@ td {
 	margin-bottom: 5%;
 }
 
-#submitAttendance {
-	margin-left: auto;
+/*Maybe don't do the styling here by ID, but by class. Also, give the first two a "left" class, 
+and the second two a "right" class for alignment. Potential reusability. 
+ -------------------------------------------------------------------------------------------- */
+
+#submitAttendance, #undoAttendance {
+	margin-left: 0;
 	margin-right: auto;
 	display: block;
 }
 
-#undoAttendance {
+#purgeMembers, #undoPurge {
 	margin-left: auto;
-	margin-right: auto;
+	margin-right: 0;
 	display: block;
+	float: right;
 }
+
+
+/*Do a position: absolute and move these around */
+.left-buttons {
+	position: absolute;
+	left: 22.7%;
+	top: 16%;
+	width: 15%;
+	float: left;
+	display: inline-block;
+}
+
+.right-buttons {
+	position: absolute;
+	right: 22.7%;
+	top: 16%;
+	width: 15%;
+	float: right;
+	display: inline-block;
+}
+
+/* ------------------------------------------------------------------------------------------ */
 
 .modal-backdrop.in{
 	opacity: 0.75;
