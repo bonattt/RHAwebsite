@@ -98,7 +98,9 @@ function setupButtons() {
                 }
             }
         }
-        json_obj.reciepts = receiptsObject;
+        json_obj.receipts = {
+            "receipts": receiptsObject
+        };
 
         
         json_obj.proposal_id = select.options[select.selectedIndex].value;
@@ -308,7 +310,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
         accountCode.innerHTML = json_obj.accountcode;
 
         var receipts = document.getElementById('detailsModal-receipts');
-        receipts.innerHTML = JSON.stringify(json_obj.reciepts)
+        receipts.innerHTML = JSON.stringify(json_obj.receipts)
     });
 
     return link;
