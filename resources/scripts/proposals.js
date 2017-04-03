@@ -26,6 +26,7 @@ function submit() {
     var name = document.getElementById("name").value;
     var costToAttendee = document.getElementById("costToAttendee").value;
     var description = document.getElementById("description").value;
+    var maxAttendance = document.getElementById("maxAttendance").value;
     var signUpOpenDate = document.getElementById("signUpOpenDate").value;
     var eventDate = document.getElementById("eventDate").value;
     var signUpCloseDate = document.getElementById("signUpCloseDate").value;
@@ -36,13 +37,11 @@ function submit() {
     var moneyRequested = document.getElementById("moneyRequested").value;
     var moneyAllocated = document.getElementById("moneyAllocated").value;
     var files = document.getElementById("imageFile").files;
-    var approved = true;
 
     if (signUpCloseDate == "" && signUpOpenDate == "") {
         console.log("I happened");
         signUpCloseDate = null;
         signUpOpenDate = null;
-        approved = false;
     }
 
     var formData = new FormData();
@@ -56,6 +55,7 @@ function submit() {
             var image_path = JSON.parse(photoxhr.responseText).filepath;
             var dbxhr = new XMLHttpRequest();
             var dbObject = {};
+            console.log(maxAttendance);
             dbObject["proposal_name"] = name;
             dbObject["cost_to_attendee"] = costToAttendee;
             dbObject["event_date"] = eventDate;
@@ -69,14 +69,14 @@ function submit() {
             dbObject["paid"] = false;
             dbObject["money_allocated"] = moneyAllocated;
             dbObject["image_path"] = image_path;
-            dbObject["approved"] = approved;
             dbObject["description"] = description;
+            dbObject["max_attendance"] = maxAttendance;
 
             dbxhr.open('POST', dbAPIURL, true);
             dbxhr.setRequestHeader('Content-Type', 'application/json');
             dbxhr.onreadystatechange = function (e) {
                 if(dbxhr.readyState == 4 && dbxhr.status == 200) {
-                    $('#myModal').modal('hide');
+                    location.reload();
                 }
             }
             dbxhr.onerror = function () {
@@ -93,4 +93,8 @@ function submit() {
 
 $(document).ready(function() {
     setup();
+    $("#signUpOpenDate").datepicker();
+    $("#signUpCloseDate").datepicker();
+    $("#eventDate").datepicker();
+    $("#proposedDate").datepicker();
 });

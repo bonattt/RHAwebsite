@@ -4,8 +4,13 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+<<<<<<< HEAD:package.json
     "test": "./node_modules/.bin/mocha --reporter spec",
     "start": "node server.js"
+=======
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+>>>>>>> refs/remotes/origin/master:Senior Project/package.json
   },
   "author": "",
   "license": "ISC",
@@ -15,9 +20,14 @@
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.2",
     "express": "^4.14.0",
+<<<<<<< HEAD:package.json
     "mocha": "^3.2.0",
     "multer": "^1.2.0",
     "request": "^2.81.0",
     "rewire": "^2.5.2"
+=======
+    "multer": "^1.2.0",
+    "nodemon": "^1.11.0"
+>>>>>>> refs/remotes/origin/master:Senior Project/package.json
   }
 }

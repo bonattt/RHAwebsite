@@ -23,9 +23,10 @@ function populateDeletePhotoModal() {
         deletePhotoForm.innerHTML += '<label><input type="radio" name="usernames" value="' + i + '" /> ' + i + '</label>';
     }
     var radios = document.getElementsByTagName('input');
-    var deleteButton = document.getElementById('modal-delete-photo');
-    console.log(deleteButton);
-    deleteButton.addEventListener("click", function() {figureOutSelectedRadioButton(radios)});
+    var deleteConfirm = document.getElementById('confirm-delete');
+    deleteConfirm.addEventListener('click', function () {
+        figureOutSelectedRadioButton(radios);
+    });
 }
 
 function figureOutSelectedRadioButton(radios) {

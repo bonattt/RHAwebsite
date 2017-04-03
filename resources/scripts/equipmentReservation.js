@@ -1,10 +1,24 @@
+function setAdmin(officers) {
+    if (userIsOfficer(officers)) {
+        var addProposalButton = document.getElementById("addProposal"); // Using same styling as button on Proposals page; didn't want to add new styling rule
+        addProposalButton.style.display = "block";
+    }
+}
+
 function setup() {
 	// var addButton = document.getElementById("calendar-add-button");
 	// addButton.addEventListener("click", function() {addNewCalendar("calendar1", "calendar-modal-")});
+	var officersxhr = getOfficers();
+	officersxhr.onload = function () {
+		setAdmin(officersxhr.responseText);
+	}
+    officersxhr.send();
 
 	var xhr = xhrGetRequest('equipment');
+	xhr.onload = function () {
+		populateCalendarData(xhr.responseText);
+	};
 	xhr.send();
-	setTimeout(function () { populateCalendarData(xhr.responseText) }, 300);
 
 	var select = document.getElementById("calendar-selector");
 	select.onchange = function() {
@@ -17,7 +31,27 @@ function setup() {
 		switchCalendarView(calendarToSelect);
 	}
 
+	var submitBtn = document.getElementById("modal-submit");
+	submitBtn.addEventListener("click", submit);
 	// var dataset = document.getElementById("calendar2").dataset;
+}
+
+function submit() {
+    var name = document.getElementById("name").value;
+    var embed = document.getElementById("embededLink").value;
+
+    json_object = {};
+    json_object["equipmentName"] = name;
+    json_object["equipmentEmbed"] = embed;
+
+    var xhr = xhrPostRequest('equipment');
+
+    xhr.onload = function() {
+    	location.reload();
+    };
+
+    console.log(JSON.stringify(json_object));
+    xhr.send(JSON.stringify(json_object));
 }
 
 function populateCalendarData(calendars) {
@@ -30,7 +64,6 @@ function populateCalendarData(calendars) {
 		data.setAttribute('id', calendars[i].equipmentname);
 		data.setAttribute('data-id', calendars[i].equipmentid);
 		data.setAttribute('data-name', calendars[i].equipmentname);
-		data.setAttribute('data-desc', calendars[i].equipmentdescription);
 		data.setAttribute('data-embed', calendars[i].equipmentembed);
 
 		body.appendChild(data);
@@ -41,23 +74,6 @@ function populateCalendarData(calendars) {
 
 		selector.appendChild(option);
 	}
-}
-
- function addNewCalendar(dataElementId, targetIdRoot) {
-	var dataset = document.getElementById(dataElementId).dataset;
-	for (attr in dataset) {
-		var textField = document.getElementById(targetIdRoot + attr);
-		if (textField == undefined) { continue; }
-		textField.value = dataset[attr];
-
-		console.log(textField);
-	}
-
-	/*var nameField = document.getElementById(targetIdRoot + "name");
-	nameField.value = dataset.name;
-	
-	var descriptionField = document.getElementById(targetIdRoot + "desc");
-	descriptionField.value = dataset.desc; //*/
 }
 
 function lastUpdated() {
@@ -114,15 +130,33 @@ function getLastUpdatedString(today) {
 }
 
 function switchCalendarView(calendarToView) {
-	console.log("I'm happening!");
 	var calendarFrame = document.getElementById("calendar-wrapper");
 	if (calendarToView == null) {
 		calendarFrame.innerHTML = "";
 		return;
 	}
-	console.log(calendarFrame);
-	console.log(calendarToView);
-	console.log(calendarToView.getAttribute("data-embed"));
+
+	//Display the delete button you will create here, and retrieve the ID the calendar and set its dataset.equipmentID to it
+	// console.log(calendarToView.dataset["embed"]);
+	// console.log(calendarToView.dataset["id"]);
+
+	var firstDelete = document.getElementById("delete-calendar");
+	firstDelete.style.display = "inline";
+
+	console.log("equipment/" + calendarToView.dataset["id"]);
+
+	var deleteBtn = document.getElementById("confirm-delete");
+	deleteBtn.addEventListener("click", function () {
+
+		var extension = "equipment/" + calendarToView.dataset["id"];
+		var xhr = xhrDeleteRequest(extension);
+		xhr.onload = function () {
+			location.reload();
+		};
+
+		xhr.send();
+
+	});
 
 	calendarFrame.innerHTML = calendarToView.getAttribute("data-embed");
 	lastUpdated();

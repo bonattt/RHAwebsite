@@ -35,8 +35,6 @@ function setAdmin(officers) {
                     alert('WARNING WARNING:\nselected_element_id: ' + global_id + '\nput_id: ' + put_id);
                 }
                 if (imageEntry.value != '') {
-                    console.log("inside this if");
-                    console.log(json_data);
                     var image_to_delete = json_data.image;
 
                     var photoPost = new XMLHttpRequest();
@@ -46,9 +44,7 @@ function setAdmin(officers) {
                     formData.append("imageFile", files[0]);
 
                     photoPost.onreadystatechange = function (e) {
-                        console.log("yoooooooooo");
                         if (photoPost.readyState == 4 && photoPost.status == 200) {
-                            console.log("DELETING THE FUNCTION!!!");
                             deleteFunction(image_to_delete.substring(2, image_to_delete.length));
                             json_data.image = JSON.parse(photoPost.response).filepath;
                             xhr.onreadystatechange = function (e) {
@@ -69,7 +65,7 @@ function setAdmin(officers) {
         var deleteBtn = document.getElementById('modal-delete');
         deleteBtn.style.display = "inline";
         deleteBtn.addEventListener('click', function() {
-            var imageEntry = document.getElementById("imageFilePut");
+            var imageEntry = document.getElementById("imageFilePut")
             imageEntry.value = '';
         });
 
@@ -85,8 +81,9 @@ function setAdmin(officers) {
             var element = document.getElementById(selected_element_id);
             var dataset = element.dataset;
             var json_data = { "memberType": null };
-            var apiUrl = 'member/' + dataset.user_id
+            var apiUrl = 'member/' + dataset.user_id;
             var xhr = xhrPutRequest(apiUrl);
+            deleteFunction(dataset.image.substring(2, dataset.image.length));
             xhr.onload = function () { location.reload() }
             xhr.send(JSON.stringify(json_data));
         });

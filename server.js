@@ -39,6 +39,12 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/html/RHAhome.html');
 });
 
+app.get('/crash', function (req, res) {
+  console.log("brb crashing...");
+  process.exit(1);
+  console.log("failed to crash");
+});
+
 app.get('/proposals', function (req, res) {
   res.sendFile(__dirname + '/html/proposals.html');
 });
@@ -96,7 +102,6 @@ app.post('/api/v1/eventPhoto', type, function (req, res) {  //we will need to ma
     fs.writeFile(target_path, data);
     fs.unlink(tmp_path);
     res.filePath = target_path;
-    console.log(res);
     res.status(200).json({ filepath: pathToSend }).send();
     return;
   });
