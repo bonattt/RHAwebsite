@@ -30,7 +30,7 @@ CREATE TABLE Expenses (
     accountCode int, 
     dateReceived date, 
     dateProcessed date,
-    reciepts jsonb
+    receipts jsonb
           -- ['Amount': Money, 
           --  'InvoiceDate': datetime]
 );
@@ -74,24 +74,19 @@ CREATE TABLE Committee (
 CREATE TABLE Equipment (
     equipmentID SERIAL PRIMARY KEY,
     equipmentName varchar(30),
-    equipmentDescription varchar(500),
     equipmentEmbed varchar(500),
-    rentalTimeInDays int DEFAULT 2
 );
 
-insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipmentEmbed, rentalTimeInDays) values (DEFAULT, 'Kan Jam', 'This is equipment 1', '<iframe src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=800&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=25v1djivm37d6psb5284pojmqs%40group.calendar.google.com&amp;color=%23AB8B00&amp;ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>', 3);
-insert into Equipment (equipmentID, equipmentName, equipmentDescription, equipmentEmbed, rentalTimeInDays) values (DEFAULT, 'Cornhole', 'This is equipment 2', '<iframe src="https://calendar.google.com/calendar/embed?mode=WEEK&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=s2bdbeg620ghgp9bh1e6k818uo%40group.calendar.google.com&amp;color=%238D6F47&amp;ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>', 3);
-
-CREATE TABLE Rentals (
-    rental_id SERIAL PRIMARY KEY,
-    member_id INT references Members (user_id),
-    equipment_id INT references Equipment (equipmentID),
-    approved_by INT references Members (user_id),
-    reason_for_rental varchar(100),
-    rented_on DATE,
-    return_on DATE,
-    due_by DATE
-);
+-- CREATE TABLE Rentals (
+--     rental_id SERIAL PRIMARY KEY,
+--     member_id INT references Members (user_id),
+--     equipment_id INT references Equipment (equipmentID),
+--     approved_by INT references Members (user_id),
+--     reason_for_rental varchar(100),
+--     rented_on DATE,
+--     return_on DATE,
+--     due_by DATE
+-- );
 
 CREATE TABLE FloorAttendanceNumerics (
     numerics_id SERIAL PRIMARY KEY,
@@ -529,3 +524,30 @@ CREATE OR REPLACE FUNCTION get_money_used(prop_id int)
     RETURN used;
   END;
 $used$ LANGUAGE plpgsql;
+
+
+/*  Drops the Members table of all members except for those who are considered Officers
+
+  RETURNS: void
+*/
+CREATE OR REPLACE FUNCTION purgeMembers()
+  RETURNS void AS $$
+  BEGIN
+    COPY Members TO '/tmp/nonMembersDropBackup.csv' DELIMITER ',' CSV HEADER;
+    DELETE FROM Members WHERE Members.membertype IS NULL OR Members.membertype = '';
+  END;
+$$ LANGUAGE plpgsql;
+
+
+/* Returns the Members table to the state it was in just prior to being purged of
+   non-officers, assuming it was only done once.
+  
+  Returns: void
+*/
+CREATE OR REPLACE FUNCTION undoPurge()
+  RETURNS void AS $$
+  BEGIN
+    TRUNCATE Members;
+    COPY Members FROM '/tmp/nonMembersDropBackup.csv' DELIMITER ',' CSV HEADER;
+  END;
+$$ LANGUAGE plpgsql;
