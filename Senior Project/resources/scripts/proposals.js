@@ -37,13 +37,11 @@ function submit() {
     var moneyRequested = document.getElementById("moneyRequested").value;
     var moneyAllocated = document.getElementById("moneyAllocated").value;
     var files = document.getElementById("imageFile").files;
-    var approved = true;
 
     if (signUpCloseDate == "" && signUpOpenDate == "") {
         console.log("I happened");
         signUpCloseDate = null;
         signUpOpenDate = null;
-        approved = false;
     }
 
     var formData = new FormData();
@@ -71,7 +69,6 @@ function submit() {
             dbObject["paid"] = false;
             dbObject["money_allocated"] = moneyAllocated;
             dbObject["image_path"] = image_path;
-            dbObject["approved"] = approved;
             dbObject["description"] = description;
             dbObject["max_attendance"] = maxAttendance;
 
@@ -79,7 +76,7 @@ function submit() {
             dbxhr.setRequestHeader('Content-Type', 'application/json');
             dbxhr.onreadystatechange = function (e) {
                 if(dbxhr.readyState == 4 && dbxhr.status == 200) {
-                    $('#myModal').modal('hide');
+                    location.reload();
                 }
             }
             dbxhr.onerror = function () {
@@ -96,4 +93,8 @@ function submit() {
 
 $(document).ready(function() {
     setup();
+    $("#signUpOpenDate").datepicker();
+    $("#signUpCloseDate").datepicker();
+    $("#eventDate").datepicker();
+    $("#proposedDate").datepicker();
 });

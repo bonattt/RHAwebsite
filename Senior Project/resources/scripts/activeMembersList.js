@@ -5,6 +5,7 @@ var table = document.createElement('table');
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
         var div = document.getElementById('submitAttendanceDiv');
+        console.log(div);
         var newButton = document.createElement('button');
         newButton.setAttribute('id', 'submitAttendance');
         newButton.setAttribute('data-toggle', 'modal');
@@ -12,11 +13,40 @@ function setAdmin(officers) {
         newButton.innerHTML = 'New Attendance Record';
         div.appendChild(newButton);
 
-        var div2 = document.getElementById('undoAttendanceDiv');
         var undoButton = document.createElement('button');
         undoButton.setAttribute('id', 'undoAttendance');
         undoButton.innerHTML = 'Undo Last Attendance Upload';
         div.appendChild(undoButton);
+
+        div2 = document.getElementById("purgeMembersDiv");
+        console.log(div2);
+        var purgeMembers = document.createElement("button");
+        purgeMembers.setAttribute("id", "purgeMembers");
+        purgeMembers.setAttribute("data-toggle", "modal");
+        purgeMembers.setAttribute("data-target", "#purgeConfirmationModal");
+        purgeMembers.innerHTML = "Purge Members Table";
+        var confirmPurge = document.getElementById("confirm-purge");
+        confirmPurge.addEventListener("click", function () {
+            var xhr = xhrGetRequest('purgeMembers/');
+            xhr.onload = function () {
+                location.reload();
+            };
+            xhr.send();
+        });
+
+        var undoPurge = document.createElement("button");
+        undoPurge.setAttribute("id", "undoPurge");
+        undoPurge.innerHTML = "Undo Members Purge";
+        undoPurge.addEventListener("click", function () {
+            var xhr = xhrGetRequest('undoPurge/');
+            xhr.onload = function () {
+                location.reload();
+            };
+            xhr.send();
+        });
+        div2.appendChild(purgeMembers);
+        div2.appendChild(undoPurge);
+
         undoAttendanceSubmission();
 
         setupSubmitAttendanceButton();
