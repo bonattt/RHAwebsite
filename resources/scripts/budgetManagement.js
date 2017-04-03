@@ -287,7 +287,7 @@ function buildPaymentRow(payment, proposal_name, rowNumber) {
     //    col.appendChild(document.createTextNode(payment.reciepts));
     //    col.setAttribute('class', 'tableEntry');
     //    row.appendChild(col);
-    row.appendChild(getDisplayExpenseDetailsLink(payment));
+    row.appendChild(getDisplayExpenseDetailsLink(payment, rowNumber));
     return row;
 }
 
@@ -310,8 +310,13 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
         var accountCode = document.getElementById('detailsModal-accountcode');
         accountCode.innerHTML = json_obj.accountcode;
 
-        var receipts = document.getElementById('detailsModal-receipts');
-        receipts.innerHTML = JSON.stringify(json_obj.receipts)
+        var receiptList = JSON.parse(json_obj.receipts).receipts;
+
+        for(var i = 0; i < gridData.length; i++) {
+            if(receiptList[i] != null) {
+                gridData[i] = receiptList[i];
+            }
+        }
     });
 
     return link;
