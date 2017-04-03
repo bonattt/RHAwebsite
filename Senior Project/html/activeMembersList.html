@@ -33,9 +33,9 @@
 		<input type="radio" class="allMembers" id="allMembers" name="members" checked="checked">All Members<br>
 		<input type="radio" class="activeMembers" id="activeMembers" name="members">Active Members<br>
 	</form>
-	<div id="submitAttendanceDiv">
-	</div>
-	<div id="undoAttendanceDiv">
+	<div>
+		<div id="submitAttendanceDiv" class="left-buttons"></div>
+		<div id="purgeMembersDiv" class="right-buttons"></div>
 	</div>
 	<!--<span>
 		<div id="activeMembersTable"></div>
@@ -130,6 +130,23 @@
 				<div class="modal-footer">
 					<button id="update-modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
 					<button id="update-modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="purgeConfirmationModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Are you sure? This will delete all members except officers.</h4>
+				</div>
+				<div class="modal-footer">
+					<button id="confirm-purge" type="button" class="btn btn-danger" data-dismiss="modal"> 
+                            Purge Table </button>
+					<button id="cancel-purge" type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
 				</div>
 			</div>
 		</div>
