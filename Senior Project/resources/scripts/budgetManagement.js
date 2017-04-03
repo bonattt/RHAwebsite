@@ -72,6 +72,7 @@ function setupButtons() {
 
     var addPaymentSubmit = document.getElementById('paymentModal-submit');
     addPaymentSubmit.addEventListener('click', function () {
+        document.getElementById('modal-header').click();
         var entryIds = [
                 'amountUsed','CM', 'accountCode', 'receiver', 'description', 'dateprocessed', 'datereceived'
         ];
