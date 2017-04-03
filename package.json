@@ -19,6 +19,7 @@
     "multer": "^1.2.0",
     "request": "^2.81.0",
     "rewire": "^2.5.2",
+    "rosefire-node": "git+https://ada.csse.rose-hulman.edu/rosefire/node-sdk.git#2.1.0",
     "nodemon": "^1.11.0"
 
   }
