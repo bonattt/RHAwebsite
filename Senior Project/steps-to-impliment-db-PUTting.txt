@@ -1,6 +1,0 @@
-YOU NEED TO IMPLEMENT GENERALIZED STORING OF DATA IN HTML5 data attributes.
-
-remove empty function from "insertEditButtons" args
-add a new submitFunc function to the 3rd arg of "insertEditButtons"
-	this function takes 2 args (json_data, put_id)
-	make xhr request in this function

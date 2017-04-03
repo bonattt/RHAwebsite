@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="../images/RHA.jpg">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
+
+
+    <script type="text/javascript" src="../scripts/navbar-factory.js">  </script>
+    <script language="Javascript" src="../scripts/adminPermission.js">  </script>
+    <script type="text/javascript" src="./scripts/rosefire.js"></script>
+
+    <title>
+        RHA | Reserve Equipment
+    </title>
+</head>
+
+<body>
+    <div id="navBar"> </div>
+    <div id="proposalsPage">
+        <h1>Equipment <br> Reservation</h1>
+
+        <div id="directions">
+            <p>Interested in renting some equipment from RHA? Select from the drop down below and view its availability!</p>
+        </div>
+
+        <select id="calendar-selector">
+            <option value="default" selected="selected">Choose a piece of equipment.</option>
+            <!-- <option value="calendar1">Cornholio</option>
+            <option value="calendar2">Testerino</option> -->
+        </select>
+
+
+        <div id="reservation-info">
+            <p>RHA has recently opened up their equipment for reservation by students and faculty. Here you are able to select
+                and view the available times that a piece of equipment is available. Some things to know before renting:</p>
+            <br>
+            <ul>
+                <li>You may only rent one piece of equipment at a time.</li>
+                <li>Each item may only be reserved for at most 3 days.</li>
+                <li>You can reserve an item at most two weeks in advance.</li>
+                <li>Late penalties may be enforced, varying on the demand of the item.</li>
+                <li>All equipment must be returned by 5:00PM on its return date.</li>
+            </ul>
+        </div>
+
+        <div class="propbutton">
+            <button class="submitButton">
+                <a href="mailto:rhitrha@gmail.com?subject=RHA%20Equipment%20Reservation&body=Your%20Name:%0D%0AEquipment%20Name:%0D%0ADate:%0D%0ACheckout Time:%0D%0AReturn Time:%0D%0AOrganization:%0D%0AReason:" class="submitButtonLink">
+                    <span class="submitMaintext">Submit Reservation</span>
+                </a>
+            </button>
+            <button id="addProposal" data-toggle="modal" data-target="#myModal" onclick="console.log('button pushed');">Add New Equipment</button>
+        </div>
+    </div>
+
+    <div id="calendar-last-updated">
+    </div>
+    
+    <button id="delete-calendar" data-toggle="modal" data-target="#deleteConfirmationModal">Delete Equipment</button>
+
+    <div id="calendar-wrapper">
+        <!-- Add a button that works as a delete button with a data-equipmentID attribute which you will use as you might expect for deleting a piece of equipment via Javascript -->
+    </div>
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add New Equipment</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="name">Equipment Name:</label>
+                    <input type="text" id="name" name="name">
+                    <label for="embededLink">Embeded Link to Calendar (Google Calendar):</label>
+                    <input type="text" id="embededLink" name="embededLink">
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteConfirmationModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Are you sure? </h4>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm-delete" type="button" class="btn btn-danger" data-dismiss="modal"> 
+                            Delete </button>
+                    <button id="cancel-delete" type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../scripts/equipmentReservation.js"></script>
+
+</html>
