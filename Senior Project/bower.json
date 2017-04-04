@@ -1,0 +1,23 @@
+{
+  "name": "RHAwebsite",
+  "description": "",
+  "main": "server.js",
+  "authors": [
+    "Bart Miskowiec <miskowbs@rose-hulman.edu>",
+    "Morgan Cook <cookmn@rose-hulman.edu>",
+    "Thomas Bonatti <bonattt@rose-hulman.edu>",
+    "Sean McPherson <mcphersm@rose-hulman.edu>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/bonattt/RHAwebsite",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "shieldui-lite": "*"
+  }
+}
