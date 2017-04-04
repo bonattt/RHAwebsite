@@ -5,10 +5,6 @@
    bordercolor: #808080
 }
 
-#paymentsDiv, #fundsDiv {
-
-}
-
 #tables table {
     padding: 2%;
     display: inline-block;
@@ -18,10 +14,6 @@
 #notAdminMsg {
     display: none;
     text-align: center;
-}
-
-table {
-
 }
 
 .colLight {
