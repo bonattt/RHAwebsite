@@ -210,19 +210,24 @@ function unMarshalDates(proposal) {
     var event_date = document.getElementById('proposalModal-event_date');
     var event_signup_open = document.getElementById('proposalModal-event_signup_open');
     var event_signup_close = document.getElementById('proposalModal-event_signup_close');
-    if (BROWSER.includes("chrome")) {
+
         proposed_date.value = unMarshalHtml5(proposal.proposed_date);
         event_date.value = unMarshalHtml5(proposal.event_date);
         event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
         event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
-
-//    } else if (BROWSER.includes("firefox")) {
-    } else {
-        proposed_date.value = proposal.proposed_date;
-        event_date.value = proposal.event_date;
-        event_signup_open.value = proposal.event_signup_open;
-        event_signup_close.value = proposal.event_signup_close;
-    }
+//    if (BROWSER.includes("chrome")) {
+//        proposed_date.value = unMarshalHtml5(proposal.proposed_date);
+//        event_date.value = unMarshalHtml5(proposal.event_date);
+//        event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
+//        event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
+//
+////    } else if (BROWSER.includes("firefox")) {
+//    } else {
+//        proposed_date.value = proposal.proposed_date;
+//        event_date.value = proposal.event_date;
+//        event_signup_open.value = proposal.event_signup_open;
+//        event_signup_close.value = proposal.event_signup_close;
+//    }
 }
 
 function marshalAllDates(json_data) {
@@ -244,7 +249,13 @@ function marshalAllDates(json_data) {
 }
 
 function marshalDateString(dateStr) {
-    var date = new Date(dateStr);
+    console.log('dateStr: ' + dateStr);
+    var dateList = dateStr.split('-')
+    var date = new Date();
+    date.setYear(dateList[0]);
+    date.setMonth(dateList[1]-1);
+    date.setDate(dateList[2]);
+
 //    date.setMonth(date.getMonth()+1);
     return date;
 }
@@ -253,14 +264,14 @@ function unMarshalHtml5(dateStr) {
     var date = new Date(dateStr);
     var msg = date.getFullYear();
     msg += '-';
-    var month = date.getMonth();
+    var month = date.getMonth()+1;
     if (month < 10) {month = "0" + month}
     msg += month;
     msg += '-'
     var day = date.getDate();
     if (day < 10) {day = "0" + day}
     msg += day;
-    return date
+    return msg;
 }
 
 function doClosure(proposal, i, tdused, tdreserve) {
@@ -325,7 +336,7 @@ function setupModalButtons() {
         var xhr = xhrPutRequest(apiUri);
 
         xhr.onload = function() {
-//            location.reload();
+            location.reload();
         }
         console.log(json_data);
         removeNullValues(json_data, ["image_path"]);
@@ -363,6 +374,7 @@ function setupModalButtons() {
             photoXhr.send(files[0]);
         } else {
             xhr.send(JSON.stringify(json_data));
+//            console.log(document.getElementById(""))
         }
         console.log(json_data);
         document.getElementById("proposalModal-imageFile").value = '';
