@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<link rel="icon" href="../images/RHA.jpg">
+	<title>
+		RHA | event sign-ups
+	</title>
+	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
+</head>
+
+<body>
+
+	<div id="navBar"></div>
+	<h1 id="signUps">Proposals</h1>
+
+	<table id="proposalsTable"></table>
+
+	<div id="proposalModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Edit a Proposal</h4>
+				</div>
+				<div id="proposalModalBody" class="modal-body">
+
+					<label>Proposal Name</label> <br/>
+					<input id="proposalModal-proposal_name" type="text" value="name" size="50"> </input><br/><br/>
+
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<label>Proposer</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<label>Max Attendees</label>
+					<br/>
+					<input id="proposalModal-proposer" type="text" value="name"> </input> &nbsp;&nbsp;
+					<input id="proposalModal-max_attendance" type="number" step="1" min="1" value="10"> </input>
+					<br/><br/>
+
+					<label>Description</label> <br/>
+					<textarea id="proposalModal-description" type="text" value="name"> </textarea><br/><br/>
+
+
+					<div id="proposalModal-money">
+						<label>Money Allocated</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<label>Money Requested</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<label>Cost To Attendee </label>
+						<br/>
+
+						<input id="proposalModal-money_allocated" type="number" step="0.01"> </input> &nbsp;&nbsp;
+						<input id="proposalModal-money_requested" type="number" step="0.01"> </input> &nbsp;&nbsp;
+						<input id="proposalModal-cost_to_attendee" type="number" step="0.01"> </input> &nbsp;&nbsp;
+					</div> <br/>
+
+					<div id="proposalModal-checkboxes">
+						<label> Paid </label> &nbsp;&nbsp;
+						<input id="proposalModal-paid" type="checkbox"> </input>
+
+					</div> <br/>
+
+					<div id="proposalModal-eventDates">
+						<label>Event Date</label> &nbsp;&nbsp;
+						<label>Proposed Date</label> <br/>
+						<input type="date" id="proposalModal-event_date"> </input> &nbsp;&nbsp;
+						<input type="date" id="proposalModal-proposed_date"> </input> &nbsp;&nbsp;
+					</div> <br/>
+
+					<div id="proposalModal-signupsDates">
+						<label>Signups Open</label> &nbsp;&nbsp;
+						<label>Signups Close</label> <br/>
+						<input type="date" class="modalEntry" id="proposalModal-event_signup_open"> </input> &nbsp;&nbsp;
+						<input type="date" id="proposalModal-event_signup_close"> </input> &nbsp;&nbsp;
+					</div> <br/>
+
+					<div>
+						<label>Week Proposed </label> &nbsp;&nbsp;
+						<label>Quarter Proposed </label> <br/>
+						<input type="number" value="0" id="proposalModal-week_proposed" min="0" max="11"> </input> &nbsp;&nbsp;
+
+
+						<input type="number" value="0" id="proposalModal-quarter_proposed" min="0" max="3"> </input> &nbsp;&nbsp;
+					</div>
+					<br/>
+                    <label for="proposalModal-imageFile">Image<input type="file" name="imageFile" id="proposalModal-imageFile"></label>
+				</div>
+				<div class="modal-footer">
+					<button id="proposalModal-delete" type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#deleteConfirmModal"> Delete </button>
+					<button id="proposalModal-submit" type="button" class="btn btn-default"> Submit </button>
+					<button id="proposalModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="infoModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Info</h4>
+				</div>
+
+				<div id="infoModal-body" class="modal-body">
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="deleteConfirmModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Edit a Proposal</h4>
+				</div>
+				<div class="modal-footer">
+					<button id="deleteConfirmModal-delete" type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#deleteConfirmationModal"> Delete </button>
+					<button id="deleteConfirmModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
+
+	<script>
+		window.jQuery || document.write('<script src="../scripts/jquery-3.1.1.js"><\/script>');
+	</script>
+
+</body>
+<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
+<script type="text/javascript" src="./scripts/rosefire.js"></script>
+<script language="Javascript" src="../scripts/listAllProposals.js"></script>
+<script language="Javascript" src="../scripts/imageUpload.js"></script>
+</body>
+
+</html>

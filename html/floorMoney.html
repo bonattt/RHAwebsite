@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<link rel="icon" href="../images/RHA.jpg">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheets/floor-money.css">
+
+	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
+
+	<link rel="icon" href="../images/RHA.jpg">
+
+	<title>
+		RHA | floor money
+	</title>
+</head>
+
+<body>
+
+	<div id="navBar">
+	</div>
+
+	<h1>Floor Money</h1>
+	<p class="floorMoneyText">
+		Floor money is money you can earn for your floor or hall to fund fun events. You can earn floor money by participating in
+		events such as hallympics and Greatest Floor. You can also earn floor money by having at least 2 people from your floor
+		attend the weekly RHA meetings held at 6:15 on Wednesdays in the Faculty Dining Room.
+	</p>
+
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Floor Money Details</h4>
+				</div>
+				<div class="modal-body">
+					<table>
+						<tbody>
+							<tr>
+								<td> <label>Hall:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="funds-modal-funds_name" type="text" value="Hall"> </label>
+								</td>
+							</tr>
+
+							<tr>
+								<td> <label>Current Balance:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="funds-modal-current_earned" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Possible Balance:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="funds-modal-possible_earned" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Number of Residents:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="funds-modal-residents" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Expenses:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="funds-modal-expenses" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Awards:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="funds-modal-awards" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Attendance Record (Fall):</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="funds-modal-attendance_fall" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Attendance Record (Winter):</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="funds-modal-attendance_winter" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Attendance Record (Spring):</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="funds-modal-attendance_spring" type="text" value="name"> </label>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script language="Javascript" src="../scripts/navbar-factory.js"></script>
+	<script type="text/javascript" src="./scripts/rosefire.js"></script>
+	<script language="Javascript" src="../scripts/floorMoney.js"></script>
+</body>
+
+</html>

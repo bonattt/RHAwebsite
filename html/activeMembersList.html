@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<link rel="icon" href="images/RHA.jpg">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
+	<title>
+		RHA | Active Members List
+	</title>
+
+	<script type="text/javascript" src="../scripts/navbar-factory.js"> </script>
+	<script type="text/javascript" src="./scripts/rosefire.js"></script>
+	<script type="text/javascript" src="../scripts/login.js"></script>
+
+	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
+	<script type="text/javascript" src="../scripts/activeMembersList.js"> </script>
+
+</head>
+
+<body>
+
+	<div id="navBar">
+	</div>
+
+	</div>
+	<h1>Members List</h1>
+	</div>
+	<form action="" id="radioButtons">
+		<input type="radio" class="allMembers" id="allMembers" name="members" checked="checked">All Members<br>
+		<input type="radio" class="activeMembers" id="activeMembers" name="members">Active Members<br>
+	</form>
+	<div>
+		<div id="submitAttendanceDiv" class="left-buttons"></div>
+		<div id="purgeMembersDiv" class="right-buttons"></div>
+	</div>
+	<!--<span>
+		<div id="activeMembersTable"></div>
+	</span>-->
+
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Modal Header</h4>
+				</div>
+				<div class="modal-body">
+					<table>
+						<tbody>
+							<!--TODO: Add if they are trip eligible, how many meetings they have attended-->
+							<tr>
+								<td> <label>Name:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="member-modal-name" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Member Type:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="member-modal-membertype" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Username:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="member-modal-username" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Phone Number:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="member-modal-phone_number" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Hall </label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="member-modal-hall" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Room:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="member-modal-room_number" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>CM:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="member-modal-cm" type="text" value="name"> </label>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Active:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <label class="modal-text-entry" id="member-modal-active" type="text" value="name"> </label>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="uploadModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add New CSV</h4>
+				</div>
+				<div class="modal-body">
+					<form action="" id="quarterRadioButtons">
+						<input type="radio" class="Quarter1" id="Quarter1" name="quarter" checked="checked">Fall Quarter<br>
+						<input type="radio" class="Quarter2" id="Quarter2" name="quarter">Winter Quarter<br>
+						<input type="radio" class="Quarter3" id="Quarter3" name="quarter">Spring Quarter<br>
+					</form>
+					<label for="csvFile">File:<input type="file" name="csvFile" id="csvFile"></label>
+				</div>
+				<div class="modal-footer">
+					<button id="update-modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="update-modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="purgeConfirmationModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Are you sure? This will delete all members except officers.</h4>
+				</div>
+				<div class="modal-footer">
+					<button id="confirm-purge" type="button" class="btn btn-danger" data-dismiss="modal"> 
+                            Purge Table </button>
+					<button id="cancel-purge" type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+	<script>
+		window.jQuery || document.write('<script src="../scripts/jquery-3.1.1.js"><\/script>');
+	</script>
+</body>
+
+</html>
