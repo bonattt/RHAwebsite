@@ -269,6 +269,10 @@ function marshalDateString(dateStr) {
 }
 
 function unMarshalHtml5(dateStr) {
+    if (dateStr == null) {
+        return '';
+    }
+
     var date = new Date(dateStr);
     var msg = date.getFullYear();
     msg += '-';
