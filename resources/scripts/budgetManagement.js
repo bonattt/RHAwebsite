@@ -1,11 +1,38 @@
 const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"]
+    "July", "August", "September", "October", "November", "December"
+]
+
+var gridData = [{
+        "amount": 0,
+        "date": new Date()
+    },
+    {
+        "amount": 0,
+        "date": new Date()
+    },
+    {
+        "amount": 0,
+        "date": new Date()
+    },
+    {
+        "amount": 0,
+        "date": new Date()
+    },
+    {
+        "amount": 0,
+        "date": new Date()
+    },
+    {
+        "amount": 0,
+        "date": new Date()
+    }
+]
 
 var current_id = -1;
 
 function parseModalEntries(idHeader, ids) {
     var json_obj = {};
-    ids.forEach(function(id) {
+    ids.forEach(function (id) {
         console.log("id: " + id + "\nidHeader: " + idHeader);
         var entry = document.getElementById(idHeader + id);
         json_obj[id] = entry.value;
@@ -44,7 +71,8 @@ function setupButtons() {
     addPaymentButton.setAttribute('data-target', '#paymentModal');
 
     var addPaymentSubmit = document.getElementById('paymentModal-submit');
-    addPaymentSubmit.addEventListener('click', function() {
+    addPaymentSubmit.addEventListener('click', function () {
+        document.getElementById('modal-header').click();
         var entryIds = [
                 'amountUsed','CM', 'accountCode', 'receiver', 'description', 'dateprocessed', 'datereceived'
         ];
@@ -54,16 +82,36 @@ function setupButtons() {
         json_obj.dateprocessed = new Date(json_obj.dateprocessed);
         json_obj.datereceived = new Date(json_obj.datereceived);
         var select = document.getElementById('paymentModal-event');
+        json_obj.proposal_id = select.dataset[prepEventName(select.value)]
+
+        /* parse through the table to insert dates*/
+        var grid = $("#receiptsGrid").swidget();
+        var receiptsObject = [];
+        for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
+            var currentRow = grid.contentTable[0].rows[i];
+            var dateText = currentRow.childNodes[1].innerHTML;
+            if (dateText != "Add a date") {
+                var dateArray = currentRow.childNodes[1].innerHTML.split('/');
+                var dateToSend = dateArray[2] + '-' + dateArray[0] + '-' + dateArray[1];
+                gridData[i].date = dateToSend;
+                if (gridData[i].amount != 0) {
+                    receiptsObject.push(gridData[i]);
+                }
+            }
+        }
+        json_obj.receipts = {
+            "receipts": receiptsObject
+        };
+
+        
         json_obj.proposal_id = select.options[select.selectedIndex].value;
-        console.log(select);
-        json_obj.reciepts = {"test1": "hello", "test2": "world!"};
 
         json_obj.amountUsed = parseFloat(json_obj.amountUsed);
 
         var apiUri = 'payment/';
         var xhr = xhrPostRequest(apiUri);
         xhr.onload = function() {
-            console.log(json_obj);
+            console.log(xhr.responseText);
             location.reload();
         }
         xhr.onerror = function() {
@@ -73,10 +121,12 @@ function setupButtons() {
     });
 
     var deletePaymentButton = document.getElementById('detailsModal-delete');
-    deletePaymentButton.addEventListener('click', function() {
-        var apiUri = 'payment/'  + current_id;
+    deletePaymentButton.addEventListener('click', function () {
+        var apiUri = 'payment/' + current_id;
         var xhr = xhrDeleteRequest(apiUri);
-        xhr.onload = function() { location.reload(); }
+        xhr.onload = function () {
+            location.reload();
+        }
         xhr.send();
     });
 
@@ -84,11 +134,13 @@ function setupButtons() {
     editSubmit.addEventListener('click', function() {
         var apiUri = 'fund/' + current_id
         var xhr = xhrPutRequest(apiUri);
-        xhr.onload = function() {  }
+        xhr.onload = function () {}
 
         var funds_amount = document.getElementById('editFundModal-funds_amount');
 
-        var json_obj = {"funds_amount": parseFloat(funds_amount.value)}
+        var json_obj = {
+            "funds_amount": parseFloat(funds_amount.value)
+        }
         xhr.send(JSON.stringify(json_obj));
         location.reload();
     });
@@ -98,9 +150,9 @@ function populateFundsTable() {
     var xhr = xhrGetRequest('funds/');
     var tbody = document.getElementById('fundsTable');
     var rowNumber = 0;
-    xhr.onload = function() {
+    xhr.onload = function () {
         var payments = JSON.parse(xhr.responseText);
-        payments.forEach(function(entry) {
+        payments.forEach(function (entry) {
             var row = buildFundsRow(entry, rowNumber);
             if (rowNumber % 2 == 1) {
                 row.setAttribute('class', 'colLight');
@@ -118,7 +170,6 @@ function populatePaymentsTable() {
     var xhr = xhrGetRequest('payments/');
     var tbody = document.getElementById('paymentsTable');
     var rowNumber = 0;
-
     xhr.onload = function() {
         var payments = JSON.parse(xhr.responseText)
         populatePaymentsTableHelper(payments, rowNumber, tbody);
@@ -166,7 +217,7 @@ function buildFundsRow(fund, rowNumber) {
     data.toggle = "modal";
     data.target = "#editFundModal";
 
-    editButton.addEventListener('click', function() {
+    editButton.addEventListener('click', function () {
         var header = document.getElementById('editFundModal-header');
         header.innerHTML = "Edit " + fund.fund_name + " Fund";
 
@@ -232,10 +283,10 @@ function buildPaymentRow(payment, proposal_name, rowNumber) {
     col.setAttribute('class', 'tableEntry');
     row.appendChild(col);
 
-//    col = document.createElement('td');
-//    col.appendChild(document.createTextNode(payment.reciepts));
-//    col.setAttribute('class', 'tableEntry');
-//    row.appendChild(col);
+    //    col = document.createElement('td');
+    //    col.appendChild(document.createTextNode(payment.reciepts));
+    //    col.setAttribute('class', 'tableEntry');
+    //    row.appendChild(col);
     row.appendChild(getDisplayExpenseDetailsLink(payment));
     return row;
 }
@@ -250,7 +301,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
     data.toggle = "modal"
     data.target = "#detailsModal"
 
-    link.addEventListener('click', function() {
+    link.addEventListener('click', function () {
         current_id = json_obj.expenses_id;
         console.log('click');
         var description = document.getElementById('detailsModal-description');
@@ -259,8 +310,8 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
         var accountCode = document.getElementById('detailsModal-accountcode');
         accountCode.innerHTML = json_obj.accountcode;
 
-        var reciepts = document.getElementById('detailsModal-reciepts');
-        reciepts.innerHTML = JSON.stringify(json_obj.reciepts)
+        var receipts = document.getElementById('detailsModal-receipts');
+        receipts.innerHTML = JSON.stringify(json_obj.receipts)
     });
 
     return link;
@@ -274,7 +325,7 @@ function buildRow(data, keys, rowNumber) {
     row.setAttribute('id', 'row' + rowNumber);
     var colNumber = 0;
 
-    keys.forEach(function(key) {
+    keys.forEach(function (key) {
         col = document.createElement('td');
         col.appendChild(document.createTextNode(data[key]));
         col.setAttribute('class', 'tableEntry');
@@ -317,6 +368,25 @@ function setAdmin() {
     setupEventSelector();
 }
 
+function updateTotal() {
+    var grid = $("#receiptsGrid").swidget();
+    var totalInput = document.getElementById('paymentModal-amountUsed');
+    var total = 0.0;
+
+    for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
+        var currentRow = grid.contentTable[0].rows[i];
+        var currentNum;
+        if (currentRow.childNodes[0].childNodes[0].childNodes[0] == null) {
+            currentNum = parseFloat(currentRow.childNodes[0].innerHTML);
+        } else {
+            currentNum = parseFloat(currentRow.childNodes[0].childNodes[0].childNodes[0].value);
+        }
+        total += currentNum;
+        gridData[i].amount = currentNum.toFixed(2);
+    }
+    totalInput.value = total.toFixed(2).toString();
+}
+
 function setup() {
     var officersxhr = getOfficers();
     officersxhr.onload = function () {
@@ -331,4 +401,66 @@ function setup() {
 
 $(document).ready(function () {
     setup();
+    $("#receiptsGrid").shieldGrid({
+        dataSource: {
+            data: gridData,
+            schema: {
+                fields: {
+                    amount: {
+                        path: "amount",
+                        type: Number
+                    },
+                    date: {
+                        path: "date",
+                        type: Date
+                    }
+                }
+            }
+        },
+        events: {
+            save: function (e) {
+                updateTotal();
+            }
+        },
+        rowHover: false,
+        columns: [{
+                field: "amount",
+                title: "Amount",
+                format: function (value) {
+                    if (value == null) {
+                        return 'New amount'
+                    } else {
+                        return value;
+                    }
+                },
+                width: "10px"
+            },
+            {
+                field: "date",
+                title: "Date",
+                format: function (value) {
+                    var today = new Date();
+                    var day = value.getDate();
+                    var month = value.getMonth() + 1;
+                    var year = value.getFullYear();
+                    var date = month + '/' + day + '/' + year;
+                    if (day == today.getDate() &&
+                        month == today.getMonth() + 1 &&
+                        year == today.getFullYear()) {
+                        return 'Add a date';
+                    } else {
+                        return date;
+                    }
+                },
+                type: Date,
+                width: "20px"
+            }
+        ],
+        editing: {
+            enabled: true,
+            event: "click",
+            type: "cell",
+            insertNewRowAt: "pagebottom"
+        }
+    });
 });

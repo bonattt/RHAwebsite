@@ -7,14 +7,19 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../externalResources/js/shieldui-lite-all.min.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
 	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
 	<link rel="stylesheet" type="text/css" href="../stylesheets/budget.css">
+	<link rel="stylesheet" type="text/css" href="../externalResources/css/all.min.css" />
 
-	<script language="Javascript" src="../scripts/adminPermission.js">  </script>
-	<script language="Javascript" src="../scripts/navbar-factory.js">  </script>
-	<script language="Javascript" src="../scripts/budgetManagement.js">  </script>
+	<script language="Javascript" src="../scripts/adminPermission.js">
+	</script>
+	<script language="Javascript" src="../scripts/navbar-factory.js">
+	</script>
+	<script language="Javascript" src="../scripts/budgetManagement.js">
+	</script>
 	<script type="text/javascript" src="./scripts/rosefire.js"></script>
 
 	<link rel="icon" href="../images/RHA.jpg">
@@ -78,13 +83,6 @@
 					<table>
 						<tbody>
 							<tr>
-								<td> <label>Amount:</label> </td>
-								<td> &nbsp;&nbsp; </td>
-								<td>
-									<input class="modal-text-entry" id="paymentModal-amountUsed" type="number" step="0.00" value='0.01'></input>
-								</td>
-							</tr>
-							<tr>
 								<td> <label> Account Code:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
@@ -120,30 +118,36 @@
 								<td> <label>Turned-in Date:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input type="date" id="paymentModal-datereceived" name="signUpOpenDate"
-										   data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+									<input type="date" id="paymentModal-datereceived" name="paymentModal-datereceived" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
 								</td>
 							</tr>
 							<tr>
 								<td> <label>Processed Date:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input type="date" id="paymentModal-dateprocessed" name="signUpOpenDate"
-										   data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+									<input type="date" id="paymentModal-dateprocessed" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
 								</td>
 							</tr>
 							<tr>
 								<td> <label>Description:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<textarea type="date" id="paymentModal-description" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></textarea>
+									<textarea type="text" id="paymentModal-description" name="signUpOpenDate"></textarea>
 								</td>
 							</tr>
 							<tr>
-								<td> <label for="imageFile"> Receipts:
-									<input type="file" name="imageFile" id="imageFile">
-								</label> </td>
+								<td> <label>Receipts:</label> </td>
 								<td> &nbsp;&nbsp; </td>
+								<td>
+									<div id="receiptsGrid"></div>
+								</td>
+							</tr>
+							<tr>
+								<td> <label>Total:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td>
+									<input class="modal-text-entry" id="paymentModal-amountUsed" type="number" steps='0.01' value='0.00' placeholder='0.00' disabled='true'></input>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -244,7 +248,7 @@
 		<div class="modal-dialog">
 			<!-- Modal content-->
 			<div class="modal-content">
-				<div class="modal-header">
+				<div class="modal-header" id="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Details</h4>
 				</div>
@@ -264,9 +268,9 @@
 								</td>
 							</tr>
 							<tr>
-								<td> <label> reciepts: </label> </td>
+								<td> <label> receipts: </label> </td>
 								<td>
-									<p id="detailsModal-reciepts"> </p>
+									<p id="detailsModal-receipts"> </p>
 								</td>
 							</tr>
 						</tbody>

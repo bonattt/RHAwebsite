@@ -525,6 +525,14 @@ h3{
 	text-decoration: none;
 }
 
+.submitEquipmentSubtext {
+	text-align: center;
+	font-size: 8pt;
+	display: block;
+	color: white;
+	text-decoration: none;
+}
+
 #submitSubtext {
 	color: white;
 }
@@ -573,6 +581,10 @@ input[type=number] {
 }
 
 input[type=date] {
+	width: 100%;
+}
+
+select {
 	width: 100%;
 }
 
