@@ -73,8 +73,6 @@ function createColumnHead(name) {
     newTd.setAttribute('align', 'middle');
     newTd.setAttribute('width', 200);
     newTd.innerHTML = '<b>' + name + '</b>';
-    newTd.dataset.toggle = "modal";
-    newTd.dataset.target = "#infoModal";
     return newTd;
 }
 
