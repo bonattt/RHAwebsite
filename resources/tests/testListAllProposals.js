@@ -40,7 +40,7 @@ window.onload = function() {
 	});
 
 
-    QUnit.test( "createDateTD--unMarshalHtml5", function( assert ) {
+    QUnit.test( "unMarshalHtml5", function( assert ) {
         var dateStr = "2015-04-07T05:00:00.000Z";
         var dateOut = unMarshalHtml5(dateStr);
         var dateLs = dateOut.split('-');
@@ -48,6 +48,12 @@ window.onload = function() {
         assert.equal(dateLs[1], 4, "meshaled date obj has correct month");
         assert.equal(dateLs[2], 7, "meshaled date obj has correct day");
         assert.equal(dateLs[0], 2015, "meshaled date obj has correct year");
+    });
+
+    QUnit.test("unMarshalHtml5 on null", function( assert ) {
+        var dateStr2 = null;
+        var dateOut2 = unMarshalHtml5(dateStr2);
+        assert.equal(dateOut2, '', "null returns empty string");
     });
 
     QUnit.test( "dateInputValueInvalid", function( assert ) {
