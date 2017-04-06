@@ -202,6 +202,12 @@ function addRowListener(tr, proposal) {
         });
         unMarshalDates(proposal);
         document.getElementById('proposalModal-paid').checked = proposal.paid;
+        var imageIsPresentLabel = document.getElementById('proposalModal-imageIsPresent');
+        if (proposal.image_path == null) {
+            imageIsPresentLabel.innerHTML = 'This proposal currently has no image !!!!'
+        } else {
+            imageIsPresentLabel.innerHTML = 'There is already a image for this proposal. '
+        }
     });
 }
 
@@ -351,7 +357,7 @@ function setupModalButtons() {
         var xhr = xhrPutRequest(apiUri);
 
         xhr.onload = function() {
-//            location.reload();
+            location.reload();
         }
         console.log(json_data);
         removeNullValues(json_data, ["image_path"]);
