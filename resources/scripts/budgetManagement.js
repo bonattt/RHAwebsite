@@ -309,7 +309,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
         description.innerHTML = json_obj.description;
 
         var accountCode = document.getElementById('detailsModal-accountcode');
-        accountCode.innerHTML = json_obj.accountcode;
+        accountCode.value = json_obj.accountcode;
 
         var receiptList = json_obj.receipts.receipts;
 
