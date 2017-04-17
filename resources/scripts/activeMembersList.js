@@ -126,36 +126,39 @@ function drawAllMembersTable(members) {
     tbdy.appendChild(tdAttendance1);
     var countForColoring = 0;
     for (var i = 0; i < members.length; i++) {
-        tr = document.createElement('tr');
-        tr.setAttribute('member', i);
-        tr.setAttribute('data-toggle', 'modal');
-        tr.setAttribute('data-target', '#myModal');
-        doClosure(members, i);
-        if (countForColoring % 2 == 0) {
-            tr.setAttribute('bgcolor', '#f0f0f0');
+        if (members[i].hall == null || members[i].hall == "") {
+        } else {
+            tr = document.createElement('tr');
+            tr.setAttribute('member', i);
+            tr.setAttribute('data-toggle', 'modal');
+            tr.setAttribute('data-target', '#myModal');
+            doClosure(members, i);
+            if (countForColoring % 2 == 0) {
+                tr.setAttribute('bgcolor', '#f0f0f0');
+            }
+            countForColoring++;
+
+            var td = document.createElement('td');
+            td.innerHTML = members[i].firstname + " " + members[i].lastname;
+
+            var td2 = document.createElement('td');
+            td2.innerHTML = members[i].hall;
+
+            var td3 = document.createElement('td');
+            td3.innerHTML = members[i].meet_attend.Q1;
+
+            var td4 = document.createElement('td');
+            td4.innerHTML = members[i].meet_attend.Q2;
+
+            var td5 = document.createElement('td');
+            td5.innerHTML = members[i].meet_attend.Q3;
+            tr.appendChild(td);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tr.appendChild(td5);
+            tbdy.appendChild(tr);
         }
-        countForColoring++;
-
-        var td = document.createElement('td');
-        td.innerHTML = members[i].firstname + " " + members[i].lastname;
-
-        var td2 = document.createElement('td');
-        td2.innerHTML = members[i].hall;
-
-        var td3 = document.createElement('td');
-        td3.innerHTML = members[i].meet_attend.Q1;
-
-        var td4 = document.createElement('td');
-        td4.innerHTML = members[i].meet_attend.Q2;
-
-        var td5 = document.createElement('td');
-        td5.innerHTML = members[i].meet_attend.Q3;
-        tr.appendChild(td);
-        tr.appendChild(td2);
-        tr.appendChild(td3);
-        tr.appendChild(td4);
-        tr.appendChild(td5);
-        tbdy.appendChild(tr);
     }
     table.appendChild(tbdy);
     body.appendChild(table);
@@ -237,55 +240,59 @@ function drawActiveMembersTable(members) {
 
     var countForColoring = 0;
     for (var i = 0; i < members.length; i++) {
-        var meetingsAttended = 0;
-        for(var j = 0; j < members[i].meet_attend.Q1.length; j++) {
-            if(members[i].meet_attend.Q1[j] == 1){
-                meetingsAttended ++;
+        if (members[i].hall == null || members[i].hall == "") {
+        } else {
+            var meetingsAttended = 0;
+            for(var j = 0; j < members[i].meet_attend.Q1.length; j++) {
+                if(members[i].meet_attend.Q1[j] == 1){
+                    meetingsAttended ++;
+                }
+            }
+            for(var j = 0; j < members[i].meet_attend.Q2.length; j++) {
+                if(members[i].meet_attend.Q2[j] == 1){
+                    meetingsAttended ++;
+                }
+            }
+            for(var j = 0; j < members[i].meet_attend.Q3.length; j++) {
+                if(members[i].meet_attend.Q3[j] == 1){
+                    meetingsAttended ++;
+                }
+            }
+            if (meetingsAttended > 4) {
+                tr = document.createElement('tr');
+                tr.setAttribute('member', i);
+                tr.setAttribute('data-toggle', 'modal');
+                tr.setAttribute('data-target', '#myModal');
+                doClosure(members, i);
+                if (countForColoring % 2 == 0) {
+                    tr.setAttribute('bgcolor', '#f0f0f0');
+                }
+                countForColoring++;
+
+                var td = document.createElement('td');
+                td.innerHTML = members[i].firstname + " " + members[i].lastname;
+
+                var td2 = document.createElement('td');
+                td2.innerHTML = members[i].hall;
+
+                var td3 = document.createElement('td');
+                td3.innerHTML = members[i].meet_attend.Q1;
+
+                var td4 = document.createElement('td');
+                td4.innerHTML = members[i].meet_attend.Q2;
+
+                var td5 = document.createElement('td');
+                td5.innerHTML = members[i].meet_attend.Q3;
+                tr.appendChild(td);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+                tr.appendChild(td5);
+                tbdy.appendChild(tr);
             }
         }
-        for(var j = 0; j < members[i].meet_attend.Q2.length; j++) {
-            if(members[i].meet_attend.Q2[j] == 1){
-                meetingsAttended ++;
-            }
+
         }
-        for(var j = 0; j < members[i].meet_attend.Q3.length; j++) {
-            if(members[i].meet_attend.Q3[j] == 1){
-                meetingsAttended ++;
-            }
-        }
-        if (meetingsAttended > 4) {
-            tr = document.createElement('tr');
-            tr.setAttribute('member', i);
-            tr.setAttribute('data-toggle', 'modal');
-            tr.setAttribute('data-target', '#myModal');
-            doClosure(members, i);
-            if (countForColoring % 2 == 0) {
-                tr.setAttribute('bgcolor', '#f0f0f0');
-            }
-            countForColoring++;
-
-            var td = document.createElement('td');
-            td.innerHTML = members[i].firstname + " " + members[i].lastname;
-
-            var td2 = document.createElement('td');
-            td2.innerHTML = members[i].hall;
-
-            var td3 = document.createElement('td');
-            td3.innerHTML = members[i].meet_attend.Q1;
-
-            var td4 = document.createElement('td');
-            td4.innerHTML = members[i].meet_attend.Q2;
-
-            var td5 = document.createElement('td');
-            td5.innerHTML = members[i].meet_attend.Q3;
-            tr.appendChild(td);
-            tr.appendChild(td2);
-            tr.appendChild(td3);
-            tr.appendChild(td4);
-            tr.appendChild(td5);
-            tbdy.appendChild(tr);
-        }
-    }
     table.appendChild(tbdy);
     body.appendChild(table);
 }
