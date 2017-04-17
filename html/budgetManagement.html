@@ -8,6 +8,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../externalResources/js/shieldui-lite-all.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
 	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
@@ -258,13 +260,14 @@
 							<tr>
 								<td> <label> Description: </label> </td>
 								<td> &nbsp;&nbsp; </td>
-								
+								<td> &nbsp;&nbsp; </td>
 								<td>
 									<div class="textwrapper"><textarea type="text" id="detailsModal-description"></textarea></div>
 								</td>
 							</tr>
 							<tr>
 								<td> <label> account ID: </label> </td>
+								<td> &nbsp;&nbsp; </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
 									<div class="textwrapper"><input type="number" disabled="true" id="detailsModal-accountcode" class="textArea"> </input></div>
@@ -273,8 +276,17 @@
 							<tr>
 								<td> <label> receipts: </label> </td>
 								<td> &nbsp;&nbsp; </td>
+								<td> &nbsp;&nbsp; </td>
 								<td>
 									<div id="receiptsDetailGrid"></div>
+								</td>
+							</tr>
+							<tr>
+								<td> <label> processed Date: </label> </td>
+								<td> Processed? </td>
+								<td> <input type="checkbox" id="detailsModal-processedCheck"></td>
+								<td>
+									<div class="textwrapper"><input type="text" id="detailsModal-processedDate"> </input></div>
 								</td>
 							</tr>
 						</tbody>

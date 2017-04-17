@@ -350,7 +350,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
                 gridData[i] = receiptList[i];
             }
         }
-        $("#receiptsDetailGrid").shieldGrid({
+        var grid = $("#receiptsDetailGrid").shieldGrid({
             dataSource: {
                 data: gridData,
                 schema: {
@@ -412,6 +412,16 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
                 insertNewRowAt: "pagebottom"
             }
         });
+        var processedCheck = document.getElementById('detailsModal-processedCheck');
+        var processedDate = document.getElementById('detailsModal-processedDate');
+        if(json_obj.dateprocessed) {
+            processedDate.value = json_obj.dateprocessed;
+            processedCheck.checked;
+            processedCheck.disabled = true;
+            description.disabled = true;
+            accountCode.disabled = true;
+            grid.disabled = true;
+        } 
     });
 
     return link;
@@ -501,6 +511,7 @@ function setup() {
 
 $(document).ready(function () {
     setup();
+    $("#processedDate").datepicker();
     $("#receiptsGrid").shieldGrid({
         dataSource: {
             data: gridData,
