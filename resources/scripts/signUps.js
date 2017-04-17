@@ -6,32 +6,10 @@ var newEventPrice;
 var newEventImage;
 var newEventDescription;
 var newEventSignUpCloseDate;
-var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/"
-var nameInput = document.createElement("textarea");
-var priceInput = document.createElement("textarea");
-var descriptionInput = document.createElement("textarea");
-var signUpCloseDateInput = document.createElement("textarea");
-var imageInput = document.createElement("textarea");
-var nameNode = document.getElementById("nameInput");
-var priceNode = document.getElementById("priceInput");
-var imageNode = document.getElementById("imageInput");
-var descriptionNode = document.getElementById("descriptionInput");
-var signUpCloseDateNode = document.getElementById("signUpCloseDateInput");
-var editValue;
-var listLinks;
+var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 
 var isAdmin = false;
 var isAMember = false;
-
-const EVENT_DATE = 'signups-modal-event_date';
-const SIGNUPS_CLOSE = 'signups-modal-event_signup_close';
-const SIGNUPS_OPEN = 'signups-modal-event_signup_open';
-const DEFAULT_HOURS = 11;
-const DEFAULT_MINUTES = 0;
-const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"];
-const MODAL_FIELD_ROOT_ID = "signups-modal-";
 
 function displayPastEvents() {
     var xhr = getEvents();
@@ -39,11 +17,6 @@ function displayPastEvents() {
         createHTMLFromResponseText(xhr.responseText)
     }
     xhr.send();
-    // setTimeout(function () {createHTMLFromResponseText(xhr.responseText)}, 300);
-    // usign xhr.onload should be more reliable and responsive:
-    // The page load won't fail if it takes more than 300 ms to receive a response,
-    // and the load won't be slowed down if the response is faster than 300 ms
-    // PLEASE APPLY THIS CHANGE ANYWHERE YOU SEE THIS ERROR REPEATED.    
 
     function createHTMLFromResponseText(proposal) {
         proposal = JSON.parse(proposal);
@@ -67,7 +40,6 @@ function displayPastEvents() {
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
         }
-        // makeListLinks();
     }
 
     function getEvents() {
@@ -108,10 +80,6 @@ function displayPastEvents() {
 }
 function setupAdmin(officers) {
     isAdmin = true;
-    //    var hiddenFeatures = document.getElementsByClassName('adminOnly')
-    //    hiddenFeatures.forEach( function(element) {
-    //        element.style.display = "block";
-    //    });
 }
 
 function displaySignUps() {
@@ -119,22 +87,15 @@ function displaySignUps() {
     var username = JSON.parse(sessionStorage.getItem("userData")).username;
     var memberXhr = xhrGetRequest('members/');
     memberXhr.onload = function () {
-        console.log(JSON.parse(memberXhr.responseText));
         var members = JSON.parse(memberXhr.responseText);
         for (var i = 0; i < members.length; i++) {
-            // console.log(members[i]);
             if (members[i]["username"] == username && members[i]["hall"] != null) {
-                console.log("feelin' myself");
-                console.log(members[i]);
                 isAMember = true;
                 break;
             }
         }
         if (!isAMember) {
-            //do nothing for now 
-            console.log("Ahh!");
             var signUpLinks = document.getElementsByClassName("signUpLink");
-            console.log(signUpLinks);
         }
     };
     memberXhr.send();
@@ -147,7 +108,6 @@ function displaySignUps() {
         var xhr = getEvents();
         xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
         xhr.send();
-        //    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
         function createHTMLFromResponseText(proposal) {
             proposal = JSON.parse(proposal);
@@ -319,12 +279,10 @@ function getEventTextSignupsHtml(proposal, cost, eventDate, signUpOpenDate, sign
 }
 
 function getEventActionDiv(proposal, username, signUpOpenDate, attendees) {
-    // html += "<div id='eventActions" + proposal_id + "' class='eventActions'>";
     var eventActionDiv = document.createElement('div');
     eventActionDiv.setAttribute('id', 'eventActions' + proposal.proposal_id);
     eventActionDiv.setAttribute('class', 'eventActions');
 
-    // signup / unregister button, ? event is current 
     if (!isAMember) {
 
     } else {
@@ -402,14 +360,12 @@ function generateOptions(idAttr, start, end, step, names) {
 
 function composeDate(modalId) {
     var date = new Date();
-    var monthName = document.getElementById(modalId + '_month').value
+    var MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+    var monthName = document.getElementById(modalId + '_month').value;
     date.setMonth(MONTH_NAMES.indexOf(monthName));
     date.setFullYear(document.getElementById(modalId + '_year').value);
     date.setDate(document.getElementById(modalId + '_day').value);
-
-    console.log(date.getMonth() + '/' + (date.getDate() + 1) + '/' + date.getFullYear());
-    //date.setHours(DEFAULT_HOURS);   
-    //date.setMinutes(DEFAULT_MINUTES);
     return date;
 }
 
@@ -475,7 +431,6 @@ function unregister(eventID) {
     }
 
     xhr.send();
-    console.log("there's an xhr above me");
 
     var signUpSnackbar = document.getElementById("unregisterSnackbar");
     signUpSnackbar.className = "show";
@@ -525,27 +480,12 @@ function getAttendees(id) {
     }
     return xhr;
 }
-function makeListLinks() {
-
-    listLinks = document.getElementsByClassName("viewListLink");
-    for (var i = 0; i < listLinks.length; i++) {
-        var listLink = listLinks[i];
-        listLink.addEventListener("click", function (e) { showListModal(e); }, false);
-    }
-
-    var isAdmin = true;
-    var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
-
-    newEvent = {};
-};
 
 function showListModal(event) {
     var xhr = getAttendees(event);
     xhr.send();
     xhr.onload = function () {
         var response = JSON.parse(xhr.responseText);
-        console.log(response[0].max_attendance);
-        console.log(response[0].attendees);
         var eventAttendees = response[0].attendees;
         var modal = document.getElementById('listModal');
         var span = document.getElementsByClassName("closeList")[0];
@@ -560,7 +500,6 @@ function showListModal(event) {
         }
 
         for (var i = 0; i < rightSide; i++) {
-            console.log("The person at " + i + " is: " + eventAttendees[i]);
             if (i == response[0].max_attendance) {
                 html += "<p>------Wait list-------</p>"
             }
@@ -585,7 +524,6 @@ function showEmailModal(event) {
     xhr.send();
     xhr.onload = function () {
         var response = JSON.parse(xhr.responseText);
-        console.log(response[0].max_attendance);
         var eventAttendees = response[0].attendees;
         var modal = document.getElementById('listModal');
         var span = document.getElementsByClassName("closeList")[0];
