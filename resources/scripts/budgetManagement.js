@@ -301,6 +301,8 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
     data.target = "#detailsModal"
 
     link.addEventListener('click', function () {
+        $("#receiptsDetailGrid").empty();
+
         current_id = json_obj.expenses_id;
         console.log('click');
         var description = document.getElementById('detailsModal-description');
