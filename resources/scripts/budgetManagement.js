@@ -129,6 +129,38 @@ function setupButtons() {
         xhr.send();
     });
 
+    var updatePaymentButton = document.getElementById('detailsModal-confirm');
+    updatePaymentButton.addEventListener('click', function () {
+        var apiUri = 'payment/' + current_id;
+        var xhr = xhrPutRequest(apiUri);
+        var receiptsObject = [];
+        var total = 0.0;
+        var descText = document.getElementById('detailsModal-description').innerHTML;
+        for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
+            var currentRow = grid.contentTable[0].rows[i];
+            var dateText = currentRow.childNodes[1].innerHTML;
+            if (dateText != "Add a date") {
+                var dateArray = currentRow.childNodes[1].innerHTML.split('/');
+                var dateToSend = dateArray[2] + '-' + dateArray[0] + '-' + dateArray[1];
+                gridData[i].date = dateToSend;
+                if (gridData[i].amount != 0) {
+                    receiptsObject.push(gridData[i]);
+                    total += gridData[i].amount;
+                }
+            }
+        }
+
+        var json_obj = {
+            "receipts": {"receipts": receiptsObject},
+            "amountused": total,
+            "description": descText
+        }
+        xhr.onload = function () {
+            location.reload();
+        }
+        xhr.send(JSON.stringify(json_obj));
+    });
+
     var editSubmit = document.getElementById('confirm-confirm');
     editSubmit.addEventListener('click', function () {
         var apiUri = 'fund/' + current_id
