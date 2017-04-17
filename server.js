@@ -6,7 +6,9 @@ fs = require('fs');
 url = require('url');
 express = require('express');
 multer = require('multer');
+helmet = require('helmet');
 app = express();
+
 
 
 var upload = multer({ dest: 'resources/images/' });
@@ -21,6 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(helmet());
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
