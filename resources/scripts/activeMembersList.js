@@ -1,4 +1,3 @@
-
 var displayingAllMembers = true;
 var table = document.createElement('table');
 

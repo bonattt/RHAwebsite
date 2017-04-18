@@ -1,11 +1,7 @@
-
-
 const FIELDS = [
         "proposal_name",
         "money_requested",
         "money_allocated",
-//            "proposed_date",
-//            "event_date",
         "week_proposed",
         "quarter_proposed",
         "proposer",
@@ -13,6 +9,8 @@ const FIELDS = [
         "cost_to_attendee",
         "max_attendance",
     ]
+var body = document.getElementsByTagName('body')[0];
+var last_proposal_clicked = -1;
 
 const BROWSER = (function(){
     // Code snippet from Stack Overflow
@@ -31,12 +29,6 @@ const BROWSER = (function(){
     if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
     return M.join(' ');
 })().toLowerCase();
-
-
-var body = document.getElementsByTagName('body')[0];
-var tables = new Array();
-
-var last_proposal_clicked = -1;
 
 function displayProposals(isAdmin) {
     var xhr = getEvents();

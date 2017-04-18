@@ -1,5 +1,3 @@
-var officers;
-
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
         var uploadButton = document.getElementById("addPhoto");
@@ -10,9 +8,6 @@ function setAdmin(officers) {
 
         var textButton = document.getElementById("editText");
         textButton.setAttribute("class", "");
-
-        //        var editButtons = insertEditButtonsBefore(showModal, {"style": "float: right;"});
-        //        alert(editButtons.length)
     }
 }
 
