@@ -147,6 +147,7 @@ function saveCommittee(data) {
     }
 
     imageInput.value = '';
+    location.reload();
 }
 
 function deleteFunction(filePath) {
