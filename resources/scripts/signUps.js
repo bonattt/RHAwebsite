@@ -62,7 +62,7 @@ function displayPastEvents() {
             html += "<div class='costEventDateWrapper'> <h3 class='cost'>$" + cost + "</h3>";
             html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
             html += "</div>";
-            html += "<div class='eventActions'><a onclick='showAttendeesModal(" + proposal[i].proposal_id + ")'><p class='viewListLink'>Attendees</p></a></div></div></div>";
+            html += "<div class='eventActions'><a data-toggle='modal' data-target='#listModal' onclick='showAttendeesModal(" + proposal[i].proposal_id + ")'><p class='viewListLink'>Attendees</p></a></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
@@ -402,16 +402,20 @@ function getEventActionDiv(proposal, username, signUpOpenDate, attendees) {
 
     var showListLink = document.createElement('a');
     showListLink.addEventListener('click', function () { showAttendeesModal(proposal.proposal_id) });
+    showListLink.dataset.toggle = 'modal';
+    showListLink.dataset.target = '#listModal';
+
     var innerParagraph2 = document.createElement('p');
     innerParagraph2.setAttribute('class', 'viewListLink');
     innerParagraph2.appendChild(document.createTextNode('Attendees'));
+
     showListLink.appendChild(innerParagraph2);
     eventActionDiv.appendChild(showListLink);
 
     if (isAdmin) {
         var showEmailLink = document.createElement('a');
         showEmailLink.dataset.toggle = "modal";
-        showEmailLink.dataset.target = "#listModal1";
+        showEmailLink.dataset.target = "#listModal";
         showEmailLink.addEventListener('click', function () { showEmailModal(proposal.proposal_id) });
 
         var innerParagraph3 = document.createElement('p');
@@ -750,51 +754,18 @@ function showAttendeesModal(event) {
     xhr.send();
     xhr.onload = function () {
         var response = JSON.parse(xhr.responseText);
-        console.log(response[0].max_attendance);
-        console.log(response[0].attendees);
-        var eventAttendees = response[0].attendees;
-        var modal = document.getElementById('listModal');
-        var span = document.getElementsByClassName("closeList")[0];
-        var list = document.getElementById("list");
-        var html = "";
+        var header = 'List of Attendees';
+        var attendees = response[0].attendees;
+        console.log(attendees);
+        var max_attendance = response[0].max_attendance;
 
-        var rightSide;
-        if (!eventAttendees) {
-            rightSide = 0;
-        } else {
-            rightSide = eventAttendees.length;
+        attendees = attendees.slice(0, max_attendance);
+        if ((attendees == null) || (attendees.length == 0)) {
+            attendees = ["there is nobody signed up for this event!"];
         }
-
-        for (var i = 0; i < rightSide; i++) {
-            console.log("The person at " + i + " is: " + eventAttendees[i]);
-            if (i == response[0].max_attendance) {
-                html += "<p>------Wait list-------</p>"
-            }
-            html += "<br>" + eventAttendees[i];
-        }
-        list.innerHTML = "The attendees for this event are:";
-        list.innerHTML += html;
-        modal.style.display = "block";
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    }
-}
-
-function showEmailModal(event) {
-    var xhr = getAttendees(event);
-    xhr.send();
-    xhr.onload = function () {
-        var response = JSON.parse(xhr.responseText);
-        var header = "Attendee Email List";
-        var eventAttendees = response[0].attendees;
-        populateListModal(header, eventAttendees);
+        populateListModal(header, attendees);
 //        console.log(response[0].max_attendance);
+//        console.log(response[0].attendees);
 //        var eventAttendees = response[0].attendees;
 //        var modal = document.getElementById('listModal');
 //        var span = document.getElementsByClassName("closeList")[0];
@@ -809,16 +780,13 @@ function showEmailModal(event) {
 //        }
 //
 //        for (var i = 0; i < rightSide; i++) {
-//            html += "<br>" + eventAttendees[i] + "@rose-hulman.edu"
-//            if (i == response[0].max_attendance - 1) {
+//            console.log("The person at " + i + " is: " + eventAttendees[i]);
+//            if (i == response[0].max_attendance) {
 //                html += "<p>------Wait list-------</p>"
-//                continue;
 //            }
-//            if (i != rightSide - 1) {
-//                html += "; ";
-//            }
+//            html += "<br>" + eventAttendees[i];
 //        }
-//        list.innerHTML = "The emails for this event are:";
+//        list.innerHTML = "The attendees for this event are:";
 //        list.innerHTML += html;
 //        modal.style.display = "block";
 //        span.onclick = function () {
@@ -832,11 +800,29 @@ function showEmailModal(event) {
     }
 }
 
+function showEmailModal(event) {
+    var xhr = getAttendees(event);
+    xhr.send();
+    xhr.onload = function () {
+        var response = JSON.parse(xhr.responseText);
+        var header = "Attendee Email List";
+        var eventAttendees = response[0].attendees;
+        if (eventAttendees == null) {
+            eventAttendees = ["there is nobody signed up for this event!"];
+        } else {
+            for (var i = 0; i < eventAttendees.length; i++) {
+                eventAttendees[i] += '@rose-hulman.edu;'
+            }
+        }
+        populateListModal(header, eventAttendees);
+    }
+}
+
 function populateListModal(header, ls) {
     document.getElementById('listModal_header').innerHTML = header+'';
     var html = ''
     ls.forEach(function(line) {
-        html += line + '@rose-hulman.edu;<br/>'
+        html += line + '<br/>'
     });
     document.getElementById('listModal_body').innerHTML = html;
 }
