@@ -38,6 +38,19 @@ function submit() {
     var moneyAllocated = document.getElementById("moneyAllocated").value;
     var files = document.getElementById("imageFile").files;
 
+    console.log("files are:");
+    console.log(files);
+    if(!name || !costToAttendee || !description || !eventDate || !proposer || !dateProposed || !weekProposed || !quarter || !moneyRequested || !moneyAllocated || files.length == 0){
+    var snackbar = document.getElementById("proposalsSnackbar");
+    snackbar.className = "show";
+    console.log(snackbar);
+    setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+    }
+
+    if(!maxAttendance) {
+        maxAttendance = 10000;
+    }
+
     if (signUpCloseDate == "" && signUpOpenDate == "") {
         console.log("I happened");
         signUpCloseDate = null;
