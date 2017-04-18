@@ -6,32 +6,10 @@ var newEventPrice;
 var newEventImage;
 var newEventDescription;
 var newEventSignUpCloseDate;
-var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/"
-var nameInput = document.createElement("textarea");
-var priceInput = document.createElement("textarea");
-var descriptionInput = document.createElement("textarea");
-var signUpCloseDateInput = document.createElement("textarea");
-var imageInput = document.createElement("textarea");
-var nameNode = document.getElementById("nameInput");
-var priceNode = document.getElementById("priceInput");
-var imageNode = document.getElementById("imageInput");
-var descriptionNode = document.getElementById("descriptionInput");
-var signUpCloseDateNode = document.getElementById("signUpCloseDateInput");
-var editValue;
-var listLinks;
+var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 
 var isAdmin = false;
 var isAMember = false;
-
-const EVENT_DATE = 'signups-modal-event_date';
-const SIGNUPS_CLOSE = 'signups-modal-event_signup_close';
-const SIGNUPS_OPEN = 'signups-modal-event_signup_open';
-const DEFAULT_HOURS = 11;
-const DEFAULT_MINUTES = 0;
-const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"];
-const MODAL_FIELD_ROOT_ID = "signups-modal-";
 
 function displayPastEvents() {
     var xhr = getEvents();
@@ -39,11 +17,6 @@ function displayPastEvents() {
         createHTMLFromResponseText(xhr.responseText)
     }
     xhr.send();
-    // setTimeout(function () {createHTMLFromResponseText(xhr.responseText)}, 300);
-    // usign xhr.onload should be more reliable and responsive:
-    // The page load won't fail if it takes more than 300 ms to receive a response,
-    // and the load won't be slowed down if the response is faster than 300 ms
-    // PLEASE APPLY THIS CHANGE ANYWHERE YOU SEE THIS ERROR REPEATED.    
 
     function createHTMLFromResponseText(proposal) {
         proposal = JSON.parse(proposal);
@@ -67,7 +40,6 @@ function displayPastEvents() {
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
         }
-        // makeListLinks();
     }
 
     function getEvents() {
@@ -106,45 +78,8 @@ function displayPastEvents() {
         return xhr;
     }
 }
-
-function saveEvent() {
-    var url = apiURL + 'api/v1/events/' + eventId;
-    function createCORSRequest(method, url) {
-        var xhr = new XMLHttpRequest();
-        console.log("xhr is: ");
-        console.log(xhr);
-        xhr.open(method, url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        return xhr;
-    }
-    var xhr = createCORSRequest('PUT', url);
-    if (!xhr) {
-        throw new Error('CORS not supported');
-    }
-
-    xhr.onload = function () {
-        var responseText = xhr.responseText;
-        console.log("Response text: " + responseText);
-    }
-
-    xhr.onerror = function () {
-        console.log("There was an error");
-    }
-    console.log("new event name is: ");
-    console.log(newEventName);
-    xhr.send(JSON.stringify({ proposal_name: newEventName, cost_to_attendee: newEventPrice, image_path: newEventImage, description: newEventDescription, event_signup_close: newEventSignUpCloseDate, event_signup_open: newEventSignUpOpenDate, event_date: newEventDate, attendees: newAttendees }));
-
-    return xhr;
-}
 function setupAdmin(officers) {
     isAdmin = true;
-    var deleteButton = document.getElementById("modal-delete");
-    deleteButton.style.display = "inline";
-    enableDeleteButton();
-    //    var hiddenFeatures = document.getElementsByClassName('adminOnly')
-    //    hiddenFeatures.forEach( function(element) {
-    //        element.style.display = "block";
-    //    });
 }
 
 function displaySignUps() {
@@ -152,22 +87,15 @@ function displaySignUps() {
     var username = JSON.parse(sessionStorage.getItem("userData")).username;
     var memberXhr = xhrGetRequest('members/');
     memberXhr.onload = function () {
-        console.log(JSON.parse(memberXhr.responseText));
         var members = JSON.parse(memberXhr.responseText);
         for (var i = 0; i < members.length; i++) {
-            // console.log(members[i]);
             if (members[i]["username"] == username && members[i]["hall"] != null) {
-                console.log("feelin' myself");
-                console.log(members[i]);
                 isAMember = true;
                 break;
             }
         }
         if (!isAMember) {
-            //do nothing for now 
-            console.log("Ahh!");
             var signUpLinks = document.getElementsByClassName("signUpLink");
-            console.log(signUpLinks);
         }
     };
     memberXhr.send();
@@ -180,7 +108,6 @@ function displaySignUps() {
         var xhr = getEvents();
         xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
         xhr.send();
-        //    setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
         function createHTMLFromResponseText(proposal) {
             proposal = JSON.parse(proposal);
@@ -192,9 +119,6 @@ function displaySignUps() {
                 var tileArea = document.getElementsByClassName("eventTileArea")[0];
                 tileArea.appendChild(eventHtml);
             }
-            populateDateSelect(EVENT_DATE);
-            populateDateSelect(SIGNUPS_OPEN);
-            populateDateSelect(SIGNUPS_CLOSE);
         }
 
         function getEvents() {
@@ -355,12 +279,10 @@ function getEventTextSignupsHtml(proposal, cost, eventDate, signUpOpenDate, sign
 }
 
 function getEventActionDiv(proposal, username, signUpOpenDate, attendees) {
-    // html += "<div id='eventActions" + proposal_id + "' class='eventActions'>";
     var eventActionDiv = document.createElement('div');
     eventActionDiv.setAttribute('id', 'eventActions' + proposal.proposal_id);
     eventActionDiv.setAttribute('class', 'eventActions');
 
-    // signup / unregister button, ? event is current 
     if (!isAMember) {
 
     } else {
@@ -423,85 +345,9 @@ function getEventActionDiv(proposal, username, signUpOpenDate, attendees) {
         innerParagraph3.appendChild(document.createTextNode('View Emails'));
         showEmailLink.appendChild(innerParagraph3);
         eventActionDiv.appendChild(showEmailLink);
-
-        var editButton = createEditButton(proposal) //////////////////////////////////////////////////////////////////////////////////////
-        eventActionDiv.appendChild(editButton);
     }
-    var cancelBtn = document.getElementById('modal-cancel');
-    cancelBtn.addEventListener('click', function () {
-        document.getElementById("imageFile").value = '';
-    });
-
-    var deleteBtn = document.getElementById('modal-delete');
-    deleteBtn.addEventListener('click', function () {
-        document.getElementById("imageFile").value = '';
-    });
 
     return eventActionDiv;
-}
-
-function enableDeleteButton() {
-    var delBtn = document.getElementById('confirm-delete');
-    delBtn.addEventListener('click', function () {
-        var id = delBtn.dataset.lastclicked;
-        var apiUrl = 'event/' + id;
-        var xhr = xhrDeleteRequest(apiUrl);
-        var image = document.getElementById("eventTextSignUps" + id).dataset.image_path;
-        deleteFunction(image.substring(2, image.length));
-        xhr.onload = function () { location.reload() };
-        xhr.send();
-    });
-}
-
-function createEditButton(proposal) {
-    console.log(proposal);
-    var editButton = document.createElement('a');
-    editButton.addEventListener('click', getSetupModalDates(dataElementId(proposal.proposal_id)));
-    editButton.addEventListener('click', generateEditButtonListener(
-        dataElementId(proposal.proposal_id), MODAL_FIELD_ROOT_ID, submitFunc, "proposal_id"
-    ));
-    editButton.addEventListener('click', function () {
-        var delBtn = document.getElementById('confirm-delete');
-        delBtn.dataset.lastclicked = proposal.proposal_id
-    });
-    editButton.dataset.toggle = 'modal';
-    editButton.dataset.target = '#myModal';
-    var innerParagraph3 = document.createElement('p');
-    innerParagraph3.setAttribute('class', 'editEvent');
-    innerParagraph3.setAttribute('id', 'editEvent' + proposal.proposal_id);
-    innerParagraph3.appendChild(document.createTextNode('Edit Event'));
-    editButton.appendChild(innerParagraph3);
-    return editButton;
-}
-
-function getSetupModalDates(dataElementId) {
-    return function (event) {
-        console.log('setting modal date');
-        setupModalDates(EVENT_DATE, dataElementId, "event_date");
-        setupModalDates(SIGNUPS_OPEN, dataElementId, "event_signup_open");
-        setupModalDates(SIGNUPS_CLOSE, dataElementId, "event_signup_close");
-    }
-}
-
-function setupModalDates(rootId, dataElementId, field) {
-    var date = new Date(document.getElementById(dataElementId).dataset[field]);
-    var day_event_date = document.getElementById(rootId + "_day");
-    var month_event_date = document.getElementById(rootId + "_month");
-    var year_event_date = document.getElementById(rootId + "_year");
-    day_event_date.value = date.getDate();
-    console.log(date.getDate());
-    month_event_date.value = MONTH_NAMES[date.getMonth()];
-    year_event_date.value = date.getFullYear();
-}
-
-
-function populateDateSelect(divId) {
-    var div = document.getElementById(divId);
-    div.appendChild(generateOptions(divId + '_month', 0, 12, 1, MONTH_NAMES));
-    div.appendChild(generateOptions(divId + '_day', 1, 31, 1));
-    div.appendChild(generateOptions(divId + '_year', 2016, 2019, 1));
-    console.log("In populateDateSelect. Printing the div Im modifying: ");
-    console.log(div);
 }
 
 function generateOptions(idAttr, start, end, step, names) {
@@ -519,79 +365,14 @@ function generateOptions(idAttr, start, end, step, names) {
     return select;
 }
 
-function submitFunc(json_data, put_id) {
-    // submitFunc
-    delete json_data.proposal_id;
-    json_data.event_date = composeDate(EVENT_DATE);
-    json_data.event_signup_open = composeDate(SIGNUPS_OPEN);
-    json_data.event_signup_close = composeDate(SIGNUPS_CLOSE);
-
-    var apiExtension = "events/" + put_id;
-    var xhr = xhrPutRequest(apiExtension);
-    xhr.onload = function () {
-        // location.reload();
-    }
-    var imageInput = document.getElementById('imageFile');
-    // if (imageInput.value != '') {
-    //     photoXhr.imageCallback(xhr, json_data, 'image_path');
-    //     var files = document.getElementById("imageFile").files;
-    //     var formData = new FormData();
-    //     formData.append("imageFile", files[0]);
-    //     photoXhr.send(formData);
-    //     imageInput.value = '';
-    // } else {
-    //     xhr.send(JSON.stringify(json_data));
-    // }
-
-    if (imageInput.value != '') {
-        var photoPost = new XMLHttpRequest();
-        photoPost.open('POST', location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/eventPhoto', true);
-        var files = imageInput.files;
-        var formData = new FormData();
-        formData.append("imageFile", files[0]);
-        console.log(files[0].name);
-        photoPost.onreadystatechange = function (e) {
-            if (photoPost.readyState == 4 && photoPost.status == 200) {
-                deleteFunction(json_data.image_path.substring(2, json_data.image_path.length));
-                xhr.onreadystatechange = function (e) {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        location.reload();
-                    }
-                };
-                json_data.image_path = JSON.parse(photoPost.response).filepath;
-                xhr.send(JSON.stringify(json_data));
-            }
-        }
-        photoPost.send(formData);
-    } else {
-        xhr.send(JSON.stringify(json_data));
-    }
-
-}
-
-function deleteFunction(filePath) {
-    var photoDeleteApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/photo';
-    var formData = new FormData();
-    var photoxhr = new XMLHttpRequest();
-    var dbObject = {};
-    dbObject["imagePath"] = 'resources' + filePath;
-
-    photoxhr.open('DELETE', photoDeleteApi, true);
-    photoxhr.setRequestHeader('Content-Type', 'application/json');
-
-    photoxhr.send(JSON.stringify(dbObject));
-}
-
 function composeDate(modalId) {
     var date = new Date();
-    var monthName = document.getElementById(modalId + '_month').value
+    var MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+    var monthName = document.getElementById(modalId + '_month').value;
     date.setMonth(MONTH_NAMES.indexOf(monthName));
     date.setFullYear(document.getElementById(modalId + '_year').value);
     date.setDate(document.getElementById(modalId + '_day').value);
-
-    console.log(date.getMonth() + '/' + (date.getDate() + 1) + '/' + date.getFullYear());
-    //date.setHours(DEFAULT_HOURS);   
-    //date.setMinutes(DEFAULT_MINUTES);
     return date;
 }
 
@@ -657,7 +438,6 @@ function unregister(eventID) {
     }
 
     xhr.send();
-    console.log("there's an xhr above me");
 
     var signUpSnackbar = document.getElementById("unregisterSnackbar");
     signUpSnackbar.className = "show";
@@ -682,34 +462,6 @@ function moreInformationFunction(triggeringElement) {
     }
 
 }
-
-/*
-function getOfficers() {
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/officers';
-    function createCORSRequest(method, url) {
-        var xhr = new XMLHttpRequest();
-        if ("withCredentials" in xhr) {
-            xhr.open(method, url, true);
-
-        } else if (typeof XDomainRequest != "undefined") {
-            xhr = new XDomainRequest();
-            xhr.open(method, url);
-        } else {
-            xhr = null;
-        }
-        return xhr;
-    }
-    var xhr = createCORSRequest('GET', url);
-    if (!xhr) {
-        throw new Error('CORS not supported');
-    }
-    xhr.onload = function () {
-    }
-    xhr.onerror = function () {
-        console.log("There was an error");
-    }
-    return xhr;
-}*/
 
 function getAttendees(id) {
     var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/' + id;
@@ -765,39 +517,6 @@ function showAttendeesModal(event) {
             attendees = attendees.slice(0, max_attendance);
         }
         populateListModal(header, attendees);
-//        console.log(response[0].max_attendance);
-//        console.log(response[0].attendees);
-//        var eventAttendees = response[0].attendees;
-//        var modal = document.getElementById('listModal');
-//        var span = document.getElementsByClassName("closeList")[0];
-//        var list = document.getElementById("list");
-//        var html = "";
-//
-//        var rightSide;
-//        if (!eventAttendees) {
-//            rightSide = 0;
-//        } else {
-//            rightSide = eventAttendees.length;
-//        }
-//
-//        for (var i = 0; i < rightSide; i++) {
-//            console.log("The person at " + i + " is: " + eventAttendees[i]);
-//            if (i == response[0].max_attendance) {
-//                html += "<p>------Wait list-------</p>"
-//            }
-//            html += "<br>" + eventAttendees[i];
-//        }
-//        list.innerHTML = "The attendees for this event are:";
-//        list.innerHTML += html;
-//        modal.style.display = "block";
-//        span.onclick = function () {
-//            modal.style.display = "none";
-//        }
-//        window.onclick = function (event) {
-//            if (event.target == modal) {
-//                modal.style.display = "none";
-//            }
-//        }
     }
 }
 
@@ -836,32 +555,3 @@ $(document).ready(function () {
     }
 
 });
-
-function submit() {
-    var modal = document.getElementById('editModal');
-    modal.style.display = "none";
-    nameNode.removeChild(nameNode.firstChild);
-    priceNode.removeChild(priceNode.firstChild);
-    imageNode.removeChild(imageNode.firstChild);
-    descriptionNode.removeChild(descriptionNode.firstChild);
-    signUpCloseDateNode.removeChild(signUpCloseDateNode.firstChild);
-
-    newEventName = nameInput.value;
-    newEventPrice = priceInput.value;
-    newEventImage = imageInput.value;
-    newEventDescription = descriptionInput.value;
-    newEventSignUpCloseDate = signUpCloseDateInput.value;
-
-    var element = eventSrc.parentElement;
-    element.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML = newEventDescription + " Sign-ups for this event will close on " + newEventSignUpCloseDate;
-    console.log(element.parentElement.querySelectorAll(":nth-child(6)")[0].innerHTML);
-    element.innerHTML = newEventName + " - " + newEventPrice;
-
-    var editPen = document.createElement("img");
-    editPen.setAttribute("src", "../images/edit.png");
-    element.appendChild(editPen);
-    editPen.addEventListener("click", function (e) {
-        showEditModal(e);
-    }, false);
-    saveEvent();
-}
