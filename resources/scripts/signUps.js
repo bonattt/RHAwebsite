@@ -836,7 +836,7 @@ function populateListModal(header, ls) {
     document.getElementById('listModal_header').innerHTML = header+'';
     var html = ''
     ls.forEach(function(line) {
-        html += line + '<br/>'
+        html += line + '@rose-hulman.edu;<br/>'
     });
     document.getElementById('listModal_body').innerHTML = html;
 }
