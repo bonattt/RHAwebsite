@@ -416,7 +416,8 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
         var processedDate = document.getElementById('detailsModal-processedDate');
         if(json_obj.dateprocessed) {
             processedDate.value = json_obj.dateprocessed;
-            processedCheck.checked;
+            processedDate.disabled = true;
+            processedCheck.checked = true;
             processedCheck.disabled = true;
             description.disabled = true;
             accountCode.disabled = true;
