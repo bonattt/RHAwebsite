@@ -759,9 +759,10 @@ function showAttendeesModal(event) {
         console.log(attendees);
         var max_attendance = response[0].max_attendance;
 
-        attendees = attendees.slice(0, max_attendance);
         if ((attendees == null) || (attendees.length == 0)) {
             attendees = ["there is nobody signed up for this event!"];
+        } else {
+            attendees = attendees.slice(0, max_attendance);
         }
         populateListModal(header, attendees);
 //        console.log(response[0].max_attendance);
