@@ -35,7 +35,7 @@ function displayPastEvents() {
             html += "<div class='costEventDateWrapper'> <h3 class='cost'>$" + cost + "</h3>";
             html += "<h3 class='eventDate'>" + (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear() + "</h3></div><br/><p class='eventDescription'>" + proposal[i].description + "</p><br/><br/>";
             html += "</div>";
-            html += "<div class='eventActions'><a onclick='showListModal(" + proposal[i].proposal_id + ")'><p class='viewListLink'>View List</p></a></div></div></div>";
+            html += "<div class='eventActions'><a data-toggle='modal' data-target='#listModal' onclick='showAttendeesModal(" + proposal[i].proposal_id + ")'><p class='viewListLink'>Attendees</p></a></div></div></div>";
 
             var tileArea = document.getElementsByClassName("eventTileArea")[0];
             tileArea.innerHTML += html;
@@ -323,16 +323,23 @@ function getEventActionDiv(proposal, username, signUpOpenDate, attendees) {
     }
 
     var showListLink = document.createElement('a');
-    showListLink.addEventListener('click', function () { showListModal(proposal.proposal_id) });
+    showListLink.addEventListener('click', function () { showAttendeesModal(proposal.proposal_id) });
+    showListLink.dataset.toggle = 'modal';
+    showListLink.dataset.target = '#listModal';
+
     var innerParagraph2 = document.createElement('p');
     innerParagraph2.setAttribute('class', 'viewListLink');
-    innerParagraph2.appendChild(document.createTextNode('View List'));
+    innerParagraph2.appendChild(document.createTextNode('Attendees'));
+
     showListLink.appendChild(innerParagraph2);
     eventActionDiv.appendChild(showListLink);
 
     if (isAdmin) {
         var showEmailLink = document.createElement('a');
+        showEmailLink.dataset.toggle = "modal";
+        showEmailLink.dataset.target = "#listModal";
         showEmailLink.addEventListener('click', function () { showEmailModal(proposal.proposal_id) });
+
         var innerParagraph3 = document.createElement('p');
         innerParagraph3.setAttribute('class', 'viewListLink');
         innerParagraph3.appendChild(document.createTextNode('View Emails'));
@@ -480,42 +487,36 @@ function getAttendees(id) {
     }
     return xhr;
 }
+function makeListLinks() {
 
-function showListModal(event) {
+    listLinks = document.getElementsByClassName("viewListLink");
+    for (var i = 0; i < listLinks.length; i++) {
+        var listLink = listLinks[i];
+        listLink.addEventListener("click", function (e) { showAttendeesModal(e); }, false);
+    }
+
+    var isAdmin = true;
+    var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
+
+    newEvent = {};
+};
+
+function showAttendeesModal(event) {
     var xhr = getAttendees(event);
     xhr.send();
     xhr.onload = function () {
         var response = JSON.parse(xhr.responseText);
-        var eventAttendees = response[0].attendees;
-        var modal = document.getElementById('listModal');
-        var span = document.getElementsByClassName("closeList")[0];
-        var list = document.getElementById("list");
-        var html = "";
+        var header = 'List of Attendees';
+        var attendees = response[0].attendees;
+        console.log(attendees);
+        var max_attendance = response[0].max_attendance;
 
-        var rightSide;
-        if (!eventAttendees) {
-            rightSide = 0;
+        if ((attendees == null) || (attendees.length == 0)) {
+            attendees = ["there is nobody signed up for this event!"];
         } else {
-            rightSide = eventAttendees.length;
+            attendees = attendees.slice(0, max_attendance);
         }
-
-        for (var i = 0; i < rightSide; i++) {
-            if (i == response[0].max_attendance) {
-                html += "<p>------Wait list-------</p>"
-            }
-            html += "<br>" + eventAttendees[i];
-        }
-        list.innerHTML = "The attendees for this event are:";
-        list.innerHTML += html;
-        modal.style.display = "block";
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+        populateListModal(header, attendees);
     }
 }
 
@@ -524,41 +525,26 @@ function showEmailModal(event) {
     xhr.send();
     xhr.onload = function () {
         var response = JSON.parse(xhr.responseText);
+        var header = "Attendee Email List";
         var eventAttendees = response[0].attendees;
-        var modal = document.getElementById('listModal');
-        var span = document.getElementsByClassName("closeList")[0];
-        var list = document.getElementById("list");
-        var html = "";
-
-        var rightSide;
-        if (!eventAttendees) {
-            rightSide = 0;
+        if (eventAttendees == null) {
+            eventAttendees = ["there is nobody signed up for this event!"];
         } else {
-            rightSide = eventAttendees.length;
-        }
-
-        for (var i = 0; i < rightSide; i++) {
-            html += "<br>" + eventAttendees[i] + "@rose-hulman.edu"
-            if (i == response[0].max_attendance - 1) {
-                html += "<p>------Wait list-------</p>"
-                continue;
-            }
-            if (i != rightSide - 1) {
-                html += "; ";
+            for (var i = 0; i < eventAttendees.length; i++) {
+                eventAttendees[i] += '@rose-hulman.edu;'
             }
         }
-        list.innerHTML = "The emails for this event are:";
-        list.innerHTML += html;
-        modal.style.display = "block";
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+        populateListModal(header, eventAttendees);
     }
+}
+
+function populateListModal(header, ls) {
+    document.getElementById('listModal_header').innerHTML = header+'';
+    var html = ''
+    ls.forEach(function(line) {
+        html += line + '<br/>'
+    });
+    document.getElementById('listModal_body').innerHTML = html;
 }
 
 $(document).ready(function () {
