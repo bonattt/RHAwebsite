@@ -1,7 +1,9 @@
 
 port = 8000;
+host = '127.0.0.1';
 
 http = require('http');
+https = require('https');
 fs = require('fs');
 url = require('url');
 express = require('express');
@@ -10,6 +12,12 @@ helmet = require('helmet');
 app = express();
 
 
+var key = fs.readFileSync('./rha-key.pem');
+var cert = fs.readFileSync('./rha-cert.pem');
+var https_options = {
+    "key": key,
+    "cert": cert
+};
 
 var upload = multer({ dest: 'resources/images/' });
 var path = require('path');
@@ -241,11 +249,13 @@ app.post('/foobar', function (req, res) {
   });
 });
 
-var server = app.listen(port, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log("Example app listening at http://%s:%s", host, port)
-});
+var server = https.createServer(https_options, app).listen(port, host);
+
+//var server = app.listen(port, function () {
+//  var host = server.address().address;
+//  var port = server.address().port;
+//  console.log("Example app listening at http://%s:%s", host, port)
+//});
 
 
 var address = 'http://127.0.0.1:' + port + '/';
