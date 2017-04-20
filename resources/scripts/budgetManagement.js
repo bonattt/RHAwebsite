@@ -3,27 +3,27 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
 ]
 
 var gridData = [{
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     },
     {
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     },
     {
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     },
     {
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     },
     {
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     },
     {
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     }
 ]
@@ -131,11 +131,13 @@ function setupButtons() {
 
     var updatePaymentButton = document.getElementById('detailsModal-confirm');
     updatePaymentButton.addEventListener('click', function () {
+        document.getElementById('modal-header').click();
         var apiUri = 'payment/' + current_id;
         var xhr = xhrPutRequest(apiUri);
         var receiptsObject = [];
         var total = 0.0;
         var descText = document.getElementById('detailsModal-description').innerHTML;
+        var grid = $("#receiptsDetailGrid").swidget();
         for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
             var currentRow = grid.contentTable[0].rows[i];
             var dateText = currentRow.childNodes[1].innerHTML;
@@ -145,13 +147,15 @@ function setupButtons() {
                 gridData[i].date = dateToSend;
                 if (gridData[i].amount != 0) {
                     receiptsObject.push(gridData[i]);
-                    total += gridData[i].amount;
+                    total += parseFloat(gridData[i].amount);
                 }
             }
         }
 
         var json_obj = {
-            "receipts": {"receipts": receiptsObject},
+            "receipts": {
+                "receipts": receiptsObject
+            },
             "amountused": total,
             "description": descText
         }
@@ -344,85 +348,139 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
         accountCode.value = json_obj.accountcode;
 
         var receiptList = json_obj.receipts.receipts;
-
-        for (var i = 0; i < gridData.length; i++) {
-            if (receiptList[i] != null) {
-                gridData[i] = receiptList[i];
-            }
-        }
-        var grid = $("#receiptsDetailGrid").shieldGrid({
-            dataSource: {
-                data: gridData,
-                schema: {
-                    fields: {
-                        amount: {
-                            path: "amount",
-                            type: Number
-                        },
-                        date: {
-                            path: "date",
-                            type: Date
-                        }
-                    }
-                }
-            },
-            events: {
-                save: function (e) {
-                    updateTotal();
-                }
-            },
-            rowHover: false,
-            columns: [{
-                    field: "amount",
-                    title: "Amount",
-                    format: function (value) {
-                        if (value == null) {
-                            return 'New amount'
-                        } else {
-                            return value;
-                        }
-                    },
-                    width: "10px"
-                },
-                {
-                    field: "date",
-                    title: "Date",
-                    format: function (value) {
-                        var today = new Date();
-                        var day = value.getDate();
-                        var month = value.getMonth() + 1;
-                        var year = value.getFullYear();
-                        var date = month + '/' + day + '/' + year;
-                        if (day == today.getDate() &&
-                            month == today.getMonth() + 1 &&
-                            year == today.getFullYear()) {
-                            return 'Add a date';
-                        } else {
-                            return date;
-                        }
-                    },
-                    type: Date,
-                    width: "20px"
-                }
-            ],
-            editing: {
-                enabled: true,
-                event: "click",
-                type: "cell",
-                insertNewRowAt: "pagebottom"
-            }
-        });
         var processedCheck = document.getElementById('detailsModal-processedCheck');
         var processedDate = document.getElementById('detailsModal-processedDate');
-        if(json_obj.dateprocessed) {
+
+        if (json_obj.dateprocessed) {
             processedDate.value = json_obj.dateprocessed;
             processedDate.disabled = true;
             processedCheck.checked = true;
             processedCheck.disabled = true;
             description.disabled = true;
             accountCode.disabled = true;
-            grid.disabled = true;
-        } 
+            $("#receiptsDetailGrid").shieldGrid({
+                dataSource: {
+                    data: receiptList,
+                    schema: {
+                        fields: {
+                            amount: {
+                                path: "amount",
+                                type: Number,
+                            },
+                            date: {
+                                path: "date",
+                                type: Date
+                            }
+                        }
+                    }
+                },
+                columns: [{
+                        field: "amount",
+                        title: "Amount",
+                        format: function (value) {
+                            if (value == null || value == 0) {
+                                return 'Add an amount'
+                            } else {
+                                return "$" + parseFloat(value).toFixed(2);
+                            }
+                        },
+                        width: "10px"
+                    },
+                    {
+                        field: "date",
+                        title: "Date",
+                        format: function (value) {
+                            var today = new Date();
+                            var day = value.getDate();
+                            var month = value.getMonth() + 1;
+                            var year = value.getFullYear();
+                            var date = month + '/' + day + '/' + year;
+                            if (day == today.getDate() &&
+                                month == today.getMonth() + 1 &&
+                                year == today.getFullYear()) {
+                                return 'Add a date';
+                            } else {
+                                return date;
+                            }
+                        },
+                        type: Date,
+                        width: "20px"
+                    }
+                ],
+                editing: {
+                    enabled: false
+                }
+            });
+
+        } else {
+            for (var i = 0; i < gridData.length; i++) {
+                if (receiptList[i] != null) {
+                    gridData[i] = receiptList[i];
+                }
+            }
+            $("#receiptsDetailGrid").shieldGrid({
+                dataSource: {
+                    data: gridData,
+                    schema: {
+                        fields: {
+                            amount: {
+                                path: "amount",
+                                type: Number
+                            },
+                            date: {
+                                path: "date",
+                                type: Date
+                            }
+                        }
+                    }
+                },
+                events: {
+                    save: function (e) {
+                        updateTotal("#receiptsDetailGrid");
+                    }
+                },
+                rowHover: false,
+                columns: [{
+                        field: "amount",
+                        title: "Amount",
+                        format: function (value) {
+                            if (value == null || value == 0) {
+                                return 'Add an amount'
+                            } else {
+                                return "$" + parseFloat(value).toFixed(2);
+                            }
+                        },
+                        width: "10px"
+                    },
+                    {
+                        field: "date",
+                        title: "Date",
+                        format: function (value) {
+                            var today = new Date();
+                            var day = value.getDate();
+                            var month = value.getMonth() + 1;
+                            var year = value.getFullYear();
+                            var date = month + '/' + day + '/' + year;
+                            if (day == today.getDate() &&
+                                month == today.getMonth() + 1 &&
+                                year == today.getFullYear()) {
+                                return 'Add a date';
+                            } else {
+                                return date;
+                            }
+                        },
+                        type: Date,
+                        width: "20px"
+                    }
+                ],
+                editing: {
+                    enabled: true,
+                    event: "click",
+                    type: "cell",
+                    insertNewRowAt: "pagebottom"
+                }
+            });
+        }
     });
 
     return link;
@@ -479,8 +537,8 @@ function setAdmin() {
     setupEventSelector();
 }
 
-function updateTotal() {
-    var grid = $("#receiptsGrid").swidget();
+function updateTotal(gridToUpdate) {
+    var grid = $(gridToUpdate).swidget();
     var totalInput = document.getElementById('paymentModal-amountUsed');
     var total = 0.0;
 
@@ -488,12 +546,12 @@ function updateTotal() {
         var currentRow = grid.contentTable[0].rows[i];
         var currentNum;
         if (currentRow.childNodes[0].childNodes[0].childNodes[0] == null) {
-            currentNum = parseFloat(currentRow.childNodes[0].innerHTML);
+            currentNum = parseFloat(currentRow.childNodes[0].innerHTML.substring(1));
         } else {
             currentNum = parseFloat(currentRow.childNodes[0].childNodes[0].childNodes[0].value);
         }
-        total += currentNum;
-        gridData[i].amount = currentNum.toFixed(2);
+        total += parseFloat(currentNum);
+        gridData[i].amount = currentNum;
     }
     totalInput.value = total.toFixed(2).toString();
 }
@@ -531,7 +589,7 @@ $(document).ready(function () {
         },
         events: {
             save: function (e) {
-                updateTotal();
+                updateTotal("#receiptsGrid");
             }
         },
         rowHover: false,
@@ -539,10 +597,10 @@ $(document).ready(function () {
                 field: "amount",
                 title: "Amount",
                 format: function (value) {
-                    if (value == null) {
-                        return 'New amount'
+                    if (value == null || value == 0) {
+                        return 'Add an amount'
                     } else {
-                        return value;
+                        return "$" + parseFloat(value).toFixed(2);
                     }
                 },
                 width: "10px"
