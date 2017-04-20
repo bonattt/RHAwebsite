@@ -7,7 +7,7 @@ body {
 h1{
 	color: #696969;
 	text-align: center;
-	font-size: 4vw;
+	font-size: 3.4vw;
 	margin-top: 20pt;
 }
 
@@ -419,8 +419,8 @@ h3{
 #proposalsPage > h1 {
 	position: absolute;
 	right: 32.5%;
-	top: 2.5%;
-	font-size: 400%;
+	top: 0%;
+	font-size: 3.4vw;
 	text-align: left;
 	font-family: Stencil Std, fantasy, sans-serif;
 }
@@ -439,13 +439,13 @@ h3{
 	/*float: right;*/
 	margin-left: auto;
 	margin-right: auto;
-	font-size: 1.11vw;
+	font-size: 0.9vw;
 	/*font-size: 1.25vw;*/
 }
 
 #directions > p {
 	font-weight: bold;
-	font-size: 1.15vw;
+	font-size: 0.95vw;
 	font-family: "Arial Black", sans-serif;
 }
 
@@ -456,17 +456,18 @@ h3{
 	bottom: -12%;
 	left: -2%;
 	width: 50%;
+	height: 25%;
 }
 
 .propbutton > button {
 	background-color: rgb(136, 0, 21);
 	width: 49%;
-	height: 80px;
+	height: 90%;
 }
 
 
 #propPic1 {
-	width: 25%;
+	width: 28%;
 	height: auto;
 	/*min-height: ;*/
 	/*min-width: ;*/
@@ -476,7 +477,7 @@ h3{
 }
 
 #propPic2 {
-	width: 23%;
+	width: 25%;
 	height: auto;
 	position: absolute;
 	left: 18%;
@@ -485,7 +486,8 @@ h3{
 
 #deadline {
 	text-align: center;
-	font-size: 10pt;
+	/*font-size: 10pt;*/
+	font-size: 1vw;
 	font-weight: bold;
 	color: black;
 }
@@ -519,7 +521,7 @@ h3{
 .submitMaintext {
 	text-align: center;
 	/*font-size: 300%;*/
-	font-size: 20pt;
+	font-size: 1.5vw;
 	display: block;
 	color: white;
 	text-decoration: none;
@@ -527,7 +529,7 @@ h3{
 
 .submitEquipmentSubtext {
 	text-align: center;
-	font-size: 8pt;
+	font-size: 0.8vw;
 	display: block;
 	color: white;
 	text-decoration: none;
@@ -535,6 +537,7 @@ h3{
 
 #submitSubtext {
 	color: white;
+	font-size: 0.9vw;
 }
 
 #submit:hover {
@@ -548,8 +551,8 @@ h3{
 	font-weight: bold;
 	color: rgb(137, 0, 21);
 	text-align: center;
-	font-size: 11pt;
-	/*font-size: 1.1vw;*/
+	/*font-size: 11pt;*/
+	font-size: 1.1vw;
 }
 
 #templateDownload {
@@ -560,7 +563,7 @@ h3{
 #addProposal {
 	text-align: center;
 	color: white;
-	font-size: 150%;
+	font-size: 1.5vw;
 	display: none;
 	float: right;
 	margin-left: auto;
@@ -737,7 +740,23 @@ height: 150pt;
     bottom: 30px;
 }
 
-#snackbar.show, #unregisterSnackbar.show, #notLoggedInSnackbar.show {
+#proposalsSnackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #FFFFFF;
+	color: #000;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1051;
+    left: 50%;
+    bottom: 30px;
+	border: 1px solid black;
+}
+
+#snackbar.show, #unregisterSnackbar.show, #notLoggedInSnackbar.show, #proposalsSnackbar.show {
     visibility: visible;
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
@@ -976,6 +995,7 @@ height: 150pt;
 	left: 0;
 	width: 40%;
 	font-weight: bold;
+	font-size: 1vw;
 	color: black;
 }
 

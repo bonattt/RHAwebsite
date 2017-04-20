@@ -73,8 +73,6 @@ function createColumnHead(name) {
     newTd.setAttribute('align', 'middle');
     newTd.setAttribute('width', 200);
     newTd.innerHTML = '<b>' + name + '</b>';
-    newTd.dataset.toggle = "modal";
-    newTd.dataset.target = "#infoModal";
     return newTd;
 }
 
@@ -202,6 +200,12 @@ function addRowListener(tr, proposal) {
         });
         unMarshalDates(proposal);
         document.getElementById('proposalModal-paid').checked = proposal.paid;
+        var imageIsPresentLabel = document.getElementById('proposalModal-imageIsPresent');
+        if (proposal.image_path == null) {
+            imageIsPresentLabel.innerHTML = 'This proposal currently has no image !!!!'
+        } else {
+            imageIsPresentLabel.innerHTML = 'There is already a image for this proposal. '
+        }
     });
 }
 
@@ -210,57 +214,80 @@ function unMarshalDates(proposal) {
     var event_date = document.getElementById('proposalModal-event_date');
     var event_signup_open = document.getElementById('proposalModal-event_signup_open');
     var event_signup_close = document.getElementById('proposalModal-event_signup_close');
-    if (BROWSER.includes("chrome")) {
-        proposed_date.value = unMarshalHtml5(proposal.proposed_date);
-        event_date.value = unMarshalHtml5(proposal.event_date);
-        event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
-        event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
 
-//    } else if (BROWSER.includes("firefox")) {
-    } else {
-        proposed_date.value = proposal.proposed_date;
-        event_date.value = proposal.event_date;
-        event_signup_open.value = proposal.event_signup_open;
-        event_signup_close.value = proposal.event_signup_close;
-    }
+    proposed_date.value = unMarshalHtml5(proposal.proposed_date);
+    event_date.value = unMarshalHtml5(proposal.event_date);
+    event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
+    event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
+//    if (BROWSER.includes("chrome")) {
+//        proposed_date.value = unMarshalHtml5(proposal.proposed_date);
+//        event_date.value = unMarshalHtml5(proposal.event_date);
+//        event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
+//        event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
+//
+////    } else if (BROWSER.includes("firefox")) {
+//    } else {
+//        proposed_date.value = proposal.proposed_date;
+//        event_date.value = proposal.event_date;
+//        event_signup_open.value = proposal.event_signup_open;
+//        event_signup_close.value = proposal.event_signup_close;
+//    }
 }
 
 function marshalAllDates(json_data) {
+    var rawDates = []
+
     var entry = document.getElementById('proposalModal-proposed_date');
+    rawDates.proposed_date = entry.value;
     var date = marshalDateString(entry.value); // new Date(entry.value);
     json_data.proposed_date = date;
 
     entry = document.getElementById('proposalModal-event_date');
+    rawDates.event_date = entry.value;
     date = marshalDateString(entry.value); // new Date(entry.value);
     json_data.event_date = date;
 
     entry = document.getElementById('proposalModal-event_signup_open');
+    rawDates.event_signup_open = entry.value;
     date = marshalDateString(entry.value); // new Date(entry.value);
     json_data.event_signup_open = date;
 
     entry = document.getElementById('proposalModal-event_signup_close');
+    rawDates.event_signup_close = entry.value;
     date = marshalDateString(entry.value); // new Date(entry.value);
     json_data.event_signup_close = date;
+
+    return verifyDates(rawDates);
 }
 
 function marshalDateString(dateStr) {
-    var date = new Date(dateStr);
+    console.log('dateStr: ' + dateStr);
+    var dateList = dateStr.split('-')
+    var date = new Date();
+    date.setYear(dateList[0]);
+    date.setMonth(dateList[1]-1);
+    date.setDate(dateList[2]);
+
 //    date.setMonth(date.getMonth()+1);
     return date;
 }
 
 function unMarshalHtml5(dateStr) {
+    if (dateStr == null) {
+        return '';
+    }
+
     var date = new Date(dateStr);
     var msg = date.getFullYear();
     msg += '-';
-    var month = date.getMonth();
+    var month = date.getMonth()+1;
     if (month < 10) {month = "0" + month}
     msg += month;
     msg += '-'
     var day = date.getDate();
     if (day < 10) {day = "0" + day}
     msg += day;
-    return date
+    return msg;
 }
 
 function doClosure(proposal, i, tdused, tdreserve) {
@@ -319,41 +346,22 @@ function setupModalButtons() {
             json_data[attr] = entry.value;
         });
         json_data.paid = document.getElementById('proposalModal-paid').checked;
-        marshalAllDates(json_data);
+        if (marshalAllDates(json_data)) {
+            return; /* a date was formated incorrectly */
+        }
+
         json_data.image_path = document.getElementById('proposal_name'+last_proposal_clicked).dataset.image_path;
         var apiUri = 'events/' + id;
         var xhr = xhrPutRequest(apiUri);
 
         xhr.onload = function() {
-//            location.reload();
+            location.reload();
         }
         console.log(json_data);
         removeNullValues(json_data, ["image_path"]);
 
-        var required_fields = ["proposed_date", "event_date", "proposal_name", "proposer","money_requested",
-                    "money_allocated", "cost_to_attendee", "week_proposed", "quarter_proposed"];
-        var missing_fields = [];
-        required_fields.forEach(function(field) {
-            if (! json_data[field]) {
-                missing_fields.push(field);
-                console.log(field + " is invalid");
-                delete json_data[field];
-            }
-            else if (Object.prototype.toString.call(json_data[field]) === '[object Date]') {
-                if (isNaN( json_data[field].getTime())) {
-                    missing_fields.push(field);
-                    console.log(field + " is an invalid date");
-                    delete json_data[field];
-                }
-            }
-        });
+        if (verifyFields(json_data)) { return; /* something is wrong in the data entered. */ }
 
-        if (missing_fields.length == 0) {
-            $("#proposalModal").modal("hide");
-        } else {
-            displayMissingFieldWarning(missing_fields);
-            return;
-        }
 
         var files = document.getElementById("proposalModal-imageFile").files;
         if(files.length > 0) {
@@ -363,6 +371,7 @@ function setupModalButtons() {
             photoXhr.send(files[0]);
         } else {
             xhr.send(JSON.stringify(json_data));
+//            console.log(document.getElementById(""))
         }
         console.log(json_data);
         document.getElementById("proposalModal-imageFile").value = '';
@@ -379,17 +388,126 @@ function setupModalButtons() {
     });
 }
 
+function verifyFields(json_data) {
+
+    var required_fields = ["proposed_date", "event_date", "proposal_name", "proposer","money_requested",
+                "money_allocated", "cost_to_attendee", "week_proposed", "quarter_proposed"];
+    var missing_fields = getInvalidFields(json_data, required_fields);
+
+    if (missing_fields.length == 0) {
+        $("#proposalModal").modal("hide");
+    } else {
+        displayMissingFieldWarning(missing_fields);
+        return true;
+    }
+    return false;
+}
+
+function verifyDates(dates) {
+    var invalid_date_fields = getInvalidDateFields(dates);
+    if (invalid_date_fields.length == 0) {
+        $("#proposalModal").modal("hide");
+    } else {
+        displayInvalidDateWarning(invalid_date_fields);
+        return true;
+    }
+    return false;
+}
+
+function getInvalidFields(json_data, required_fields) {
+    var missing_fields = []
+    required_fields.forEach(function(field) {
+        if (! json_data[field]) {
+            missing_fields.push(field);
+            console.log(field + " is invalid");
+            delete json_data[field];
+        }
+        else if (Object.prototype.toString.call(json_data[field]) === '[object Date]') {
+            if (isNaN( json_data[field].getTime())) {
+                missing_fields.push(field);
+                console.log(field + " is an invalid date");
+                delete json_data[field];
+            }
+        }
+    });
+    return missing_fields;
+}
+
+function getInvalidDateFields(json_data) {
+    var invalid_fields = []
+    var date_fields = ['proposed_date', 'event_date', 'event_signup_open', 'event_signup_close']
+
+    for (var i = 0; i < date_fields.length; i++) {
+        var f = date_fields[i]
+        if (dateInputValueInvalid(json_data[f])) {
+            invalid_fields.push(f)
+        }
+    }
+
+//    if (dateInputValueInvalid(json_data.proposed_date)) {
+//        invalid_fields.push("proposed_date")
+//    }
+//
+//    if (dateInputValueInvalid(json_data.event_date)) {
+//        invalid_fields.push("event_date")
+//    }
+//
+//    if (dateInputValueInvalid(json_data.event_signup_open)) {
+//        invalid_fields.push("event_signup_open")
+//    }
+//
+//    if (dateInputValueInvalid(json_data.event_signup_close)) {
+//        invalid_fields.push("event_signup_close")
+//    }
+    return invalid_fields;
+}
+
+/**
+ *  returns true if the input is not a valid date string that would be returned by HTML5.
+ *  returns false if the input is okay
+ */
+function dateInputValueInvalid(value) {
+    if (value == null) { return false}
+    if (typeof value == "undefined") { return false}
+
+    var valSplit = value.split('-');
+    if (valSplit.length != 3) { return 'incorrect delimiters'; }
+    if (isNaN(valSplit[0]) || isNaN(valSplit[1]) || isNaN(valSplit[2])) { return 'date contains non numbers'; }
+    if ( valSplit[0]=='' || valSplit[1]=='' || valSplit[2]=='' ) { return 'date contains blank'; }
+    if (valSplit[1] < 1 || valSplit[1] > 12) { return "month out of range" }
+    if (valSplit[2] > 31 || valSplit[2] < 1) { return "day-of-month out of range" }
+    if (valSplit[1] == 2 && valSplit[2] > 28) { return "day-of-month out of range for this month" }
+    if ((valSplit[1] == 4 || valSplit[1] == 6 || valSplit[1] == 9 || valSplit[1] == 11) &&
+            valSplit[2] > 30) { return "day-of-month out of range for this month" }
+    return false;
+}
+
+function displayInvalidDateWarning(invalid_dates) {
+    var msg = 'some dates were enterd incorrectly: <br/>';
+    invalid_dates.forEach(function(field) {
+        msg += '<b>' + field.replace(/_/g, ' ') + '</b> was entered incorrectly<br/>';
+    });
+    displayWarningModal(msg, 6000)
+}
+
 function displayMissingFieldWarning(missing_fields) {
-    var infoBody = document.getElementById("infoModal-body");
     var msg = 'some required fields were left blank: <br/>';
     missing_fields.forEach(function(field) {
         msg += 'please include the <b>' + field.replace(/_/g, ' ') + '</b><br/>';
     });
+    displayWarningModal(msg, 6000)
+}
+
+function displayWarningModal(msg, duration) {
+
+    var infoBody = document.getElementById("infoModal-body");
     infoBody.innerHTML = msg;
     $("#infoModal").modal("show");
-    setTimeout(function() {
-        $("#infoModal").modal("hide");
-    }, 6000);
+    if (typeof duration !== "undefined") {
+        setTimeout(function() {
+            $("#infoModal").modal("hide");
+        }, duration);
+    }
 }
 
 function removeNullValues(json_data, exclude) {
