@@ -46,9 +46,7 @@ function setupEventSelector() {
     xhr.onload = function() {
         var selector = document.getElementById('paymentModal-event');
         var eventList = JSON.parse(xhr.responseText)
-        console.log(eventList);
         eventList.forEach(function(event) {
-            console.log('adding ' + event.proposal_name);
             var option = document.createElement('option');
             option.setAttribute('id', 'eventOption'+event.proposal_id);
             option.setAttribute('value', event.proposal_id);
