@@ -27,11 +27,8 @@
 				<div id="proposalModalBody" class="modal-body">
 
 					<label>Proposal Name</label> <br/>
-					<input id="proposalModal-proposal_name" type="text" value="name" size="50"> </input><br/><br/>
-
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<label>Proposer</label>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input id="proposalModal-proposal_name" type="text" value="name" size="50"> </input><br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;
+					<label>Proposer</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<label>Max Attendees</label>
 					<br/>
 					<input id="proposalModal-proposer" type="text" value="name"> </input> &nbsp;&nbsp;
@@ -74,15 +71,13 @@
 					</div> <br/>
 
 					<div>
-						<label>Week Proposed </label> &nbsp;&nbsp;
-						<label>Quarter Proposed </label> <br/>
-						<input type="number" value="0" id="proposalModal-week_proposed" min="0" max="11"> </input> &nbsp;&nbsp;
-
-
-						<input type="number" value="0" id="proposalModal-quarter_proposed" min="0" max="3"> </input> &nbsp;&nbsp;
+						<label>Week Proposed </label> &nbsp;&nbsp; <br/>
+						<input type="number" value="0" id="proposalModal-week_proposed" min="0" max="11"> </input> &nbsp;&nbsp; <br/>
+						<label>Quarter Proposed </label>
+						<select class="form-control" id="quarterProposed" name="quarterProposed"></select>
 					</div>
 					<br/>
-                    <label for="proposalModal-imageFile">Image<input type="file" name="imageFile" id="proposalModal-imageFile"></label>
+					<label for="proposalModal-imageFile">Image<input type="file" name="imageFile" id="proposalModal-imageFile"></label>
 					<label id="proposalModal-imageIsPresent"> </label>
 				</div>
 				<div class="modal-footer">

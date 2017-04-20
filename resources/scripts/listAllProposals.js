@@ -1,32 +1,31 @@
 const FIELDS = [
-        "proposal_name",
-        "money_requested",
-        "money_allocated",
-        "week_proposed",
-        "quarter_proposed",
-        "proposer",
-        "description",
-        "cost_to_attendee",
-        "max_attendance",
-    ]
+    "proposal_name",
+    "money_requested",
+    "money_allocated",
+    "week_proposed",
+    "proposer",
+    "description",
+    "cost_to_attendee",
+    "max_attendance",
+]
 var body = document.getElementsByTagName('body')[0];
 var last_proposal_clicked = -1;
 
-const BROWSER = (function(){
+const BROWSER = (function () {
     // Code snippet from Stack Overflow
     // http://stackoverflow.com/questions/2400935/browser-detection-in-javascript
-    var ua= navigator.userAgent, tem,
-    M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-    if(/trident/i.test(M[1])){
-        tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
-        return 'IE '+(tem[1] || '');
+    var ua = navigator.userAgent, tem,
+        M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if (/trident/i.test(M[1])) {
+        tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+        return 'IE ' + (tem[1] || '');
     }
-    if(M[1]=== 'Chrome'){
-        tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
-        if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+    if (M[1] === 'Chrome') {
+        tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+        if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
     }
-    M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
-    if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
+    M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+    if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
     return M.join(' ');
 })().toLowerCase();
 
@@ -57,6 +56,21 @@ function displayProposals(isAdmin) {
         body.appendChild(paragraph);
         drawTable(proposalsForCurrentYear.reverse(), isAdmin);
     }
+    var selector = document.getElementById('quarterProposed');
+    var fallOption = document.createElement('option');
+    fallOption.setAttribute('value', 'Fall');
+    fallOption.innerHTML = 'Fall';
+    selector.appendChild(fallOption);
+
+    var winterOption = document.createElement('option');
+    winterOption.setAttribute('value', 'Winter');
+    winterOption.innerHTML = 'Winter';
+    selector.appendChild(winterOption);
+
+    var springOption = document.createElement('option');
+    springOption.setAttribute('value', 'Spring');
+    springOption.innerHTML = 'Spring';
+    selector.appendChild(springOption);
     xhr.send();
 }
 
@@ -107,18 +121,18 @@ function drawTable(proposals, isAdmin) {
         if (isAdmin) {
             addRowListener(tr, proposals[i]);
         }
-        else {console.log("not adding listener " + id)}
+        else { console.log("not adding listener " + id) }
         var tdname = document.createElement('td');
         tdname.innerHTML = proposals[i].proposal_name;
         tdname.setAttribute("id", "proposal_name" + id);
         tdname.dataset.image_path = proposals[i].image_path;
 
         var tddate = getDateTD(proposals[i].event_date, id);
-//        document.createElement('td');
-//        var eventDate = new Date(proposals[i].event_date);
-//        eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
-//        tddate.innerHTML = eventDate;
-//        tddate.setAttribute("id", "event_date" + id);
+        //        document.createElement('td');
+        //        var eventDate = new Date(proposals[i].event_date);
+        //        eventDate = (eventDate.getMonth() + 1) + "/" + eventDate.getUTCDate() + "/" + eventDate.getFullYear();
+        //        tddate.innerHTML = eventDate;
+        //        tddate.setAttribute("id", "event_date" + id);
 
         var tdProposedDate = getDateTD(proposals[i].proposed_date, id);
 
@@ -127,7 +141,16 @@ function drawTable(proposals, isAdmin) {
         tdweek.setAttribute("id", "week_proposed" + id);
 
         var tdquarter = document.createElement('td');
-        tdquarter.innerHTML = proposals[i].quarter_proposed;
+
+        var quarter = proposals[i].quarter_proposed;
+        if (quarter == 0) {
+            quarter = 'Fall';
+        } else if (quarter == 1) {
+            quarter = 'Winter';
+        } else {
+            quarter = 'Spring';
+        }
+        tdquarter.innerHTML = quarter;
         tdquarter.setAttribute("id", "quarter_proposed" + id);
 
         var tdrequested = document.createElement('td');
@@ -166,7 +189,7 @@ function drawTable(proposals, isAdmin) {
 function getDateTD(date, id) {
     var tdProposedDate = document.createElement('td');
     var proposedEventDate;
-    if (! date) {
+    if (!date) {
         proposedEventDate = "no date!"
         tdProposedDate.style.color = 'red';
     } else {
@@ -182,21 +205,33 @@ function addRowListener(tr, proposal) {
     var id = proposal.proposal_id;
     tr.setAttribute('data-toggle', 'modal');
     tr.setAttribute('data-target', '#proposalModal');
-    tr.addEventListener('click', function() {
+    tr.addEventListener('click', function () {
         last_proposal_clicked = id;
         var entry;
-        FIELDS.forEach(function (attr){
+        FIELDS.forEach(function (attr) {
             var entry = document.getElementById('proposalModal-' + attr);
-            console.log(attr + ': ' + entry.value);
             entry.value = proposal[attr];
         });
+        var quarter = proposal['quarter_proposed'];
+        if (quarter == 0) {
+            quarter = 'Fall';
+        } else if (quarter == 1) {
+            quarter = 'Winter';
+        } else {
+            quarter = 'Spring';
+        }
+        // var quarterProposedField = document.getElementById('quarterProposed');
+        // console.log(quarterProposedField);
+        // quarterProposedField.val(quarter);
+        $('#quarterProposed option[value="' + quarter + '"]').prop('selected', true);
+
         unMarshalDates(proposal);
         document.getElementById('proposalModal-paid').checked = proposal.paid;
         var imageIsPresentLabel = document.getElementById('proposalModal-imageIsPresent');
         if (proposal.image_path == null) {
             imageIsPresentLabel.innerHTML = 'This proposal currently has no image !!!!'
         } else {
-            imageIsPresentLabel.innerHTML = 'There is already a image for this proposal. '
+            imageIsPresentLabel.innerHTML = 'There is already an image for this proposal. '
         }
     });
 }
@@ -211,19 +246,19 @@ function unMarshalDates(proposal) {
     event_date.value = unMarshalHtml5(proposal.event_date);
     event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
     event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
-//    if (BROWSER.includes("chrome")) {
-//        proposed_date.value = unMarshalHtml5(proposal.proposed_date);
-//        event_date.value = unMarshalHtml5(proposal.event_date);
-//        event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
-//        event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
-//
-////    } else if (BROWSER.includes("firefox")) {
-//    } else {
-//        proposed_date.value = proposal.proposed_date;
-//        event_date.value = proposal.event_date;
-//        event_signup_open.value = proposal.event_signup_open;
-//        event_signup_close.value = proposal.event_signup_close;
-//    }
+    //    if (BROWSER.includes("chrome")) {
+    //        proposed_date.value = unMarshalHtml5(proposal.proposed_date);
+    //        event_date.value = unMarshalHtml5(proposal.event_date);
+    //        event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
+    //        event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
+    //
+    ////    } else if (BROWSER.includes("firefox")) {
+    //    } else {
+    //        proposed_date.value = proposal.proposed_date;
+    //        event_date.value = proposal.event_date;
+    //        event_signup_open.value = proposal.event_signup_open;
+    //        event_signup_close.value = proposal.event_signup_close;
+    //    }
 }
 
 function marshalAllDates(json_data) {
@@ -253,14 +288,13 @@ function marshalAllDates(json_data) {
 }
 
 function marshalDateString(dateStr) {
-    console.log('dateStr: ' + dateStr);
     var dateList = dateStr.split('-')
     var date = new Date();
     date.setYear(dateList[0]);
-    date.setMonth(dateList[1]-1);
+    date.setMonth(dateList[1] - 1);
     date.setDate(dateList[2]);
 
-//    date.setMonth(date.getMonth()+1);
+    //    date.setMonth(date.getMonth()+1);
     return date;
 }
 
@@ -272,12 +306,12 @@ function unMarshalHtml5(dateStr) {
     var date = new Date(dateStr);
     var msg = date.getFullYear();
     msg += '-';
-    var month = date.getMonth()+1;
-    if (month < 10) {month = "0" + month}
+    var month = date.getMonth() + 1;
+    if (month < 10) { month = "0" + month }
     msg += month;
     msg += '-'
     var day = date.getDate();
-    if (day < 10) {day = "0" + day}
+    if (day < 10) { day = "0" + day }
     msg += day;
     return msg;
 }
@@ -292,9 +326,9 @@ function doClosure(proposal, i, tdused, tdreserve) {
 function setValues(used, tdused, tdreserve, proposal, i) {
     used = JSON.parse(used);
     var usedVal = used[0].get_money_used;
-    tdused.innerHTML = "$" + (Math.round(usedVal*100) / 100);
+    tdused.innerHTML = "$" + (Math.round(usedVal * 100) / 100);
     var reserve = proposal[i].money_allocated - used[0].get_money_used;
-    tdreserve.innerHTML = "$" + (Math.round(reserve*100) / 100);
+    tdreserve.innerHTML = "$" + (Math.round(reserve * 100) / 100);
 }
 
 function getEvents() {
@@ -328,25 +362,33 @@ function getEvents() {
 
 function setupModalButtons() {
     var submitBtn = document.getElementById("proposalModal-submit");
-    submitBtn.addEventListener('click', function() {
+    submitBtn.addEventListener('click', function () {
         var id = last_proposal_clicked;
 
         var json_data = {}
-        FIELDS.forEach(function(attr) {
+        FIELDS.forEach(function (attr) {
             var entry = document.getElementById('proposalModal-' + attr);
-            console.log('proposalModal-' + attr);
             json_data[attr] = entry.value;
         });
+        var quarter = document.getElementById("quarterProposed").value;
+        if (quarter == 'Fall') {
+            quarter = 0;
+        } else if (quarter == 'Winter') {
+            quarter = 1;
+        } else {
+            quarter = 2;
+        }
+        json_data['quarter_proposed'] = quarter;
         json_data.paid = document.getElementById('proposalModal-paid').checked;
         if (marshalAllDates(json_data)) {
             return; /* a date was formated incorrectly */
         }
 
-        json_data.image_path = document.getElementById('proposal_name'+last_proposal_clicked).dataset.image_path;
+        json_data.image_path = document.getElementById('proposal_name' + last_proposal_clicked).dataset.image_path;
         var apiUri = 'events/' + id;
         var xhr = xhrPutRequest(apiUri);
 
-        xhr.onload = function() {
+        xhr.onload = function () {
             location.reload();
         }
         console.log(json_data);
@@ -356,24 +398,24 @@ function setupModalButtons() {
 
 
         var files = document.getElementById("proposalModal-imageFile").files;
-        if(files.length > 0) {
+        if (files.length > 0) {
             var photoXhr = new PhotoReplaceXhr('eventPhoto');
             console.log(json_data);
             photoXhr.imageCallback(xhr, json_data, 'image_path');
             photoXhr.send(files[0]);
         } else {
             xhr.send(JSON.stringify(json_data));
-//            console.log(document.getElementById(""))
+            //            console.log(document.getElementById(""))
         }
         console.log(json_data);
         document.getElementById("proposalModal-imageFile").value = '';
     });
 
     var deleteBtn = document.getElementById("deleteConfirmModal-delete");
-    deleteBtn.addEventListener('click', function() {
+    deleteBtn.addEventListener('click', function () {
         var apiUri = 'event/' + last_proposal_clicked;
         var xhr = xhrDeleteRequest(apiUri);
-        xhr.onload = function() {
+        xhr.onload = function () {
             location.reload();
         }
         xhr.send();
@@ -382,8 +424,8 @@ function setupModalButtons() {
 
 function verifyFields(json_data) {
 
-    var required_fields = ["proposed_date", "event_date", "proposal_name", "proposer","money_requested",
-                "money_allocated", "cost_to_attendee", "week_proposed", "quarter_proposed"];
+    var required_fields = ["proposed_date", "event_date", "proposal_name", "proposer", "money_requested",
+        "money_allocated", "cost_to_attendee", "week_proposed"];
     var missing_fields = getInvalidFields(json_data, required_fields);
 
     if (missing_fields.length == 0) {
@@ -408,14 +450,14 @@ function verifyDates(dates) {
 
 function getInvalidFields(json_data, required_fields) {
     var missing_fields = []
-    required_fields.forEach(function(field) {
-        if (! json_data[field]) {
+    required_fields.forEach(function (field) {
+        if (!json_data[field]) {
             missing_fields.push(field);
             console.log(field + " is invalid");
             delete json_data[field];
         }
         else if (Object.prototype.toString.call(json_data[field]) === '[object Date]') {
-            if (isNaN( json_data[field].getTime())) {
+            if (isNaN(json_data[field].getTime())) {
                 missing_fields.push(field);
                 console.log(field + " is an invalid date");
                 delete json_data[field];
@@ -427,7 +469,7 @@ function getInvalidFields(json_data, required_fields) {
 
 function getInvalidDateFields(json_data) {
     var invalid_fields = []
-    var date_fields = ['proposed_date', 'event_date', 'event_signup_open', 'event_signup_close']
+    var date_fields = ['proposed_date', 'event_date']
 
     for (var i = 0; i < date_fields.length; i++) {
         var f = date_fields[i]
@@ -436,21 +478,21 @@ function getInvalidDateFields(json_data) {
         }
     }
 
-//    if (dateInputValueInvalid(json_data.proposed_date)) {
-//        invalid_fields.push("proposed_date")
-//    }
-//
-//    if (dateInputValueInvalid(json_data.event_date)) {
-//        invalid_fields.push("event_date")
-//    }
-//
-//    if (dateInputValueInvalid(json_data.event_signup_open)) {
-//        invalid_fields.push("event_signup_open")
-//    }
-//
-//    if (dateInputValueInvalid(json_data.event_signup_close)) {
-//        invalid_fields.push("event_signup_close")
-//    }
+    //    if (dateInputValueInvalid(json_data.proposed_date)) {
+    //        invalid_fields.push("proposed_date")
+    //    }
+    //
+    //    if (dateInputValueInvalid(json_data.event_date)) {
+    //        invalid_fields.push("event_date")
+    //    }
+    //
+    //    if (dateInputValueInvalid(json_data.event_signup_open)) {
+    //        invalid_fields.push("event_signup_open")
+    //    }
+    //
+    //    if (dateInputValueInvalid(json_data.event_signup_close)) {
+    //        invalid_fields.push("event_signup_close")
+    //    }
     return invalid_fields;
 }
 
@@ -459,24 +501,24 @@ function getInvalidDateFields(json_data) {
  *  returns false if the input is okay
  */
 function dateInputValueInvalid(value) {
-    if (value == null) { return false}
-    if (typeof value == "undefined") { return false}
+    if (value == null) { return false }
+    if (typeof value == "undefined") { return false }
 
     var valSplit = value.split('-');
     if (valSplit.length != 3) { return 'incorrect delimiters'; }
     if (isNaN(valSplit[0]) || isNaN(valSplit[1]) || isNaN(valSplit[2])) { return 'date contains non numbers'; }
-    if ( valSplit[0]=='' || valSplit[1]=='' || valSplit[2]=='' ) { return 'date contains blank'; }
+    if (valSplit[0] == '' || valSplit[1] == '' || valSplit[2] == '') { return 'date contains blank'; }
     if (valSplit[1] < 1 || valSplit[1] > 12) { return "month out of range" }
     if (valSplit[2] > 31 || valSplit[2] < 1) { return "day-of-month out of range" }
     if (valSplit[1] == 2 && valSplit[2] > 28) { return "day-of-month out of range for this month" }
     if ((valSplit[1] == 4 || valSplit[1] == 6 || valSplit[1] == 9 || valSplit[1] == 11) &&
-            valSplit[2] > 30) { return "day-of-month out of range for this month" }
+        valSplit[2] > 30) { return "day-of-month out of range for this month" }
     return false;
 }
 
 function displayInvalidDateWarning(invalid_dates) {
     var msg = 'some dates were enterd incorrectly: <br/>';
-    invalid_dates.forEach(function(field) {
+    invalid_dates.forEach(function (field) {
         msg += '<b>' + field.replace(/_/g, ' ') + '</b> was entered incorrectly<br/>';
     });
     displayWarningModal(msg, 6000)
@@ -484,7 +526,7 @@ function displayInvalidDateWarning(invalid_dates) {
 
 function displayMissingFieldWarning(missing_fields) {
     var msg = 'some required fields were left blank: <br/>';
-    missing_fields.forEach(function(field) {
+    missing_fields.forEach(function (field) {
         msg += 'please include the <b>' + field.replace(/_/g, ' ') + '</b><br/>';
     });
     displayWarningModal(msg, 6000)
@@ -496,7 +538,7 @@ function displayWarningModal(msg, duration) {
     infoBody.innerHTML = msg;
     $("#infoModal").modal("show");
     if (typeof duration !== "undefined") {
-        setTimeout(function() {
+        setTimeout(function () {
             $("#infoModal").modal("hide");
         }, duration);
     }

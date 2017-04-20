@@ -16,13 +16,11 @@ function setup() {
         fallOption.setAttribute('value', 'Fall');
         fallOption.innerHTML = 'Fall';
         selector.appendChild(fallOption);
-
         
         var winterOption = document.createElement('option');
         winterOption.setAttribute('value', 'Winter');
         winterOption.innerHTML = 'Winter';
         selector.appendChild(winterOption);
-
         
         var springOption = document.createElement('option');
         springOption.setAttribute('value', 'Spring');
@@ -55,7 +53,6 @@ function submit() {
     } else{
         quarter = 2;
     }
-    alert(quarter);
     if (!name || !costToAttendee || !description || !eventDate || !proposer || !dateProposed || !weekProposed || !quarter || !moneyRequested || !moneyAllocated || files.length == 0) {
         var snackbar = document.getElementById("proposalsSnackbar");
         snackbar.className = "show";
