@@ -545,13 +545,17 @@ function updateTotal(gridToUpdate) {
     for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
         var currentRow = grid.contentTable[0].rows[i];
         var currentNum;
-        if (currentRow.childNodes[0].childNodes[0].childNodes[0] == null) {
-            currentNum = parseFloat(currentRow.childNodes[0].innerHTML.substring(1));
+        if (currentRow.childNodes[0].childNodes[0].data == null) {
+            currentNum = parseFloat(currentRow.childNodes[0].childNodes[0].value);
         } else {
-            currentNum = parseFloat(currentRow.childNodes[0].childNodes[0].childNodes[0].value);
+            currentNum = parseFloat(currentRow.childNodes[0].childNodes[0].data.substring(1));
         }
-        total += parseFloat(currentNum);
-        gridData[i].amount = currentNum;
+        if (!isNaN(currentNum)) {
+            total += parseFloat(currentNum);
+            gridData[i].amount = currentNum;
+        } else {
+            currentRow.childNodes[0].childNodes[0].value = gridData[i].amount;            
+        }
     }
     totalInput.value = total.toFixed(2).toString();
 }
@@ -578,7 +582,7 @@ $(document).ready(function () {
                 fields: {
                     amount: {
                         path: "amount",
-                        type: Number
+                        type: String
                     },
                     date: {
                         path: "date",
@@ -589,6 +593,7 @@ $(document).ready(function () {
         },
         events: {
             save: function (e) {
+                console.log(e);
                 updateTotal("#receiptsGrid");
             }
         },
@@ -597,7 +602,8 @@ $(document).ready(function () {
                 field: "amount",
                 title: "Amount",
                 format: function (value) {
-                    if (value == null || value == 0) {
+                    console.log(value);
+                    if (value == null || value == 0 || isNaN(value)) {
                         return 'Add an amount'
                     } else {
                         return "$" + parseFloat(value).toFixed(2);
