@@ -27,11 +27,8 @@
 				<div id="proposalModalBody" class="modal-body">
 
 					<label>Proposal Name</label> <br/>
-					<input id="proposalModal-proposal_name" type="text" value="name" size="50"> </input><br/><br/>
-
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<label>Proposer</label>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input id="proposalModal-proposal_name" type="text" value="name" size="50"> </input><br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;
+					<label>Proposer</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<label>Max Attendees</label>
 					<br/>
 					<input id="proposalModal-proposer" type="text" value="name"> </input> &nbsp;&nbsp;
@@ -62,27 +59,25 @@
 					<div id="proposalModal-eventDates">
 						<label>Event Date</label> &nbsp;&nbsp;
 						<label>Proposed Date</label> <br/>
-						<input type="date" id="proposalModal-event_date"> </input> &nbsp;&nbsp;
-						<input type="date" id="proposalModal-proposed_date"> </input> &nbsp;&nbsp;
+						<input type="text" id="proposalModal-event_date"> </input> &nbsp;&nbsp;
+						<input type="text" id="proposalModal-proposed_date"> </input> &nbsp;&nbsp;
 					</div> <br/>
 
 					<div id="proposalModal-signupsDates">
 						<label>Signups Open</label> &nbsp;&nbsp;
 						<label>Signups Close</label> <br/>
-						<input type="date" class="modalEntry" id="proposalModal-event_signup_open"> </input> &nbsp;&nbsp;
-						<input type="date" id="proposalModal-event_signup_close"> </input> &nbsp;&nbsp;
+						<input type="text" class="modalEntry" id="proposalModal-event_signup_open"> </input> &nbsp;&nbsp;
+						<input type="text" id="proposalModal-event_signup_close"> </input> &nbsp;&nbsp;
 					</div> <br/>
 
 					<div>
-						<label>Week Proposed </label> &nbsp;&nbsp;
-						<label>Quarter Proposed </label> <br/>
-						<input type="number" value="0" id="proposalModal-week_proposed" min="0" max="11"> </input> &nbsp;&nbsp;
-
-
-						<input type="number" value="0" id="proposalModal-quarter_proposed" min="0" max="3"> </input> &nbsp;&nbsp;
+						<label>Week Proposed </label> &nbsp;&nbsp; <br/>
+						<input type="number" value="0" id="proposalModal-week_proposed" min="0" max="11"> </input> &nbsp;&nbsp; <br/>
+						<label>Quarter Proposed </label>
+						<select class="form-control" id="quarterProposed" name="quarterProposed"></select>
 					</div>
 					<br/>
-                    <label for="proposalModal-imageFile">Image<input type="file" name="imageFile" id="proposalModal-imageFile"></label>
+					<label for="proposalModal-imageFile">Image<input type="file" name="imageFile" id="proposalModal-imageFile"></label>
 					<label id="proposalModal-imageIsPresent"> </label>
 				</div>
 				<div class="modal-footer">
@@ -130,9 +125,16 @@
 		</div>
 	</div>
 
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"
+	/>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="../stylesheets/navbar.css">
 	<link rel="stylesheet" type="text/css" href="../stylesheets/content.css">
 
