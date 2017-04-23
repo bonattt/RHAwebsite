@@ -74,11 +74,12 @@ function setupButtons() {
     addPaymentSubmit.addEventListener('click', function () {
         document.getElementById('modal-header').click();
         var entryIds = [
-            'amountUsed', 'CM', 'accountCode', 'receiver', 'description', 'dateprocessed', 'datereceived'
+            'amountUsed', 'CM', 'receiver', 'description', 'dateprocessed', 'datereceived'
         ];
         var modalId = 'paymentModal-';
         var json_obj = parseModalEntries(modalId, entryIds);
 
+        json_obj.accountCode = document.getElementById('paymentModal-accountCode').innerHTML || 0.0;
         json_obj.dateprocessed = new Date(json_obj.dateprocessed);
         json_obj.datereceived = new Date(json_obj.datereceived);
         var select = document.getElementById('paymentModal-event');
@@ -554,7 +555,7 @@ function updateTotal(gridToUpdate) {
             total += parseFloat(currentNum);
             gridData[i].amount = currentNum;
         } else {
-            currentRow.childNodes[0].childNodes[0].value = gridData[i].amount;            
+            currentRow.childNodes[0].childNodes[0].value = gridData[i].amount;
         }
     }
     totalInput.value = total.toFixed(2).toString();
