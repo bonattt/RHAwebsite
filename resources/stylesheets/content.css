@@ -838,7 +838,7 @@ height: 150pt;
 	display: none;
 }
 
-#addOfficer, #addCommittee, #addOfficer, #addEventLink{
+#addOfficerButton, #addCommittee, #addEventLink{
 	text-align: center;
 	font-size: 200%;
 	margin-left: auto;

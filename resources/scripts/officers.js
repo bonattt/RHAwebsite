@@ -107,19 +107,19 @@ function deleteFunction(filePath) {
 }
 
 function setupAddOfficerButton() {
-    var addOfficerBtn = document.getElementById('addOfficer');
+    var addOfficerBtn = document.getElementById('addOfficerButton');
     addOfficerBtn.style.display = "block"; //*/
     addOfficerBtn.addEventListener('click', function () {
-        var usernameEntry = document.getElementById('new-officer-username');
+        var usernameEntry = document.getElementById('addOfficerModal-username');
         usernameEntry.value = ''
-        var memebertypeEntry = document.getElementById('new-officer-membertype');
+        var memebertypeEntry = document.getElementById('addOfficerModal-membertype');
         memebertypeEntry.value = ''
     });
-    var submitBtn = document.getElementById('modal-new-officer-submit');
+    var submitBtn = document.getElementById('addOfficerModal-submit');
     submitBtn.addEventListener('click', function () {
-        var usernameEntry = document.getElementById('new-officer-username');
+        var usernameEntry = document.getElementById('addOfficerModal-username');
         var username = usernameEntry.value;
-        var membertypeEntry = document.getElementById('new-officer-membertype');
+        var membertypeEntry = document.getElementById('addOfficerModal-membertype');
         var memberType = membertypeEntry.value;
 
         var urlExtension = 'members/' + username;
@@ -139,7 +139,7 @@ function setupAddOfficerButton() {
             xhr.send(JSON.stringify(json_data));
         }
     });
-    var cancelBtn = document.getElementById('modal-new-officer-cancel');
+    var cancelBtn = document.getElementById('addOfficerModal-cancel');
     cancelBtn.addEventListener('click', function () {
         var imageEntry = document.getElementById("imageFilePost");
         imageEntry.value = '';
