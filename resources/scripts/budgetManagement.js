@@ -33,7 +33,6 @@ var current_id = -1;
 function parseModalEntries(idHeader, ids) {
     var json_obj = {};
     ids.forEach(function (id) {
-        console.log("id: " + id + "\nidHeader: " + idHeader);
         var entry = document.getElementById(idHeader + id);
         json_obj[id] = entry.value;
     });
@@ -112,11 +111,9 @@ function setupButtons() {
         var apiUri = 'payment/';
         var xhr = xhrPostRequest(apiUri);
         xhr.onload = function () {
-            console.log(xhr.responseText);
             location.reload();
         }
         xhr.onerror = function () {}
-        console.log(json_obj);
         xhr.send(JSON.stringify(json_obj));
     });
 
@@ -271,8 +268,6 @@ function buildFundsRow(fund, rowNumber) {
 function buildPaymentRow(payment, proposal_name, rowNumber) {
     var col;
     var keys = ['cm', 'receiver']
-    console.log('payment');
-    console.log(payment);
 
     var row = document.createElement('tr');
     var col = document.createElement('td');
@@ -341,7 +336,6 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
         $("#receiptsDetailGrid").empty();
 
         current_id = json_obj.expenses_id;
-        console.log('click');
         var description = document.getElementById('detailsModal-description');
         description.innerHTML = json_obj.description;
 
@@ -366,7 +360,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
                         fields: {
                             amount: {
                                 path: "amount",
-                                type: Number,
+                                type: String
                             },
                             date: {
                                 path: "date",
@@ -379,7 +373,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
                         field: "amount",
                         title: "Amount",
                         format: function (value) {
-                            if (value == null || value == 0) {
+                            if (value == null || value == 0 || isNaN(value)) {
                                 return 'Add an amount'
                             } else {
                                 return "$" + parseFloat(value).toFixed(2);
@@ -426,7 +420,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
                         fields: {
                             amount: {
                                 path: "amount",
-                                type: Number
+                                type: String
                             },
                             date: {
                                 path: "date",
@@ -445,7 +439,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
                         field: "amount",
                         title: "Amount",
                         format: function (value) {
-                            if (value == null || value == 0) {
+                            if (value == null || value == 0 || isNaN(value)) {
                                 return 'Add an amount'
                             } else {
                                 return "$" + parseFloat(value).toFixed(2);
@@ -594,7 +588,6 @@ $(document).ready(function () {
         },
         events: {
             save: function (e) {
-                console.log(e);
                 updateTotal("#receiptsGrid");
             }
         },
@@ -603,7 +596,6 @@ $(document).ready(function () {
                 field: "amount",
                 title: "Amount",
                 format: function (value) {
-                    console.log(value);
                     if (value == null || value == 0 || isNaN(value)) {
                         return 'Add an amount'
                     } else {
