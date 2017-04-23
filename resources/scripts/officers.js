@@ -126,13 +126,14 @@ function setupAddOfficerButton() {
         var cmEntry = document.getElementById('addOfficerModal-cm');
 
         var urlExtension = 'members/' + username;
-        var json_data = {
-            "memberType": membertypeEntry.value,
-            "phone_number": phoneEntry.value,
-            "hall": hallEntry.value,
-            "room_number": roomEntry.value,
-            "cm": cmEntry.value
-        };
+        var json_data = {"memberType": membertypeEntry.value};
+
+        if (phoneEntry.value != '') { json_data.phone_number = phoneEntry.value}
+        if (hallEntry.value != '') { json_data.hall = hallEntry.value}
+        if (roomEntry.value != '') { json_data.room_number = roomEntry.value}
+        if (cmEntry.value != '') { json_data.cm = cmEntry.value}
+        console.log(json_data)
+
         var xhr = xhrPutRequest(urlExtension);
         xhr.onload = function () { location.reload() };
         var imageEntry = document.getElementById("imageFilePost");
