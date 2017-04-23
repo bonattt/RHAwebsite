@@ -120,10 +120,19 @@ function setupAddOfficerButton() {
         var usernameEntry = document.getElementById('addOfficerModal-username');
         var username = usernameEntry.value;
         var membertypeEntry = document.getElementById('addOfficerModal-membertype');
-        var memberType = membertypeEntry.value;
+        var phoneEntry = document.getElementById('addOfficerModal-phone_number');
+        var hallEntry = document.getElementById('addOfficerModal-hall');
+        var roomEntry = document.getElementById('addOfficerModal-room_number');
+        var cmEntry = document.getElementById('addOfficerModal-cm');
 
         var urlExtension = 'members/' + username;
-        var json_data = { "memberType": memberType };
+        var json_data = {
+            "memberType": membertypeEntry.value,
+            "phone_number": phoneEntry.value,
+            "hall": hallEntry.value,
+            "room_number": roomEntry.value,
+            "cm": cmEntry.value
+        };
         var xhr = xhrPutRequest(urlExtension);
         xhr.onload = function () { location.reload() };
         var imageEntry = document.getElementById("imageFilePost");
