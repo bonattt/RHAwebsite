@@ -132,7 +132,6 @@ function setupAddOfficerButton() {
         if (hallEntry.value != '') { json_data.hall = hallEntry.value}
         if (roomEntry.value != '') { json_data.room_number = roomEntry.value}
         if (cmEntry.value != '') { json_data.cm = cmEntry.value}
-        console.log(json_data)
 
         var xhr = xhrPutRequest(urlExtension);
         xhr.onload = function () { location.reload() };
