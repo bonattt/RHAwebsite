@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "./node_modules/.bin/forever start -c node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -15,11 +15,12 @@
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.2",
     "express": "^4.14.0",
+    "forever": "^0.15.3",
     "mocha": "^3.2.0",
     "multer": "^1.2.0",
+    "nodemon": "^1.11.0",
     "request": "^2.81.0",
     "rewire": "^2.5.2",
-    "rosefire-node": "git+https://ada.csse.rose-hulman.edu/rosefire/node-sdk.git#2.1.0",
-    "nodemon": "^1.11.0"
+    "rosefire-node": "git+https://ada.csse.rose-hulman.edu/rosefire/node-sdk.git#2.1.0"
   }
 }
