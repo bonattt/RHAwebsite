@@ -134,7 +134,7 @@ function setupButtons() {
         var xhr = xhrPutRequest(apiUri);
         var receiptsObject = [];
         var total = 0.0;
-        var descText = document.getElementById('detailsModal-description').innerHTML;
+        var descText = document.getElementById('detailsModal-description').value;
         var grid = $("#receiptsDetailGrid").swidget();
         for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
             var currentRow = grid.contentTable[0].rows[i];
@@ -176,6 +176,16 @@ function setupButtons() {
         }
         xhr.send(JSON.stringify(json_obj));
         location.reload();
+    });
+
+    var cancelFinalChanges = document.getElementById('finalChanges-cancel');
+    cancelFinalChanges.addEventListener('click', function() {
+        $('#detailsModal-processedCheck').attr('checked', false);
+    });
+
+    var confirmFinalChanges = document.getElementById('finalChanges-confirm');
+    confirmFinalChanges.addEventListener('click', function() {
+        document.getElementById('detailsModal-processedDate').disabled = false;
     });
 }
 
@@ -337,7 +347,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
 
         current_id = json_obj.expenses_id;
         var description = document.getElementById('detailsModal-description');
-        description.innerHTML = json_obj.description;
+        description.value = json_obj.description;
 
         var accountCode = document.getElementById('detailsModal-accountcode');
         accountCode.value = json_obj.accountcode;
@@ -345,14 +355,17 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
         var receiptList = json_obj.receipts.receipts;
         var processedCheck = document.getElementById('detailsModal-processedCheck');
         var processedDate = document.getElementById('detailsModal-processedDate');
+        processedDate.disabled = true;
 
         if (json_obj.dateprocessed) {
             processedDate.value = json_obj.dateprocessed;
-            processedDate.disabled = true;
             processedCheck.checked = true;
             processedCheck.disabled = true;
             description.disabled = true;
             accountCode.disabled = true;
+            //Buttons
+            document.getElementById('detailsModal-delete').disabled = true;
+            document.getElementById('detailsModal-confirm').disabled = true;
             $("#receiptsDetailGrid").shieldGrid({
                 dataSource: {
                     data: receiptList,
@@ -475,6 +488,15 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
                     insertNewRowAt: "pagebottom"
                 }
             });
+
+            $('#detailsModal-processedCheck').on('change', function (e) {
+                if(e.target.checked) {
+                    $('#finalChangesConfirmationModal').modal();
+                } else {
+                    processedDate.disabled = true;
+                    processedDate.value = null;
+                }
+            })
         }
     });
 
@@ -570,6 +592,9 @@ function setup() {
 $(document).ready(function () {
     setup();
     $("#processedDate").datepicker();
+    $("#paymentModal-datereceived").datepicker();
+    $('#paymentModal-dateprocessed').datepicker();
+
     $("#receiptsGrid").shieldGrid({
         dataSource: {
             data: gridData,

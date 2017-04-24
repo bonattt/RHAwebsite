@@ -120,14 +120,14 @@
 								<td> <label>Turned-in Date:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input type="date" id="paymentModal-datereceived" name="paymentModal-datereceived" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+									<input type="text" id="paymentModal-datereceived" name="paymentModal-datereceived"></input>
 								</td>
 							</tr>
 							<tr>
 								<td> <label>Processed Date:</label> </td>
 								<td> &nbsp;&nbsp; </td>
 								<td>
-									<input type="date" id="paymentModal-dateprocessed" name="signUpOpenDate" data-date-inline-picker="false" data-date-open-on-focus="true"></input>
+									<input type="text" id="paymentModal-dateprocessed" name="signUpOpenDate"></input>
 								</td>
 							</tr>
 							<tr>
@@ -293,13 +293,46 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button id="detailsModal-delete" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+					<button id="detailsModal-delete" type="button" class="btn btn-danger" data-dismiss="modal" data-target="#deleteExpenseConfirmationModal">Delete</button>
 					<button id="detailsModal-confirm" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
 					<button id="detailsModal-close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div id="finalChangesConfirmationModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title" id="confirmationText">Are you sure? You will not be able to change the payment after it is saved.</h4>
+				</div>
+				<div class="modal-footer">
+					<button id="finalChanges-confirm" type="button" class="btn btn-danger" data-dismiss="modal">Confirm</button>
+					<button id="finalChanges-cancel" type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		<div id="deleteExpenseConfirmationModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title" id="confirmationText">Are you sure? The payment will be permanently deleted.</h4>
+				</div>
+				<div class="modal-footer">
+					<button id="deleteExpense-confirm" type="button" class="btn btn-danger" data-dismiss="modal">Confirm</button>
+					<button id="deleteExpense-cancel" type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
 
 </body>
 
