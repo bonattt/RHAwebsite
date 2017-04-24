@@ -117,7 +117,6 @@ function drawTable(proposals, isAdmin) {
     tbdy.appendChild(createColumnHead("Amout Budgeted"));
     tbdy.appendChild(createColumnHead("Reserve"));
     tbdy.appendChild(createColumnHead("Used"));
-    tbdy.appendChild(createColumnHead("Paid"));
     tbdy.appendChild(createColumnHead("Event Date"));
     tbdy.appendChild(createColumnHead("Proposed Date"));
     tbdy.appendChild(createColumnHead("Proposed Quarter"));
@@ -169,10 +168,6 @@ function drawTable(proposals, isAdmin) {
         tdallocated.innerHTML = "$" + proposals[i].money_allocated;
         tdallocated.setAttribute("id", "money_allocated" + id);
 
-        var tdpaid = document.createElement('td');
-        tdpaid.innerHTML = proposals[i].paid;
-        tdpaid.setAttribute("id", "paid" + id);
-
         var tdreserve = document.createElement('td');
         var tdused = document.createElement('td');
 
@@ -182,7 +177,6 @@ function drawTable(proposals, isAdmin) {
         tr.appendChild(tdallocated);
         tr.appendChild(tdreserve);
         tr.appendChild(tdused);
-        tr.appendChild(tdpaid);
         tr.appendChild(tddate);
         tr.appendChild(tdProposedDate);
         tr.appendChild(tdquarter);
@@ -222,7 +216,8 @@ function addRowListener(tr, proposal) {
         });
         date_FIELDS.forEach(function (attr) {
             var entry = document.getElementById('proposalModal-' + attr);
-            entry.value = proposal[attr];
+            var d = new Date(proposal[attr]);
+            entry.value = (d.getMonth() + 1) + "/" + d.getUTCDate() + "/" + d.getFullYear();
         });
         var quarter = proposal['quarter_proposed'];
         if (quarter == 0) {
@@ -232,12 +227,7 @@ function addRowListener(tr, proposal) {
         } else {
             quarter = 'Spring';
         }
-        // var quarterProposedField = document.getElementById('quarterProposed');
-        // console.log(quarterProposedField);
-        // quarterProposedField.val(quarter);
         $('#quarterProposed option[value="' + quarter + '"]').prop('selected', true);
-
-        document.getElementById('proposalModal-paid').checked = proposal.paid;
         var imageIsPresentLabel = document.getElementById('proposalModal-imageIsPresent');
         if (proposal.image_path == null) {
             imageIsPresentLabel.innerHTML = 'This proposal currently has no image !!!!'
@@ -316,7 +306,6 @@ function setupModalButtons() {
             quarter = 2;
         }
         json_data['quarter_proposed'] = quarter;
-        json_data.paid = document.getElementById('proposalModal-paid').checked;
 
         json_data.image_path = document.getElementById('proposal_name' + last_proposal_clicked).dataset.image_path;
         var apiUri = 'events/' + id;
@@ -422,15 +411,15 @@ $(document).ready(function () {
        orientation: "bottom auto"
     });
     $("#proposalModal-proposed_date").datepicker({
-       dateFormat: "yy-mm-dd",
+       dateFormat: "mm/dd/yy",
        orientation: "bottom auto"
     });
     $("#proposalModal-event_signup_open").datepicker({
-       dateFormat: "yy-mm-dd",
+       dateFormat: "mm/dd/yy",
        orientation: "bottom auto"
     });
     $("#proposalModal-event_signup_close").datepicker({
-       dateFormat: "yy-mm-dd",
+       dateFormat: "mm/dd/yy",
        orientation: "bottom auto"
     });
     var officersxhr = getOfficers();
