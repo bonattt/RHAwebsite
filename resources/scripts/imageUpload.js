@@ -17,7 +17,6 @@ PhotoPostXhr.prototype.imageCallback = function(xhr, json_data, field_name) {
         }
         var image_path = JSON.parse(theXhr.responseText).filepath;
         json_data[field_name] = image_path;
-//        alert(JSON.stringify(json_data));
         xhr.send(JSON.stringify(json_data));
     }
 }
@@ -85,7 +84,6 @@ function imageDeleteFunction(filePath) {
 
     photoxhr.open('DELETE', photoDeleteApi, true);
     photoxhr.setRequestHeader('Content-Type', 'application/json');
-    photoxhr.onload = function() { alert("status: "+ photoxhr.status); }
 
     photoxhr.send(JSON.stringify(dbObject));
 }
