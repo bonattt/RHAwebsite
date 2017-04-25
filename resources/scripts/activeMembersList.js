@@ -1,6 +1,7 @@
 
 var displayingAllMembers = true;
 var table = document.createElement('table');
+table.setAttribute('class', 'clickable');
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
