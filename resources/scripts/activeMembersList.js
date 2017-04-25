@@ -358,10 +358,9 @@ function undoAttendanceSubmission() {
         var urlExtension = 'attendance/undo';
         var xhr = xhrGetRequest(urlExtension);
 
-        xhr.onreadystatechange = function(e) {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                location.reload();
-            }
+        xhr.onload = function() {
+            console.log("asdhfashf");
+            location.reload();
         };
         xhr.send();
     });

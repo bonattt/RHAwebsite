@@ -5,7 +5,7 @@ COPY Funds TO '/tmp/funds.csv' DELIMITER ',' CSV HEADER;
 COPY Members TO '/tmp/members.csv' DELIMITER ',' CSV HEADER;
 COPY Expenses TO '/tmp/expenses.csv' DELIMITER ',' CSV HEADER;
 COPY Committee TO '/tmp/committee.csv' DELIMITER ',' CSV HEADER;
-COPY InfoText TO '/tmp/committee.csv' DELIMITER '.' CSV HEADER;
+COPY InfoText TO '/tmp/infotext.csv' DELIMITER '.' CSV HEADER;
 COPY Equipment TO '/tmp/equipment.csv' DELIMITER ',' CSV HEADER;
 COPY Rentals TO '/tmp/rentals.csv' DELIMITER ',' CSV HEADER;
 COPY FloorMoney TO '/tmp/floormoney.csv' DELIMITER ',' CSV HEADER;
