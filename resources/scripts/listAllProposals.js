@@ -96,6 +96,7 @@ function drawTable(proposals, isAdmin) {
     table.setAttribute('align', 'center');
     table.setAttribute('bordercolor', '#808080');
     table.setAttribute('class', 'proposalsTable');
+    table.setAttribute('class', 'clickable');
     var tbdy = document.createElement('tbody');
 
     tbdy.appendChild(createColumnHead("Name"));
