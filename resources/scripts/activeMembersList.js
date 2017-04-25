@@ -1,11 +1,11 @@
 
 var displayingAllMembers = true;
 var table = document.createElement('table');
+table.setAttribute('class', 'clickable');
 
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
-        var div = document.getElementById('submitAttendanceDiv');
-        console.log(div);
+        var div = document.getElementById('buttonsDiv');
         var newButton = document.createElement('button');
         newButton.setAttribute('id', 'submitAttendance');
         newButton.setAttribute('data-toggle', 'modal');
@@ -15,16 +15,22 @@ function setAdmin(officers) {
 
         var undoButton = document.createElement('button');
         undoButton.setAttribute('id', 'undoAttendance');
+        undoButton.className = "membersListButtons";
         undoButton.innerHTML = 'Undo Last Attendance Upload';
-        div.appendChild(undoButton);
+        undoButton.addEventListener('click', function () {
+            var xhr = xhrGetRequest('attendance/undo');
+            xhr.onload = function () {
+                location.reload();
+            };
+            xhr.send();
+        });
 
-        div2 = document.getElementById("purgeMembersDiv");
-        console.log(div2);
         var purgeMembers = document.createElement("button");
         purgeMembers.setAttribute("id", "purgeMembers");
         purgeMembers.setAttribute("data-toggle", "modal");
         purgeMembers.setAttribute("data-target", "#purgeConfirmationModal");
         purgeMembers.innerHTML = "Purge Members Table";
+        purgeMembers.className = "membersListButtons";
         var confirmPurge = document.getElementById("confirm-purge");
         confirmPurge.addEventListener("click", function () {
             var xhr = xhrGetRequest('purgeMembers/');
@@ -37,6 +43,7 @@ function setAdmin(officers) {
         var undoPurge = document.createElement("button");
         undoPurge.setAttribute("id", "undoPurge");
         undoPurge.innerHTML = "Undo Members Purge";
+        undoPurge.className = "membersListButtons";
         undoPurge.addEventListener("click", function () {
             var xhr = xhrGetRequest('undoPurge/');
             xhr.onload = function () {
@@ -44,10 +51,11 @@ function setAdmin(officers) {
             };
             xhr.send();
         });
-        div2.appendChild(purgeMembers);
-        div2.appendChild(undoPurge);
+        div.appendChild(undoButton);
+        div.appendChild(purgeMembers);
+        div.appendChild(undoPurge);
 
-        undoAttendanceSubmission();
+        //undoAttendanceSubmission();
 
         setupSubmitAttendanceButton();
         var cancelBtn = document.getElementById('update-modal-cancel');
@@ -63,25 +71,13 @@ function setup() {
     var xhr = xhrGetRequest(urlExtension);
     //setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
-    xhr.onload = function() {
+    xhr.onload = function () {
         var members = xhr.responseText;
         drawAllMembersTable(members);
         var allMembersButton = document.getElementById('allMembers');
-        var submitAttendanceDiv = document.getElementById('submitAttendanceDiv');
-        $(".allMembers").change(function () {
-            displayOtherTable(members);
-            submitAttendanceDiv.style.display = "block";
-        });
-        $(".activeMembers").change(function () {
-            displayOtherTable(members);
-            submitAttendanceDiv.style.display = "none";
-        });
+        var buttonsDiv = document.getElementById('buttonsDiv');
     }
     xhr.send();
-}
-
-function showModal() {
-    alert("showing modal, in theory.");
 }
 
 function drawAllMembersTable(members) {
@@ -243,19 +239,19 @@ function drawActiveMembersTable(members) {
         if (members[i].hall == null || members[i].hall == "") {
         } else {
             var meetingsAttended = 0;
-            for(var j = 0; j < members[i].meet_attend.Q1.length; j++) {
-                if(members[i].meet_attend.Q1[j] == 1){
-                    meetingsAttended ++;
+            for (var j = 0; j < members[i].meet_attend.Q1.length; j++) {
+                if (members[i].meet_attend.Q1[j] == 1) {
+                    meetingsAttended++;
                 }
             }
-            for(var j = 0; j < members[i].meet_attend.Q2.length; j++) {
-                if(members[i].meet_attend.Q2[j] == 1){
-                    meetingsAttended ++;
+            for (var j = 0; j < members[i].meet_attend.Q2.length; j++) {
+                if (members[i].meet_attend.Q2[j] == 1) {
+                    meetingsAttended++;
                 }
             }
-            for(var j = 0; j < members[i].meet_attend.Q3.length; j++) {
-                if(members[i].meet_attend.Q3[j] == 1){
-                    meetingsAttended ++;
+            for (var j = 0; j < members[i].meet_attend.Q3.length; j++) {
+                if (members[i].meet_attend.Q3[j] == 1) {
+                    meetingsAttended++;
                 }
             }
             if (meetingsAttended > 4) {
@@ -292,14 +288,14 @@ function drawActiveMembersTable(members) {
             }
         }
 
-        }
+    }
     table.appendChild(tbdy);
     body.appendChild(table);
 }
 
 function setupSubmitAttendanceButton() {
     var addCommitteeBtn = document.getElementById("submitAttendance");
-    addCommitteeBtn.style.display = "block"; //*/
+    addCommitteeBtn.className = "membersListButtons";
     addCommitteeBtn.addEventListener('click', function () {
 
         var submitBtn = document.getElementById('update-modal-submit');
@@ -322,7 +318,7 @@ function setupSubmitAttendanceButton() {
                 var preResult = reader.result.split("\r\n");
                 var result = [];
                 preResult.forEach(e => {
-                    if(e != '') {
+                    if (e != '') {
                         result.push(e);
                     }
                 });
@@ -332,7 +328,7 @@ function setupSubmitAttendanceButton() {
 
                 xhr.onreadystatechange = function (e) {
                     if (xhr.readyState == 4 && xhr.status == 200) {
-                        setTimeout(function () { location.reload()}, 600);
+                        setTimeout(function () { location.reload() }, 600);
                     }
                 };
                 xhr.send(JSON.stringify({ membersToUpdate: result }));
@@ -354,25 +350,25 @@ function setupSubmitAttendanceButton() {
         }
         var cancelBtn = document.getElementById('update-modal-cancel');
         cancelBtn.addEventListener('click', function () {
-            // do nothing.
         });
     });
 }
 
-function undoAttendanceSubmission() {
-    var undoButton = document.getElementById("undoAttendance");
-    undoButton.addEventListener('click', function () {
-        var urlExtension = 'attendance/undo';
-        var xhr = xhrGetRequest(urlExtension);
+// function undoAttendanceSubmission() {
+//     undoButton.className = "membersListButtons";
+//     undoButton.addEventListener('click', function () {
+//         var urlExtension = 'attendance/undo';
+//         var xhr = xhrGetRequest(urlExtension);
+//         alert("yo");
 
-        xhr.onreadystatechange = function(e) {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                location.reload();
-            }
-        };
-        xhr.send();
-    });
-}
+//         xhr.onreadystatechange = function (e) {
+//             if (xhr.readyState == 4 && xhr.status == 200) {
+//                 location.reload();
+//             }
+//         };
+//         xhr.send();
+//     });
+// }
 
 function displayOtherTable(members) {
     if (displayingAllMembers) {
