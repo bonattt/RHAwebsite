@@ -118,7 +118,12 @@ function setupButtons() {
     });
 
     var deletePaymentButton = document.getElementById('detailsModal-delete');
-    deletePaymentButton.addEventListener('click', function () {
+    deletePaymentButton.addEventListener('click', function (e) {
+        $('#deleteExpenseConfirmationModal').modal();
+    });
+
+    var deletePaymentButtonConfirm = document.getElementById('deleteExpense-confirm');
+    deletePaymentButtonConfirm.addEventListener('click', function () {
         var apiUri = 'payment/' + current_id;
         var xhr = xhrDeleteRequest(apiUri);
         xhr.onload = function () {
