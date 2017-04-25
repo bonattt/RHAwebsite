@@ -4,6 +4,11 @@ const API_EXTENSION = '';
 const MESSAGE_MODAL_ID = 'messageModal';
 
 
+function showNotification(message) {
+    document.getElementById("messageModal-body").innerHTML = message;
+    $("#messageModal").modal()
+}
+
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
         setupAddOfficerButton();
@@ -26,7 +31,12 @@ function setAdmin(officers) {
                     msg = 'Officers must have a member type.'
                     delete json_data.membertype;
                 }
-                xhr.onload = function () { location.reload() };
+                if (json_data.phone_number.length != 10) {
+                    showNotification("please enter a 10-digit phone number");
+                    return;
+                }
+
+                xhr.onload = function () { }//location.reload() };
                 var imageEntry = document.getElementById("imageFilePut");
                 var global_id = selected_element_id.replace('officer', '');
                 global_id = parseInt(global_id);
@@ -133,8 +143,14 @@ function setupAddOfficerButton() {
         if (roomEntry.value != '') { json_data.room_number = roomEntry.value}
         if (cmEntry.value != '') { json_data.cm = cmEntry.value}
 
+        console.log(json_data.phone_number);
+        if (json_data.phone_number.length != 10) {
+            showNotification("please enter a 10-digit phone number");
+            return;
+        }
+
         var xhr = xhrPutRequest(urlExtension);
-        xhr.onload = function () { location.reload() };
+        xhr.onload = function () { } //location.reload() };
         var imageEntry = document.getElementById("imageFilePost");
         if (imageEntry.value != '') {
             var photoPost = new PhotoPostXhr("officerPhoto");

@@ -65,7 +65,8 @@
 							<tr>
 								<td> <label>Phone Number:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-phone_number" type="text" value="name"> </input> </td>
+								<td> <input class="modal-text-entry" id="officers-modal-phone_number" type="number"
+											step=1 max=9999999999 min=0  value="name"> </input> </td>
 							</tr>
 							<tr>
 								<td> <label>Hall:</label> </td>
@@ -75,12 +76,14 @@
 							<tr>
 								<td> <label>Room:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-room_number" type="text" value="name"> </input> </td>
+								<td> <input class="modal-text-entry" id="officers-modal-room_number"  type="number"
+											step=1 max=999 min=0 value="name"> </input> </td>
 							</tr>
 							<tr>
 								<td> <label>CM</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-cm" type="text" value="name"> </input> </td>
+								<td> <input class="modal-text-entry" id="officers-modal-cm" type="number"
+											step=1 max=9999 min=0  value="name"> </input> </td>
 							</tr>
 							<label for="imageFile">Image:<input type="file" name="imageFile" id="imageFilePut"></label>
 						</tbody>
@@ -137,7 +140,8 @@
 							<tr>
 								<td> <label>Phone Number:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="addOfficerModal-phone_number" type="text" value=""> </input> </td>
+								<td> <input class="modal-text-entry" id="addOfficerModal-phone_number" type="number"
+											step=1 max=999999999 min=0 value=""> </input> </td>
 							</tr>
 							<tr>
 								<td> <label>Hall:</label> </td>
@@ -147,12 +151,14 @@
 							<tr>
 								<td> <label>Room:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="addOfficerModal-room_number" type="text" value=""> </input> </td>
+								<td> <input class="modal-text-entry" id="addOfficerModal-room_number" type="number"
+											step=1 max=999 min=1 value=""> </input> </td>
 							</tr>
 							<tr>
 								<td> <label>CM</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="addOfficerModal-cm" type="text" value=""> </input> </td>
+								<td> <input class="modal-text-entry" id="addOfficerModal-cm" type="number"
+											step=1 max=9999 min=0 value=""> </input> </td>
 							</tr>
 
 						</tbody>
@@ -166,6 +172,26 @@
 			</div>
 		</div>
 	</div>
+
+    <div id="messageModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Notification </h4>
+				</div>
+                <div id="messageModal-body" class="modal-body">
+					<p > </p>
+                </div>
+
+				<div class="modal-footer">
+					<button id="messageModal-okay" type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
 
 </html>

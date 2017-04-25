@@ -1032,6 +1032,10 @@ img {
 	text-align: center;
 }
 
+.modal-text-entry {
+	width: 100%;
+}
+
 #photoModal {
 	display: none;
 	opacity: 1;
