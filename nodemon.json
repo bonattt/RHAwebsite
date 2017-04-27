@@ -2,6 +2,6 @@
     "events": {
         "start": "echo Starting Server.",
         "exit": "server exited normally.",
-        "crash": "echo server crashed!! && npm start"
+        "crash": "echo server crashed!!"
     }
 }
