@@ -26,7 +26,7 @@
 	<div id="navBar"> </div>
 	<div class="content">
 		<h1>Officers</h1>
-        <button id="addOfficer" data-toggle="modal" data-target="#addOfficerModal">Add Officer</button>
+        <button id="addOfficerButton" data-toggle="modal" data-target="#addOfficerModal">Add Officer</button>
 		<div id="officers"></div>
 	</div>
 		
@@ -65,7 +65,8 @@
 							<tr>
 								<td> <label>Phone Number:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-phone_number" type="text" value="name"> </input> </td>
+								<td> <input class="modal-text-entry" id="officers-modal-phone_number" type="number"
+											step=1 max=9999999999 min=0  value="name"> </input> </td>
 							</tr>
 							<tr>
 								<td> <label>Hall:</label> </td>
@@ -75,12 +76,14 @@
 							<tr>
 								<td> <label>Room:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-room_number" type="text" value="name"> </input> </td>
+								<td> <input class="modal-text-entry" id="officers-modal-room_number"  type="number"
+											step=1 max=999 min=0 value="name"> </input> </td>
 							</tr>
 							<tr>
 								<td> <label>CM</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="officers-modal-cm" type="text" value="name"> </input> </td>
+								<td> <input class="modal-text-entry" id="officers-modal-cm" type="number"
+											step=1 max=9999 min=0  value="name"> </input> </td>
 							</tr>
 							<label for="imageFile">Image:<input type="file" name="imageFile" id="imageFilePut"></label>
 						</tbody>
@@ -90,6 +93,7 @@
                     <button id="modal-delete" type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#deleteConfirmationModal"> Delete </button>
 					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
 					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<h6 id="officer-delete-note">(Note: deleting an officer only removes them from <br> this page, not the database)</h6>
 				</div>
 			</div>
 		</div>
@@ -124,31 +128,71 @@
 					<table>
 						<tbody>
 							<tr>
-								<td> <label>Username: </label> </td>
+								<td> <label>Username:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="new-officer-username" type="text" value=""> </input> </td>
+								<td> <input class="modal-text-entry" id="addOfficerModal-username" type="text" value=""> </input> </td>
 							</tr>
 							<tr>
 								<td> <label>Member Type:</label> </td>
 								<td> &nbsp;&nbsp; </td>
-								<td> <input class="modal-text-entry" id="new-officer-membertype" type="text" value=""> </input> </td>
+								<td> <input class="modal-text-entry" id="addOfficerModal-membertype" type="text" value=""> </input> </td>
+							</tr>
+							<label for="imageFile">Image:<input type="file" name="imageFile" id="imageFilePost"></label>
+							<tr>
+								<td> <label>Phone Number:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="addOfficerModal-phone_number" type="number"
+											step=1 max=999999999 min=0 value=""> </input> </td>
 							</tr>
 							<tr>
-								<td>
-									<label for="imageFile">Image:<input type="file" name="imageFile" id="imageFilePost"> </label>
-								</td>
+								<td> <label>Hall:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="addOfficerModal-hall" type="text" value=""> </input> </td>
 							</tr>
-                        </tbody>
+							<tr>
+								<td> <label>Room:</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="addOfficerModal-room_number" type="number"
+											step=1 max=999 min=1 value=""> </input> </td>
+							</tr>
+							<tr>
+								<td> <label>CM</label> </td>
+								<td> &nbsp;&nbsp; </td>
+								<td> <input class="modal-text-entry" id="addOfficerModal-cm" type="number"
+											step=1 max=9999 min=0 value=""> </input> </td>
+							</tr>
+
+						</tbody>
                     </table>
                 </div>
                 
 				<div class="modal-footer">
-					<button id="modal-new-officer-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
-					<button id="modal-new-officer-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button id="addOfficerModal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
+					<button id="addOfficerModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
 	</div>
+
+    <div id="messageModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Notification </h4>
+				</div>
+                <div id="messageModal-body" class="modal-body">
+					<p > </p>
+                </div>
+
+				<div class="modal-footer">
+					<button id="messageModal-okay" type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
 
 </html>

@@ -408,6 +408,10 @@ h3{
 	display: inline-block;
 }
 
+#officer-delete-note {
+	text-align: center;
+}
+
 /* Proposals */
 #proposalsPage {
 	position: absolute;
@@ -846,7 +850,7 @@ height: 150pt;
 	display: none;
 }
 
-#addOfficer, #addCommittee, #addOfficer, #addEventLink{
+#addOfficerButton, #addCommittee, #addEventLink{
 	text-align: center;
 	font-size: 200%;
 	margin-left: auto;
@@ -1038,6 +1042,10 @@ img {
 
 #photoGalleryWrapper {
 	text-align: center;
+}
+
+.modal-text-entry {
+	width: 100%;
 }
 
 #photoModal {

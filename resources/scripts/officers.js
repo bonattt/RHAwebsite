@@ -4,6 +4,11 @@ const API_EXTENSION = '';
 const MESSAGE_MODAL_ID = 'messageModal';
 
 
+function showNotification(message) {
+    document.getElementById("messageModal-body").innerHTML = message;
+    $("#messageModal").modal()
+}
+
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
         setupAddOfficerButton();
@@ -26,7 +31,12 @@ function setAdmin(officers) {
                     msg = 'Officers must have a member type.'
                     delete json_data.membertype;
                 }
-                xhr.onload = function () { location.reload() };
+                if (json_data.phone_number.length != 10) {
+                    showNotification("please enter a 10-digit phone number");
+                    return;
+                }
+
+                xhr.onload = function () { }//location.reload() };
                 var imageEntry = document.getElementById("imageFilePut");
                 var global_id = selected_element_id.replace('officer', '');
                 global_id = parseInt(global_id);
@@ -107,25 +117,40 @@ function deleteFunction(filePath) {
 }
 
 function setupAddOfficerButton() {
-    var addOfficerBtn = document.getElementById('addOfficer');
+    var addOfficerBtn = document.getElementById('addOfficerButton');
     addOfficerBtn.style.display = "block"; //*/
     addOfficerBtn.addEventListener('click', function () {
-        var usernameEntry = document.getElementById('new-officer-username');
+        var usernameEntry = document.getElementById('addOfficerModal-username');
         usernameEntry.value = ''
-        var memebertypeEntry = document.getElementById('new-officer-membertype');
+        var memebertypeEntry = document.getElementById('addOfficerModal-membertype');
         memebertypeEntry.value = ''
     });
-    var submitBtn = document.getElementById('modal-new-officer-submit');
+    var submitBtn = document.getElementById('addOfficerModal-submit');
     submitBtn.addEventListener('click', function () {
-        var usernameEntry = document.getElementById('new-officer-username');
+        var usernameEntry = document.getElementById('addOfficerModal-username');
         var username = usernameEntry.value;
-        var membertypeEntry = document.getElementById('new-officer-membertype');
-        var memberType = membertypeEntry.value;
+        var membertypeEntry = document.getElementById('addOfficerModal-membertype');
+        var phoneEntry = document.getElementById('addOfficerModal-phone_number');
+        var hallEntry = document.getElementById('addOfficerModal-hall');
+        var roomEntry = document.getElementById('addOfficerModal-room_number');
+        var cmEntry = document.getElementById('addOfficerModal-cm');
 
         var urlExtension = 'members/' + username;
-        var json_data = { "memberType": memberType };
+        var json_data = {"memberType": membertypeEntry.value};
+
+        if (phoneEntry.value != '') { json_data.phone_number = phoneEntry.value}
+        if (hallEntry.value != '') { json_data.hall = hallEntry.value}
+        if (roomEntry.value != '') { json_data.room_number = roomEntry.value}
+        if (cmEntry.value != '') { json_data.cm = cmEntry.value}
+
+        console.log(json_data.phone_number);
+        if (json_data.phone_number.length != 10) {
+            showNotification("please enter a 10-digit phone number");
+            return;
+        }
+
         var xhr = xhrPutRequest(urlExtension);
-        xhr.onload = function () { location.reload() };
+        xhr.onload = function () { } //location.reload() };
         var imageEntry = document.getElementById("imageFilePost");
         if (imageEntry.value != '') {
             var photoPost = new PhotoPostXhr("officerPhoto");
@@ -139,7 +164,7 @@ function setupAddOfficerButton() {
             xhr.send(JSON.stringify(json_data));
         }
     });
-    var cancelBtn = document.getElementById('modal-new-officer-cancel');
+    var cancelBtn = document.getElementById('addOfficerModal-cancel');
     cancelBtn.addEventListener('click', function () {
         var imageEntry = document.getElementById("imageFilePost");
         imageEntry.value = '';
