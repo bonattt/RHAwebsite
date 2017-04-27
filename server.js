@@ -136,8 +136,12 @@ app.get('/api/v1/galleryPhoto', type, function (req, res) {
 
 app.delete('/api/v1/photo', urlencodedParser, function(req, res, next) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
   var target_path = req.body.imagePath + "";
-  fs.unlink(target_path);
-  res.status(200).json({ status: 'The file ' + target_path + ' was deleted.' }).send();
+  if (fs.fs.existsSync(target_path)) {
+    fs.unlink(target_path);
+    res.status(200).json({ status: 'The file ' + target_path + ' was deleted.' }).send();
+  } else {
+    res.status(404).json({ status: 'The file ' + target_path + ' does not exist.' }).send();
+  }
   return;
 });
 
@@ -184,9 +188,13 @@ app.post('/api/v1/committeePhoto', type, function (req, res) {  //we will need t
 
 app.delete('/api/v1/committeePhoto', function (req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
   var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
-  fs.unlink(toDeleteAbsolute);
-  console.log(res);
-  res.status(200).json({ status: 'The file ' + toDeleteAbsolute + ' was deleted.' }).send();
+  if (fs.existsSync(toDeleteAbsolute)) {
+      fs.unlink(toDeleteAbsolute);
+      console.log(res);
+      res.status(200).json({ status: 'The file ' + toDeleteAbsolute + ' was deleted.' }).send();
+  } else {
+      res.status(404).json({ status: 'The file ' + toDeleteAbsolute + ' does not exist.' }).send();      
+  }
   return;
 });
 
@@ -206,9 +214,13 @@ app.post('/api/v1/officerPhoto', type, function (req, res) {  //we will need to 
 
 app.delete('/api/v1/officerPhoto', function (req, res) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
   var toDeleteAbsolute = 'resources/' + req.body.toBaleet.substring(2);
-  fs.unlink(toDeleteAbsolute);
-  console.log(res);
-  res.status(200).json({ status: 'The file ' + toDeleteAbsolute + ' was deleted.' }).send();
+  if (toDeleteAbsolute) {
+      fs.unlink(toDeleteAbsolute);
+      console.log(res);
+      res.status(200).json({ status: 'The file ' + toDeleteAbsolute + ' was deleted.' }).send();
+  } else {
+      res.status(404).json({ status: 'The file ' + toDeleteAbsolute + ' does not exist.' }).send();      
+  }
   return;
 });
 
