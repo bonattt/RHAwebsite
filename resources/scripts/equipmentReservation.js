@@ -6,8 +6,6 @@ function setAdmin(officers) {
 }
 
 function setup() {
-	// var addButton = document.getElementById("calendar-add-button");
-	// addButton.addEventListener("click", function() {addNewCalendar("calendar1", "calendar-modal-")});
 	var officersxhr = getOfficers();
 	officersxhr.onload = function () {
 		setAdmin(officersxhr.responseText);
@@ -33,7 +31,6 @@ function setup() {
 
 	var submitBtn = document.getElementById("modal-submit");
 	submitBtn.addEventListener("click", submit);
-	// var dataset = document.getElementById("calendar2").dataset;
 }
 
 function submit() {
