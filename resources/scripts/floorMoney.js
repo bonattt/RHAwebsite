@@ -4,9 +4,6 @@ function setup() {
     xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
     xhr.send();
 
-
-//    setTimeout(, 300);
-
     function createHTMLFromResponseText(floorMoney) {
         floorMoney = JSON.parse(floorMoney);
         floorMoney = floorMoney.sort();

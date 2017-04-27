@@ -1,13 +1,5 @@
 
-var eventsMap = new Object();
-var eventId;
-var newEventName;
-var newEventPrice;
-var newEventImage;
-var newEventDescription;
-var newEventSignUpCloseDate;
 var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
-
 var isAdmin = false;
 var isAMember = false;
 

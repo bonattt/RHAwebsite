@@ -1,6 +1,3 @@
-var committeeMap = new Object();
-var committeeID;
-
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
         setupAddCommitteeButton();
@@ -33,7 +30,6 @@ function setAdmin(officers) {
 }
 
 function setupAddCommitteeButton() {
-
     var addCommitteeBtn = document.getElementById("addCommittee");
     addCommitteeBtn.style.display = "block"; //*/
     addCommitteeBtn.addEventListener('click', function () {
@@ -75,6 +71,7 @@ function clearImageForm() {
 }
 
 function setup() {
+    var committeeMap = new Object();
     var apiExtension = 'committees/';
     var urlExtension = 'committees';
     var xhr = xhrGetRequest(urlExtension);
@@ -150,6 +147,7 @@ function saveCommittee(data) {
     }
 
     imageInput.value = '';
+    location.reload();
 }
 
 function deleteFunction(filePath) {
