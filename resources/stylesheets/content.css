@@ -408,6 +408,10 @@ h3{
 	display: inline-block;
 }
 
+#officer-delete-note {
+	text-align: center;
+}
+
 /* Proposals */
 #proposalsPage {
 	position: absolute;
