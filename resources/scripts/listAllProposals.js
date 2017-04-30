@@ -128,7 +128,6 @@ function drawTable(proposals, isAdmin) {
         if (isAdmin) {
             addRowListener(tr, proposals[i]);
         }
-        else { console.log("not adding listener " + id) }
         var tdname = document.createElement('td');
         tdname.innerHTML = proposals[i].proposal_name;
         tdname.setAttribute("id", "proposal_name" + id);
@@ -232,9 +231,6 @@ function addRowListener(tr, proposal) {
         // console.log(quarterProposedField);
         // quarterProposedField.val(quarter);
         $('#quarterProposed option[value="' + quarter + '"]').prop('selected', true);
-
-        unMarshalDates(proposal);
-        document.getElementById('proposalModal-paid').checked = proposal.paid;
         var imageIsPresentLabel = document.getElementById('proposalModal-imageIsPresent');
         if (proposal.image_path == null) {
             imageIsPresentLabel.innerHTML = 'This proposal currently has no image !!!!'
@@ -321,8 +317,6 @@ function setupModalButtons() {
         xhr.onload = function () {
             location.reload();
         }
-        console.log(json_data);
-        removeNullValues(json_data, ["image_path"]);
 
         if (verifyFields(json_data)) { return; /* something is wrong in the data entered. */ }
 
