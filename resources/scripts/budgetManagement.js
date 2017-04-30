@@ -184,12 +184,12 @@ function setupButtons() {
     });
 
     var cancelFinalChanges = document.getElementById('finalChanges-cancel');
-    cancelFinalChanges.addEventListener('click', function() {
+    cancelFinalChanges.addEventListener('click', function () {
         $('#detailsModal-processedCheck').attr('checked', false);
     });
 
     var confirmFinalChanges = document.getElementById('finalChanges-confirm');
-    confirmFinalChanges.addEventListener('click', function() {
+    confirmFinalChanges.addEventListener('click', function () {
         document.getElementById('detailsModal-processedDate').disabled = false;
     });
 }
@@ -325,7 +325,11 @@ function buildPaymentRow(payment, proposal_name, rowNumber) {
     row.appendChild(col);
 
     col = document.createElement('td');
-    col.appendChild(document.createTextNode(composeDateStr(payment.dateprocessed)));
+    if (payment.dateprocessed) {
+        col.appendChild(document.createTextNode(composeDateStr(payment.dateprocessed)));
+    } else {
+        col.appendChild(document.createTextNode('-'));
+    }
     col.setAttribute('class', 'tableEntry');
     row.appendChild(col);
 
@@ -495,7 +499,7 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
             });
 
             $('#detailsModal-processedCheck').on('change', function (e) {
-                if(e.target.checked) {
+                if (e.target.checked) {
                     $('#finalChangesConfirmationModal').modal();
                 } else {
                     processedDate.disabled = true;
@@ -599,6 +603,7 @@ $(document).ready(function () {
     $("#processedDate").datepicker();
     $("#paymentModal-datereceived").datepicker();
     $('#paymentModal-dateprocessed').datepicker();
+    $('#detailsModal-processedDate').datepicker();
 
     $("#receiptsGrid").shieldGrid({
         dataSource: {
