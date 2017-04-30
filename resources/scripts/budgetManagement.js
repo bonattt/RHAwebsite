@@ -140,6 +140,7 @@ function setupButtons() {
         var receiptsObject = [];
         var total = 0.0;
         var descText = document.getElementById('detailsModal-description').value;
+        var processedDate = document.getElementById('detailsModal-processedDate').value;
         var grid = $("#receiptsDetailGrid").swidget();
         for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
             var currentRow = grid.contentTable[0].rows[i];
@@ -154,13 +155,15 @@ function setupButtons() {
                 }
             }
         }
-
         var json_obj = {
             "receipts": {
                 "receipts": receiptsObject
             },
             "amountused": total,
             "description": descText
+        }
+        if(processedDate) {
+            json_obj.dateprocessed = processedDate;
         }
         xhr.onload = function () {
             location.reload();
