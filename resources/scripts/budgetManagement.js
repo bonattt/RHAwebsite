@@ -185,7 +185,8 @@ function setupButtons() {
 
     var cancelFinalChanges = document.getElementById('finalChanges-cancel');
     cancelFinalChanges.addEventListener('click', function () {
-        $('#detailsModal-processedCheck').attr('checked', false);
+        var processedCheck = document.getElementById('detailsModal-processedCheck');
+        processedCheck.checked = false;
     });
 
     var confirmFinalChanges = document.getElementById('finalChanges-confirm');
@@ -365,9 +366,9 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
         var processedCheck = document.getElementById('detailsModal-processedCheck');
         var processedDate = document.getElementById('detailsModal-processedDate');
         processedDate.disabled = true;
+        processedDate.value = json_obj.dateprocessed;
 
         if (json_obj.dateprocessed) {
-            processedDate.value = json_obj.dateprocessed;
             processedCheck.checked = true;
             processedCheck.disabled = true;
             description.disabled = true;
@@ -433,6 +434,8 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
             for (var i = 0; i < gridData.length; i++) {
                 if (receiptList[i] != null) {
                     gridData[i] = receiptList[i];
+                } else {
+                    gridData[i] = {"amount": null, "date": new Date()};
                 }
             }
             $("#receiptsDetailGrid").shieldGrid({
@@ -497,7 +500,10 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
                     insertNewRowAt: "pagebottom"
                 }
             });
-
+            processedCheck.checked = false;
+            processedCheck.disabled = false;
+            document.getElementById('detailsModal-delete').disabled = false;
+            document.getElementById('detailsModal-confirm').disabled = false;
             $('#detailsModal-processedCheck').on('change', function (e) {
                 if (e.target.checked) {
                     $('#finalChangesConfirmationModal').modal();
