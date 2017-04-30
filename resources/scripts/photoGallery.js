@@ -1,5 +1,3 @@
-var isAdmin = false;
-
 function setup() {
     var officersxhr = getOfficers(); // from adminPErmission.js
     var galleryURL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery';

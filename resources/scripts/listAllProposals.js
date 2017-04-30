@@ -8,7 +8,6 @@ const FIELDS = [
     "cost_to_attendee",
     "max_attendance",
 ]
-
 const date_FIELDS = [
     "event_date",
     "proposed_date",
@@ -110,6 +109,7 @@ function drawTable(proposals, isAdmin) {
     table.setAttribute('align', 'center');
     table.setAttribute('bordercolor', '#808080');
     table.setAttribute('class', 'proposalsTable');
+    table.setAttribute('class', 'clickable');
     var tbdy = document.createElement('tbody');
 
     tbdy.appendChild(createColumnHead("Name"));
@@ -228,6 +228,13 @@ function addRowListener(tr, proposal) {
             quarter = 'Spring';
         }
         $('#quarterProposed option[value="' + quarter + '"]').prop('selected', true);
+        // var quarterProposedField = document.getElementById('quarterProposed');
+        // console.log(quarterProposedField);
+        // quarterProposedField.val(quarter);
+        $('#quarterProposed option[value="' + quarter + '"]').prop('selected', true);
+
+        unMarshalDates(proposal);
+        document.getElementById('proposalModal-paid').checked = proposal.paid;
         var imageIsPresentLabel = document.getElementById('proposalModal-imageIsPresent');
         if (proposal.image_path == null) {
             imageIsPresentLabel.innerHTML = 'This proposal currently has no image !!!!'
@@ -346,8 +353,7 @@ function setupModalButtons() {
 }
 
 function verifyFields(json_data) {
-
-    var required_fields = ["proposal_name", "proposer", "money_requested",
+    var required_fields = ["proposed_date", "event_date", "proposal_name", "proposer", "money_requested",
         "money_allocated", "cost_to_attendee", "week_proposed"];
     var missing_fields = getInvalidFields(json_data, required_fields);
 
@@ -368,39 +374,23 @@ function getInvalidFields(json_data, required_fields) {
             console.log(field + " is invalid");
             delete json_data[field];
         }
+        else if (Object.prototype.toString.call(json_data[field]) === '[object Date]') {
+            if (isNaN(json_data[field].getTime())) {
+                missing_fields.push(field);
+                console.log(field + " is an invalid date");
+                delete json_data[field];
+            }
+        }
     });
     return missing_fields;
 }
 
-function displayMissingFieldWarning(missing_fields) {
-    var msg = 'some required fields were left blank: <br/>';
-    missing_fields.forEach(function (field) {
-        msg += 'please include the <b>' + field.replace(/_/g, ' ') + '</b><br/>';
+function displayInvalidDateWarning(invalid_dates) {
+    var msg = 'some dates were enterd incorrectly: <br/>';
+    invalid_dates.forEach(function (field) {
+        msg += '<b>' + field.replace(/_/g, ' ') + '</b> was entered incorrectly<br/>';
     });
     displayWarningModal(msg, 6000)
-}
-
-function displayWarningModal(msg, duration) {
-
-    var infoBody = document.getElementById("infoModal-body");
-    infoBody.innerHTML = msg;
-    $("#infoModal").modal("show");
-    if (typeof duration !== "undefined") {
-        setTimeout(function () {
-            $("#infoModal").modal("hide");
-        }, duration);
-    }
-}
-
-function removeNullValues(json_data, exclude) {
-    if (typeof exclude == "undefined") {
-        exclude = [];
-    }
-    for (attr in json_data) {
-        if (json_data[attr] == null && !exclude.include(attr)) {
-            delete json_data[attr];
-        }
-    }
 }
 
 

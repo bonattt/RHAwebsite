@@ -4,9 +4,6 @@ function setup() {
     xhr.onload = function () { createHTMLFromResponseText(xhr.responseText) };
     xhr.send();
 
-
-//    setTimeout(, 300);
-
     function createHTMLFromResponseText(floorMoney) {
         floorMoney = JSON.parse(floorMoney);
         floorMoney = floorMoney.sort();
@@ -16,6 +13,7 @@ function setup() {
         table.setAttribute('align', 'center');
         table.setAttribute('bordercolor', '#808080');
         table.setAttribute('id', 'floor-money');
+        table.setAttribute('class', 'clickable');
 
         var tbdy = document.createElement('tbody');
         var tdFloor = document.createElement('td');

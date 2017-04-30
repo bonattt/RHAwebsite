@@ -1,7 +1,3 @@
-const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-]
-
 var gridData = [{
         "amount": 0,
         "date": new Date()
@@ -27,7 +23,6 @@ var gridData = [{
         "date": new Date()
     }
 ]
-
 var current_id = -1;
 
 function parseModalEntries(idHeader, ids) {
@@ -46,15 +41,12 @@ function prepEventName(str) {
 }
 
 function setupEventSelector() {
-    console.log('setupEventSelector');
     var apiExtension = 'allEvents/';
     var xhr = xhrGetRequest(apiExtension);
     xhr.onload = function() {
         var selector = document.getElementById('paymentModal-event');
         var eventList = JSON.parse(xhr.responseText)
-        console.log(eventList);
         eventList.forEach(function(event) {
-            console.log('adding ' + event.proposal_name);
             var option = document.createElement('option');
             option.setAttribute('id', 'eventOption'+event.proposal_id);
             option.setAttribute('value', event.proposal_id);
@@ -83,8 +75,6 @@ function setupButtons() {
         json_obj.datereceived = new Date(json_obj.datereceived);
         var select = document.getElementById('paymentModal-event');
         json_obj.proposal_id = select.dataset[prepEventName(select.value)]
-
-        /* parse through the table to insert dates*/
         var grid = $("#receiptsGrid").swidget();
         var receiptsObject = [];
         for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
@@ -339,6 +329,9 @@ function buildRow(data, keys, rowNumber) {
 function composeDateStr(dateStr) {
     var msg = '';
     var date = new Date(dateStr);
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+]
     msg += monthNames[date.getMonth()]
     msg += ' ';
     msg += date.getDate();

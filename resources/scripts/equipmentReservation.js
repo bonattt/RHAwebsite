@@ -1,13 +1,16 @@
+var isOfficer = false;
+
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
+    	isOfficer = true;
         var addProposalButton = document.getElementById("addProposal"); // Using same styling as button on Proposals page; didn't want to add new styling rule
         addProposalButton.style.display = "block";
+    } else {
+    	isOfficer = false;
     }
 }
 
 function setup() {
-	// var addButton = document.getElementById("calendar-add-button");
-	// addButton.addEventListener("click", function() {addNewCalendar("calendar1", "calendar-modal-")});
 	var officersxhr = getOfficers();
 	officersxhr.onload = function () {
 		setAdmin(officersxhr.responseText);
@@ -33,7 +36,6 @@ function setup() {
 
 	var submitBtn = document.getElementById("modal-submit");
 	submitBtn.addEventListener("click", submit);
-	// var dataset = document.getElementById("calendar2").dataset;
 }
 
 function submit() {
@@ -140,23 +142,25 @@ function switchCalendarView(calendarToView) {
 	// console.log(calendarToView.dataset["embed"]);
 	// console.log(calendarToView.dataset["id"]);
 
-	var firstDelete = document.getElementById("delete-calendar");
-	firstDelete.style.display = "inline";
+	if (isOfficer) {
+		var firstDelete = document.getElementById("delete-calendar");
+		firstDelete.style.display = "inline";
 
-	console.log("equipment/" + calendarToView.dataset["id"]);
+		console.log("equipment/" + calendarToView.dataset["id"]);
 
-	var deleteBtn = document.getElementById("confirm-delete");
-	deleteBtn.addEventListener("click", function () {
+		var deleteBtn = document.getElementById("confirm-delete");
+		deleteBtn.addEventListener("click", function () {
 
-		var extension = "equipment/" + calendarToView.dataset["id"];
-		var xhr = xhrDeleteRequest(extension);
-		xhr.onload = function () {
-			location.reload();
-		};
+			var extension = "equipment/" + calendarToView.dataset["id"];
+			var xhr = xhrDeleteRequest(extension);
+			xhr.onload = function () {
+				location.reload();
+			};
 
-		xhr.send();
+			xhr.send();
 
-	});
+		});
+	}
 
 	calendarFrame.innerHTML = calendarToView.getAttribute("data-embed");
 	lastUpdated();
