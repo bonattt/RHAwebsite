@@ -1,5 +1,3 @@
-
-
 function setAdmin(officers) {
     if (userIsOfficer(officers)) {
         var addProposalButton = document.getElementById("addProposal");
@@ -7,22 +5,33 @@ function setAdmin(officers) {
     }
 }
 
-
 function setup() {
-
     var officersxhr = getOfficers();
     officersxhr.send();
     setTimeout(function () { setAdmin(officersxhr.responseText) }, 300);
     var createNewProposal = document.getElementById("addProposal");
+
+    var selector = document.getElementById('quarterProposed');
+        var fallOption = document.createElement('option');
+        fallOption.setAttribute('value', 'Fall');
+        fallOption.innerHTML = 'Fall';
+        selector.appendChild(fallOption);
+        
+        var winterOption = document.createElement('option');
+        winterOption.setAttribute('value', 'Winter');
+        winterOption.innerHTML = 'Winter';
+        selector.appendChild(winterOption);
+        
+        var springOption = document.createElement('option');
+        springOption.setAttribute('value', 'Spring');
+        springOption.innerHTML = 'Spring';
+        selector.appendChild(springOption);
 }
 
 function submit() {
-
-    var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port: '') + '/api/v1/eventPhoto';
+    var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/eventPhoto';
     var photoxhr = new XMLHttpRequest();
-
     var dbAPIURL = 'http://rha-website-1.csse.rose-hulman.edu:3000/API/v1/proposal';
-
     var name = document.getElementById("name").value;
     var costToAttendee = document.getElementById("costToAttendee").value;
     var description = document.getElementById("description").value;
@@ -37,22 +46,24 @@ function submit() {
     var moneyRequested = document.getElementById("moneyRequested").value;
     var moneyAllocated = document.getElementById("moneyAllocated").value;
     var files = document.getElementById("imageFile").files;
-
-    console.log("files are:");
-    console.log(files);
-    if(!name || !costToAttendee || !description || !eventDate || !proposer || !dateProposed || !weekProposed || !quarter || !moneyRequested || !moneyAllocated || files.length == 0){
-    var snackbar = document.getElementById("proposalsSnackbar");
-    snackbar.className = "show";
-    console.log(snackbar);
-    setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+    if(quarter == 'Fall'){
+        quarter = 0;
+    } else if(quarter =='Winter'){
+        quarter = 1;
+    } else{
+        quarter = 2;
+    }
+    if (!name || !costToAttendee || !description || !eventDate || !proposer || !dateProposed || !weekProposed || !quarter || !moneyRequested || !moneyAllocated || files.length == 0) {
+        var snackbar = document.getElementById("proposalsSnackbar");
+        snackbar.className = "show";
+        setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
     }
 
-    if(!maxAttendance) {
+    if (!maxAttendance) {
         maxAttendance = 10000;
     }
 
     if (signUpCloseDate == "" && signUpOpenDate == "") {
-        console.log("I happened");
         signUpCloseDate = null;
         signUpOpenDate = null;
     }
@@ -62,13 +73,10 @@ function submit() {
     photoxhr.open('POST', photoAPIURL, true);
 
     photoxhr.onreadystatechange = function (e) {
-        console.log("I'm playing in the stateChange!");
-        if(photoxhr.readyState == 4 && photoxhr.status == 200) {
-            console.log("ReadyState was 4 and status 200!")
+        if (photoxhr.readyState == 4 && photoxhr.status == 200) {
             var image_path = JSON.parse(photoxhr.responseText).filepath;
             var dbxhr = new XMLHttpRequest();
             var dbObject = {};
-            console.log(maxAttendance);
             dbObject["proposal_name"] = name;
             dbObject["cost_to_attendee"] = costToAttendee;
             dbObject["event_date"] = eventDate;
@@ -88,7 +96,7 @@ function submit() {
             dbxhr.open('POST', dbAPIURL, true);
             dbxhr.setRequestHeader('Content-Type', 'application/json');
             dbxhr.onreadystatechange = function (e) {
-                if(dbxhr.readyState == 4 && dbxhr.status == 200) {
+                if (dbxhr.readyState == 4 && dbxhr.status == 200) {
                     location.reload();
                 }
             }
@@ -104,7 +112,7 @@ function submit() {
     photoxhr.send(formData);
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     setup();
     $("#signUpOpenDate").datepicker();
     $("#signUpCloseDate").datepicker();

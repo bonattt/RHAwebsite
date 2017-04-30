@@ -1,5 +1,3 @@
-
-
 function PhotoPostXhr(apiCall) {
     this.xhr = new XMLHttpRequest();
     this.xhr.open('POST', getPhotoApiUri(apiCall));
