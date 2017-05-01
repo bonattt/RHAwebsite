@@ -138,16 +138,22 @@ function setupAddOfficerButton() {
         var urlExtension = 'members/' + username;
         var json_data = {"memberType": membertypeEntry.value};
 
-        if (phoneEntry.value != '') { json_data.phone_number = phoneEntry.value}
+        if (phoneEntry.value != '') {
+            if (phoneEntry.value.length != 10) {
+                showNotification("please enter a 10-digit phone number");
+                return;
+            }
+            json_data.phone_number = phoneEntry.value
+        }
         if (hallEntry.value != '') { json_data.hall = hallEntry.value}
         if (roomEntry.value != '') { json_data.room_number = roomEntry.value}
         if (cmEntry.value != '') { json_data.cm = cmEntry.value}
 
         console.log(json_data.phone_number);
-        if (json_data.phone_number.length != 10) {
-            showNotification("please enter a 10-digit phone number");
-            return;
-        }
+//        if (json_data.phone_number.length != 10) {
+//            showNotification("please enter a 10-digit phone number");
+//            return;
+//        }
 
         var xhr = xhrPutRequest(urlExtension);
         xhr.onload = function () { location.reload() };
