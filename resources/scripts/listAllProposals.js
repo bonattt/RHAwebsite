@@ -8,6 +8,12 @@ const FIELDS = [
     "cost_to_attendee",
     "max_attendance",
 ]
+const date_FIELDS = [
+    "event_date",
+    "proposed_date",
+    "event_signup_open",
+    "event_signup_close"
+]
 var body = document.getElementsByTagName('body')[0];
 var last_proposal_clicked = -1;
 
@@ -46,6 +52,7 @@ function displayProposals(isAdmin) {
                 drawTable(proposalsForCurrentYear.reverse(), isAdmin);
                 proposalsForCurrentYear = new Array();
                 startingYear++;
+                console.log("increasting starting year by 1");
             }
             proposalsForCurrentYear.push(proposals[i]);
         }
@@ -110,7 +117,6 @@ function drawTable(proposals, isAdmin) {
     tbdy.appendChild(createColumnHead("Amout Budgeted"));
     tbdy.appendChild(createColumnHead("Reserve"));
     tbdy.appendChild(createColumnHead("Used"));
-    tbdy.appendChild(createColumnHead("Paid"));
     tbdy.appendChild(createColumnHead("Event Date"));
     tbdy.appendChild(createColumnHead("Proposed Date"));
     tbdy.appendChild(createColumnHead("Proposed Quarter"));
@@ -122,7 +128,6 @@ function drawTable(proposals, isAdmin) {
         if (isAdmin) {
             addRowListener(tr, proposals[i]);
         }
-        else { console.log("not adding listener " + id) }
         var tdname = document.createElement('td');
         tdname.innerHTML = proposals[i].proposal_name;
         tdname.setAttribute("id", "proposal_name" + id);
@@ -162,10 +167,6 @@ function drawTable(proposals, isAdmin) {
         tdallocated.innerHTML = "$" + proposals[i].money_allocated;
         tdallocated.setAttribute("id", "money_allocated" + id);
 
-        var tdpaid = document.createElement('td');
-        tdpaid.innerHTML = proposals[i].paid;
-        tdpaid.setAttribute("id", "paid" + id);
-
         var tdreserve = document.createElement('td');
         var tdused = document.createElement('td');
 
@@ -175,7 +176,6 @@ function drawTable(proposals, isAdmin) {
         tr.appendChild(tdallocated);
         tr.appendChild(tdreserve);
         tr.appendChild(tdused);
-        tr.appendChild(tdpaid);
         tr.appendChild(tddate);
         tr.appendChild(tdProposedDate);
         tr.appendChild(tdquarter);
@@ -213,6 +213,11 @@ function addRowListener(tr, proposal) {
             var entry = document.getElementById('proposalModal-' + attr);
             entry.value = proposal[attr];
         });
+        date_FIELDS.forEach(function (attr) {
+            var entry = document.getElementById('proposalModal-' + attr);
+            var d = new Date(proposal[attr]);
+            entry.value = (d.getMonth() + 1) + "/" + d.getUTCDate() + "/" + d.getFullYear();
+        });
         var quarter = proposal['quarter_proposed'];
         if (quarter == 0) {
             quarter = 'Fall';
@@ -221,13 +226,11 @@ function addRowListener(tr, proposal) {
         } else {
             quarter = 'Spring';
         }
+        $('#quarterProposed option[value="' + quarter + '"]').prop('selected', true);
         // var quarterProposedField = document.getElementById('quarterProposed');
         // console.log(quarterProposedField);
         // quarterProposedField.val(quarter);
         $('#quarterProposed option[value="' + quarter + '"]').prop('selected', true);
-
-        unMarshalDates(proposal);
-        document.getElementById('proposalModal-paid').checked = proposal.paid;
         var imageIsPresentLabel = document.getElementById('proposalModal-imageIsPresent');
         if (proposal.image_path == null) {
             imageIsPresentLabel.innerHTML = 'This proposal currently has no image !!!!'
@@ -235,86 +238,6 @@ function addRowListener(tr, proposal) {
             imageIsPresentLabel.innerHTML = 'There is already an image for this proposal. '
         }
     });
-}
-
-function unMarshalDates(proposal) {
-    var proposed_date = document.getElementById('proposalModal-proposed_date');
-    var event_date = document.getElementById('proposalModal-event_date');
-    var event_signup_open = document.getElementById('proposalModal-event_signup_open');
-    var event_signup_close = document.getElementById('proposalModal-event_signup_close');
-
-    proposed_date.value = unMarshalHtml5(proposal.proposed_date);
-    event_date.value = unMarshalHtml5(proposal.event_date);
-    event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
-    event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
-    //    if (BROWSER.includes("chrome")) {
-    //        proposed_date.value = unMarshalHtml5(proposal.proposed_date);
-    //        event_date.value = unMarshalHtml5(proposal.event_date);
-    //        event_signup_open.value = unMarshalHtml5(proposal.event_signup_open);
-    //        event_signup_close.value = unMarshalHtml5(proposal.event_signup_close);
-    //
-    ////    } else if (BROWSER.includes("firefox")) {
-    //    } else {
-    //        proposed_date.value = proposal.proposed_date;
-    //        event_date.value = proposal.event_date;
-    //        event_signup_open.value = proposal.event_signup_open;
-    //        event_signup_close.value = proposal.event_signup_close;
-    //    }
-}
-
-function marshalAllDates(json_data) {
-    var rawDates = []
-
-    var entry = document.getElementById('proposalModal-proposed_date');
-    rawDates.proposed_date = entry.value;
-    var date = marshalDateString(entry.value); // new Date(entry.value);
-    json_data.proposed_date = date;
-
-    entry = document.getElementById('proposalModal-event_date');
-    rawDates.event_date = entry.value;
-    date = marshalDateString(entry.value); // new Date(entry.value);
-    json_data.event_date = date;
-
-    entry = document.getElementById('proposalModal-event_signup_open');
-    rawDates.event_signup_open = entry.value;
-    date = marshalDateString(entry.value); // new Date(entry.value);
-    json_data.event_signup_open = date;
-
-    entry = document.getElementById('proposalModal-event_signup_close');
-    rawDates.event_signup_close = entry.value;
-    date = marshalDateString(entry.value); // new Date(entry.value);
-    json_data.event_signup_close = date;
-
-    return verifyDates(rawDates);
-}
-
-function marshalDateString(dateStr) {
-    var dateList = dateStr.split('-')
-    var date = new Date();
-    date.setYear(dateList[0]);
-    date.setMonth(dateList[1] - 1);
-    date.setDate(dateList[2]);
-
-    //    date.setMonth(date.getMonth()+1);
-    return date;
-}
-
-function unMarshalHtml5(dateStr) {
-    if (dateStr == null) {
-        return '';
-    }
-
-    var date = new Date(dateStr);
-    var msg = date.getFullYear();
-    msg += '-';
-    var month = date.getMonth() + 1;
-    if (month < 10) { month = "0" + month }
-    msg += month;
-    msg += '-'
-    var day = date.getDate();
-    if (day < 10) { day = "0" + day }
-    msg += day;
-    return msg;
 }
 
 function doClosure(proposal, i, tdused, tdreserve) {
@@ -371,6 +294,12 @@ function setupModalButtons() {
             var entry = document.getElementById('proposalModal-' + attr);
             json_data[attr] = entry.value;
         });
+        date_FIELDS.forEach(function (attr) {
+            var entry = document.getElementById('proposalModal-' + attr);
+            if (entry.value) {
+                json_data[attr] = entry.value;
+            }
+        });
         var quarter = document.getElementById("quarterProposed").value;
         if (quarter == 'Fall') {
             quarter = 0;
@@ -380,10 +309,6 @@ function setupModalButtons() {
             quarter = 2;
         }
         json_data['quarter_proposed'] = quarter;
-        json_data.paid = document.getElementById('proposalModal-paid').checked;
-        if (marshalAllDates(json_data)) {
-            return; /* a date was formated incorrectly */
-        }
 
         json_data.image_path = document.getElementById('proposal_name' + last_proposal_clicked).dataset.image_path;
         var apiUri = 'events/' + id;
@@ -392,8 +317,6 @@ function setupModalButtons() {
         xhr.onload = function () {
             location.reload();
         }
-        console.log(json_data);
-        removeNullValues(json_data, ["image_path"]);
 
         if (verifyFields(json_data)) { return; /* something is wrong in the data entered. */ }
 
@@ -424,7 +347,6 @@ function setupModalButtons() {
 }
 
 function verifyFields(json_data) {
-
     var required_fields = ["proposed_date", "event_date", "proposal_name", "proposer", "money_requested",
         "money_allocated", "cost_to_attendee", "week_proposed"];
     var missing_fields = getInvalidFields(json_data, required_fields);
@@ -433,17 +355,6 @@ function verifyFields(json_data) {
         $("#proposalModal").modal("hide");
     } else {
         displayMissingFieldWarning(missing_fields);
-        return true;
-    }
-    return false;
-}
-
-function verifyDates(dates) {
-    var invalid_date_fields = getInvalidDateFields(dates);
-    if (invalid_date_fields.length == 0) {
-        $("#proposalModal").modal("hide");
-    } else {
-        displayInvalidDateWarning(invalid_date_fields);
         return true;
     }
     return false;
@@ -468,55 +379,6 @@ function getInvalidFields(json_data, required_fields) {
     return missing_fields;
 }
 
-function getInvalidDateFields(json_data) {
-    var invalid_fields = []
-    var date_fields = ['proposed_date', 'event_date']
-
-    for (var i = 0; i < date_fields.length; i++) {
-        var f = date_fields[i]
-        if (dateInputValueInvalid(json_data[f])) {
-            invalid_fields.push(f)
-        }
-    }
-
-    //    if (dateInputValueInvalid(json_data.proposed_date)) {
-    //        invalid_fields.push("proposed_date")
-    //    }
-    //
-    //    if (dateInputValueInvalid(json_data.event_date)) {
-    //        invalid_fields.push("event_date")
-    //    }
-    //
-    //    if (dateInputValueInvalid(json_data.event_signup_open)) {
-    //        invalid_fields.push("event_signup_open")
-    //    }
-    //
-    //    if (dateInputValueInvalid(json_data.event_signup_close)) {
-    //        invalid_fields.push("event_signup_close")
-    //    }
-    return invalid_fields;
-}
-
-/**
- *  returns true if the input is not a valid date string that would be returned by HTML5.
- *  returns false if the input is okay
- */
-function dateInputValueInvalid(value) {
-    if (value == null) { return false }
-    if (typeof value == "undefined") { return false }
-
-    var valSplit = value.split('-');
-    if (valSplit.length != 3) { return 'incorrect delimiters'; }
-    if (isNaN(valSplit[0]) || isNaN(valSplit[1]) || isNaN(valSplit[2])) { return 'date contains non numbers'; }
-    if (valSplit[0] == '' || valSplit[1] == '' || valSplit[2] == '') { return 'date contains blank'; }
-    if (valSplit[1] < 1 || valSplit[1] > 12) { return "month out of range" }
-    if (valSplit[2] > 31 || valSplit[2] < 1) { return "day-of-month out of range" }
-    if (valSplit[1] == 2 && valSplit[2] > 28) { return "day-of-month out of range for this month" }
-    if ((valSplit[1] == 4 || valSplit[1] == 6 || valSplit[1] == 9 || valSplit[1] == 11) &&
-        valSplit[2] > 30) { return "day-of-month out of range for this month" }
-    return false;
-}
-
 function displayInvalidDateWarning(invalid_dates) {
     var msg = 'some dates were enterd incorrectly: <br/>';
     invalid_dates.forEach(function (field) {
@@ -525,40 +387,25 @@ function displayInvalidDateWarning(invalid_dates) {
     displayWarningModal(msg, 6000)
 }
 
-function displayMissingFieldWarning(missing_fields) {
-    var msg = 'some required fields were left blank: <br/>';
-    missing_fields.forEach(function (field) {
-        msg += 'please include the <b>' + field.replace(/_/g, ' ') + '</b><br/>';
-    });
-    displayWarningModal(msg, 6000)
-}
-
-function displayWarningModal(msg, duration) {
-
-    var infoBody = document.getElementById("infoModal-body");
-    infoBody.innerHTML = msg;
-    $("#infoModal").modal("show");
-    if (typeof duration !== "undefined") {
-        setTimeout(function () {
-            $("#infoModal").modal("hide");
-        }, duration);
-    }
-}
-
-function removeNullValues(json_data, exclude) {
-    if (typeof exclude == "undefined") {
-        exclude = [];
-    }
-    for (attr in json_data) {
-        if (json_data[attr] == null && !exclude.include(attr)) {
-            delete json_data[attr];
-        }
-    }
-}
-
 
 $(document).ready(function () {
     console.log(BROWSER);
+    $("#proposalModal-event_date").datepicker({
+       dateFormat: "mm/dd/yy",
+       orientation: "bottom auto"
+    });
+    $("#proposalModal-proposed_date").datepicker({
+       dateFormat: "mm/dd/yy",
+       orientation: "bottom auto"
+    });
+    $("#proposalModal-event_signup_open").datepicker({
+       dateFormat: "mm/dd/yy",
+       orientation: "bottom auto"
+    });
+    $("#proposalModal-event_signup_close").datepicker({
+       dateFormat: "mm/dd/yy",
+       orientation: "bottom auto"
+    });
     var officersxhr = getOfficers();
     officersxhr.onload = function () {
         var isAdmin = false;
