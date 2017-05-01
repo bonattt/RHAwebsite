@@ -15,7 +15,7 @@ function populateDeletePhotoModal() {
     var carouselInner = document.getElementById("carousel-inner");
     deletePhotoForm = document.getElementById("deletePhotoForm");
     for (var i = 1; i <= carouselInner.children.length; i++) {
-        deletePhotoForm.innerHTML += '<label><input type="radio" name="usernames" value="' + i + '" /> ' + i + '</label>';
+        deletePhotoForm.innerHTML += '<label class="carouselDeleteRadioButton"><input type="radio" name="usernames" value="' + i + '" /> ' + i + '</label>';
     }
     var radios = document.getElementsByTagName('input');
     var deleteConfirm = document.getElementById('confirm-delete');
