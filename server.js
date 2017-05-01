@@ -136,7 +136,7 @@ app.get('/api/v1/galleryPhoto', type, function (req, res) {
 
 app.delete('/api/v1/photo', urlencodedParser, function(req, res, next) {  //we will need to make this more secure (I don't think everyone should upload junk to here)
   var target_path = req.body.imagePath + "";
-  if (fs.fs.existsSync(target_path)) {
+  if (fs.existsSync(target_path)) {
     fs.unlink(target_path);
     res.status(200).json({ status: 'The file ' + target_path + ' was deleted.' }).send();
   } else {
