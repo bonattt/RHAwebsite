@@ -150,7 +150,7 @@ function setupAddOfficerButton() {
         }
 
         var xhr = xhrPutRequest(urlExtension);
-        xhr.onload = function () { } //location.reload() };
+        xhr.onload = function () { location.reload() };
         var imageEntry = document.getElementById("imageFilePost");
         if (imageEntry.value != '') {
             var photoPost = new PhotoPostXhr("officerPhoto");
