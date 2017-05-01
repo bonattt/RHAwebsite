@@ -36,7 +36,7 @@ function setAdmin(officers) {
                     return;
                 }
 
-                xhr.onload = function () { }//location.reload() };
+                xhr.onload = function () { location.reload() };
                 var imageEntry = document.getElementById("imageFilePut");
                 var global_id = selected_element_id.replace('officer', '');
                 global_id = parseInt(global_id);
