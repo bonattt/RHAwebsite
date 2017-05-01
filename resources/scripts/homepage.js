@@ -105,6 +105,7 @@ function setup() {
     } else {
         title.innerHTML = "Welcome!"
     }
+    setupEditTextSubmit();
 }
 
 function showModal(editImage) {
@@ -191,6 +192,11 @@ function uploadCarouselPhoto() {
     };
 
     photoxhr.send(formData);
+}
+
+function setupEditTextSubmit() {
+    var submitBtn = document.getElementById('editTextModal-submit');
+    submitBtn.addEventListener('click', updateFrontPageText);
 }
 
 function updateFrontPageText() {
