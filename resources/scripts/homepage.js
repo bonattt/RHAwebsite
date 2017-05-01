@@ -106,6 +106,12 @@ function setup() {
         title.innerHTML = "Welcome!"
     }
     setupEditTextSubmit();
+    setupUploadPhotoSubmit();
+}
+
+function setupUploadPhotoSubmit() {
+    var submitBtn = document.getElementById('carouselUploadModal-submit');
+    submitBtn.addEventListener('click', uploadCarouselPhoto);
 }
 
 function showModal(editImage) {
