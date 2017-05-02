@@ -226,6 +226,10 @@ div.tileTitle p {
 	display: inline-block;
 }
 
+.carouselDeleteRadioButton {
+	display: block;
+}
+
 /* ------------------- */
 
 .section {
