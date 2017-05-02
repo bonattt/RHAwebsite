@@ -10,6 +10,7 @@ function setup() {
         if (userIsOfficer(officersxhr.responseText)) {
             galleryURL += 'All';
             modalDelete.style.display = "inline-block";
+            setupUploadPhotoSubmit();
         } else {
             galleryURL += 'Restricted';
             var photoGallerySections = document.getElementsByClassName("photo-gallery-sections");
@@ -30,6 +31,11 @@ function setup() {
     });
 
 //    setTimeout(function () { displayImages(galleryURL) }, 300);
+}
+
+function setupUploadPhotoSubmit() {
+    var submitBtn = document.getElementById('uploadModal-submit');
+    submitBtn.addEventListener('click', uploadPhoto);
 }
 
 function displayImages(galleryURL) {
