@@ -211,6 +211,7 @@ function populateFundsTable() {
 function populatePaymentsTable() {
     var xhr = xhrGetRequest('payments/');
     var tbody = document.getElementById('paymentsTable');
+//    tbody.setAttribute('class', 'clickable');
     var rowNumber = 0;
     xhr.onload = function () {
         var payments = JSON.parse(xhr.responseText)
@@ -248,18 +249,14 @@ function buildFundsRow(fund, rowNumber) {
     var keys = ['fund_name', 'funds_amount']
     var row = buildRow(fund, keys, rowNumber)
 
-    // add edit button
     col = document.createElement('td');
-    var editButton = document.createElement('a');
-    editButton.appendChild(document.createTextNode('[edit]'));
-    editButton.setAttribute('class', 'tableEntry');
-    editButton.setAttribute('id', 'row' + rowNumber + 'edit');
+    row.appendChild(col);
 
-    var data = editButton.dataset;
+    var data = row.dataset;
     data.toggle = "modal";
     data.target = "#editFundModal";
 
-    editButton.addEventListener('click', function () {
+    row.addEventListener('click', function () {
         var header = document.getElementById('editFundModal-header');
         header.innerHTML = "Edit " + fund.fund_name + " Fund";
 
@@ -268,9 +265,6 @@ function buildFundsRow(fund, rowNumber) {
 
         current_id = fund.funds_id;
     });
-
-    col.appendChild(editButton);
-    row.appendChild(col);
     return row;
 }
 
@@ -303,10 +297,6 @@ function buildPaymentRow(payment, proposal_name, rowNumber) {
     col.setAttribute('id', 'row' + rowNumber + 'col' + 2);
     row.appendChild(col);
 
-    //    var row = buildRow(payment, keys, rowNumber);
-
-
-    // special cases:
     col = document.createElement('td');
     var amount = parseFloat(Math.round(payment.amountused * 100) / 100).toFixed(2);
     col.appendChild(document.createTextNode("$" + amount));
@@ -331,21 +321,22 @@ function buildPaymentRow(payment, proposal_name, rowNumber) {
     //    col.appendChild(document.createTextNode(payment.reciepts));
     //    col.setAttribute('class', 'tableEntry');
     //    row.appendChild(col);
-    row.appendChild(getDisplayExpenseDetailsLink(payment, rowNumber));
+    appendDisplayExpenseDetailsLink(row, payment);
     return row;
 }
 
-function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
-    var link = document.createElement('a');
-    link.appendChild(document.createTextNode('[details]'));
-    link.setAttribute('id', 'row' + rowNumber + 'details');
-    link.setAttribute('class', 'expenseDetails tableEntry');
 
-    var data = link.dataset;
+function appendDisplayExpenseDetailsLink(row, json_obj) {
+//    var link = document.createElement('a');
+//    link.appendChild(document.createTextNode('[details]'));
+//    link.setAttribute('id', 'row' + rowNumber + 'details');
+//    link.setAttribute('class', 'expenseDetails tableEntry');
+
+    var data = row.dataset;
     data.toggle = "modal"
     data.target = "#detailsModal"
 
-    link.addEventListener('click', function () {
+    row.addEventListener('click', function () {
         $("#receiptsDetailGrid").empty();
 
         current_id = json_obj.expenses_id;
@@ -511,9 +502,188 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
             })
         }
     });
-
-    return link;
 }
+
+
+//function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
+//    var link = document.createElement('a');
+//    link.appendChild(document.createTextNode('[details]'));
+//    link.setAttribute('id', 'row' + rowNumber + 'details');
+//    link.setAttribute('class', 'expenseDetails tableEntry');
+//
+//    var data = link.dataset;
+//    data.toggle = "modal"
+//    data.target = "#detailsModal"
+//
+//    link.addEventListener('click', function () {
+//        $("#receiptsDetailGrid").empty();
+//
+//        current_id = json_obj.expenses_id;
+//        var description = document.getElementById('detailsModal-description');
+//        description.value = json_obj.description;
+//
+//        var accountCode = document.getElementById('detailsModal-accountcode');
+//        accountCode.value = json_obj.accountcode;
+//
+//        var receiptList = json_obj.receipts.receipts;
+//        var processedCheck = document.getElementById('detailsModal-processedCheck');
+//        var processedDate = document.getElementById('detailsModal-processedDate');
+//        processedDate.disabled = true;
+//        processedDate.value = json_obj.dateprocessed;
+//
+//        if (json_obj.dateprocessed) {
+//            processedCheck.checked = true;
+//            processedCheck.disabled = true;
+//            description.disabled = true;
+//            accountCode.disabled = true;
+//            //Buttons
+//            document.getElementById('detailsModal-delete').disabled = true;
+//            $('#detailsModal-delete').hide();
+//            document.getElementById('detailsModal-confirm').disabled = true;
+//            $('#detailsModal-confirm').hide();
+//            $("#receiptsDetailGrid").shieldGrid({
+//                dataSource: {
+//                    data: receiptList,
+//                    schema: {
+//                        fields: {
+//                            amount: {
+//                                path: "amount",
+//                                type: String
+//                            },
+//                            date: {
+//                                path: "date",
+//                                type: Date
+//                            }
+//                        }
+//                    }
+//                },
+//                columns: [{
+//                        field: "amount",
+//                        title: "Amount",
+//                        format: function (value) {
+//                            if (value == null || value == 0 || isNaN(value)) {
+//                                return 'Add an amount'
+//                            } else {
+//                                return "$" + parseFloat(value).toFixed(2);
+//                            }
+//                        },
+//                        width: "10px"
+//                    },
+//                    {
+//                        field: "date",
+//                        title: "Date",
+//                        format: function (value) {
+//                            var today = new Date();
+//                            var day = value.getDate();
+//                            var month = value.getMonth() + 1;
+//                            var year = value.getFullYear();
+//                            var date = month + '/' + day + '/' + year;
+//                            if (day == today.getDate() &&
+//                                month == today.getMonth() + 1 &&
+//                                year == today.getFullYear()) {
+//                                return 'Add a date';
+//                            } else {
+//                                return date;
+//                            }
+//                        },
+//                        type: Date,
+//                        width: "20px"
+//                    }
+//                ],
+//                editing: {
+//                    enabled: false
+//                }
+//            });
+//
+//        } else {
+//            for (var i = 0; i < gridData.length; i++) {
+//                if (receiptList[i] != null) {
+//                    gridData[i] = receiptList[i];
+//                } else {
+//                    gridData[i] = {"amount": null, "date": new Date()};
+//                }
+//            }
+//            $("#receiptsDetailGrid").shieldGrid({
+//                dataSource: {
+//                    data: gridData,
+//                    schema: {
+//                        fields: {
+//                            amount: {
+//                                path: "amount",
+//                                type: String
+//                            },
+//                            date: {
+//                                path: "date",
+//                                type: Date
+//                            }
+//                        }
+//                    }
+//                },
+//                events: {
+//                    save: function (e) {
+//                        updateTotal("#receiptsDetailGrid");
+//                    }
+//                },
+//                rowHover: false,
+//                columns: [{
+//                        field: "amount",
+//                        title: "Amount",
+//                        format: function (value) {
+//                            if (value == null || value == 0 || isNaN(value)) {
+//                                return 'Add an amount'
+//                            } else {
+//                                return "$" + parseFloat(value).toFixed(2);
+//                            }
+//                        },
+//                        width: "10px"
+//                    },
+//                    {
+//                        field: "date",
+//                        title: "Date",
+//                        format: function (value) {
+//                            var today = new Date();
+//                            var day = value.getDate();
+//                            var month = value.getMonth() + 1;
+//                            var year = value.getFullYear();
+//                            var date = month + '/' + day + '/' + year;
+//                            if (day == today.getDate() &&
+//                                month == today.getMonth() + 1 &&
+//                                year == today.getFullYear()) {
+//                                return 'Add a date';
+//                            } else {
+//                                return date;
+//                            }
+//                        },
+//                        type: Date,
+//                        width: "20px"
+//                    }
+//                ],
+//                editing: {
+//                    enabled: true,
+//                    event: "click",
+//                    type: "cell",
+//                    insertNewRowAt: "pagebottom"
+//                }
+//            });
+//            processedCheck.checked = false;
+//            processedCheck.disabled = false;
+//            document.getElementById('detailsModal-delete').disabled = false;
+//            $('#detailsModal-delete').show();
+//            document.getElementById('detailsModal-confirm').disabled = false;
+//            $('#detailsModal-confirm').show();
+//            $('#detailsModal-processedCheck').on('change', function (e) {
+//                if (e.target.checked) {
+//                    $('#finalChangesConfirmationModal').modal();
+//                } else {
+//                    processedDate.disabled = true;
+//                    processedDate.value = null;
+//                }
+//            })
+//        }
+//    });
+//
+//    return link;
+//}
 
 function buildRow(data, keys, rowNumber) {
     var row = document.createElement('tr');
