@@ -1058,6 +1058,7 @@ img {
 	height: 350px;
 	width: 350px;
 	margin: 7.5px;
+	cursor: pointer;
 }
 
 #photoGalleryWrapper {
