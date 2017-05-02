@@ -587,6 +587,9 @@ h3{
 	border: none;
 	border-radius: 10px;
 }
+input[name=paymentModal-datereceived] {
+	width: 100%;
+}
 
 /*
 input[type=text] {
@@ -829,6 +832,19 @@ height: 150pt;
 
 .textArea {
 	float: left;
+}
+
+textarea {
+	width: 100%;
+}
+
+select {
+	width: 100%;
+}
+
+.textwrapper {
+  	margin:5px 0;
+	 padding:3px;
 }
 
 .modal-content p {
