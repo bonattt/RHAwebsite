@@ -211,6 +211,7 @@ function populateFundsTable() {
 function populatePaymentsTable() {
     var xhr = xhrGetRequest('payments/');
     var tbody = document.getElementById('paymentsTable');
+//    tbody.setAttribute('class', 'clickable');
     var rowNumber = 0;
     xhr.onload = function () {
         var payments = JSON.parse(xhr.responseText)
@@ -254,6 +255,7 @@ function buildFundsRow(fund, rowNumber) {
     var data = row.dataset;
     data.toggle = "modal";
     data.target = "#editFundModal";
+
     row.addEventListener('click', function () {
         var header = document.getElementById('editFundModal-header');
         header.innerHTML = "Edit " + fund.fund_name + " Fund";
