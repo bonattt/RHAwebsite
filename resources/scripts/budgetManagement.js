@@ -65,7 +65,7 @@ function setupButtons() {
     addPaymentSubmit.addEventListener('click', function () {
         document.getElementById('modal-header').click();
         var entryIds = [
-            'amountUsed', 'CM', 'receiver', 'description', 'dateprocessed', 'datereceived'
+            'amountUsed', 'CM', 'receiver', 'description', 'datereceived'
         ];
         var modalId = 'paymentModal-';
         var json_obj = parseModalEntries(modalId, entryIds);
@@ -368,7 +368,9 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
             accountCode.disabled = true;
             //Buttons
             document.getElementById('detailsModal-delete').disabled = true;
+            $('#detailsModal-delete').hide();
             document.getElementById('detailsModal-confirm').disabled = true;
+            $('#detailsModal-confirm').hide();
             $("#receiptsDetailGrid").shieldGrid({
                 dataSource: {
                     data: receiptList,
@@ -496,7 +498,9 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
             processedCheck.checked = false;
             processedCheck.disabled = false;
             document.getElementById('detailsModal-delete').disabled = false;
+            $('#detailsModal-delete').show();
             document.getElementById('detailsModal-confirm').disabled = false;
+            $('#detailsModal-confirm').show();
             $('#detailsModal-processedCheck').on('change', function (e) {
                 if (e.target.checked) {
                     $('#finalChangesConfirmationModal').modal();
@@ -604,7 +608,6 @@ $(document).ready(function () {
     setup();
     $("#processedDate").datepicker();
     $("#paymentModal-datereceived").datepicker();
-    $('#paymentModal-dateprocessed').datepicker();
     $('#detailsModal-processedDate').datepicker();
 
     $("#receiptsGrid").shieldGrid({
