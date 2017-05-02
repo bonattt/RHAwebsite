@@ -1,25 +1,25 @@
 var gridData = [{
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     },
     {
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     },
     {
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     },
     {
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     },
     {
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     },
     {
-        "amount": 0,
+        "amount": 0.0,
         "date": new Date()
     }
 ]
@@ -28,7 +28,6 @@ var current_id = -1;
 function parseModalEntries(idHeader, ids) {
     var json_obj = {};
     ids.forEach(function (id) {
-        console.log("id: " + id + "\nidHeader: " + idHeader);
         var entry = document.getElementById(idHeader + id);
         json_obj[id] = entry.value;
     });
@@ -43,12 +42,12 @@ function prepEventName(str) {
 function setupEventSelector() {
     var apiExtension = 'allEvents/';
     var xhr = xhrGetRequest(apiExtension);
-    xhr.onload = function() {
+    xhr.onload = function () {
         var selector = document.getElementById('paymentModal-event');
         var eventList = JSON.parse(xhr.responseText)
-        eventList.forEach(function(event) {
+        eventList.forEach(function (event) {
             var option = document.createElement('option');
-            option.setAttribute('id', 'eventOption'+event.proposal_id);
+            option.setAttribute('id', 'eventOption' + event.proposal_id);
             option.setAttribute('value', event.proposal_id);
             option.innerHTML = event.proposal_name;
             selector.appendChild(option);
@@ -66,11 +65,12 @@ function setupButtons() {
     addPaymentSubmit.addEventListener('click', function () {
         document.getElementById('modal-header').click();
         var entryIds = [
-                'amountUsed','CM', 'accountCode', 'receiver', 'description', 'dateprocessed', 'datereceived'
+            'amountUsed', 'CM', 'receiver', 'description', 'datereceived'
         ];
         var modalId = 'paymentModal-';
         var json_obj = parseModalEntries(modalId, entryIds);
 
+        json_obj.accountCode = document.getElementById('paymentModal-accountCode').value || 0;
         json_obj.dateprocessed = new Date(json_obj.dateprocessed);
         json_obj.datereceived = new Date(json_obj.datereceived);
         var select = document.getElementById('paymentModal-event');
@@ -93,25 +93,27 @@ function setupButtons() {
             "receipts": receiptsObject
         };
 
-        
+
         json_obj.proposal_id = select.options[select.selectedIndex].value;
 
         json_obj.amountUsed = parseFloat(json_obj.amountUsed);
 
         var apiUri = 'payment/';
         var xhr = xhrPostRequest(apiUri);
-        xhr.onload = function() {
-            console.log(xhr.responseText);
+        xhr.onload = function () {
             location.reload();
         }
-        xhr.onerror = function() {
-        }
-        console.log(json_obj);
+        xhr.onerror = function () {}
         xhr.send(JSON.stringify(json_obj));
     });
 
     var deletePaymentButton = document.getElementById('detailsModal-delete');
-    deletePaymentButton.addEventListener('click', function () {
+    deletePaymentButton.addEventListener('click', function (e) {
+        $('#deleteExpenseConfirmationModal').modal();
+    });
+
+    var deletePaymentButtonConfirm = document.getElementById('deleteExpense-confirm');
+    deletePaymentButtonConfirm.addEventListener('click', function () {
         var apiUri = 'payment/' + current_id;
         var xhr = xhrDeleteRequest(apiUri);
         xhr.onload = function () {
@@ -120,8 +122,47 @@ function setupButtons() {
         xhr.send();
     });
 
+    var updatePaymentButton = document.getElementById('detailsModal-confirm');
+    updatePaymentButton.addEventListener('click', function () {
+        document.getElementById('modal-header').click();
+        var apiUri = 'payment/' + current_id;
+        var xhr = xhrPutRequest(apiUri);
+        var receiptsObject = [];
+        var total = 0.0;
+        var descText = document.getElementById('detailsModal-description').value;
+        var processedDate = document.getElementById('detailsModal-processedDate').value;
+        var grid = $("#receiptsDetailGrid").swidget();
+        for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
+            var currentRow = grid.contentTable[0].rows[i];
+            var dateText = currentRow.childNodes[1].innerHTML;
+            if (dateText != "Add a date") {
+                var dateArray = currentRow.childNodes[1].innerHTML.split('/');
+                var dateToSend = dateArray[2] + '-' + dateArray[0] + '-' + dateArray[1];
+                gridData[i].date = dateToSend;
+                if (gridData[i].amount != 0) {
+                    receiptsObject.push(gridData[i]);
+                    total += parseFloat(gridData[i].amount);
+                }
+            }
+        }
+        var json_obj = {
+            "receipts": {
+                "receipts": receiptsObject
+            },
+            "amountused": total,
+            "description": descText
+        }
+        if(processedDate) {
+            json_obj.dateprocessed = processedDate;
+        }
+        xhr.onload = function () {
+            location.reload();
+        }
+        xhr.send(JSON.stringify(json_obj));
+    });
+
     var editSubmit = document.getElementById('confirm-confirm');
-    editSubmit.addEventListener('click', function() {
+    editSubmit.addEventListener('click', function () {
         var apiUri = 'fund/' + current_id
         var xhr = xhrPutRequest(apiUri);
         xhr.onload = function () {}
@@ -133,6 +174,17 @@ function setupButtons() {
         }
         xhr.send(JSON.stringify(json_obj));
         location.reload();
+    });
+
+    var cancelFinalChanges = document.getElementById('finalChanges-cancel');
+    cancelFinalChanges.addEventListener('click', function () {
+        var processedCheck = document.getElementById('detailsModal-processedCheck');
+        processedCheck.checked = false;
+    });
+
+    var confirmFinalChanges = document.getElementById('finalChanges-confirm');
+    confirmFinalChanges.addEventListener('click', function () {
+        document.getElementById('detailsModal-processedDate').disabled = false;
     });
 }
 
@@ -160,7 +212,7 @@ function populatePaymentsTable() {
     var xhr = xhrGetRequest('payments/');
     var tbody = document.getElementById('paymentsTable');
     var rowNumber = 0;
-    xhr.onload = function() {
+    xhr.onload = function () {
         var payments = JSON.parse(xhr.responseText)
         populatePaymentsTableHelper(payments, rowNumber, tbody);
     }
@@ -169,11 +221,11 @@ function populatePaymentsTable() {
 
 function populatePaymentsTableHelper(payments, rowNumber, tbody) {
     var xhr = xhrGetRequest('allEvents/');
-    xhr.onload = function() {
+    xhr.onload = function () {
         var allEvents = JSON.parse(xhr.responseText);
-        payments.forEach(function(pay) {
+        payments.forEach(function (pay) {
             var proposal_name = '[event was deleted]';
-            allEvents.forEach(function(event) {
+            allEvents.forEach(function (event) {
                 if (event.proposal_id == pay.proposal_id) {
                     proposal_name = event.proposal_name;
                 }
@@ -225,8 +277,6 @@ function buildFundsRow(fund, rowNumber) {
 function buildPaymentRow(payment, proposal_name, rowNumber) {
     var col;
     var keys = ['cm', 'receiver']
-    console.log('payment');
-    console.log(payment);
 
     var row = document.createElement('tr');
     var col = document.createElement('td');
@@ -253,7 +303,7 @@ function buildPaymentRow(payment, proposal_name, rowNumber) {
     col.setAttribute('id', 'row' + rowNumber + 'col' + 2);
     row.appendChild(col);
 
-//    var row = buildRow(payment, keys, rowNumber);
+    //    var row = buildRow(payment, keys, rowNumber);
 
 
     // special cases:
@@ -269,7 +319,11 @@ function buildPaymentRow(payment, proposal_name, rowNumber) {
     row.appendChild(col);
 
     col = document.createElement('td');
-    col.appendChild(document.createTextNode(composeDateStr(payment.dateprocessed)));
+    if (payment.dateprocessed) {
+        col.appendChild(document.createTextNode(composeDateStr(payment.dateprocessed)));
+    } else {
+        col.appendChild(document.createTextNode('-'));
+    }
     col.setAttribute('class', 'tableEntry');
     row.appendChild(col);
 
@@ -277,7 +331,7 @@ function buildPaymentRow(payment, proposal_name, rowNumber) {
     //    col.appendChild(document.createTextNode(payment.reciepts));
     //    col.setAttribute('class', 'tableEntry');
     //    row.appendChild(col);
-    row.appendChild(getDisplayExpenseDetailsLink(payment));
+    row.appendChild(getDisplayExpenseDetailsLink(payment, rowNumber));
     return row;
 }
 
@@ -292,16 +346,170 @@ function getDisplayExpenseDetailsLink(json_obj, rowNumber) {
     data.target = "#detailsModal"
 
     link.addEventListener('click', function () {
+        $("#receiptsDetailGrid").empty();
+
         current_id = json_obj.expenses_id;
-        console.log('click');
         var description = document.getElementById('detailsModal-description');
-        description.innerHTML = json_obj.description;
+        description.value = json_obj.description;
 
         var accountCode = document.getElementById('detailsModal-accountcode');
-        accountCode.innerHTML = json_obj.accountcode;
+        accountCode.value = json_obj.accountcode;
 
-        var receipts = document.getElementById('detailsModal-receipts');
-        receipts.innerHTML = JSON.stringify(json_obj.receipts)
+        var receiptList = json_obj.receipts.receipts;
+        var processedCheck = document.getElementById('detailsModal-processedCheck');
+        var processedDate = document.getElementById('detailsModal-processedDate');
+        processedDate.disabled = true;
+        processedDate.value = json_obj.dateprocessed;
+
+        if (json_obj.dateprocessed) {
+            processedCheck.checked = true;
+            processedCheck.disabled = true;
+            description.disabled = true;
+            accountCode.disabled = true;
+            //Buttons
+            document.getElementById('detailsModal-delete').disabled = true;
+            $('#detailsModal-delete').hide();
+            document.getElementById('detailsModal-confirm').disabled = true;
+            $('#detailsModal-confirm').hide();
+            $("#receiptsDetailGrid").shieldGrid({
+                dataSource: {
+                    data: receiptList,
+                    schema: {
+                        fields: {
+                            amount: {
+                                path: "amount",
+                                type: String
+                            },
+                            date: {
+                                path: "date",
+                                type: Date
+                            }
+                        }
+                    }
+                },
+                columns: [{
+                        field: "amount",
+                        title: "Amount",
+                        format: function (value) {
+                            if (value == null || value == 0 || isNaN(value)) {
+                                return 'Add an amount'
+                            } else {
+                                return "$" + parseFloat(value).toFixed(2);
+                            }
+                        },
+                        width: "10px"
+                    },
+                    {
+                        field: "date",
+                        title: "Date",
+                        format: function (value) {
+                            var today = new Date();
+                            var day = value.getDate();
+                            var month = value.getMonth() + 1;
+                            var year = value.getFullYear();
+                            var date = month + '/' + day + '/' + year;
+                            if (day == today.getDate() &&
+                                month == today.getMonth() + 1 &&
+                                year == today.getFullYear()) {
+                                return 'Add a date';
+                            } else {
+                                return date;
+                            }
+                        },
+                        type: Date,
+                        width: "20px"
+                    }
+                ],
+                editing: {
+                    enabled: false
+                }
+            });
+
+        } else {
+            for (var i = 0; i < gridData.length; i++) {
+                if (receiptList[i] != null) {
+                    gridData[i] = receiptList[i];
+                } else {
+                    gridData[i] = {"amount": null, "date": new Date()};
+                }
+            }
+            $("#receiptsDetailGrid").shieldGrid({
+                dataSource: {
+                    data: gridData,
+                    schema: {
+                        fields: {
+                            amount: {
+                                path: "amount",
+                                type: String
+                            },
+                            date: {
+                                path: "date",
+                                type: Date
+                            }
+                        }
+                    }
+                },
+                events: {
+                    save: function (e) {
+                        updateTotal("#receiptsDetailGrid");
+                    }
+                },
+                rowHover: false,
+                columns: [{
+                        field: "amount",
+                        title: "Amount",
+                        format: function (value) {
+                            if (value == null || value == 0 || isNaN(value)) {
+                                return 'Add an amount'
+                            } else {
+                                return "$" + parseFloat(value).toFixed(2);
+                            }
+                        },
+                        width: "10px"
+                    },
+                    {
+                        field: "date",
+                        title: "Date",
+                        format: function (value) {
+                            var today = new Date();
+                            var day = value.getDate();
+                            var month = value.getMonth() + 1;
+                            var year = value.getFullYear();
+                            var date = month + '/' + day + '/' + year;
+                            if (day == today.getDate() &&
+                                month == today.getMonth() + 1 &&
+                                year == today.getFullYear()) {
+                                return 'Add a date';
+                            } else {
+                                return date;
+                            }
+                        },
+                        type: Date,
+                        width: "20px"
+                    }
+                ],
+                editing: {
+                    enabled: true,
+                    event: "click",
+                    type: "cell",
+                    insertNewRowAt: "pagebottom"
+                }
+            });
+            processedCheck.checked = false;
+            processedCheck.disabled = false;
+            document.getElementById('detailsModal-delete').disabled = false;
+            $('#detailsModal-delete').show();
+            document.getElementById('detailsModal-confirm').disabled = false;
+            $('#detailsModal-confirm').show();
+            $('#detailsModal-processedCheck').on('change', function (e) {
+                if (e.target.checked) {
+                    $('#finalChangesConfirmationModal').modal();
+                } else {
+                    processedDate.disabled = true;
+                    processedDate.value = null;
+                }
+            })
+        }
     });
 
     return link;
@@ -361,21 +569,25 @@ function setAdmin() {
     setupEventSelector();
 }
 
-function updateTotal() {
-    var grid = $("#receiptsGrid").swidget();
+function updateTotal(gridToUpdate) {
+    var grid = $(gridToUpdate).swidget();
     var totalInput = document.getElementById('paymentModal-amountUsed');
     var total = 0.0;
 
     for (var i = 0; i < grid.contentTable[0].rows.length; i++) {
         var currentRow = grid.contentTable[0].rows[i];
         var currentNum;
-        if (currentRow.childNodes[0].childNodes[0].childNodes[0] == null) {
-            currentNum = parseFloat(currentRow.childNodes[0].innerHTML);
+        if (currentRow.childNodes[0].childNodes[0].data == null) {
+            currentNum = parseFloat(currentRow.childNodes[0].childNodes[0].value);
         } else {
-            currentNum = parseFloat(currentRow.childNodes[0].childNodes[0].childNodes[0].value);
+            currentNum = parseFloat(currentRow.childNodes[0].childNodes[0].data.substring(1));
         }
-        total += currentNum;
-        gridData[i].amount = currentNum.toFixed(2);
+        if (!isNaN(currentNum)) {
+            total += parseFloat(currentNum);
+            gridData[i].amount = currentNum;
+        } else {
+            currentRow.childNodes[0].childNodes[0].value = gridData[i].amount;
+        }
     }
     totalInput.value = total.toFixed(2).toString();
 }
@@ -394,6 +606,10 @@ function setup() {
 
 $(document).ready(function () {
     setup();
+    $("#processedDate").datepicker();
+    $("#paymentModal-datereceived").datepicker();
+    $('#detailsModal-processedDate').datepicker();
+
     $("#receiptsGrid").shieldGrid({
         dataSource: {
             data: gridData,
@@ -401,7 +617,7 @@ $(document).ready(function () {
                 fields: {
                     amount: {
                         path: "amount",
-                        type: Number
+                        type: String
                     },
                     date: {
                         path: "date",
@@ -412,7 +628,7 @@ $(document).ready(function () {
         },
         events: {
             save: function (e) {
-                updateTotal();
+                updateTotal("#receiptsGrid");
             }
         },
         rowHover: false,
@@ -420,10 +636,10 @@ $(document).ready(function () {
                 field: "amount",
                 title: "Amount",
                 format: function (value) {
-                    if (value == null) {
-                        return 'New amount'
+                    if (value == null || value == 0 || isNaN(value)) {
+                        return 'Add an amount'
                     } else {
-                        return value;
+                        return "$" + parseFloat(value).toFixed(2);
                     }
                 },
                 width: "10px"
