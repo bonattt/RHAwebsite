@@ -75,7 +75,13 @@ function setAdmin(officers) {
         var deleteBtn = document.getElementById('modal-delete');
         deleteBtn.style.display = "inline";
         deleteBtn.addEventListener('click', function() {
-            $('#deleteConfirmationModal').modal();
+            var dataset = document.getElementById(selected_element_id).dataset;
+            var cookieUser = JSON.parse(sessionStorage.getItem("userData"));
+            if(cookieUser.username != dataset.username) {
+                $('#deleteConfirmationModal').modal();
+            } else {
+                $('#selfDeleteModal').modal();
+            }
             var imageEntry = document.getElementById("imageFilePut")
             imageEntry.value = '';
         });
