@@ -120,7 +120,7 @@ function saveCommittee(data) {
     var urlExtension = 'committee/' + data.committeeid;
     var xhr = xhrPutRequest(urlExtension);
     var json_data = { committeeName: data.committeename, description: data.description, image: data.image};
-    xhr.onload = function () { }//location.reload() };
+    xhr.onload = function () { location.reload() };
 
     var imageEntry = document.getElementById("imageFile");
     if (imageEntry.value != '') {
@@ -135,7 +135,7 @@ function saveCommittee(data) {
         photoPost.onload = function () {
             deleteFunction(image_to_delete.substring(2, image_to_delete.length));
             json_data.image = JSON.parse(photoPost.response).filepath;
-            xhr.onload = function () { } //location.reload(); }
+            xhr.onload = function () { location.reload(); }
             xhr.send(JSON.stringify(json_data));
         }
         photoPost.send(formData);
