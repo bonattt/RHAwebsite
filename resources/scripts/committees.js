@@ -35,25 +35,43 @@ function setupAddCommitteeButton() {
     addCommitteeBtn.addEventListener('click', function () {
         var deleteBtn = document.getElementById('modal-delete');
         deleteBtn.disabled = true;
-        var committeeName = document.getElementById('committee-modal-committeename')
+        var committeeName = document.getElementById('committee-modal-committeeName')
         committeeName.value = '';
         var committeeDesc = document.getElementById('committee-modal-description')
         committeeDesc.value = '';
+
         var submitBtn = document.getElementById('modal-submit')
-        var addCommitteeSubmit = function (e) {
-            var photoXhr = new PhotoPostXhr('committeePhoto');
+        submitBtn.addEventListener('click', function (e) {
+            console.log("hello");
             var urlExtension = 'committee/';
-            var postXhr = xhrPostRequest(urlExtension);
-            postXhr.onload = function () { location.reload(); }
-            var json_data = { 'committeeName': committeeName.value, 'description': committeeDesc.value };
-            photoXhr.imageCallback(postXhr, json_data, 'image');
-            var files = document.getElementById("imageFile").files;
-            var formData = new FormData();
-            formData.append("imageFile", files[0]);
-            photoXhr.send(formData);
-            document.getElementById("imageFile").value = '';
-        }
-        submitBtn.addEventListener('click', addCommitteeSubmit);
+            var json_data = {"committeeName": committeeName.value, "description": committeeDesc.value};
+            var xhr = xhrPostRequest(urlExtension);
+            xhr.onload = function () { } //location.reload() };
+
+            var imageEntry = document.getElementById("imageFile");
+            if (imageEntry.value != '') {
+                var photoPost = new PhotoPostXhr("committeePhoto");
+                photoPost.imageCallback(xhr, json_data, 'image');
+                var files = imageEntry.files;
+                var formData = new FormData();
+                formData.append("imageFile", files[0]);
+                imageEntry.value = ''
+                photoPost.send(formData);
+            } else {
+                xhr.send(JSON.stringify(json_data));
+            }
+//            var photoXhr = new PhotoPostXhr('committeePhoto');
+//            var urlExtension = 'committee/';
+//            var postXhr = xhrPostRequest(urlExtension);
+//            postXhr.onload = function () { location.reload(); }
+//            var json_data = { 'committeeName': committeeName.value, 'description': committeeDesc.value };
+//            photoXhr.imageCallback(postXhr, json_data, 'image');
+//            var files = document.getElementById("imageFile").files;
+//            var formData = new FormData();
+//            formData.append("imageFile", files[0]);
+//            photoXhr.send(formData);
+//            document.getElementById("imageFile").value = '';
+        });
         var addCommitteeCancel = function () {
             clearSubmitHandlers(submitBtn);
             cancelBtn.removeEventListener('click', addCommitteeCancel);
