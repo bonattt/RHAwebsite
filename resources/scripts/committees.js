@@ -35,8 +35,8 @@ function setupAddCommitteeButton() {
     addCommitteeBtn.addEventListener('click', function () {
         var deleteBtn = document.getElementById('modal-delete');
         deleteBtn.disabled = true;
-        var committeeName = document.getElementById('committee-modal-committeeName')
-        committeeName.value = '';
+        var committeename = document.getElementById('committee-modal-committeename')
+        committeename.value = '';
         var committeeDesc = document.getElementById('committee-modal-description')
         committeeDesc.value = '';
 
@@ -44,7 +44,7 @@ function setupAddCommitteeButton() {
         submitBtn.addEventListener('click', function (e) {
             console.log("hello");
             var urlExtension = 'committee/';
-            var json_data = {"committeeName": committeeName.value, "description": committeeDesc.value};
+            var json_data = {"committeeName": committeename.value, "description": committeeDesc.value};
             var xhr = xhrPostRequest(urlExtension);
             xhr.onload = function () { location.reload() };
 
