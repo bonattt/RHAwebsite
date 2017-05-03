@@ -75,6 +75,7 @@ function setAdmin(officers) {
         var deleteBtn = document.getElementById('modal-delete');
         deleteBtn.style.display = "inline";
         deleteBtn.addEventListener('click', function() {
+            $('#deleteConfirmationModal').modal();
             var imageEntry = document.getElementById("imageFilePut")
             imageEntry.value = '';
         });
@@ -185,15 +186,6 @@ function showMessageModal(message) {
     $('#' + MESSAGE_MODAL_ID).modal('show');
 }
 
-function parsePhoneNumber(phoneStr) {
-    var newStr = phoneStr.substring(0,3);
-    newStr += '-';
-    newStr += phoneStr.substring(3,6);
-    newStr += '-';
-    newStr += phoneStr.substring(6,10);
-    return newStr;
-}
-
 
 function setup() {
 
@@ -218,7 +210,7 @@ function setup() {
                 html += "</h3>";
                 html += "<img src='" + officer[i].image + "' alt='" + officer[i].membertype + "'height='294' width='195'>";
                 html += "<p>Email: <a href='mailto:" + officer[i].username + "@rose-hulman.edu'>" + officer[i].username + "@rose-hulman.edu</a></p>";
-                html += "<p> Phone Number: " + parsePhoneNumber(officer[i].phone_number) + "</p>";
+                html += "<p> Phone Number: " + officer[i].phone_number + "</p>";
                 html += "<p> Room: " + officer[i].hall + " " + officer[i].room_number + "</p>";
                 html += "<p>Box #: " + officer[i].cm + "</p>";
 
