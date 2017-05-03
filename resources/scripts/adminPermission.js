@@ -59,12 +59,12 @@ var insertEditButtons = function(dataElementRoot, uiElementRootId, idFieldName, 
 // idFieldName      - the value of this field will passed to submitFunc for use in the API url.
 var generateEditButtonListener = function(dataElementId, uiElementRootId, submitFunc, idFieldName) {
      return function(event) {
-            var deleteBtn = document.getElementById('modal-delete');
-            if (deleteBtn != null && typeof deleteBtn != "undefined") {
-                deleteBtn.disabled = false;
-            } else {
-            }
-            setupEditModal(dataElementId, uiElementRootId, submitFunc, idFieldName);
+        var deleteBtn = document.getElementById('modal-delete');
+//        if (deleteBtn != null && typeof deleteBtn != "undefined") {
+//            deleteBtn.disabled = false;
+//        } else {
+//        }
+        setupEditModal(dataElementId, uiElementRootId, submitFunc, idFieldName);
      };
 }
 

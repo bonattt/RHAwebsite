@@ -35,25 +35,31 @@ function setupAddCommitteeButton() {
     addCommitteeBtn.addEventListener('click', function () {
         var deleteBtn = document.getElementById('modal-delete');
         deleteBtn.disabled = true;
-        var committeeName = document.getElementById('committee-modal-committeename')
-        committeeName.value = '';
+        var committeename = document.getElementById('committee-modal-committeename')
+        committeename.value = '';
         var committeeDesc = document.getElementById('committee-modal-description')
         committeeDesc.value = '';
+
         var submitBtn = document.getElementById('modal-submit')
-        var addCommitteeSubmit = function (e) {
-            var photoXhr = new PhotoPostXhr('committeePhoto');
+        submitBtn.addEventListener('click', function (e) {
             var urlExtension = 'committee/';
-            var postXhr = xhrPostRequest(urlExtension);
-            postXhr.onload = function () { location.reload(); }
-            var json_data = { 'committeeName': committeeName.value, 'description': committeeDesc.value };
-            photoXhr.imageCallback(postXhr, json_data, 'image');
-            var files = document.getElementById("imageFile").files;
-            var formData = new FormData();
-            formData.append("imageFile", files[0]);
-            photoXhr.send(formData);
-            document.getElementById("imageFile").value = '';
-        }
-        submitBtn.addEventListener('click', addCommitteeSubmit);
+            var json_data = {"committeeName": committeename.value, "description": committeeDesc.value};
+            var xhr = xhrPostRequest(urlExtension);
+            xhr.onload = function () { location.reload() };
+
+            var imageEntry = document.getElementById("imageFile");
+            if (imageEntry.value != '') {
+                var photoPost = new PhotoPostXhr("committeePhoto");
+                photoPost.imageCallback(xhr, json_data, 'image');
+                var files = imageEntry.files;
+                var formData = new FormData();
+                formData.append("imageFile", files[0]);
+                imageEntry.value = ''
+                photoPost.send(formData);
+            } else {
+                xhr.send(JSON.stringify(json_data));
+            }
+        });
         var addCommitteeCancel = function () {
             clearSubmitHandlers(submitBtn);
             cancelBtn.removeEventListener('click', addCommitteeCancel);
@@ -113,14 +119,35 @@ function setup() {
 function saveCommittee(data) {
     var urlExtension = 'committee/' + data.committeeid;
     var xhr = xhrPutRequest(urlExtension);
-    var json_data = { committeename: data.committeename, description: data.description, image: data.image};
-    var imageInput = document.getElementById("imageFile");
+    var json_data = { committeeName: data.committeename, description: data.description, image: data.image};
+    xhr.onload = function () { location.reload() };
 
-    if (imageInput.value != '') {
-        var photoXhr = new PhotoReplaceXhr("committeePhoto");
-        photoXhr.imageCallback(xhr, data, "image");
-        var file = imageInput.files[0];
-        photoXhr.send(file);
+    var imageEntry = document.getElementById("imageFile");
+    if (imageEntry.value != '') {
+        var image_to_delete = json_data.image;
+
+        var photoPost = new XMLHttpRequest();
+        photoPost.open('POST', location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/officerPhoto', true);
+        var files = imageEntry.files;
+        var formData = new FormData();
+        formData.append("imageFile", files[0]);
+
+        photoPost.onload = function () {
+            deleteFunction(image_to_delete.substring(2, image_to_delete.length));
+            json_data.image = JSON.parse(photoPost.response).filepath;
+            xhr.onload = function () { location.reload(); }
+            xhr.send(JSON.stringify(json_data));
+        }
+        photoPost.send(formData);
+    } else {
+        xhr.send(JSON.stringify(json_data));
+    }
+
+//    if (imageInput.value != '') {
+//        var photoXhr = new PhotoReplaceXhr("committeePhoto");
+//        photoXhr.imageCallback(xhr, data, "image");
+//        var file = imageInput.files[0];
+//        photoXhr.send(file);
         //photoXhr
 
 //        var image_to_delete = data.image.replace('.', "");
@@ -142,12 +169,12 @@ function saveCommittee(data) {
 //            }
 //        }
 //        photoPost.send(formData);
-    } else {
-        xhr.send(JSON.stringify(json_data));
-    }
+//    } else {
+//        xhr.send(JSON.stringify(json_data));
+//    }
 
-    imageInput.value = '';
-    location.reload();
+//    imageInput.value = '';
+//    location.reload();
 }
 
 function deleteFunction(filePath) {
