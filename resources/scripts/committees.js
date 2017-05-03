@@ -42,7 +42,6 @@ function setupAddCommitteeButton() {
 
         var submitBtn = document.getElementById('modal-submit')
         submitBtn.addEventListener('click', function (e) {
-            console.log("hello");
             var urlExtension = 'committee/';
             var json_data = {"committeeName": committeename.value, "description": committeeDesc.value};
             var xhr = xhrPostRequest(urlExtension);
@@ -121,13 +120,34 @@ function saveCommittee(data) {
     var urlExtension = 'committee/' + data.committeeid;
     var xhr = xhrPutRequest(urlExtension);
     var json_data = { committeeName: data.committeename, description: data.description, image: data.image};
-    var imageInput = document.getElementById("imageFile");
+    xhr.onload = function () { }//location.reload() };
 
-    if (imageInput.value != '') {
-        var photoXhr = new PhotoReplaceXhr("committeePhoto");
-        photoXhr.imageCallback(xhr, data, "image");
-        var file = imageInput.files[0];
-        photoXhr.send(file);
+    var imageEntry = document.getElementById("imageFile");
+    if (imageEntry.value != '') {
+        var image_to_delete = json_data.image;
+
+        var photoPost = new XMLHttpRequest();
+        photoPost.open('POST', location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/officerPhoto', true);
+        var files = imageEntry.files;
+        var formData = new FormData();
+        formData.append("imageFile", files[0]);
+
+        photoPost.onload = function () {
+            deleteFunction(image_to_delete.substring(2, image_to_delete.length));
+            json_data.image = JSON.parse(photoPost.response).filepath;
+            xhr.onload = function () { } //location.reload(); }
+            xhr.send(JSON.stringify(json_data));
+        }
+        photoPost.send(formData);
+    } else {
+        xhr.send(JSON.stringify(json_data));
+    }
+
+//    if (imageInput.value != '') {
+//        var photoXhr = new PhotoReplaceXhr("committeePhoto");
+//        photoXhr.imageCallback(xhr, data, "image");
+//        var file = imageInput.files[0];
+//        photoXhr.send(file);
         //photoXhr
 
 //        var image_to_delete = data.image.replace('.', "");
@@ -149,12 +169,12 @@ function saveCommittee(data) {
 //            }
 //        }
 //        photoPost.send(formData);
-    } else {
-        xhr.send(JSON.stringify(json_data));
-    }
+//    } else {
+//        xhr.send(JSON.stringify(json_data));
+//    }
 
-    imageInput.value = '';
-    location.reload();
+//    imageInput.value = '';
+//    location.reload();
 }
 
 function deleteFunction(filePath) {
