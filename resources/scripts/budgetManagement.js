@@ -1,7 +1,7 @@
 var gridData = [{
-        "amount": 0.0,
-        "date": new Date()
-    },
+    "amount": 0.0,
+    "date": new Date()
+},
     {
         "amount": 0.0,
         "date": new Date()
@@ -103,7 +103,7 @@ function setupButtons() {
         xhr.onload = function () {
             location.reload();
         }
-        xhr.onerror = function () {}
+        xhr.onerror = function () { }
         xhr.send(JSON.stringify(json_obj));
     });
 
@@ -165,7 +165,7 @@ function setupButtons() {
     editSubmit.addEventListener('click', function () {
         var apiUri = 'fund/' + current_id
         var xhr = xhrPutRequest(apiUri);
-        xhr.onload = function () {}
+        xhr.onload = function () { }
 
         var funds_amount = document.getElementById('editFundModal-funds_amount');
 
@@ -223,29 +223,11 @@ function populatePaymentsTable() {
 function populatePaymentsTableHelper(payments, rowNumber, tbody) {
     var xhr = xhrGetRequest('allEvents/');
     xhr.onload = function () {
-        var allEvents = JSON.parse(xhr.responseText);
+        var allEvents = JSON.parse(xhr.responseText);;
         payments.forEach(function (pay) {
             var today = new Date();
-            var payDate = new Date(pay.dateprocessed);
-
-            if (today.getMonth() >= 7) {
-                if (payDate.getMonth() >= 7 && payDate.getFullYear() == today.getFullYear()) {
-                    var proposal_name = '[event was deleted]';
-                    allEvents.forEach(function (event) {
-                        if (event.proposal_id == pay.proposal_id) {
-                            proposal_name = event.proposal_name;
-                        }
-                    });
-                    var row = buildPaymentRow(pay, proposal_name, rowNumber);
-                    if (rowNumber % 2 == 1) {
-                        row.setAttribute('class', 'colLight');
-                    } else {
-                        row.setAttribute('class', 'colDark');
-                    }
-                    rowNumber++;
-                    tbody.appendChild(row);
-                }
-            } else if ((payDate.getFullYear() >= today.getFullYear() - 1 && payDate.getMonth() >= 7) || (payDate.getFullYear() == today.getFullYear())) {
+            var payDate = new Date(pay.datereceived);
+            if ((payDate.getMonth() >= 7 && payDate.getFullYear() == today.getFullYear() - 1) || (payDate.getMonth() < 7 && payDate.getFullYear() == today.getFullYear())) {
                 var proposal_name = '[event was deleted]';
                 allEvents.forEach(function (event) {
                     if (event.proposal_id == pay.proposal_id) {
@@ -401,17 +383,17 @@ function appendDisplayExpenseDetailsLink(row, json_obj) {
                     }
                 },
                 columns: [{
-                        field: "amount",
-                        title: "Amount",
-                        format: function (value) {
-                            if (value == null || value == 0 || isNaN(value)) {
-                                return 'Add an amount'
-                            } else {
-                                return "$" + parseFloat(value).toFixed(2);
-                            }
-                        },
-                        width: "10px"
+                    field: "amount",
+                    title: "Amount",
+                    format: function (value) {
+                        if (value == null || value == 0 || isNaN(value)) {
+                            return 'Add an amount'
+                        } else {
+                            return "$" + parseFloat(value).toFixed(2);
+                        }
                     },
+                    width: "10px"
+                },
                     {
                         field: "date",
                         title: "Date",
@@ -472,17 +454,17 @@ function appendDisplayExpenseDetailsLink(row, json_obj) {
                 },
                 rowHover: false,
                 columns: [{
-                        field: "amount",
-                        title: "Amount",
-                        format: function (value) {
-                            if (value == null || value == 0 || isNaN(value)) {
-                                return 'Add an amount'
-                            } else {
-                                return "$" + parseFloat(value).toFixed(2);
-                            }
-                        },
-                        width: "10px"
+                    field: "amount",
+                    title: "Amount",
+                    format: function (value) {
+                        if (value == null || value == 0 || isNaN(value)) {
+                            return 'Add an amount'
+                        } else {
+                            return "$" + parseFloat(value).toFixed(2);
+                        }
                     },
+                    width: "10px"
+                },
                     {
                         field: "date",
                         title: "Date",
@@ -828,17 +810,17 @@ $(document).ready(function () {
         },
         rowHover: false,
         columns: [{
-                field: "amount",
-                title: "Amount",
-                format: function (value) {
-                    if (value == null || value == 0 || isNaN(value)) {
-                        return 'Add an amount'
-                    } else {
-                        return "$" + parseFloat(value).toFixed(2);
-                    }
-                },
-                width: "10px"
+            field: "amount",
+            title: "Amount",
+            format: function (value) {
+                if (value == null || value == 0 || isNaN(value)) {
+                    return 'Add an amount'
+                } else {
+                    return "$" + parseFloat(value).toFixed(2);
+                }
             },
+            width: "10px"
+        },
             {
                 field: "date",
                 title: "Date",
