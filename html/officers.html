@@ -90,7 +90,7 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-                    <button id="modal-delete" type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#deleteConfirmationModal"> Delete </button>
+					<button id="modal-delete" type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" > Delete </button>
 					<button id="modal-submit" type="button" class="btn btn-default" data-dismiss="modal"> Submit </button>
 					<button id="modal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 					<h6 id="officer-delete-note">(Note: deleting an officer only removes them from <br> this page, not the database)</h6>
@@ -111,6 +111,21 @@
 					<button id="confirm-delete" type="button" class="btn btn-danger" data-dismiss="modal"> 
                             Delete </button>
 					<button id="cancel-delete" type="button" class="btn btn-default" data-dismiss="modal"> Cancel </button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="selfDeleteModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">You can't delete yourself as an officer. </h4>
+				</div>
+				<div class="modal-footer">
+					<button id="close" type="button" class="btn btn-default" data-dismiss="modal"> Close </button>
 				</div>
 			</div>
 		</div>
