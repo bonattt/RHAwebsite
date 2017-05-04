@@ -62,7 +62,7 @@ function setup() {
         if (xhr2.readyState == 4 && xhr2.status == 200) {
             var indicatorOl = document.getElementById("carousel-indicators");
             var carouselInnerDiv = document.getElementById("carousel-inner");
-            var dbApiUrl = 'http://rha-website-1.csse.rose-hulman.edu:3000/API/v1/infoText/1';
+            var dbApiUrl = BASE_API_URL + 'infoText/1';
             var xhr3 = new XMLHttpRequest();
             xhr3.open('GET', dbApiUrl, true);
             xhr3.onreadystatechange = function (e) {
