@@ -35,7 +35,10 @@ var insertEditButtons = function(dataElementRoot, uiElementRootId, idFieldName, 
                 generateEditButtonListener(elementId, uiElementRootId, submitFunc, idFieldName)
             );
         editButton.addEventListener('click', function(clickedId) {
-            return function() {selected_element_id = clickedId}
+            return function() {
+                console.log(clickedId);
+                selected_element_id = clickedId;
+            }
         } (elementId));
         /*
          * this is messy, but basically I need to curry so that the
