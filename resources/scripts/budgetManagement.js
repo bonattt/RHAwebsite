@@ -152,7 +152,7 @@ function setupButtons() {
             "amountused": total,
             "description": descText
         }
-        if(processedDate) {
+        if (processedDate) {
             json_obj.dateprocessed = processedDate;
         }
         xhr.onload = function () {
@@ -211,7 +211,7 @@ function populateFundsTable() {
 function populatePaymentsTable() {
     var xhr = xhrGetRequest('payments/');
     var tbody = document.getElementById('paymentsTable');
-//    tbody.setAttribute('class', 'clickable');
+    //    tbody.setAttribute('class', 'clickable');
     var rowNumber = 0;
     xhr.onload = function () {
         var payments = JSON.parse(xhr.responseText)
@@ -225,20 +225,42 @@ function populatePaymentsTableHelper(payments, rowNumber, tbody) {
     xhr.onload = function () {
         var allEvents = JSON.parse(xhr.responseText);
         payments.forEach(function (pay) {
-            var proposal_name = '[event was deleted]';
-            allEvents.forEach(function (event) {
-                if (event.proposal_id == pay.proposal_id) {
-                    proposal_name = event.proposal_name;
+            var today = new Date();
+            var payDate = new Date(pay.dateprocessed);
+
+            if (today.getMonth() >= 7) {
+                if (payDate.getMonth() >= 7 && payDate.getFullYear() == today.getFullYear()) {
+                    var proposal_name = '[event was deleted]';
+                    allEvents.forEach(function (event) {
+                        if (event.proposal_id == pay.proposal_id) {
+                            proposal_name = event.proposal_name;
+                        }
+                    });
+                    var row = buildPaymentRow(pay, proposal_name, rowNumber);
+                    if (rowNumber % 2 == 1) {
+                        row.setAttribute('class', 'colLight');
+                    } else {
+                        row.setAttribute('class', 'colDark');
+                    }
+                    rowNumber++;
+                    tbody.appendChild(row);
                 }
-            });
-            var row = buildPaymentRow(pay, proposal_name, rowNumber);
-            if (rowNumber % 2 == 1) {
-                row.setAttribute('class', 'colLight');
-            } else {
-                row.setAttribute('class', 'colDark');
+            } else if ((payDate.getFullYear() >= today.getFullYear() - 1 && payDate.getMonth() >= 7) || (payDate.getFullYear() == today.getFullYear())) {
+                var proposal_name = '[event was deleted]';
+                allEvents.forEach(function (event) {
+                    if (event.proposal_id == pay.proposal_id) {
+                        proposal_name = event.proposal_name;
+                    }
+                });
+                var row = buildPaymentRow(pay, proposal_name, rowNumber);
+                if (rowNumber % 2 == 1) {
+                    row.setAttribute('class', 'colLight');
+                } else {
+                    row.setAttribute('class', 'colDark');
+                }
+                rowNumber++;
+                tbody.appendChild(row);
             }
-            rowNumber++;
-            tbody.appendChild(row);
         });
     }
     xhr.send();
@@ -327,10 +349,10 @@ function buildPaymentRow(payment, proposal_name, rowNumber) {
 
 
 function appendDisplayExpenseDetailsLink(row, json_obj) {
-//    var link = document.createElement('a');
-//    link.appendChild(document.createTextNode('[details]'));
-//    link.setAttribute('id', 'row' + rowNumber + 'details');
-//    link.setAttribute('class', 'expenseDetails tableEntry');
+    //    var link = document.createElement('a');
+    //    link.appendChild(document.createTextNode('[details]'));
+    //    link.setAttribute('id', 'row' + rowNumber + 'details');
+    //    link.setAttribute('class', 'expenseDetails tableEntry');
 
     var data = row.dataset;
     data.toggle = "modal"
@@ -421,7 +443,10 @@ function appendDisplayExpenseDetailsLink(row, json_obj) {
                 if (receiptList[i] != null) {
                     gridData[i] = receiptList[i];
                 } else {
-                    gridData[i] = {"amount": null, "date": new Date()};
+                    gridData[i] = {
+                        "amount": null,
+                        "date": new Date()
+                    };
                 }
             }
             $("#receiptsDetailGrid").shieldGrid({
@@ -708,8 +733,8 @@ function composeDateStr(dateStr) {
     var msg = '';
     var date = new Date(dateStr);
     var monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-]
+        "July", "August", "September", "October", "November", "December"
+    ]
     msg += monthNames[date.getMonth()]
     msg += ' ';
     msg += date.getDate();
