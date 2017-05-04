@@ -1,5 +1,5 @@
 
-port = 8000;
+port = 80;
 
 http = require('http');
 fs = require('fs');

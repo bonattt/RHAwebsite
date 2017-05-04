@@ -17,7 +17,8 @@ function setAdmin(officers) {
             'officers-modal-',
             'user_id',
             function (json_data, put_id) {
-                var apiUrl = 'member/' + put_id
+                var global_id = selected_element_id.replace('officer', '');
+                var apiUrl = 'member/' + global_id;
                 var xhr = xhrPutRequest(apiUrl);
                 delete json_data.user_id;
                 delete json_data.username;
@@ -38,12 +39,10 @@ function setAdmin(officers) {
 
                 xhr.onload = function () { location.reload() };
                 var imageEntry = document.getElementById("imageFilePut");
-                var global_id = selected_element_id.replace('officer', '');
                 global_id = parseInt(global_id);
-                //            alert(selected_element_id + ' ?= ' + put_id + ' = ' + (selected_element_id == put_id));
-                if (global_id != put_id) {
-                    alert('WARNING WARNING:\nselected_element_id: ' + global_id + '\nput_id: ' + put_id);
-                }
+//                if (global_id != put_id) {
+//                    alert('WARNING WARNING:\nselected_element_id: ' + global_id + '\nput_id: ' + put_id);
+//                }
                 if (imageEntry.value != '') {
                     var image_to_delete = json_data.image;
 
