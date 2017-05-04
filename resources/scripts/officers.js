@@ -75,6 +75,13 @@ function setAdmin(officers) {
         var deleteBtn = document.getElementById('modal-delete');
         deleteBtn.style.display = "inline";
         deleteBtn.addEventListener('click', function() {
+            var dataset = document.getElementById(selected_element_id).dataset;
+            var cookieUser = JSON.parse(sessionStorage.getItem("userData"));
+            if(cookieUser.username != dataset.username) {
+                $('#deleteConfirmationModal').modal();
+            } else {
+                $('#selfDeleteModal').modal();
+            }
             var imageEntry = document.getElementById("imageFilePut")
             imageEntry.value = '';
         });
@@ -138,19 +145,25 @@ function setupAddOfficerButton() {
         var urlExtension = 'members/' + username;
         var json_data = {"memberType": membertypeEntry.value};
 
-        if (phoneEntry.value != '') { json_data.phone_number = phoneEntry.value}
+        if (phoneEntry.value != '') {
+            if (phoneEntry.value.length != 10) {
+                showNotification("please enter a 10-digit phone number");
+                return;
+            }
+            json_data.phone_number = phoneEntry.value
+        }
         if (hallEntry.value != '') { json_data.hall = hallEntry.value}
         if (roomEntry.value != '') { json_data.room_number = roomEntry.value}
         if (cmEntry.value != '') { json_data.cm = cmEntry.value}
 
         console.log(json_data.phone_number);
-        if (json_data.phone_number.length != 10) {
-            showNotification("please enter a 10-digit phone number");
-            return;
-        }
+//        if (json_data.phone_number.length != 10) {
+//            showNotification("please enter a 10-digit phone number");
+//            return;
+//        }
 
         var xhr = xhrPutRequest(urlExtension);
-        xhr.onload = function () { } //location.reload() };
+        xhr.onload = function () { location.reload() };
         var imageEntry = document.getElementById("imageFilePost");
         if (imageEntry.value != '') {
             var photoPost = new PhotoPostXhr("officerPhoto");
@@ -179,15 +192,6 @@ function showMessageModal(message) {
     $('#' + MESSAGE_MODAL_ID).modal('show');
 }
 
-function parsePhoneNumber(phoneStr) {
-    var newStr = phoneStr.substring(0,3);
-    newStr += '-';
-    newStr += phoneStr.substring(3,6);
-    newStr += '-';
-    newStr += phoneStr.substring(6,10);
-    return newStr;
-}
-
 
 function setup() {
 
@@ -212,7 +216,7 @@ function setup() {
                 html += "</h3>";
                 html += "<img src='" + officer[i].image + "' alt='" + officer[i].membertype + "'height='294' width='195'>";
                 html += "<p>Email: <a href='mailto:" + officer[i].username + "@rose-hulman.edu'>" + officer[i].username + "@rose-hulman.edu</a></p>";
-                html += "<p> Phone Number: " + parsePhoneNumber(officer[i].phone_number) + "</p>";
+                html += "<p> Phone Number: " + officer[i].phone_number + "</p>";
                 html += "<p> Room: " + officer[i].hall + " " + officer[i].room_number + "</p>";
                 html += "<p>Box #: " + officer[i].cm + "</p>";
 
