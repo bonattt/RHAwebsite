@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="../scripts/navbar-factory.js">
 	</script>
 	<script type="text/javascript" src="./scripts/rosefire.js"></script>
+	<script language="Javascript" src="../scripts/adminPermission.js"></script>
 	<script type="text/javascript" src="./scripts/homepage.js"></script>
 
 	<link rel="icon" href="../images/RHA.jpg">
@@ -24,8 +25,6 @@
 	</script>
 	<script src="./scripts/rosefire.js"></script>
 	<script src="./scripts/login.js"></script>
-	<script language="Javascript" src="../scripts/adminPermission.js">
-	</script>
 
 </head>
 
@@ -104,11 +103,11 @@
 					<h4 class="modal-title">Upload a Carousel Photo</h4>
 				</div>
 				<div class="modal-body">
-					<form action="javascript:uploadCarouselPhoto()">
-						<label for="imageFile">Image:<input type="file" name="imageFile" id="imageFile"></label>
-						<button type="submit" class="btn btn-default">Submit</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</form>
+					<label for="imageFile">Image:<input type="file" name="imageFile" id="imageFile"></label>
+				</div>
+				<div class="modal-footer">
+					<button id="carouselUploadModal-submit" type="submit" class="btn btn-default">Submit</button>
+					<button id="carouselUploadModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
@@ -133,7 +132,7 @@
 		</div>
 	</div>
 
-	    <div id="deleteConfirmationModal" class="modal fade" role="dialog">
+	<div id="deleteConfirmationModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<!-- Modal content-->
 			<div class="modal-content">
@@ -159,11 +158,11 @@
 					<h4 class="modal-title">Edit the Front Page Description</h4>
 				</div>
 				<div class="modal-body">
-					<form action="javascript: updateFrontPageText()">
-						<textarea type="text" rows="12" id="textToUpdate" align="left"></textarea>
-						<button type="submit" class="btn btn-default">Submit</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</form>
+					<textarea type="text" rows="6" cols="25" id="textToUpdate" align="left"></textarea>
+				</div>
+				<div class="modal-footer">
+					<button id="editTextModal-submit" type="button" class="btn btn-default">Submit</button>
+					<button id="editTextModal-cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>

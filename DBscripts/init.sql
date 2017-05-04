@@ -12,7 +12,7 @@ CREATE TABLE Members (
     trip_eligible boolean,
     meet_attend jsonb, -- {'Q1': [int], 'Q2': [int], 'Q3': [int]}
     CM int,
-    phone_number int,
+    phone_number varchar(10),
     room_number varchar(25)
 );
 

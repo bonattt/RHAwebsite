@@ -15,7 +15,7 @@ function populateDeletePhotoModal() {
     var carouselInner = document.getElementById("carousel-inner");
     deletePhotoForm = document.getElementById("deletePhotoForm");
     for (var i = 1; i <= carouselInner.children.length; i++) {
-        deletePhotoForm.innerHTML += '<label><input type="radio" name="usernames" value="' + i + '" /> ' + i + '</label>';
+        deletePhotoForm.innerHTML += '<label class="carouselDeleteRadioButton"><input type="radio" name="usernames" value="' + i + '" /> ' + i + '</label>';
     }
     var radios = document.getElementsByTagName('input');
     var deleteConfirm = document.getElementById('confirm-delete');
@@ -62,7 +62,7 @@ function setup() {
         if (xhr2.readyState == 4 && xhr2.status == 200) {
             var indicatorOl = document.getElementById("carousel-indicators");
             var carouselInnerDiv = document.getElementById("carousel-inner");
-            var dbApiUrl = 'http://rha-website-1.csse.rose-hulman.edu:3000/API/v1/infoText/1';
+            var dbApiUrl = BASE_API_URL + 'infoText/1';
             var xhr3 = new XMLHttpRequest();
             xhr3.open('GET', dbApiUrl, true);
             xhr3.onreadystatechange = function (e) {
@@ -105,6 +105,13 @@ function setup() {
     } else {
         title.innerHTML = "Welcome!"
     }
+    setupEditTextSubmit();
+    setupUploadPhotoSubmit();
+}
+
+function setupUploadPhotoSubmit() {
+    var submitBtn = document.getElementById('carouselUploadModal-submit');
+    submitBtn.addEventListener('click', uploadCarouselPhoto);
 }
 
 function showModal(editImage) {
@@ -191,6 +198,11 @@ function uploadCarouselPhoto() {
     };
 
     photoxhr.send(formData);
+}
+
+function setupEditTextSubmit() {
+    var submitBtn = document.getElementById('editTextModal-submit');
+    submitBtn.addEventListener('click', updateFrontPageText);
 }
 
 function updateFrontPageText() {

@@ -31,7 +31,7 @@ function setup() {
 function submit() {
     var photoAPIURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/eventPhoto';
     var photoxhr = new XMLHttpRequest();
-    var dbAPIURL = 'http://rha-website-1.csse.rose-hulman.edu:3000/API/v1/proposal';
+    var dbAPIURL = BASE_API_URL + 'proposal';
     var name = document.getElementById("name").value;
     var costToAttendee = document.getElementById("costToAttendee").value;
     var description = document.getElementById("description").value;

@@ -1,11 +1,16 @@
+last_filepath_clicked = null
+last_id_clicked = null
+
+
 function setup() {
     var officersxhr = getOfficers(); // from adminPErmission.js
-    var galleryURL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery';
+    var galleryURL = BASE_API_URL + 'photoGallery';
     officersxhr.onload = function () {
         var modalDelete = document.getElementById('modal-delete');
         if (userIsOfficer(officersxhr.responseText)) {
             galleryURL += 'All';
             modalDelete.style.display = "inline-block";
+            setupUploadPhotoSubmit();
         } else {
             galleryURL += 'Restricted';
             var photoGallerySections = document.getElementsByClassName("photo-gallery-sections");
@@ -13,10 +18,24 @@ function setup() {
                 photoGallerySections[i].style.display = "none";
             }
         }
+
+        displayImages(galleryURL);
     }
     officersxhr.send();
 
-    setTimeout(function () { displayImages(galleryURL) }, 300);
+
+
+    var deleteConfirm = document.getElementById('confirm-delete');
+    deleteConfirm.addEventListener('click', function () {
+        deleteFunction(last_filepath_clicked, last_id_clicked);
+    });
+
+//    setTimeout(function () { displayImages(galleryURL) }, 300);
+}
+
+function setupUploadPhotoSubmit() {
+    var submitBtn = document.getElementById('uploadModal-submit');
+    submitBtn.addEventListener('click', uploadPhoto);
 }
 
 function displayImages(galleryURL) {
@@ -64,14 +83,13 @@ function setUpModal(filePath, photoID, approved) {
     modalImage.setAttribute('src', filePath);
     var modalApprove = document.getElementById('modal-approve');
     modalApprove.addEventListener("click", function () { approveImage(photoID) });
-    var deleteConfirm = document.getElementById('confirm-delete');
-    deleteConfirm.addEventListener('click', function () {
-        deleteFunction(filePath, photoID);
-    });
+
+    last_filepath_clicked = filePath;
+    last_id_clicked = photoID;
 }
 
 function approveImage(imageID) {
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery';
+    var url = BASE_API_URL + 'photoGallery';
     var xhr = new XMLHttpRequest();
     var json_data = { "approved": "approved", "photo_gallery_id": imageID };
     xhr.open('PUT', url + '/' + imageID, true);
@@ -85,7 +103,7 @@ function approveImage(imageID) {
 }
 
 function deletePhotoDB(imageID) {
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery/' + imageID;
+    var url = BASE_API_URL + 'photoGallery/' + imageID;
     var xhr = new XMLHttpRequest();
     xhr.open('DELETE', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -134,7 +152,7 @@ function showPictureModal(source) {
 }
 
 function uploadPhoto() {
-    var url = "http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/photoGallery";
+    var url = BASE_API_URL + 'photoGallery';
     var photoUploadApi = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/api/v1/galleryPhoto';
     var photoxhr = new XMLHttpRequest();
     var files = document.getElementById("imageFile").files;

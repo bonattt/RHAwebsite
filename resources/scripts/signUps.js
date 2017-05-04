@@ -1,5 +1,5 @@
 
-var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
+var apiURL = BASE_API_URL;
 var isAdmin = false;
 var isAMember = false;
 
@@ -374,7 +374,7 @@ function dataElementId(proposal_id) {
 
 function signUp(eventID) {
     var username = JSON.parse(sessionStorage.getItem("userData")).username;
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/';
+    var url = BASE_API_URL + 'events/';
     url += eventID + '/attendees/' + username;
     function createCORSRequest(method, url) {
         var xhr = new XMLHttpRequest();
@@ -408,7 +408,7 @@ function signUp(eventID) {
 
 function unregister(eventID) {
     var username = JSON.parse(sessionStorage.getItem("userData")).username;
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/';
+    var url = BASE_API_URL + 'events/';
     url += eventID + '/attendees/' + username;
     function createCORSRequest(method, url) {
         var xhr = new XMLHttpRequest();
@@ -456,7 +456,7 @@ function moreInformationFunction(triggeringElement) {
 }
 
 function getAttendees(id) {
-    var url = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/events/' + id;
+    var url = BASE_API_URL + 'events/' + id;
     function createCORSRequest(method, url) {
         var xhr = new XMLHttpRequest();
         if ("withCredentials" in xhr) {
@@ -488,7 +488,6 @@ function makeListLinks() {
     }
 
     var isAdmin = true;
-    var apiURL = "http://rha-website-1.csse.rose-hulman.edu:3000/";
 
     newEvent = {};
 };

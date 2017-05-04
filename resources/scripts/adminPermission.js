@@ -35,7 +35,10 @@ var insertEditButtons = function(dataElementRoot, uiElementRootId, idFieldName, 
                 generateEditButtonListener(elementId, uiElementRootId, submitFunc, idFieldName)
             );
         editButton.addEventListener('click', function(clickedId) {
-            return function() {selected_element_id = clickedId}
+            return function() {
+                console.log(clickedId);
+                selected_element_id = clickedId;
+            }
         } (elementId));
         /*
          * this is messy, but basically I need to curry so that the
@@ -59,12 +62,12 @@ var insertEditButtons = function(dataElementRoot, uiElementRootId, idFieldName, 
 // idFieldName      - the value of this field will passed to submitFunc for use in the API url.
 var generateEditButtonListener = function(dataElementId, uiElementRootId, submitFunc, idFieldName) {
      return function(event) {
-            var deleteBtn = document.getElementById('modal-delete');
-            if (deleteBtn != null && typeof deleteBtn != "undefined") {
-                deleteBtn.disabled = false;
-            } else {
-            }
-            setupEditModal(dataElementId, uiElementRootId, submitFunc, idFieldName);
+        var deleteBtn = document.getElementById('modal-delete');
+//        if (deleteBtn != null && typeof deleteBtn != "undefined") {
+//            deleteBtn.disabled = false;
+//        } else {
+//        }
+        setupEditModal(dataElementId, uiElementRootId, submitFunc, idFieldName);
      };
 }
 

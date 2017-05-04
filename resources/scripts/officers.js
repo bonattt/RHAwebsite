@@ -17,7 +17,8 @@ function setAdmin(officers) {
             'officers-modal-',
             'user_id',
             function (json_data, put_id) {
-                var apiUrl = 'member/' + put_id
+                var global_id = selected_element_id.replace('officer', '');
+                var apiUrl = 'member/' + global_id;
                 var xhr = xhrPutRequest(apiUrl);
                 delete json_data.user_id;
                 delete json_data.username;
@@ -38,12 +39,10 @@ function setAdmin(officers) {
 
                 xhr.onload = function () { location.reload() };
                 var imageEntry = document.getElementById("imageFilePut");
-                var global_id = selected_element_id.replace('officer', '');
                 global_id = parseInt(global_id);
-                //            alert(selected_element_id + ' ?= ' + put_id + ' = ' + (selected_element_id == put_id));
-                if (global_id != put_id) {
-                    alert('WARNING WARNING:\nselected_element_id: ' + global_id + '\nput_id: ' + put_id);
-                }
+//                if (global_id != put_id) {
+//                    alert('WARNING WARNING:\nselected_element_id: ' + global_id + '\nput_id: ' + put_id);
+//                }
                 if (imageEntry.value != '') {
                     var image_to_delete = json_data.image;
 
@@ -75,6 +74,13 @@ function setAdmin(officers) {
         var deleteBtn = document.getElementById('modal-delete');
         deleteBtn.style.display = "inline";
         deleteBtn.addEventListener('click', function() {
+            var dataset = document.getElementById(selected_element_id).dataset;
+            var cookieUser = JSON.parse(sessionStorage.getItem("userData"));
+            if(cookieUser.username != dataset.username) {
+                $('#deleteConfirmationModal').modal();
+            } else {
+                $('#selfDeleteModal').modal();
+            }
             var imageEntry = document.getElementById("imageFilePut")
             imageEntry.value = '';
         });
@@ -138,19 +144,25 @@ function setupAddOfficerButton() {
         var urlExtension = 'members/' + username;
         var json_data = {"memberType": membertypeEntry.value};
 
-        if (phoneEntry.value != '') { json_data.phone_number = phoneEntry.value}
+        if (phoneEntry.value != '') {
+            if (phoneEntry.value.length != 10) {
+                showNotification("please enter a 10-digit phone number");
+                return;
+            }
+            json_data.phone_number = phoneEntry.value
+        }
         if (hallEntry.value != '') { json_data.hall = hallEntry.value}
         if (roomEntry.value != '') { json_data.room_number = roomEntry.value}
         if (cmEntry.value != '') { json_data.cm = cmEntry.value}
 
         console.log(json_data.phone_number);
-        if (json_data.phone_number.length != 10) {
-            showNotification("please enter a 10-digit phone number");
-            return;
-        }
+//        if (json_data.phone_number.length != 10) {
+//            showNotification("please enter a 10-digit phone number");
+//            return;
+//        }
 
         var xhr = xhrPutRequest(urlExtension);
-        xhr.onload = function () { } //location.reload() };
+        xhr.onload = function () { location.reload() };
         var imageEntry = document.getElementById("imageFilePost");
         if (imageEntry.value != '') {
             var photoPost = new PhotoPostXhr("officerPhoto");
