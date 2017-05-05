@@ -17,6 +17,7 @@ function setup() {
             for (var i = 0; i < photoGallerySections.length; i++) {
                 photoGallerySections[i].style.display = "none";
             }
+            setupUploadPhotoSubmit();
         }
 
         displayImages(galleryURL);

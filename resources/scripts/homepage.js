@@ -206,7 +206,7 @@ function setupEditTextSubmit() {
 }
 
 function updateFrontPageText() {
-    var dbApiUrl = 'http://rha-website-1.csse.rose-hulman.edu:3000/API/v1/infoText/1';
+    var dbApiUrl = BASE_API_URL + 'infoText/1';
     var xhr = new XMLHttpRequest();
     xhr.open('PUT', dbApiUrl, true);
     xhr.setRequestHeader('Content-Type', 'application/json');

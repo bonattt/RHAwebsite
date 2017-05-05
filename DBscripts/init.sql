@@ -206,14 +206,10 @@ INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_atte
 CREATE OR REPLACE FUNCTION populate_floor_money()
   RETURNS void AS $$
   BEGIN
-    -- call other functions 
-    CREATE TEMPORARY TABLE floor_resident_count AS 
-    SELECT Members.hall, count(*) FROM Members GROUP BY Members.hall;
-    INSERT INTO FloorMoney (hall_and_floor, residents) 
-      SELECT hall, count FROM floor_resident_count;
+    CREATE TEMPORARY TABLE floor_resident_count AS SELECT Members.hall, count(*) FROM Members GROUP BY Members.hall;
+    INSERT INTO FloorMoney (hall_and_floor, residents) SELECT hall, count FROM floor_resident_count;
     DROP TABLE floor_resident_count;
-
-    SELECT * FROM update_floor_money();
+    PERFORM FROM update_floor_money();
   END;
 $$ LANGUAGE plpgsql;
 
@@ -302,9 +298,6 @@ CREATE OR REPLACE FUNCTION calc_earned_money(floor varchar, size int, moneyRate 
         END;
         meet_attended := meet_attended + counter;
       END LOOP;
-      IF y = 'Q1' THEN
-        meet_attended = meet_attended + 1; 
-      END IF;
       earned := earned + (multiplier * ((1.5) ^ meet_attended));
     END LOOP;
   RETURN earned;
