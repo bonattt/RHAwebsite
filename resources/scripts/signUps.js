@@ -35,7 +35,7 @@ function displayPastEvents() {
     }
 
     function getEvents() {
-        var url = apiURL + 'api/v1/pastevents';
+        var url = apiURL + 'pastevents';
         function createCORSRequest(method, url) {
             var xhr = new XMLHttpRequest();
             if ("withCredentials" in xhr) {
@@ -114,7 +114,7 @@ function displaySignUps() {
         }
 
         function getEvents() {
-            var url = apiURL + 'api/v1/events';
+            var url = apiURL + 'events';
             function createCORSRequest(method, url) {
                 var xhr = new XMLHttpRequest();
                 if ("withCredentials" in xhr) {

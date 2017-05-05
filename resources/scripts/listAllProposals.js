@@ -39,7 +39,7 @@ function displayProposals(isAdmin) {
     var xhr = getEvents();
     xhr.onload = function () {
         var proposals = JSON.parse(xhr.responseText);
-        var startingYear = 2015;
+        var startingYear = 2016;
         var proposalsForCurrentYear = new Array();
         for (var i = proposals.length - 1; i >= 0; i--) {
             var proposedDate = new Date(proposals[i].proposed_date);
