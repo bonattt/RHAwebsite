@@ -521,6 +521,7 @@ function showEmailModal(event) {
     xhr.onload = function () {
         var response = JSON.parse(xhr.responseText);
         var header = "Attendee Email List";
+        var max_attendance = response[0].max_attendance
         var eventAttendees = response[0].attendees;
         if (eventAttendees == null) {
             eventAttendees = ["There is nobody signed up for this event!"];
@@ -528,6 +529,12 @@ function showEmailModal(event) {
             for (var i = 0; i < eventAttendees.length; i++) {
                 eventAttendees[i] += '@rose-hulman.edu;'
             }
+        }
+        if (eventAttendees.length > max_attendance) {
+            console.log("there is a waitlist");
+            eventAttendees.splice(max_attendance, 0, "<br/><b>--- waitlist ---</b>");
+        } else {
+            console.log("no wait")
         }
         populateListModal(header, eventAttendees);
     }
