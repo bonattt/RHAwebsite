@@ -504,7 +504,7 @@ function showAttendeesModal(event) {
         var max_attendance = response[0].max_attendance;
 
         if ((attendees == null) || (attendees.length == 0)) {
-            attendees = ["there is nobody signed up for this event!"];
+            attendees = ["There is nobody signed up for this event!"];
         } else {
             attendees = attendees.slice(0, max_attendance);
         }
@@ -520,7 +520,7 @@ function showEmailModal(event) {
         var header = "Attendee Email List";
         var eventAttendees = response[0].attendees;
         if (eventAttendees == null) {
-            eventAttendees = ["there is nobody signed up for this event!"];
+            eventAttendees = ["There is nobody signed up for this event!"];
         } else {
             for (var i = 0; i < eventAttendees.length; i++) {
                 eventAttendees[i] += '@rose-hulman.edu;'
