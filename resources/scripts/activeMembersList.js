@@ -7,10 +7,10 @@ function setAdmin(officers) {
         var div = document.getElementById('buttonsDiv');
         var newButton = document.createElement('button');
         newButton.setAttribute('id', 'submitAttendance');
+        newButton.className = "membersListButtons";
         newButton.setAttribute('data-toggle', 'modal');
         newButton.setAttribute('data-target', '#uploadModal');
         newButton.innerHTML = 'New Attendance Record';
-        div.appendChild(newButton);
 
         var undoButton = document.createElement('button');
         undoButton.setAttribute('id', 'undoAttendance');
@@ -50,9 +50,19 @@ function setAdmin(officers) {
             };
             xhr.send();
         });
+
+        var uploadMembers = document.createElement("button");
+        uploadMembers.setAttribute("id", "uploadMembers");
+        uploadMembers.setAttribute("data-toggle", "modal");
+        uploadMembers.setAttribute("data-target", "#membersModal");
+        uploadMembers.innerHTML = "Upload New Members";
+        uploadMembers.className = "membersListButtons";
+
+        div.appendChild(newButton);
         div.appendChild(undoButton);
         div.appendChild(purgeMembers);
         div.appendChild(undoPurge);
+        div.appendChild(uploadMembers);
 
         //undoAttendanceSubmission();
 
@@ -77,6 +87,8 @@ function setup() {
         var buttonsDiv = document.getElementById('buttonsDiv');
     }
     xhr.send();
+
+    massMemberUpload();
 }
 
 function drawAllMembersTable(members) {
@@ -292,9 +304,38 @@ function drawActiveMembersTable(members) {
     body.appendChild(table);
 }
 
+function massMemberUpload() {
+    // console.log("Yes, I have been clicked.");
+
+    var massMembersSubmit = document.getElementById("members-modal-submit");
+    massMembersSubmit.addEventListener(function () {
+        var file = document.getElementById("csvFileMembers").files;
+        var reader = FileReader();
+        reader.onload = function (e) {
+            var preResult = reader.result.split("\r\n");
+            var result = [];
+            preResult.forEach(e => {
+                if(e != '') {
+                    result.push(e);
+                }
+            });
+            result = result.sort();
+
+            var urlExtension = 'members/';
+            var xhr = xhrPostRequest(urlExtension);
+
+            xhr.onload = function () {
+                location.reload();
+            }
+            xhr.send(JSON.stringify({membersToAdd: result}));
+            return xhr;
+        };
+        reader.readAsText(files[0]);
+    });
+}
+
 function setupSubmitAttendanceButton() {
     var addCommitteeBtn = document.getElementById("submitAttendance");
-    addCommitteeBtn.className = "membersListButtons";
     addCommitteeBtn.addEventListener('click', function () {
 
         var submitBtn = document.getElementById('update-modal-submit');
