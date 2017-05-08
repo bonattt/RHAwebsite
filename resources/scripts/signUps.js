@@ -500,15 +500,18 @@ function showAttendeesModal(event) {
         var response = JSON.parse(xhr.responseText);
         var header = 'List of Attendees';
         var attendees = response[0].attendees;
-        console.log(attendees);
         var max_attendance = response[0].max_attendance;
 
         if ((attendees == null) || (attendees.length == 0)) {
-            attendees = ["There is nobody signed up for this event!"];
+            attendees_shown = ["There is nobody signed up for this event!"];
+        } if (attendees.length <= max_attendance) {
+            attendees_shown = attendees.slice(0, max_attendance);
         } else {
-            attendees = attendees.slice(0, max_attendance);
+            attendees_shown = attendees.slice(0, max_attendance);
+            attendees_shown = attendees_shown.concat('<br/> <b> --- Waitlist --- </b>')
+            attendees_shown = attendees_shown.concat(attendees.slice(max_attendance));
         }
-        populateListModal(header, attendees);
+        populateListModal(header, attendees_shown);
     }
 }
 
