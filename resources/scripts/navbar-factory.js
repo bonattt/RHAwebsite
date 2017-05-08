@@ -26,10 +26,10 @@ window.onload = function () {
 		'		<div class="dropdown">' +
 		'			<button class="dropbtn">Forms</button>' +
 		'			<div class="dropdown-content">' +
-		'				<a href="http://www.rose-hulman.edu/rha/downloads/RHA_Reimbursement_Form.xlsm">Reimbursement Form</a>' +
-		'				<a href="http://www.rose-hulman.edu/rha/downloads/RHA_Payment_Form.xls">Payment Form</a>' +
-		'				<a href="http://www.rose-hulman.edu/rha/constitution.pdf">Constitution</a>' +
-		'				<a href="http://www.rose-hulman.edu/rha/procedural.pdf">Procedural Document</a>' +
+		'				<a href="../staticDocuments/RHA_Reimbursement_Form.xlsm">Reimbursement Form</a>' +
+		'				<a href="../staticDocuments/RHA_Payment_Form.xls">Payment Form</a>' +
+		'				<a href="../staticDocuments/constitution.pdf">Constitution</a>' +
+		'				<a href="../staticDocuments/proceduralDocument.pdf">Procedural Document</a>' +
 		'			</div>' +
 		'		</div>' +
 		'		<div class="dropdown">' +

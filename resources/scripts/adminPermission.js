@@ -1,5 +1,5 @@
 // append something to this
-const BASE_API_URL = 'http://rha-website-1.csse.rose-hulman.edu:3000/api/v1/';
+const BASE_API_URL = 'http://ec2-52-15-141-212.us-east-2.compute.amazonaws.com:3000/api/v1';
 
 var modal_event_handlers = [];
 var delete_confirm_handlers = [];
