@@ -76,7 +76,9 @@ function setupAdmin(officers) {
 
 function displaySignUps() {
     var officersxhr = getOfficers(); // from adminPermission.js
-    var username = JSON.parse(sessionStorage.getItem("userData")).username;
+    if (JSON.parse(sessionStorage.getItem("userData"))) {
+        var username = JSON.parse(sessionStorage.getItem("userData")).username;
+    }
     var memberXhr = xhrGetRequest('members/');
     memberXhr.onload = function () {
         var members = JSON.parse(memberXhr.responseText);
@@ -275,44 +277,40 @@ function getEventActionDiv(proposal, username, signUpOpenDate, attendees) {
     eventActionDiv.setAttribute('id', 'eventActions' + proposal.proposal_id);
     eventActionDiv.setAttribute('class', 'eventActions');
 
-    if (!isAMember) {
-
-    } else {
-        if (signUpOpenDate < new Date()) {
-            var signupLink = document.createElement('a');
-            signupLink.setAttribute('id', 'signUpLink' + proposal.proposal_id);
-            if (username != null) {
-                if ($.inArray(username, attendees) == -1) {
-                    signupLink.addEventListener('click', function () { signUp(proposal.proposal_id + "") });
-                    var innerParagraph = document.createElement('p');
-                    innerParagraph.setAttribute('class', 'signUpLink');
-                    innerParagraph.appendChild(document.createTextNode('Sign Up'));
-                    signupLink.appendChild(innerParagraph);
-                } else {
-                    signupLink.addEventListener('click', function () { unregister(proposal.proposal_id) });
-                    var innerParagraph = document.createElement('p');
-                    innerParagraph.setAttribute('class', 'signUpLink');
-                    innerParagraph.appendChild(document.createTextNode('Unregister'));
-                    signupLink.appendChild(innerParagraph);
-                }
-            } else {
-                signupLink.addEventListener('click', function () {
-                    var snackbar = document.getElementById("notLoggedInSnackbar");
-                    snackbar.className = "show";
-                    setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
-                });
+    if (signUpOpenDate < new Date()) {
+        var signupLink = document.createElement('a');
+        signupLink.setAttribute('id', 'signUpLink' + proposal.proposal_id);
+        if (username != null) {
+            if ($.inArray(username, attendees) == -1) {
+                signupLink.addEventListener('click', function () { signUp(proposal.proposal_id + "") });
                 var innerParagraph = document.createElement('p');
                 innerParagraph.setAttribute('class', 'signUpLink');
                 innerParagraph.appendChild(document.createTextNode('Sign Up'));
                 signupLink.appendChild(innerParagraph);
+            } else {
+                signupLink.addEventListener('click', function () { unregister(proposal.proposal_id) });
+                var innerParagraph = document.createElement('p');
+                innerParagraph.setAttribute('class', 'signUpLink');
+                innerParagraph.appendChild(document.createTextNode('Unregister'));
+                signupLink.appendChild(innerParagraph);
             }
         } else {
-            var signupLink = document.createElement('p');
-            signupLink.setAttribute('class', 'signUpLink');
-            signupLink.appendChild(document.createTextNode('Signups Closed'));
+            signupLink.addEventListener('click', function () {
+                var snackbar = document.getElementById("notLoggedInSnackbar");
+                snackbar.className = "show";
+                setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+            });
+            var innerParagraph = document.createElement('p');
+            innerParagraph.setAttribute('class', 'signUpLink');
+            innerParagraph.appendChild(document.createTextNode('Sign Up'));
+            signupLink.appendChild(innerParagraph);
         }
-        eventActionDiv.appendChild(signupLink);
+    } else {
+        var signupLink = document.createElement('p');
+        signupLink.setAttribute('class', 'signUpLink');
+        signupLink.appendChild(document.createTextNode('Signups Closed'));
     }
+    eventActionDiv.appendChild(signupLink);
 
     var showListLink = document.createElement('a');
     showListLink.addEventListener('click', function () { showAttendeesModal(proposal.proposal_id) });
@@ -374,6 +372,9 @@ function dataElementId(proposal_id) {
 
 function signUp(eventID) {
     var username = JSON.parse(sessionStorage.getItem("userData")).username;
+    if (!username) {
+        username = "abcd";
+    }
     var url = BASE_API_URL + 'events/';
     url += eventID + '/attendees/' + username;
     function createCORSRequest(method, url) {
@@ -499,15 +500,18 @@ function showAttendeesModal(event) {
         var response = JSON.parse(xhr.responseText);
         var header = 'List of Attendees';
         var attendees = response[0].attendees;
-        console.log(attendees);
         var max_attendance = response[0].max_attendance;
 
         if ((attendees == null) || (attendees.length == 0)) {
-            attendees = ["there is nobody signed up for this event!"];
+            attendees_shown = ["There is nobody signed up for this event!"];
+        } if (attendees.length <= max_attendance) {
+            attendees_shown = attendees.slice(0, max_attendance);
         } else {
-            attendees = attendees.slice(0, max_attendance);
+            attendees_shown = attendees.slice(0, max_attendance);
+            attendees_shown = attendees_shown.concat('<br/> <b> --- Waitlist --- </b>')
+            attendees_shown = attendees_shown.concat(attendees.slice(max_attendance));
         }
-        populateListModal(header, attendees);
+        populateListModal(header, attendees_shown);
     }
 }
 
@@ -517,22 +521,29 @@ function showEmailModal(event) {
     xhr.onload = function () {
         var response = JSON.parse(xhr.responseText);
         var header = "Attendee Email List";
+        var max_attendance = response[0].max_attendance
         var eventAttendees = response[0].attendees;
         if (eventAttendees == null) {
-            eventAttendees = ["there is nobody signed up for this event!"];
+            eventAttendees = ["There is nobody signed up for this event!"];
         } else {
             for (var i = 0; i < eventAttendees.length; i++) {
                 eventAttendees[i] += '@rose-hulman.edu;'
             }
+        }
+        if (eventAttendees.length > max_attendance) {
+            console.log("there is a waitlist");
+            eventAttendees.splice(max_attendance, 0, "<br/><b>--- waitlist ---</b>");
+        } else {
+            console.log("no wait")
         }
         populateListModal(header, eventAttendees);
     }
 }
 
 function populateListModal(header, ls) {
-    document.getElementById('listModal_header').innerHTML = header+'';
+    document.getElementById('listModal_header').innerHTML = header + '';
     var html = ''
-    ls.forEach(function(line) {
+    ls.forEach(function (line) {
         html += line + '<br/>'
     });
     document.getElementById('listModal_body').innerHTML = html;
