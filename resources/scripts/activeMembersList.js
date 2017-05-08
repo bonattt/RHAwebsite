@@ -308,9 +308,9 @@ function massMemberUpload() {
     // console.log("Yes, I have been clicked.");
 
     var massMembersSubmit = document.getElementById("members-modal-submit");
-    massMembersSubmit.addEventListener(function () {
+    massMembersSubmit.addEventListener("click", function () {
         var file = document.getElementById("csvFileMembers").files;
-        var reader = FileReader();
+        var reader = new FileReader();
         reader.onload = function (e) {
             var preResult = reader.result.split("\r\n");
             var result = [];
@@ -330,7 +330,7 @@ function massMemberUpload() {
             xhr.send(JSON.stringify({membersToAdd: result}));
             return xhr;
         };
-        reader.readAsText(files[0]);
+        reader.readAsText(file[0]);
     });
 }
 
