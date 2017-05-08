@@ -215,7 +215,9 @@ function setup() {
                 html += "</h3>";
                 html += "<img src='" + officer[i].image + "' alt='" + officer[i].membertype + "'height='294' width='195'>";
                 html += "<p>Email: <a href='mailto:" + officer[i].username + "@rose-hulman.edu'>" + officer[i].username + "@rose-hulman.edu</a></p>";
-                html += "<p> Phone Number: " + parsePhoneNumber(officer[i].phone_number) + "</p>";
+                if (officer[i].phone_number) {
+                    html += "<p> Phone Number: " + parsePhoneNumber(officer[i].phone_number) + "</p>";
+                }
                 html += "<p> Room: " + officer[i].hall + " " + officer[i].room_number + "</p>";
                 html += "<p>Box #: " + officer[i].cm + "</p>";
 
