@@ -504,7 +504,7 @@ function showAttendeesModal(event) {
 
         if ((attendees == null) || (attendees.length == 0)) {
             attendees_shown = ["There is nobody signed up for this event!"];
-        } if (attendees.length <= max_attendance) {
+        } else if (attendees.length <= max_attendance) {
             attendees_shown = attendees.slice(0, max_attendance);
         } else {
             attendees_shown = attendees.slice(0, max_attendance);
