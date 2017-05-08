@@ -1,10 +1,12 @@
+$.holdReady(true);
 
 window.onload = function() {
-	QUnit.test( "test 1", function( assert ) {
-	  assert.ok( 1 == "1", "Passed!" );
+	QUnit.test( "Test Case One", function( assert ) {
+        // code
+        assert.equal(2+2, 4, "test addition");
 	});
-	
-	QUnit.test( "test 2", function( assert ) {
-	  assert.equal("thing", "thing", "Passed!" );
+	QUnit.test( "Test Case Two", function( assert ) {
+        // code
+        assert.equal(2-2, 0, "test subtraction");
 	});
 }
