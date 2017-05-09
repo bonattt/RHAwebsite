@@ -10,7 +10,7 @@ CREATE TABLE Members (
     memberType varchar(30), 
     active boolean, -- TODO: update table to not include this column
     trip_eligible boolean,
-    meet_attend jsonb, -- {'Q1': [int], 'Q2': [int], 'Q3': [int]}
+    meet_attend jsonb DEFAULT '{"Q1":[],"Q2":[],"Q3":[]}', -- {'Q1': [int], 'Q2': [int], 'Q3': [int]}
     CM int,
     phone_number varchar(10),
     room_number varchar(25)

@@ -15,7 +15,27 @@ var userIsOfficer = function(officers) {
     }
     for (var i = 0; i < officer.length; i++) {
         if (officer[i].username === tempUser.username) {
+        	if (officer[i].firstname == null || officer[i].lastname == null) {
+        		var xhr = xhrPutRequest('members/' + officer[i].username);
+        		var tempName = tempUser.name.split(" ");
+        		var firstname = tempName[0];
+        		var lastname = tempName[1];
+        		officer[i].firstname = firstname;
+        		officer[i].lastname = lastname;
+        		xhr.send(JSON.stringify(officer[i]));
+        	}
 			return true;
+		}
+		if (tempUser.username == null) {
+			var xhr = xhrPostRequest('singleMember');
+			var tempName = tempUser.name.split(" ");
+    		var firstname = tempName[0];
+    		var lastname = tempName[1];
+    		var json = {};
+    		json.username = tempUser.username;
+    		json.firstname = firstname;
+    		json.lastname = lastname;
+    		xhr.send(JSON.stringify(json));
 		}
 	}
 	return false;
