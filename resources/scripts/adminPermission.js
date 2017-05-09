@@ -13,8 +13,10 @@ var userIsOfficer = function(officers) {
 	if (!tempUser) {
         return false;
     }
+    var memberFound = false;
     for (var i = 0; i < officer.length; i++) {
         if (officer[i].username === tempUser.username) {
+        	memberFound = true;
         	if (officer[i].firstname == null || officer[i].lastname == null) {
         		var xhr = xhrPutRequest('members/' + officer[i].username);
         		var tempName = tempUser.name.split(" ");
@@ -24,19 +26,23 @@ var userIsOfficer = function(officers) {
         		officer[i].lastname = lastname;
         		xhr.send(JSON.stringify(officer[i]));
         	}
-			return true;
+        	if (officer[i].memberType != null) {
+				return true;
+        	} else {
+				return false;
+        	}
 		}
-		if (tempUser.username == null) {
-			var xhr = xhrPostRequest('singleMember');
-			var tempName = tempUser.name.split(" ");
-    		var firstname = tempName[0];
-    		var lastname = tempName[1];
-    		var json = {};
-    		json.username = tempUser.username;
-    		json.firstname = firstname;
-    		json.lastname = lastname;
-    		xhr.send(JSON.stringify(json));
-		}
+    }
+	if (!memberFound) {
+		var xhr = xhrPostRequest('singleMember');
+		var tempName = tempUser.name.split(" ");
+		var firstname = tempName[0];
+		var lastname = tempName[1];
+		var json = {};
+		json.username = tempUser.username;
+		json.firstname = firstname;
+		json.lastname = lastname;
+		xhr.send(JSON.stringify(json));
 	}
 	return false;
 }
@@ -225,7 +231,7 @@ var enableSubmitButton = function(dataElementId, uiElementRootId, submitFunc, id
 }*/
 
 function getOfficers() {
-    var urlExtension = 'officers/';
+    var urlExtension = 'members/';
     var xhr = xhrGetRequest(urlExtension);
     return xhr;
 }
