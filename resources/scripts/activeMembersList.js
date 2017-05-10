@@ -316,17 +316,22 @@ function massMemberUpload() {
             var result = [];
             preResult.forEach(e => {
                 if(e != '') {
-                    result.push(e);
+                    var split = e.split(',');
+                    var data = {};
+                    data.username = split[0];
+                    data.hall = split[1];
+                    console.log(data);
+                    result.push(data);
                 }
             });
-            result = result.sort();
 
-            var urlExtension = 'members/';
+            var urlExtension = 'members';
             var xhr = xhrPostRequest(urlExtension);
 
             xhr.onload = function () {
-                location.reload();
+                // location.reload();
             }
+            console.log(result);
             xhr.send(JSON.stringify({membersToAdd: result}));
             return xhr;
         };

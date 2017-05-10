@@ -26,7 +26,7 @@ var userIsOfficer = function(officers) {
         		officer[i].lastname = lastname;
         		xhr.send(JSON.stringify(officer[i]));
         	}
-        	if (officer[i].memberType != null) {
+        	if (officer[i].membertype != null) {
 				return true;
         	} else {
 				return false;
