@@ -146,8 +146,11 @@ function drawAllMembersTable(members) {
             countForColoring++;
 
             var td = document.createElement('td');
-            td.innerHTML = members[i].firstname + " " + members[i].lastname;
-
+            if (members[i].firstname == null || members[i].lastname == null) {
+                td.innerHTML = members[i].username;
+            } else {
+                td.innerHTML = members[i].firstname + " " + members[i].lastname;
+            }
             var td2 = document.createElement('td');
             td2.innerHTML = members[i].hall;
 
@@ -277,7 +280,11 @@ function drawActiveMembersTable(members) {
                 countForColoring++;
 
                 var td = document.createElement('td');
-                td.innerHTML = members[i].firstname + " " + members[i].lastname;
+                if (members[i].firstname == null || members[i].lastname == null) {
+                    td.innerHTML = members[i].username;
+                } else {
+                    td.innerHTML = members[i].firstname + " " + members[i].lastname;
+                }
 
                 var td2 = document.createElement('td');
                 td2.innerHTML = members[i].hall;
@@ -329,7 +336,7 @@ function massMemberUpload() {
             var xhr = xhrPostRequest(urlExtension);
 
             xhr.onload = function () {
-                // location.reload();
+                location.reload();
             }
             console.log(result);
             xhr.send(JSON.stringify({membersToAdd: result}));
