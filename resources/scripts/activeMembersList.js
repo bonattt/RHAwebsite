@@ -403,10 +403,12 @@ function setupSubmitAttendanceButton() {
                 var urlExtension = 'attendance/' + quarterToUpdate;
                 var xhr = xhrPutRequest(urlExtension);
 
-                xhr.onreadystatechange = function (e) {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        setTimeout(function () { location.reload() }, 600);
-                    }
+                xhr.onload = function() {
+                    // var updateMoneyXhr = xhrGetRequest('updateFloorMoney');
+                    // updateMoneyXhr.onload = function() {
+                    location.reload();
+                    // }
+                    // updateMoneyXhr.send();
                 };
                 xhr.send(JSON.stringify({ membersToUpdate: result }));
                 clearSubmitHandlers(submitBtn);
