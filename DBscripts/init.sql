@@ -156,17 +156,6 @@ CREATE TABLE InfoText (
 
 /*Load all tables with contents from CSV files (if they exist)*/
 
-COPY Proposals FROM '/tmp/proposals.csv' DELIMITER ',' CSV HEADER;
-COPY Funds FROM '/tmp/funds.csv' DELIMITER ',' CSV HEADER;
-COPY Members FROM '/tmp/members.csv' DELIMITER ',' CSV HEADER;
-COPY Expenses FROM '/tmp/expenses.csv' DELIMITER ',' CSV HEADER;
-COPY Committee FROM '/tmp/committee.csv' DELIMITER ',' CSV HEADER;
-COPY Equipment FROM '/tmp/equipment.csv' DELIMITER ',' CSV HEADER;
-COPY Rentals FROM '/tmp/rentals.csv' DELIMITER ',' CSV HEADER;
-COPY FloorMoney FROM '/tmp/floormoney.csv' DELIMITER ',' CSV HEADER;
-COPY FloorExpenses FROM '/tmp/floorexpenses.csv' DELIMITER ',' CSV HEADER;
-COPY PhotoGallery FROM '/tmp/photogallery.csv' DELIMITER ',' CSV HEADER;
-COPY InfoText FROM '/tmp/infotext.csv' DELIMITER ',' CSV HEADER;
 /* Inserts for FloorAttendanceNumerics */
 
 INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Blum', 4);
@@ -526,7 +515,6 @@ $used$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION purgeMembers()
   RETURNS void AS $$
   BEGIN
-    COPY Members TO '/tmp/nonMembersDropBackup.csv' DELIMITER ',' CSV HEADER;
     DELETE FROM Members WHERE Members.membertype IS NULL OR Members.membertype = '';
   END;
 $$ LANGUAGE plpgsql;
@@ -537,10 +525,9 @@ $$ LANGUAGE plpgsql;
   
   Returns: void
 */
-CREATE OR REPLACE FUNCTION undoPurge()
+CREATE OR REPLACE FUNCTION resetAttendance()
   RETURNS void AS $$
   BEGIN
-    TRUNCATE Members;
-    COPY Members FROM '/tmp/nonMembersDropBackup.csv' DELIMITER ',' CSV HEADER;
+   /*Reset all members meet_attend back to default values*/
   END;
 $$ LANGUAGE plpgsql;
