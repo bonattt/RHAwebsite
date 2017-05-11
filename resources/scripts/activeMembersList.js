@@ -311,12 +311,32 @@ function drawActiveMembersTable(members) {
     body.appendChild(table);
 }
 
+function getExtension(filename) {
+    var split = filename.split('.');
+    return split[split.length - 1];
+}
+
+function isProperCSVFormat(filename) {
+    var extension = getExtension(filename);
+    switch (extension.toLowerCase()) {
+        case 'txt':
+            return true;
+        case 'csv':
+            return true;
+    }
+    return false;
+}
+
 function massMemberUpload() {
-    // console.log("Yes, I have been clicked.");
 
     var massMembersSubmit = document.getElementById("members-modal-submit");
     massMembersSubmit.addEventListener("click", function () {
         var file = document.getElementById("csvFileMembers").files;
+        console.log(file[0].name);
+        if (!isProperCSVFormat(file[0].name)) {
+            alert("This file is not of the proper file type. Please upload either a CSV or text file.");
+            return;
+        }
         var reader = new FileReader();
         reader.onload = function (e) {
             var preResult = reader.result.split("\r\n");
@@ -344,6 +364,8 @@ function massMemberUpload() {
         };
         reader.readAsText(file[0]);
     });
+
+
 }
 
 function setupSubmitAttendanceButton() {
@@ -363,7 +385,10 @@ function setupSubmitAttendanceButton() {
             }
 
             var files = document.getElementById("csvFile").files;
-
+            if (!isProperCSVFormat(files[0].name)) {
+                alert("This file is not of the proper file type. Please upload either a CSV or text file.");
+                return;
+            }
             var reader = new FileReader();
 
             var readerOnload = function (e) {
