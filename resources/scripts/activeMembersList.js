@@ -7,10 +7,10 @@ function setAdmin(officers) {
         var div = document.getElementById('buttonsDiv');
         var newButton = document.createElement('button');
         newButton.setAttribute('id', 'submitAttendance');
+        newButton.className = "membersListButtons";
         newButton.setAttribute('data-toggle', 'modal');
         newButton.setAttribute('data-target', '#uploadModal');
         newButton.innerHTML = 'New Attendance Record';
-        div.appendChild(newButton);
 
         var undoButton = document.createElement('button');
         undoButton.setAttribute('id', 'undoAttendance');
@@ -50,9 +50,19 @@ function setAdmin(officers) {
             };
             xhr.send();
         });
+
+        var uploadMembers = document.createElement("button");
+        uploadMembers.setAttribute("id", "uploadMembers");
+        uploadMembers.setAttribute("data-toggle", "modal");
+        uploadMembers.setAttribute("data-target", "#membersModal");
+        uploadMembers.innerHTML = "Upload New Members";
+        uploadMembers.className = "membersListButtons";
+
+        div.appendChild(newButton);
         div.appendChild(undoButton);
         div.appendChild(purgeMembers);
         div.appendChild(undoPurge);
+        div.appendChild(uploadMembers);
 
         //undoAttendanceSubmission();
 
@@ -77,6 +87,8 @@ function setup() {
         var buttonsDiv = document.getElementById('buttonsDiv');
     }
     xhr.send();
+
+    massMemberUpload();
 }
 
 function drawAllMembersTable(members) {
@@ -134,8 +146,11 @@ function drawAllMembersTable(members) {
             countForColoring++;
 
             var td = document.createElement('td');
-            td.innerHTML = members[i].firstname + " " + members[i].lastname;
-
+            if (members[i].firstname == null || members[i].lastname == null) {
+                td.innerHTML = members[i].username;
+            } else {
+                td.innerHTML = members[i].firstname + " " + members[i].lastname;
+            }
             var td2 = document.createElement('td');
             td2.innerHTML = members[i].hall;
 
@@ -265,7 +280,11 @@ function drawActiveMembersTable(members) {
                 countForColoring++;
 
                 var td = document.createElement('td');
-                td.innerHTML = members[i].firstname + " " + members[i].lastname;
+                if (members[i].firstname == null || members[i].lastname == null) {
+                    td.innerHTML = members[i].username;
+                } else {
+                    td.innerHTML = members[i].firstname + " " + members[i].lastname;
+                }
 
                 var td2 = document.createElement('td');
                 td2.innerHTML = members[i].hall;
@@ -292,9 +311,65 @@ function drawActiveMembersTable(members) {
     body.appendChild(table);
 }
 
+function getExtension(filename) {
+    var split = filename.split('.');
+    return split[split.length - 1];
+}
+
+function isProperCSVFormat(filename) {
+    var extension = getExtension(filename);
+    switch (extension.toLowerCase()) {
+        case 'txt':
+            return true;
+        case 'csv':
+            return true;
+    }
+    return false;
+}
+
+function massMemberUpload() {
+
+    var massMembersSubmit = document.getElementById("members-modal-submit");
+    massMembersSubmit.addEventListener("click", function () {
+        var file = document.getElementById("csvFileMembers").files;
+        console.log(file[0].name);
+        if (!isProperCSVFormat(file[0].name)) {
+            alert("This file is not of the proper file type. Please upload either a CSV or text file.");
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var preResult = reader.result.split("\r\n");
+            var result = [];
+            preResult.forEach(e => {
+                if(e != '') {
+                    var split = e.split(',');
+                    var data = {};
+                    data.username = split[0];
+                    data.hall = split[1];
+                    console.log(data);
+                    result.push(data);
+                }
+            });
+
+            var urlExtension = 'members';
+            var xhr = xhrPostRequest(urlExtension);
+
+            xhr.onload = function () {
+                location.reload();
+            }
+            console.log(result);
+            xhr.send(JSON.stringify({membersToAdd: result}));
+            return xhr;
+        };
+        reader.readAsText(file[0]);
+    });
+
+
+}
+
 function setupSubmitAttendanceButton() {
     var addCommitteeBtn = document.getElementById("submitAttendance");
-    addCommitteeBtn.className = "membersListButtons";
     addCommitteeBtn.addEventListener('click', function () {
 
         var submitBtn = document.getElementById('update-modal-submit');
@@ -310,7 +385,10 @@ function setupSubmitAttendanceButton() {
             }
 
             var files = document.getElementById("csvFile").files;
-
+            if (!isProperCSVFormat(files[0].name)) {
+                alert("This file is not of the proper file type. Please upload either a CSV or text file.");
+                return;
+            }
             var reader = new FileReader();
 
             var readerOnload = function (e) {
