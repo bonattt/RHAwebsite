@@ -12,12 +12,12 @@ function setAdmin(officers) {
         newButton.setAttribute('data-target', '#uploadModal');
         newButton.innerHTML = 'New Attendance Record';
 
-        var undoButton = document.createElement('button');
-        undoButton.setAttribute('id', 'undoAttendance');
-        undoButton.className = "membersListButtons";
-        undoButton.innerHTML = 'Undo Last Attendance Upload';
-        undoButton.addEventListener('click', function () {
-            var xhr = xhrGetRequest('attendance/undo');
+        var undoAttendance = document.createElement('button');
+        undoAttendance.setAttribute('id', 'undoAttendance');
+        undoAttendance.className = "membersListButtons";
+        undoAttendance.innerHTML = 'Undo Attendance';
+        undoAttendance.addEventListener('click', function () {
+            var xhr = xhrGetRequest('resetAttendance');
             xhr.onload = function () {
                 location.reload();
             };
@@ -39,18 +39,6 @@ function setAdmin(officers) {
             xhr.send();
         });
 
-        var undoPurge = document.createElement("button");
-        undoPurge.setAttribute("id", "undoPurge");
-        undoPurge.innerHTML = "Undo Members Purge";
-        undoPurge.className = "membersListButtons";
-        undoPurge.addEventListener("click", function () {
-            var xhr = xhrGetRequest('undoPurge/');
-            xhr.onload = function () {
-                location.reload();
-            };
-            xhr.send();
-        });
-
         var uploadMembers = document.createElement("button");
         uploadMembers.setAttribute("id", "uploadMembers");
         uploadMembers.setAttribute("data-toggle", "modal");
@@ -59,12 +47,9 @@ function setAdmin(officers) {
         uploadMembers.className = "membersListButtons";
 
         div.appendChild(newButton);
-        div.appendChild(undoButton);
+        div.appendChild(undoAttendance);
         div.appendChild(purgeMembers);
-        div.appendChild(undoPurge);
         div.appendChild(uploadMembers);
-
-        //undoAttendanceSubmission();
 
         setupSubmitAttendanceButton();
         var cancelBtn = document.getElementById('update-modal-cancel');
@@ -318,6 +303,7 @@ function getExtension(filename) {
 
 function isProperCSVFormat(filename) {
     var extension = getExtension(filename);
+    console.log(extension);
     switch (extension.toLowerCase()) {
         case 'txt':
             return true;
@@ -404,11 +390,11 @@ function setupSubmitAttendanceButton() {
                 var xhr = xhrPutRequest(urlExtension);
 
                 xhr.onload = function() {
-                    // var updateMoneyXhr = xhrGetRequest('updateFloorMoney');
-                    // updateMoneyXhr.onload = function() {
-                    location.reload();
-                    // }
-                    // updateMoneyXhr.send();
+                    var updateMoneyXhr = xhrGetRequest('updateFloorMoney');
+                    updateMoneyXhr.onload = function() {
+                        location.reload();
+                    }
+                    updateMoneyXhr.send();
                 };
                 xhr.send(JSON.stringify({ membersToUpdate: result }));
                 clearSubmitHandlers(submitBtn);
@@ -432,22 +418,6 @@ function setupSubmitAttendanceButton() {
         });
     });
 }
-
-// function undoAttendanceSubmission() {
-//     undoButton.className = "membersListButtons";
-//     undoButton.addEventListener('click', function () {
-//         var urlExtension = 'attendance/undo';
-//         var xhr = xhrGetRequest(urlExtension);
-//         alert("yo");
-
-//         xhr.onreadystatechange = function (e) {
-//             if (xhr.readyState == 4 && xhr.status == 200) {
-//                 location.reload();
-//             }
-//         };
-//         xhr.send();
-//     });
-// }
 
 function displayOtherTable(members) {
     if (displayingAllMembers) {

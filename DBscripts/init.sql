@@ -225,6 +225,11 @@ CREATE OR REPLACE FUNCTION update_floor_money()
       c_earned := calc_earned_money(t_row.hall_and_floor, t_row.residents, moneyRate);
       p_balance := calc_possible_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
       c_balance := calc_current_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
+      RAISE NOTICE 'Floor: %', t_row.hall_and_floor;
+      RAISE NOTICE 'possible earnings: %', p_earnings;
+      RAISE NOTICE 'actual earnings: %', c_earned;
+      RAISE NOTICE 'possible balance: %', p_balance;
+      RAISE NOTICE 'actual balance: %', c_balance;
       UPDATE FloorMoney
         SET possible_earnings = p_earnings,
             current_earned = c_earned,
@@ -529,5 +534,6 @@ CREATE OR REPLACE FUNCTION resetAttendance()
   RETURNS void AS $$
   BEGIN
    /*Reset all members meet_attend back to default values*/
+   UPDATE Members SET meet_attend = DEFAULT;
   END;
 $$ LANGUAGE plpgsql;
