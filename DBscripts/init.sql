@@ -2,7 +2,7 @@ CREATE DATABASE RHA;
 
 CREATE TABLE Members (
     user_id SERIAL PRIMARY KEY,
-    username varchar(20),
+    username varchar(20) UNIQUE,
     firstname varchar(20),
     lastname varchar(20),
     hall varchar(20),
