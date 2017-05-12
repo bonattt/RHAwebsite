@@ -15,7 +15,7 @@ function setAdmin(officers) {
         var undoAttendance = document.createElement('button');
         undoAttendance.setAttribute('id', 'undoAttendance');
         undoAttendance.className = "membersListButtons";
-        undoAttendance.innerHTML = 'Undo Attendance';
+        undoAttendance.innerHTML = 'Reset Attendance';
         undoAttendance.addEventListener('click', function () {
             var xhr = xhrGetRequest('resetAttendance');
             xhr.onload = function () {
