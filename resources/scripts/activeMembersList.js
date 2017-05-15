@@ -12,11 +12,14 @@ function setAdmin(officers) {
         newButton.setAttribute('data-target', '#uploadModal');
         newButton.innerHTML = 'New Attendance Record';
 
-        var undoAttendance = document.createElement('button');
-        undoAttendance.setAttribute('id', 'undoAttendance');
-        undoAttendance.className = "membersListButtons";
-        undoAttendance.innerHTML = 'Reset Attendance';
-        undoAttendance.addEventListener('click', function () {
+        var resetAttendance = document.createElement('button');
+        resetAttendance.setAttribute('id', 'resetAttendance');
+        resetAttendance.setAttribute("data-toggle", "modal");
+        resetAttendance.setAttribute("data-target", "#resetConfirmationModal");
+        resetAttendance.className = "membersListButtons";
+        resetAttendance.innerHTML = 'Reset Attendance';
+        var confirmReset = document.getElementById("confirm-reset");
+        confirmReset.addEventListener('click', function () {
             var xhr = xhrGetRequest('resetAttendance');
             xhr.onload = function () {
                 location.reload();
@@ -47,7 +50,7 @@ function setAdmin(officers) {
         uploadMembers.className = "membersListButtons";
 
         div.appendChild(newButton);
-        div.appendChild(undoAttendance);
+        div.appendChild(resetAttendance);
         div.appendChild(purgeMembers);
         div.appendChild(uploadMembers);
 
