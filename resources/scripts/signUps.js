@@ -171,8 +171,18 @@ function generatePageHTML(proposal, proposal_id, cost, eventDate) {
     }
 
     var signUpCloseDate = new Date(proposal.event_signup_close);
+    var year = signUpCloseDate.getUTCFullYear();
+    var month = signUpCloseDate.getUTCMonth();
+    var day = signUpCloseDate.getUTCDate();
+
+    signUpCloseDate =  new Date(year, month, day);
     var signUpCloseDateFormatted = (signUpCloseDate.getMonth() + 1) + "/" + signUpCloseDate.getUTCDate() + "/" + signUpCloseDate.getFullYear();
     var signUpOpenDate = new Date(proposal.event_signup_open);
+    var openYear = signUpOpenDate.getUTCFullYear();
+    var openMonth = signUpOpenDate.getUTCMonth();
+    var openDay = signUpOpenDate.getUTCDate();
+
+    signUpOpenDate =  new Date(openYear, openMonth, openDay);
     var signUpOpenDateFormatted = (signUpOpenDate.getMonth() + 1) + "/" + (signUpOpenDate.getUTCDate() + 1) + "/" + signUpOpenDate.getFullYear();
 
     var signupHtml = getSignupDateHtml(proposal, signUpCloseDateFormatted, signUpOpenDate, signUpOpenDateFormatted);
@@ -504,7 +514,7 @@ function showAttendeesModal(event) {
 
         if ((attendees == null) || (attendees.length == 0)) {
             attendees_shown = ["There is nobody signed up for this event!"];
-        } if (attendees.length <= max_attendance) {
+        } else if (attendees.length <= max_attendance) {
             attendees_shown = attendees.slice(0, max_attendance);
         } else {
             attendees_shown = attendees.slice(0, max_attendance);
