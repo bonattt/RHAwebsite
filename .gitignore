@@ -5,17 +5,6 @@ bower_components/
 .idea/
 
 #################
-## Images
-#################
-
-*.jpg
-*.gif
-*.png
-*.jpeg
-*.bmp
-*.tiff
-
-#################
 ## Eclipse
 #################
 
