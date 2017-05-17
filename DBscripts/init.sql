@@ -98,10 +98,10 @@ CREATE TABLE FloorMoney (
     floormoney_id SERIAL PRIMARY KEY,
     hall_and_floor varchar(50), -- Still working this one out.
     residents INT, -- Calculated via count_residents([floor name]);
-    possible_earnings double precision, -- Calculated via calc_possible_earnings([floorname], [floor_resident_count], [money_per_person_per_year])
-    current_earned double precision, -- Calculated via calc_earned_money([floorname], [floor_resident_count], [money_per_person_per_year])
-    possible_balance double precision, -- Calculated via calc_possible_balance([floorname], [floor_resident_count], [money_per_person_per_year])
-    current_balance double precision -- Calculated via calc_current_balance([floorname], [floor_resident_count], [money_per_person_per_year]);
+    possible_earnings double precision DEFAULT 0, -- Calculated via calc_possible_earnings([floorname], [floor_resident_count], [money_per_person_per_year])
+    current_earned double precision DEFAULT 0, -- Calculated via calc_earned_money([floorname], [floor_resident_count], [money_per_person_per_year])
+    possible_balance double precision DEFAULT 0, -- Calculated via calc_possible_balance([floorname], [floor_resident_count], [money_per_person_per_year])
+    current_balance double precision DEFAULT 0 -- Calculated via calc_current_balance([floorname], [floor_resident_count], [money_per_person_per_year]);
 );
 
 CREATE TABLE FloorExpenses (
@@ -186,6 +186,36 @@ INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_atte
 INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Speed 2', 2);
 INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_attendance) VALUES (DEFAULT, 'Speed 3', 2);
 
+/*Inserts for FloorMoney */
+
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Blum');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Scharp');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Mees');
+
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Apartments E 1');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Apartments E 2');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Apartments E 3');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Apartments W 1');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Apartments W 2');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Apartments W 3');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('BSB 1');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('BSB 2');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('BSB 3');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Deming 0');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Deming 1');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Deming 2');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Deming Attic');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Lakeside 1');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Lakeside 2');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Lakeside 3');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Lakeside 4');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Percopo 1');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Percopo 2');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Percopo 3');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Speed 1');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Speed 2');
+INSERT INTO FloorMoney (hall_and_floor) VALUES ('Speed 3');
+
 /* Pre-populates the FloorMoney table with barebones entries for update_floor_money() to be
   useable both on the initial creation of the database as well as whenever attendance is
   updated each week.
@@ -194,14 +224,21 @@ INSERT INTO FloorAttendanceNumerics (numerics_id, floor_name, floor_minimum_atte
 */
 CREATE OR REPLACE FUNCTION populate_floor_money()
   RETURNS void AS $$
+  DECLARE
+  items record;
   BEGIN
     CREATE TEMPORARY TABLE floor_resident_count AS SELECT Members.hall, count(*) FROM Members GROUP BY Members.hall;
-    INSERT INTO FloorMoney (hall_and_floor, residents) SELECT hall, count FROM floor_resident_count;
+    FOR items in SELECT * FROM floor_resident_count LOOP
+      RAISE NOTICE '%', items.count;
+      RAISE NOTICE '%', trim(both ' ' from items.hall);
+      UPDATE FloorMoney SET
+        residents = items.count
+        WHERE hall_and_floor = trim(both ' ' from items.hall);
+    END LOOP;
     DROP TABLE floor_resident_count;
     PERFORM FROM update_floor_money();
   END;
 $$ LANGUAGE plpgsql;
-
 
 /* Updates floor money table using function suite below. Assuming floor money table is not empty and that
    the number of residents is accurate and does not need to be changed.
@@ -218,18 +255,23 @@ CREATE OR REPLACE FUNCTION update_floor_money()
     c_balance double precision;
     moneyRate int := 15; 
     t_row FloorMoney%rowtype;
+    residents int;
   BEGIN
 
     FOR t_row IN SELECT * FROM FloorMoney LOOP
-      p_earnings := calc_possible_earnings(t_row.hall_and_floor, t_row.residents, moneyRate);
-      c_earned := calc_earned_money(t_row.hall_and_floor, t_row.residents, moneyRate);
-      p_balance := calc_possible_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
-      c_balance := calc_current_balance(t_row.hall_and_floor, t_row.residents, moneyRate);
-      RAISE NOTICE 'Floor: %', t_row.hall_and_floor;
-      RAISE NOTICE 'possible earnings: %', p_earnings;
-      RAISE NOTICE 'actual earnings: %', c_earned;
-      RAISE NOTICE 'possible balance: %', p_balance;
-      RAISE NOTICE 'actual balance: %', c_balance;
+      residents := 
+      CASE
+        WHEN t_row.residents IS NULL THEN 0
+        ELSE t_row.residents
+      END;
+      p_earnings := calc_possible_earnings(t_row.hall_and_floor, residents, moneyRate);
+      c_earned := calc_earned_money(t_row.hall_and_floor, residents, moneyRate);
+      p_balance := calc_possible_balance(t_row.hall_and_floor, residents, moneyRate);
+      c_balance := calc_current_balance(t_row.hall_and_floor, residents, moneyRate);
+      -- RAISE NOTICE 'possible earnings: %', p_earnings;
+      -- RAISE NOTICE 'actual earnings: %', c_earned;
+      -- RAISE NOTICE 'possible balance: %', p_balance;
+      -- RAISE NOTICE 'actual balance: %', c_balance;
       UPDATE FloorMoney
         SET possible_earnings = p_earnings,
             current_earned = c_earned,
@@ -521,6 +563,7 @@ CREATE OR REPLACE FUNCTION purgeMembers()
   RETURNS void AS $$
   BEGIN
     DELETE FROM Members WHERE Members.membertype IS NULL OR Members.membertype = '';
+    
   END;
 $$ LANGUAGE plpgsql;
 

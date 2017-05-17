@@ -1,5 +1,6 @@
 var displayingAllMembers = true;
 var table = document.createElement('table');
+var members;
 table.setAttribute('class', 'clickable');
 
 function setAdmin(officers) {
@@ -69,7 +70,7 @@ function setup() {
     //setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
     xhr.onload = function () {
-        var members = xhr.responseText;
+        members = xhr.responseText;
         drawAllMembersTable(members);
         var allMembersButton = document.getElementById('allMembers');
         var buttonsDiv = document.getElementById('buttonsDiv');
@@ -345,6 +346,7 @@ function massMemberUpload() {
             var xhr = xhrPostRequest(urlExtension);
 
             xhr.onload = function () {
+                // xhrGetRequest('populateFloorMoney').send();
                 location.reload();
             }
             console.log(result);
@@ -422,7 +424,7 @@ function setupSubmitAttendanceButton() {
     });
 }
 
-function displayOtherTable(members) {
+function displayOtherTable() {
     if (displayingAllMembers) {
         drawActiveMembersTable(members);
         displayingAllMembers = false;
