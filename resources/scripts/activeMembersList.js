@@ -1,5 +1,6 @@
 var displayingAllMembers = true;
 var table = document.createElement('table');
+var members;
 table.setAttribute('class', 'clickable');
 
 function setAdmin(officers) {
@@ -12,12 +13,15 @@ function setAdmin(officers) {
         newButton.setAttribute('data-target', '#uploadModal');
         newButton.innerHTML = 'New Attendance Record';
 
-        var undoButton = document.createElement('button');
-        undoButton.setAttribute('id', 'undoAttendance');
-        undoButton.className = "membersListButtons";
-        undoButton.innerHTML = 'Undo Last Attendance Upload';
-        undoButton.addEventListener('click', function () {
-            var xhr = xhrGetRequest('attendance/undo');
+        var resetAttendance = document.createElement('button');
+        resetAttendance.setAttribute('id', 'resetAttendance');
+        resetAttendance.setAttribute("data-toggle", "modal");
+        resetAttendance.setAttribute("data-target", "#resetConfirmationModal");
+        resetAttendance.className = "membersListButtons";
+        resetAttendance.innerHTML = 'Reset Attendance';
+        var confirmReset = document.getElementById("confirm-reset");
+        confirmReset.addEventListener('click', function () {
+            var xhr = xhrGetRequest('resetAttendance');
             xhr.onload = function () {
                 location.reload();
             };
@@ -39,18 +43,6 @@ function setAdmin(officers) {
             xhr.send();
         });
 
-        var undoPurge = document.createElement("button");
-        undoPurge.setAttribute("id", "undoPurge");
-        undoPurge.innerHTML = "Undo Members Purge";
-        undoPurge.className = "membersListButtons";
-        undoPurge.addEventListener("click", function () {
-            var xhr = xhrGetRequest('undoPurge/');
-            xhr.onload = function () {
-                location.reload();
-            };
-            xhr.send();
-        });
-
         var uploadMembers = document.createElement("button");
         uploadMembers.setAttribute("id", "uploadMembers");
         uploadMembers.setAttribute("data-toggle", "modal");
@@ -59,12 +51,9 @@ function setAdmin(officers) {
         uploadMembers.className = "membersListButtons";
 
         div.appendChild(newButton);
-        div.appendChild(undoButton);
+        div.appendChild(resetAttendance);
         div.appendChild(purgeMembers);
-        div.appendChild(undoPurge);
         div.appendChild(uploadMembers);
-
-        //undoAttendanceSubmission();
 
         setupSubmitAttendanceButton();
         var cancelBtn = document.getElementById('update-modal-cancel');
@@ -81,7 +70,7 @@ function setup() {
     //setTimeout(function () { createHTMLFromResponseText(xhr.responseText) }, 300);
 
     xhr.onload = function () {
-        var members = xhr.responseText;
+        members = xhr.responseText;
         drawAllMembersTable(members);
         var allMembersButton = document.getElementById('allMembers');
         var buttonsDiv = document.getElementById('buttonsDiv');
@@ -318,6 +307,7 @@ function getExtension(filename) {
 
 function isProperCSVFormat(filename) {
     var extension = getExtension(filename);
+    console.log(extension);
     switch (extension.toLowerCase()) {
         case 'txt':
             return true;
@@ -356,6 +346,7 @@ function massMemberUpload() {
             var xhr = xhrPostRequest(urlExtension);
 
             xhr.onload = function () {
+                // xhrGetRequest('populateFloorMoney').send();
                 location.reload();
             }
             console.log(result);
@@ -403,10 +394,12 @@ function setupSubmitAttendanceButton() {
                 var urlExtension = 'attendance/' + quarterToUpdate;
                 var xhr = xhrPutRequest(urlExtension);
 
-                xhr.onreadystatechange = function (e) {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        setTimeout(function () { location.reload() }, 600);
+                xhr.onload = function() {
+                    var updateMoneyXhr = xhrGetRequest('updateFloorMoney');
+                    updateMoneyXhr.onload = function() {
+                        location.reload();
                     }
+                    updateMoneyXhr.send();
                 };
                 xhr.send(JSON.stringify({ membersToUpdate: result }));
                 clearSubmitHandlers(submitBtn);
@@ -431,23 +424,7 @@ function setupSubmitAttendanceButton() {
     });
 }
 
-// function undoAttendanceSubmission() {
-//     undoButton.className = "membersListButtons";
-//     undoButton.addEventListener('click', function () {
-//         var urlExtension = 'attendance/undo';
-//         var xhr = xhrGetRequest(urlExtension);
-//         alert("yo");
-
-//         xhr.onreadystatechange = function (e) {
-//             if (xhr.readyState == 4 && xhr.status == 200) {
-//                 location.reload();
-//             }
-//         };
-//         xhr.send();
-//     });
-// }
-
-function displayOtherTable(members) {
+function displayOtherTable() {
     if (displayingAllMembers) {
         drawActiveMembersTable(members);
         displayingAllMembers = false;
