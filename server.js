@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
 });
 
 var RosefireTokenVerifier = require('rosefire-node');
-var SECRET = "Kc3fbaStbkdAa6tiX446";
+var SECRET = "QiJCwFlN93ZSBi5GEC01";
 var rosefire = new RosefireTokenVerifier(SECRET);
 console.log("hey there");
 
